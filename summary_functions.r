@@ -29,4 +29,9 @@ names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
 meanDensity = function(surveys, 
                        orders, 
                        ordersToInclude,
-                       )
+                       byTreeSpecies = FALSE,
+                       minLength = 0) {
+  
+  
+  
+}
