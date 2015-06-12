@@ -11,3 +11,6 @@
 #             each survey event
 
 
+# Read in data
+surveys = read.csv('data/tbl_surveys.csv', header=F)
+orders = read.csv('data/tbl_orders.csv', header=F)
