@@ -10,7 +10,23 @@
 # tbl_orders: arthropod observed, their length, and count associated with
 #             each survey event
 
+# Load required libraries
+library(dplyr)
+
 
 # Read in data
 surveys = read.csv('data/tbl_surveys.csv', header=F)
 orders = read.csv('data/tbl_orders.csv', header=F)
+
+names(surveys) = c('surveyID', 'site', 'userID', 'survey', 'circle', 'dateStart',
+                   'dateSubmit', 'tempMin', 'tempMax', 'notes', 'plantSp',
+                   'herbivory', 'photo', 'isValid')
+names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
+                  'count', 'photo', 'time', 'isValid')
+
+# Calculate mean density per survey
+
+meanDensity = function(surveys, 
+                       orders, 
+                       ordersToInclude,
+                       )
