@@ -1,0 +1,79 @@
+
+# Replacing orderArthropod field when that field is listed as "OTHER" but
+# common description is provided in "orderNotes" field.
+# (This is necessary at the moment due to missing drop down options
+# in the Android app as of 16 June 2015.)
+
+# These SQL statements can be pasted into the SQL box in the Caterpillars
+# Count! phpMyAdmin site.
+
+UPDATE `caterpillars`.`tbl_orders` 
+SET `orderArthropod` = 'Ants (Formicidae)' 
+WHERE `orderArthropod` = "OTHER (describe in Notes)" and `orderNotes` = "ant"
+
+
+UPDATE `caterpillars`.`tbl_orders` 
+SET `orderArthropod` = 'Aphids and Psyllids (Sternorrhyncha)' 
+WHERE `orderArthropod` = "OTHER (describe in Notes)" 
+and `orderNotes` like "aphid%"
+
+
+UPDATE `caterpillars`.`tbl_orders` 
+SET `orderArthropod` = 'True Bugs (Heteroptera)' 
+WHERE `orderArthropod` = "OTHER (describe in Notes)" and `orderNotes` = "true bug"
+
+
+UPDATE `caterpillars`.`tbl_orders` 
+SET `orderArthropod` = 'Grasshoppers, Crickets (Orthoptera)' 
+WHERE `orderArthropod` = "Grasshoppers and crickets (Orthoptera)"
+
+UPDATE `caterpillars`.`tbl_orders` 
+SET `orderArthropod` = 'Spiders (Araneae; NOT daddy longlegs!)' 
+WHERE `orderArthropod` = "Spiders (Araneae)"
+
+UPDATE `caterpillars`.`tbl_orders` 
+SET `orderArthropod` = 'True Bugs (Heteroptera)' 
+WHERE `orderArthropod` = "True Bugs (Hemiptera)"
+
+
+
+# Replacing Tree species codes.
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Box elder"
+WHERE `plantSpecies` = "Box elder "
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Red maple"
+WHERE `plantSpecies` = "Red maple "
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Sugar maple"
+WHERE `plantSpecies` = "Sugar Maple"
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Sweet gum"
+WHERE `plantSpecies` IN ("Sweet gum ", "Liquidambar styraciflua (sweetgum)")
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Spicebush"
+WHERE `plantSpecies` = "Spicebush "
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Tuliptree"
+WHERE `plantSpecies` IN ("Tulip tree", "Tulip Tree", "Liriodendron tulipifera (tuliptree)")
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Common persimmon"
+WHERE `plantSpecies` IN ("Common Persimmon", "Persimmon", "Common persimmon ")
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "American beech"
+WHERE `plantSpecies` = "American beech "
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "American hornbeam"
+WHERE `plantSpecies` = "American hornbeam, ironwood"
+
+
+
