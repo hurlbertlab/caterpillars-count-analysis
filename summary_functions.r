@@ -27,7 +27,7 @@ names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', all = T)
 
-
+# caterpillarssss
 
 # Calculate mean density per survey
 
