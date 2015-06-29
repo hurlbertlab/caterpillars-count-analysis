@@ -24,6 +24,11 @@ names(surveys) = c('surveyID', 'site', 'userID', 'survey', 'circle', 'dateStart'
 names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
                   'count', 'photo', 'time', 'isValid')
 
+
+orders2 = merge(surveys, orders, by = 'surveyID', all = T)
+
+
+
 # Calculate mean density per survey
 
 meanDensity = function(surveys, 
