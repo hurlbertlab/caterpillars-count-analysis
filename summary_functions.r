@@ -12,10 +12,7 @@
 
 # Load required libraries
 library(dplyr)
-
-#NEW COMMENT LINE UP HERE
-
-
+library(lubridate)
 
 # Read in data
 surveys = read.csv('data/tbl_surveys.csv', header=F)
@@ -30,8 +27,13 @@ names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', all = T)
 
+orders2$date = as.POSIXlt(orders2$dateStart, format = "%m/%d/%Y %H:%M")
+orders2$julianday = yday(orders2$date)
 
-# Allen is ADDING A VERY IMPORTANT COMMENT HERE.
+orders3 = orders2[, c('surveyID', 'site', 'survey', 'circle', 'date','julianday',
+                      'plantSp','herbivory','arthropod','length',
+                      'count','notes.y','notes.x')]
+
 
 # Calculate mean density per survey
 
