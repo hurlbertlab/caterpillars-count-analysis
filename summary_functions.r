@@ -24,7 +24,7 @@ names(surveys) = c('surveyID', 'site', 'userID', 'survey', 'circle', 'dateStart'
 names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
                   'count', 'photo', 'time', 'isValid')
 
-
+# Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', all = T)
 
 
