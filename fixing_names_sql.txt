@@ -75,5 +75,21 @@ UPDATE `caterpillars`.`tbl_surveys`
 SET `plantSpecies` = "American hornbeam"
 WHERE `plantSpecies` = "American hornbeam, ironwood"
 
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "American beech"
+WHERE `plantSpecies` = "Fagus grandifolia (American beech)"
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Sugar maple"
+WHERE `plantSpecies` = "Acer saccharum (Sugar maple)"
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Sweet gum"
+WHERE `plantSpecies` = "Liquidambar styraciflua (sweetgum)"
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Tuliptree"
+WHERE `plantSpecies` = "Liriodendron tulipifera (tuliptree)"
+
 
 
