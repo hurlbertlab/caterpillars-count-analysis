@@ -41,57 +41,61 @@ WHERE `orderArthropod` = "True Bugs (Hemiptera)"
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Box elder"
-WHERE `plantSpecies` = "Box elder "
+WHERE `plantSpecies` = "Box elder ";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Red maple"
-WHERE `plantSpecies` = "Red maple "
+WHERE `plantSpecies` = "Red maple ";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Sugar maple"
-WHERE `plantSpecies` = "Sugar Maple"
+WHERE `plantSpecies` = "Sugar Maple";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Sweet gum"
-WHERE `plantSpecies` IN ("Sweet gum ", "Liquidambar styraciflua (sweetgum)")
+WHERE `plantSpecies` IN ("Sweet gum ", "Liquidambar styraciflua (sweetgum)");
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Spicebush"
-WHERE `plantSpecies` = "Spicebush "
+WHERE `plantSpecies` = "Spicebush ";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Tuliptree"
-WHERE `plantSpecies` IN ("Tulip tree", "Tulip Tree", "Liriodendron tulipifera (tuliptree)")
+WHERE `plantSpecies` IN ("Tulip tree", "Tulip Tree", "Liriodendron tulipifera (tuliptree)");
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Common persimmon"
-WHERE `plantSpecies` IN ("Common Persimmon", "Persimmon", "Common persimmon ")
+WHERE `plantSpecies` IN ("Common Persimmon", "Persimmon", "Common persimmon ", "persimmon");
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "American beech"
-WHERE `plantSpecies` = "American beech "
+WHERE `plantSpecies` = "American beech ";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "American hornbeam"
-WHERE `plantSpecies` = "American hornbeam, ironwood"
+WHERE `plantSpecies` = "American hornbeam, ironwood";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "American beech"
-WHERE `plantSpecies` = "Fagus grandifolia (American beech)"
+WHERE `plantSpecies` = "Fagus grandifolia (American beech)";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Sugar maple"
-WHERE `plantSpecies` = "Acer saccharum (Sugar maple)"
+WHERE `plantSpecies` = "Acer saccharum (Sugar maple)";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Sweet gum"
-WHERE `plantSpecies` = "Liquidambar styraciflua (sweetgum)"
+WHERE `plantSpecies` = "Liquidambar styraciflua (sweetgum)";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Tuliptree"
-WHERE `plantSpecies` = "Liriodendron tulipifera (tuliptree)"
+WHERE `plantSpecies` = "Liriodendron tulipifera (tuliptree)";
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Red maple"
+WHERE `plantSpecies` = "Acer rubrum (Red maple)";
 
 
 # Counting occurrences of tree species names
-SELECT DISTINCT(`plantSpecies`), count(`surveyID`) FROM `tbl_surveys` WHERE `siteID` = 117 GROUP BY `plantSpecies` 
+SELECT DISTINCT(`plantSpecies`), count(`surveyID`) FROM `tbl_surveys` WHERE `siteID` = 117 GROUP BY `plantSpecies`; 
 
