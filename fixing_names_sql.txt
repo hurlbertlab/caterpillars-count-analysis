@@ -92,4 +92,6 @@ SET `plantSpecies` = "Tuliptree"
 WHERE `plantSpecies` = "Liriodendron tulipifera (tuliptree)"
 
 
+# Counting occurrences of tree species names
+SELECT DISTINCT(`plantSpecies`), count(`surveyID`) FROM `tbl_surveys` WHERE `siteID` = 117 GROUP BY `plantSpecies` 
 
