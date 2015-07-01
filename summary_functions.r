@@ -11,6 +11,7 @@
 #             each survey event
 
 # Load required libraries
+library(plyr)
 library(dplyr)
 library(lubridate)
 
@@ -40,7 +41,7 @@ orders3$date = as.character(orders3$date)
 
 # Calculate mean density per survey
 
-meanDensity = function(surveyData,            # merged dataframe of surveys and orders tables
+meanDensityByDay = function(surveyData,            # merged dataframe of surveys and orders tables
                        ordersToInclude,       # which arthropod orders to calculate density for
                        byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
                        minLength = 0)         # minimum arthropod size to include
