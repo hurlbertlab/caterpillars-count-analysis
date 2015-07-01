@@ -38,22 +38,28 @@ orders3 = orders2[, c('surveyID', 'site', 'survey', 'circle', 'date','julianday'
 # temp fix of date class
 orders3$date = as.character(orders3$date)
 
+# add a year column
+tempdate <- substring(orders3$date, 1, 4)
+orders3$year = tempdate
 
 # Calculate mean density per survey
 
 meanDensityByDay = function(surveyData,            # merged dataframe of surveys and orders tables
                        ordersToInclude,       # which arthropod orders to calculate density for
                        byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
-                       minLength = 0)         # minimum arthropod size to include
+                       minLength = 0,         # minimum arthropod size to include
+                       inputYear)                  
   
   {
-  temp = filter(surveyData, length >= minLength & arthropod %in% ordersToInclude)
+  dataYear = surveyData[surveyData$year == inputYear, ]
+  
+  temp = filter(dataYear, length >= minLength & arthropod %in% ordersToInclude)
   if (byTreeSpecies) {
-    temp2 = ddply(temp, .(site, julianday, plantSp), summarize, 
+    temp2 = ddply(temp, .(site, julianday, year, plantSp), summarize, 
                   meanDensity = sum(count)/length(unique(surveyID)))
     
   } else {
-    temp2 = ddply(temp, .(site, julianday), summarize, 
+    temp2 = ddply(temp, .(site, julianday, year), summarize, 
                   meanDensity = sum(count)/length(unique(surveyID)))
   }
   
