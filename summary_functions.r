@@ -64,3 +64,14 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
   }
   
 }
+
+# Plotting
+tempvar2 <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpillars (Lepidoptera larvae)', inputYear = '2015')
+tempvar2pr <- tempvar2[tempvar2$site == 117, ] # for Prairie Ridge plot
+plot(tempvar2pr$julianday, tempvar2pr$meanDensity, type = 'l', col = "blue")
+tempvar2bg <- tempvar2[tempvar2$site == 8892356, ] # for Botanical Garden plot
+plot(tempvar2bg$julianday, tempvar2bg$meanDensity, type = 'l', col = "blue")
+tempvar2all <- tempvar2[order(tempvar2$julianday), ] # for all 2015 data
+plot(tempvar2all$julianday, tempvar2all$meanDensity, type = 'l', col = "blue")
+
+# need to keep surveys with 0 caterpillars
