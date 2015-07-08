@@ -53,18 +53,46 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
   
   {
   dataYearSite = surveyData[surveyData$year == inputYear & surveyData$site == inputSite, ]
+  effortByDay = data.frame(table(unique(dataYearSite[, c('surveyID', 'julianday')])$julianday))
+  names(effortByDay) = c('julianday', 'numSurveys')
   
-  temp = filter(dataYearSite, length >= minLength & arthropod %in% ordersToInclude)
+  temp = filter(surveyData,
+                surveyData$year == inputYear & 
+                surveyData$site == inputSite &
+                length >= minLength & 
+                arthropod %in% ordersToInclude)
+  
+  
   if (byTreeSpecies) {
     temp2 = ddply(temp, .(site, julianday, year, plantSp), summarize, 
-                  meanDensity = sum(count)/length(unique(dataYearSite$surveyID)))
+                  totalCount = sum(count))
     
   } else {
     temp2 = ddply(temp, .(site, julianday, year), summarize, 
-                  meanDensity = sum(count)/length(unique(dataYearSite$surveyID)))
+                  totalCount = sum(count))
   }
   
+  temp3 = merge(effortByDay, temp2[, c('julianday', 'totalCount')], by = 'julianday', all = T)
+  temp3$totalCount[is.na(temp3$totalCount)] = 0
+  temp3$meanDensity = temp3$totalCount/temp3$numSurveys
+  temp3$julianday = as.numeric(as.character(temp3$julianday))
+  return(temp3)
 }
+
+
+# Create different subsets of data for beat sheets vs visual surveys, 
+# morning versus afternoon, etc. Also, try to pull out the number of leaves
+# for the BEAT SHEETs.
+
+beatsheet = orders3[grep("BEAT SHEET", orders3$notes.x),]
+
+# Pulling out # Leaves, use strsplit(orders3$notes.x, "BEAT SHEET; Leaves = ")
+
+
+
+
+
+
 
 # Plotting
 tempvarPR <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpillars (Lepidoptera larvae)', 
