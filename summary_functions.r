@@ -84,13 +84,28 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
 # morning versus afternoon, etc. Also, try to pull out the number of leaves
 # for the BEAT SHEETs.
 
+library(stringr)
+
+visualsurvey = orders3[!grepl("BEAT SHEET", orders3$notes.x),]
+
+
 beatsheet = orders3[grep("BEAT SHEET", orders3$notes.x),]
+leavesNumTemp <- word(beatsheet$notes.x, -1, sep = "= ")
+leavesNumTemp1 <- word(leavesNumTemp, 1, sep = "BEAT SHEET; Leaves  ")
+leavesNumTemp2 <- word(leavesNumTemp1, 1, sep = "BEAT SHEET; Leaves=")
+leavesNumTemp3 <- word(leavesNumTemp2, 1, sep = ";")
+leavesNumTemp4 <- word(leavesNumTemp3, 1, sep = ",")
+
+# Still errors in # leaves data
+
 
 # Pulling out # Leaves, use strsplit(orders3$notes.x, "BEAT SHEET; Leaves = ")
 
 
+splitbeat <- strsplit(as.character(beatsheet$notes.x), split = "BEAT SHEET; Leaves = ")
+beatsheet$leavesBeatTemp = splitbeat
 
-
+splitbeat1 <- strsplit(as.character(beatsheet$leavesBeatTemp), split = "BEAT SHEET; Leaves  = ")
 
 
 
