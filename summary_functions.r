@@ -48,30 +48,34 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
                        ordersToInclude,       # which arthropod orders to calculate density for
                        byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
                        minLength = 0,         # minimum arthropod size to include
-                       inputYear)                  
+                       inputYear,
+                       inputSite)                  
   
   {
-  dataYear = surveyData[surveyData$year == inputYear, ]
+  dataYearSite = surveyData[surveyData$year == inputYear & surveyData$site == inputSite, ]
   
-  temp = filter(dataYear, length >= minLength & arthropod %in% ordersToInclude)
+  temp = filter(dataYearSite, length >= minLength & arthropod %in% ordersToInclude)
   if (byTreeSpecies) {
     temp2 = ddply(temp, .(site, julianday, year, plantSp), summarize, 
-                  meanDensity = sum(count)/length(unique(surveyID)))
+                  meanDensity = sum(count)/length(unique(dataYearSite$surveyID)))
     
   } else {
     temp2 = ddply(temp, .(site, julianday, year), summarize, 
-                  meanDensity = sum(count)/length(unique(surveyID)))
+                  meanDensity = sum(count)/length(unique(dataYearSite$surveyID)))
   }
   
 }
 
 # Plotting
-tempvar2 <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpillars (Lepidoptera larvae)', inputYear = '2015')
-tempvar2pr <- tempvar2[tempvar2$site == 117, ] # for Prairie Ridge plot
-plot(tempvar2pr$julianday, tempvar2pr$meanDensity, type = 'l', col = "blue")
-tempvar2bg <- tempvar2[tempvar2$site == 8892356, ] # for Botanical Garden plot
-plot(tempvar2bg$julianday, tempvar2bg$meanDensity, type = 'l', col = "blue")
-tempvar2all <- tempvar2[order(tempvar2$julianday), ] # for all 2015 data
-plot(tempvar2all$julianday, tempvar2all$meanDensity, type = 'l', col = "blue")
+tempvarPR <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpillars (Lepidoptera larvae)', 
+                             inputYear = '2015', inputSite = 117) # for Prairie Ridge plot
+plot(tempvarPR$julianday, tempvarPR$meanDensity, type = 'l', col = "blue")
 
-# need to keep surveys with 0 caterpillars
+tempvarBG <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpillars (Lepidoptera larvae)', 
+                            inputYear = '2015', inputSite = 8892356) # for Botanical Garden plot
+plot(tempvarBG$julianday, tempvarBG$meanDensity, type = 'l', col = "blue")
+
+# Not sure if these are correct, never a mean density of 0?
+# Adding if else statements for if you don't want to input year and site?
+
+
