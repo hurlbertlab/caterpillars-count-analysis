@@ -14,24 +14,29 @@
 library(plyr)
 library(dplyr)
 library(lubridate)
+library(stringr)
 
 # Read in data
 surveys = read.csv('data/tbl_surveys.csv', header=F)
 orders = read.csv('data/tbl_orders.csv', header=F)
 
-names(surveys) = c('surveyID', 'site', 'userID', 'survey', 'circle', 'dateStart',
+names(surveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
                    'dateSubmit', 'tempMin', 'tempMax', 'notes', 'plantSp',
                    'herbivory', 'photo', 'isValid')
 names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
                   'count', 'photo', 'time', 'isValid')
 
-# Merge orders and surveys table
-orders2 = merge(surveys, orders, by = 'surveyID', all = T)
+# Convert 'survey' field to character from factor
+surveys$survey = as.character(surveys$survey)
 
-orders2$date = as.POSIXlt(orders2$dateStart, format = "%m/%d/%Y %H:%M")
+
+# Merge orders and surveys table
+orders2 = merge(surveys, orders, by = 'surveyID', all.x = T)
+
+orders2$date = as.POSIXlt(word(orders2$dateStart, 1, sep = " "), format = "%m/%d/%Y")
 orders2$julianday = yday(orders2$date)
 
-orders3 = orders2[, c('surveyID', 'site', 'userID', 'survey', 'circle', 'date','julianday',
+orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
                       'plantSp','herbivory','arthropod','length',
                       'count','notes.y','notes.x')]
 
@@ -41,6 +46,28 @@ orders3$date = as.character(orders3$date)
 # add a year column
 tempdate <- substring(orders3$date, 1, 4)
 orders3$year = tempdate
+
+# List of unique survey events
+events = unique(orders3[, c("surveyID", "userID", "date", "year", "julianday", "site", "circle", "survey")])
+
+
+# Function for checking survey events for a given site and year
+
+surveyCount = function(events, site, year) {
+  subevents = subset(events, site == site & year == year)
+  #Count number of survey locations per date
+  survcount1 = data.frame(table(subevents$date))
+  names(survcount1) = c('date', 'numSurveys')                        
+  survcount2 = data.frame(table(subevents[, c('date', 'circle', 'survey')]))
+  zerocounts = survcount2[survcount2$Freq == 0,]
+  zerocounts = zerocounts[order(zerocounts$date, zerocounts$circle, zerocounts$survey),]
+  multicounts = survcount2[survcount2$Freq > 1,]
+  multicounts = multicounts[order(multicounts$date, multicounts$circle, multicounts$survey),]
+}
+
+
+
+
 
 # Calculate mean density per survey
 
@@ -84,11 +111,14 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
 # morning versus afternoon, etc. Also, try to pull out the number of leaves
 # for the BEAT SHEETs.
 
+<<<<<<< HEAD
 
 # Separating the data:
 
 # For the word function:
 library(stringr)
+=======
+>>>>>>> 5cb38ea09a4d25b58dbe82eefe77944f72156aa5
 
 # All visual surveys
 visualsurvey = orders3[!grepl("BEAT SHEET", orders3$notes.x),]
