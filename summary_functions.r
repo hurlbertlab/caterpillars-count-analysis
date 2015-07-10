@@ -31,7 +31,7 @@ orders2 = merge(surveys, orders, by = 'surveyID', all = T)
 orders2$date = as.POSIXlt(orders2$dateStart, format = "%m/%d/%Y %H:%M")
 orders2$julianday = yday(orders2$date)
 
-orders3 = orders2[, c('surveyID', 'site', 'survey', 'circle', 'date','julianday',
+orders3 = orders2[, c('surveyID', 'site', 'userID', 'survey', 'circle', 'date','julianday',
                       'plantSp','herbivory','arthropod','length',
                       'count','notes.y','notes.x')]
 
@@ -84,19 +84,48 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
 # morning versus afternoon, etc. Also, try to pull out the number of leaves
 # for the BEAT SHEETs.
 
+
+# Separating the data:
+
+# For the word function:
 library(stringr)
 
+# All visual surveys
 visualsurvey = orders3[!grepl("BEAT SHEET", orders3$notes.x),]
 
+# Botanical Garden visual surveys
+visualsurveybg = visualsurvey[visualsurvey$site == 8892356,]
 
+# Prairie Ridge visual surveys
+visualsurveypr = visualsurvey[visualsurvey$site == 117,]
+
+
+# For separating the Prairie Ridge data:
+
+# Our visual surveys ONLY, not including repeat surveys
+# Checked data and "REPEAT SURVEY" only format used so far to indicate
+tempvis = visualsurveypr[!grepl("REPEAT SURVEY", visualsurveypr$notes.x),]
+labsurvey = tempvis[tempvis$userID == 69 | tempvis$userID == 130 | tempvis$userID == 131 
+                    | tempvis$userID == 132, ]
+
+# Our repeat surveys ONLY
+repsurvey = visualsurveypr[grep("REPEAT SURVEY", visualsurveypr$notes.x),]
+
+# Volunteer surveys
+volsurvey = visualsurveypr[visualsurveypr$userID == 129,]
+
+# Beat sheets and isolating # leaves into a new column
 beatsheet = orders3[grep("BEAT SHEET", orders3$notes.x),]
 leavesNumTemp <- word(beatsheet$notes.x, -1, sep = "= ")
-leavesNumTemp1 <- word(leavesNumTemp, 1, sep = "BEAT SHEET; Leaves  ")
-leavesNumTemp2 <- word(leavesNumTemp1, 1, sep = "BEAT SHEET; Leaves=")
+leavesNumTemp1 <- word(leavesNumTemp, -1, sep = "BEAT SHEET; Leaves  ")
+leavesNumTemp2 <- word(leavesNumTemp1, -1, sep = "BEAT SHEET; Leaves=")
 leavesNumTemp3 <- word(leavesNumTemp2, 1, sep = ";")
 leavesNumTemp4 <- word(leavesNumTemp3, 1, sep = ",")
-
-# Still errors in # leaves data
+leavesNumTemp5 <- gsub(" ", "", leavesNumTemp4)
+leavesNumTemp6 <- gsub("\n", "", leavesNumTemp5)
+leavesNumTemp7 <- gsub("Unknown", "unknown", leavesNumTemp6)
+beatsheet$leavesNum <- leavesNumTemp7
+# also might add a column about whether or not the leaves were wet
 
 
 # Pulling out # Leaves, use strsplit(orders3$notes.x, "BEAT SHEET; Leaves = ")
@@ -104,9 +133,6 @@ leavesNumTemp4 <- word(leavesNumTemp3, 1, sep = ",")
 
 splitbeat <- strsplit(as.character(beatsheet$notes.x), split = "BEAT SHEET; Leaves = ")
 beatsheet$leavesBeatTemp = splitbeat
-
-splitbeat1 <- strsplit(as.character(beatsheet$leavesBeatTemp), split = "BEAT SHEET; Leaves  = ")
-
 
 
 # Plotting
