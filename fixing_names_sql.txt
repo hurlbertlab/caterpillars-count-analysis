@@ -9,31 +9,31 @@
 
 UPDATE `caterpillars`.`tbl_orders` 
 SET `orderArthropod` = 'Ants (Formicidae)' 
-WHERE `orderArthropod` = "OTHER (describe in Notes)" and `orderNotes` = "ant"
+WHERE `orderArthropod` = "OTHER (describe in Notes)" and `orderNotes` = "ant";
 
 
 UPDATE `caterpillars`.`tbl_orders` 
 SET `orderArthropod` = 'Aphids and Psyllids (Sternorrhyncha)' 
 WHERE `orderArthropod` = "OTHER (describe in Notes)" 
-and `orderNotes` like "aphid%"
+and `orderNotes` like "aphid%";
 
 
 UPDATE `caterpillars`.`tbl_orders` 
 SET `orderArthropod` = 'True Bugs (Heteroptera)' 
-WHERE `orderArthropod` = "OTHER (describe in Notes)" and `orderNotes` = "true bug"
+WHERE `orderArthropod` = "OTHER (describe in Notes)" and `orderNotes` = "true bug";
 
 
 UPDATE `caterpillars`.`tbl_orders` 
 SET `orderArthropod` = 'Grasshoppers, Crickets (Orthoptera)' 
-WHERE `orderArthropod` = "Grasshoppers and crickets (Orthoptera)"
+WHERE `orderArthropod` = "Grasshoppers and crickets (Orthoptera)";
 
 UPDATE `caterpillars`.`tbl_orders` 
 SET `orderArthropod` = 'Spiders (Araneae; NOT daddy longlegs!)' 
-WHERE `orderArthropod` = "Spiders (Araneae)"
+WHERE `orderArthropod` = "Spiders (Araneae)";
 
 UPDATE `caterpillars`.`tbl_orders` 
 SET `orderArthropod` = 'True Bugs (Heteroptera)' 
-WHERE `orderArthropod` = "True Bugs (Hemiptera)"
+WHERE `orderArthropod` = "True Bugs (Hemiptera)";
 
 
 
