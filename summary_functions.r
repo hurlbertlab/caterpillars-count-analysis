@@ -40,6 +40,16 @@ orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','j
                       'plantSp','herbivory','arthropod','length',
                       'count','notes.y','notes.x')]
 
+# Add column with arthopod order code
+arthcodes = read.csv('arth_codes.csv', header=T)
+arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
+names(arthcodes1) = c('arthCode', 'arthropod')
+orders4 <- merge(orders3, arthcodes1, all.x = TRUE, sort = FALSE)
+orders4 <- orders4[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
+                        'plantSp','herbivory','arthropod','arthCode','length',
+                        'count','notes.y','notes.x')]
+orders4 <- orders4[order(orders4$date),]
+
 # temp fix of date class
 orders3$date = as.character(orders3$date)
 
@@ -174,7 +184,6 @@ tempvarBG <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpill
                             inputYear = '2015', inputSite = 8892356) # for Botanical Garden plot
 plot(tempvarBG$julianday, tempvarBG$meanDensity, type = 'l', col = "blue")
 
-# Not sure if these are correct, never a mean density of 0?
-# Adding if else statements for if you don't want to input year and site?
+
 
 
