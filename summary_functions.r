@@ -50,15 +50,28 @@ orders4 <- orders4[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','
                         'count','notes.y','notes.x')]
 orders4 <- orders4[order(orders4$date),]
 
+# Add a column indicating if the leaves were wet
+orders4$wetLeaves = c()
+tempwet <- sort(c(grep("wet leaves", orders4$notes.x), grep("Wet leaves", orders4$notes.x), 
+      grep("very dewy", orders4$notes.x), grep("Wet Leaves", orders4$notes.x)))
+orders4$wetLeaves = rep('no', nrow(orders4))
+orders4$wetLeaves[tempwet] = 'yes'
+
+#tempwet$wetLeaves = 'yes'
+#tempwet1 <- tempwet[, c('surveyID', 'wetLeaves')]
+#orders5 <- merge(orders4, tempwet1, by = 'wetLeaves', all.x = T)
+#orders5$wetLeaves[is.na(orders5$wetLeaves)] = 'no'
+
+
 # temp fix of date class
-orders3$date = as.character(orders3$date)
+orders4$date = as.character(orders4$date)
 
 # add a year column
-tempdate <- substring(orders3$date, 1, 4)
-orders3$year = tempdate
+tempdate <- substring(orders4$date, 1, 4)
+orders4$year = tempdate
 
 # List of unique survey events
-events = unique(orders3[, c("surveyID", "userID", "date", "year", "julianday", "site", "circle", "survey")])
+events = unique(orders4[, c("surveyID", "userID", "date", "year", "julianday", "site", "circle", "survey")])
 
 
 # Function for checking survey events for a given site and year
@@ -82,7 +95,7 @@ surveyCount = function(events, site, year) {
 # Calculate mean density per survey
 
 meanDensityByDay = function(surveyData,            # merged dataframe of surveys and orders tables
-                       ordersToInclude,       # which arthropod orders to calculate density for
+                       ordersToInclude,       # which arthropod orders to calculate density for (codes)
                        byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
                        minLength = 0,         # minimum arthropod size to include
                        inputYear,
@@ -97,7 +110,7 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
                 surveyData$year == inputYear & 
                 surveyData$site == inputSite &
                 length >= minLength & 
-                arthropod %in% ordersToInclude)
+                arthCode %in% ordersToInclude)
   
   
   if (byTreeSpecies) {
@@ -121,17 +134,14 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
 # morning versus afternoon, etc. Also, try to pull out the number of leaves
 # for the BEAT SHEETs.
 
-<<<<<<< HEAD
 
 # Separating the data:
 
 # For the word function:
 library(stringr)
-=======
->>>>>>> 5cb38ea09a4d25b58dbe82eefe77944f72156aa5
 
 # All visual surveys
-visualsurvey = orders3[!grepl("BEAT SHEET", orders3$notes.x),]
+visualsurvey = orders4[!grepl("BEAT SHEET", orders4$notes.x),]
 
 # Botanical Garden visual surveys
 visualsurveybg = visualsurvey[visualsurvey$site == 8892356,]
@@ -155,7 +165,7 @@ repsurvey = visualsurveypr[grep("REPEAT SURVEY", visualsurveypr$notes.x),]
 volsurvey = visualsurveypr[visualsurveypr$userID == 129,]
 
 # Beat sheets and isolating # leaves into a new column
-beatsheet = orders3[grep("BEAT SHEET", orders3$notes.x),]
+beatsheet = orders4[grep("BEAT SHEET", orders4$notes.x),]
 leavesNumTemp <- word(beatsheet$notes.x, -1, sep = "= ")
 leavesNumTemp1 <- word(leavesNumTemp, -1, sep = "BEAT SHEET; Leaves  ")
 leavesNumTemp2 <- word(leavesNumTemp1, -1, sep = "BEAT SHEET; Leaves=")
@@ -165,23 +175,28 @@ leavesNumTemp5 <- gsub(" ", "", leavesNumTemp4)
 leavesNumTemp6 <- gsub("\n", "", leavesNumTemp5)
 leavesNumTemp7 <- gsub("Unknown", "unknown", leavesNumTemp6)
 beatsheet$leavesNum <- leavesNumTemp7
-# also might add a column about whether or not the leaves were wet
 
 
-# Pulling out # Leaves, use strsplit(orders3$notes.x, "BEAT SHEET; Leaves = ")
+# Pulling out # Leaves, use strsplit(orders4$notes.x, "BEAT SHEET; Leaves = ")
+# splitbeat <- strsplit(as.character(beatsheet$notes.x), split = "BEAT SHEET; Leaves = ")
+# beatsheet$leavesBeatTemp = splitbeat
 
 
-splitbeat <- strsplit(as.character(beatsheet$notes.x), split = "BEAT SHEET; Leaves = ")
-beatsheet$leavesBeatTemp = splitbeat
+# Plotting and calculations
 
-
-# Plotting
-tempvarPR <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpillars (Lepidoptera larvae)', 
-                             inputYear = '2015', inputSite = 117) # for Prairie Ridge plot
+# Prairie Ridge
+# temporarily going to take out julian day 170, not a PR day and only one caterpillar seen on one survey
+# (so I can start making peak calculations):
+labsurvey1 <- labsurvey[labsurvey$julianday != 170, ]
+twoorders <- c('LEPL', 'ORTH')
+tempvarPR <- meanDensityByDay(surveyData = labsurvey1, ordersToInclude = twoorders, 
+                             inputYear = '2015', inputSite = 117)
 plot(tempvarPR$julianday, tempvarPR$meanDensity, type = 'l', col = "blue")
 
-tempvarBG <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpillars (Lepidoptera larvae)', 
-                            inputYear = '2015', inputSite = 8892356) # for Botanical Garden plot
+
+# Botanical Garden
+tempvarBG <- meanDensityByDay(surveyData = visualsurveybg, ordersToInclude = 'LEPL', 
+                            inputYear = '2015', inputSite = 8892356) 
 plot(tempvarBG$julianday, tempvarBG$meanDensity, type = 'l', col = "blue")
 
 
