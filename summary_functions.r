@@ -155,8 +155,7 @@ visualsurveypr = visualsurvey[visualsurvey$site == 117,]
 # Our visual surveys ONLY, not including repeat surveys
 # Checked data and "REPEAT SURVEY" only format used so far to indicate
 tempvis = visualsurveypr[!grepl("REPEAT SURVEY", visualsurveypr$notes.x),]
-labsurvey = tempvis[tempvis$userID == 69 | tempvis$userID == 130 | tempvis$userID == 131 
-                    | tempvis$userID == 132, ]
+labsurvey = tempvis[tempvis$userID %in% c(69, 130, 131, 132), ]
 
 # Our repeat surveys ONLY
 repsurvey = visualsurveypr[grep("REPEAT SURVEY", visualsurveypr$notes.x),]
@@ -174,7 +173,7 @@ leavesNumTemp4 <- word(leavesNumTemp3, 1, sep = ",")
 leavesNumTemp5 <- gsub(" ", "", leavesNumTemp4)
 leavesNumTemp6 <- gsub("\n", "", leavesNumTemp5)
 leavesNumTemp7 <- gsub("Unknown", "unknown", leavesNumTemp6)
-beatsheet$leavesNum <- leavesNumTemp7
+beatsheet$leavesNum <- as.numeric(leavesNumTemp7)
 
 
 # Pulling out # Leaves, use strsplit(orders4$notes.x, "BEAT SHEET; Leaves = ")
@@ -189,7 +188,7 @@ beatsheet$leavesNum <- leavesNumTemp7
 # (so I can start making peak calculations):
 labsurvey1 <- labsurvey[labsurvey$julianday != 170, ]
 twoorders <- c('LEPL', 'ORTH')
-tempvarPR <- meanDensityByDay(surveyData = labsurvey1, ordersToInclude = twoorders, 
+tempvarPR <- meanDensityByDay(surveyData = labsurvey, ordersToInclude = twoorders, 
                              inputYear = '2015', inputSite = 117)
 plot(tempvarPR$julianday, tempvarPR$meanDensity, type = 'l', col = "blue")
 
