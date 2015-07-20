@@ -99,7 +99,10 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
                        byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
                        minLength = 0,         # minimum arthropod size to include
                        inputYear,
-                       inputSite)                  
+                       inputSite, 
+                       plot = F,
+                       new = T,
+                       color = 'black')                  
   
   {
   dataYearSite = surveyData[surveyData$year == inputYear & surveyData$site == inputSite, ]
@@ -126,6 +129,12 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
   temp3$totalCount[is.na(temp3$totalCount)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
   temp3$julianday = as.numeric(as.character(temp3$julianday))
+  if (plot & new) {
+    plot(temp3$julianday, temp3$meanDensity, type = 'l', 
+         col = color, xlab = "Julian day", ylab = "Mean density per survey")
+  } else if (plot & new==F) {
+    points(temp3$julianday, temp3$meanDensity, type = 'l', col = color)
+  }
   return(temp3)
 }
 
@@ -188,15 +197,17 @@ beatsheet$leavesNum <- as.numeric(leavesNumTemp7)
 # (so I can start making peak calculations):
 labsurvey1 <- labsurvey[labsurvey$julianday != 170, ]
 twoorders <- c('LEPL', 'ORTH')
-tempvarPR <- meanDensityByDay(surveyData = labsurvey, ordersToInclude = twoorders, 
-                             inputYear = '2015', inputSite = 117)
-plot(tempvarPR$julianday, tempvarPR$meanDensity, type = 'l', col = "blue")
+
+# Plot our morning surveys, our repeat surveys, and the volunteer surveys all on one graph
+PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = T, color = 'blue')
+PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'red')
+PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'green')
+legend("topleft", c('lab am surveys', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', col = c('blue', 'red', 'green'))
 
 
 # Botanical Garden
-tempvarBG <- meanDensityByDay(surveyData = visualsurveybg, ordersToInclude = 'LEPL', 
-                            inputYear = '2015', inputSite = 8892356) 
-plot(tempvarBG$julianday, tempvarBG$meanDensity, type = 'l', col = "blue")
+BG = meanDensityByDay(visualsurveybg, 'LEPL', inputYear = '2015', inputSite = 8892356,
+                      plot = T, new = T, color = 'black') 
 
 
 
