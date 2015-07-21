@@ -194,15 +194,17 @@ beatsheet$leavesNum <- as.numeric(leavesNumTemp7)
 
 # Prairie Ridge
 # temporarily going to take out julian day 170, not a PR day and only one caterpillar seen on one survey
-# (so I can start making peak calculations):
+
 labsurvey1 <- labsurvey[labsurvey$julianday != 170, ]
 twoorders <- c('LEPL', 'ORTH')
 
-# Plot our morning surveys, our repeat surveys, and the volunteer surveys all on one graph
+# Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
 PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = T, color = 'blue')
+PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'plum')
 PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'red')
 PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'green')
-legend("topleft", c('lab am surveys', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', col = c('blue', 'red', 'green'))
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'plum', 'red', 'green'))
 
 
 # Botanical Garden
