@@ -139,6 +139,56 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
 }
 
 
+
+# Calculate fraction of surverys with arthropods by julian day
+
+meanDensityByDay = function(surveyData,            # merged dataframe of surveys and orders tables
+                            ordersToInclude,       # which arthropod orders to calculate density for (codes)
+                            byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
+                            minLength = 0,         # minimum arthropod size to include
+                            inputYear,
+                            inputSite, 
+                            plot = F,
+                            new = T,
+                            color = 'black')                  
+  
+{
+  dataYearSite = surveyData[surveyData$year == inputYear & surveyData$site == inputSite, ]
+  effortByDay = data.frame(table(unique(dataYearSite[, c('surveyID', 'julianday')])$julianday))
+  names(effortByDay) = c('julianday', 'numSurveys')
+  
+  temp = filter(surveyData,
+                surveyData$year == inputYear & 
+                  surveyData$site == inputSite &
+                  length >= minLength & 
+                  arthCode %in% ordersToInclude)
+  
+  temp2 = unique(temp[,c('survey','circle','julianday')])
+  
+  
+  if (byTreeSpecies) {
+    temp2 = ddply(temp, .(site, julianday, year, plantSp), summarize, 
+                  totalCount = sum(count>0))
+    
+  } else {
+    temp2 = ddply(temp, .(site, julianday, year), summarize, 
+                  totalCount = sum(count>0))
+  }
+  
+  temp3 = merge(effortByDay, temp2[, c('julianday', 'totalCount')], by = 'julianday', all = T)
+  temp3$totalCount[is.na(temp3$totalCount)] = 0
+  temp3$meanDensity = temp3$totalCount/temp3$numSurveys
+  temp3$julianday = as.numeric(as.character(temp3$julianday))
+  if (plot & new) {
+    plot(temp3$julianday, temp3$meanDensity, type = 'l', 
+         col = color, xlab = "Julian day", ylab = "Mean density per survey")
+  } else if (plot & new==F) {
+    points(temp3$julianday, temp3$meanDensity, type = 'l', col = color)
+  }
+  return(temp3)
+}
+
+
 # Create different subsets of data for beat sheets vs visual surveys, 
 # morning versus afternoon, etc. Also, try to pull out the number of leaves
 # for the BEAT SHEETs.
@@ -205,6 +255,14 @@ PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, pl
 PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'green')
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'plum', 'red', 'green'))
+
+# Merge each of the subsets above together
+PRall1 = merge(PRam[,c('julianday','meanDensity')], PRbs[, c('julianday','meanDensity')], by='julianday', all = T)
+names(PRall1) = c('julianday','density_am','density_bs')
+PRall2 = merge(PRall1, PRpm[,c('julianday','meanDensity')], by = 'julianday', all = T)
+names(PRall2)[4] = 'density_pm'
+PRall = merge(PRall2, PRvol[,c('julianday','meanDensity')], by = 'julianday', all = T)
+names(PRall)[5] = 'density_vol'
 
 
 # Botanical Garden
