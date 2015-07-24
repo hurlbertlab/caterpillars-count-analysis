@@ -40,15 +40,38 @@ orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','j
                       'plantSp','herbivory','arthropod','length',
                       'count','notes.y','notes.x')]
 
+# Add column with arthopod order code
+arthcodes = read.csv('arth_codes.csv', header=T)
+arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
+names(arthcodes1) = c('arthCode', 'arthropod')
+orders4 <- merge(orders3, arthcodes1, all.x = TRUE, sort = FALSE)
+orders4 <- orders4[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
+                        'plantSp','herbivory','arthropod','arthCode','length',
+                        'count','notes.y','notes.x')]
+orders4 <- orders4[order(orders4$date),]
+
+# Add a column indicating if the leaves were wet
+orders4$wetLeaves = c()
+tempwet <- sort(c(grep("wet leaves", orders4$notes.x), grep("Wet leaves", orders4$notes.x), 
+      grep("very dewy", orders4$notes.x), grep("Wet Leaves", orders4$notes.x)))
+orders4$wetLeaves = rep('no', nrow(orders4))
+orders4$wetLeaves[tempwet] = 'yes'
+
+#tempwet$wetLeaves = 'yes'
+#tempwet1 <- tempwet[, c('surveyID', 'wetLeaves')]
+#orders5 <- merge(orders4, tempwet1, by = 'wetLeaves', all.x = T)
+#orders5$wetLeaves[is.na(orders5$wetLeaves)] = 'no'
+
+
 # temp fix of date class
-orders3$date = as.character(orders3$date)
+orders4$date = as.character(orders4$date)
 
 # add a year column
-tempdate <- substring(orders3$date, 1, 4)
-orders3$year = tempdate
+tempdate <- substring(orders4$date, 1, 4)
+orders4$year = tempdate
 
 # List of unique survey events
-events = unique(orders3[, c("surveyID", "userID", "date", "year", "julianday", "site", "circle", "survey")])
+events = unique(orders4[, c("surveyID", "userID", "date", "year", "julianday", "site", "circle", "survey")])
 
 
 # Function for checking survey events for a given site and year
@@ -72,11 +95,14 @@ surveyCount = function(events, site, year) {
 # Calculate mean density per survey
 
 meanDensityByDay = function(surveyData,            # merged dataframe of surveys and orders tables
-                       ordersToInclude,       # which arthropod orders to calculate density for
+                       ordersToInclude,       # which arthropod orders to calculate density for (codes)
                        byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
                        minLength = 0,         # minimum arthropod size to include
                        inputYear,
-                       inputSite)                  
+                       inputSite, 
+                       plot = F,
+                       new = T,
+                       color = 'black')                  
   
   {
   dataYearSite = surveyData[surveyData$year == inputYear & surveyData$site == inputSite, ]
@@ -87,7 +113,7 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
                 surveyData$year == inputYear & 
                 surveyData$site == inputSite &
                 length >= minLength & 
-                arthropod %in% ordersToInclude)
+                arthCode %in% ordersToInclude)
   
   
   if (byTreeSpecies) {
@@ -103,6 +129,12 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
   temp3$totalCount[is.na(temp3$totalCount)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
   temp3$julianday = as.numeric(as.character(temp3$julianday))
+  if (plot & new) {
+    plot(temp3$julianday, temp3$meanDensity, type = 'l', 
+         col = color, xlab = "Julian day", ylab = "Mean density per survey")
+  } else if (plot & new==F) {
+    points(temp3$julianday, temp3$meanDensity, type = 'l', col = color)
+  }
   return(temp3)
 }
 
@@ -112,39 +144,73 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
 # for the BEAT SHEETs.
 
 
-visualsurvey = orders3[!grepl("BEAT SHEET", orders3$notes.x),]
+# Separating the data:
+
+# For the word function:
+library(stringr)
+
+# All visual surveys
+visualsurvey = orders4[!grepl("BEAT SHEET", orders4$notes.x),]
+
+# Botanical Garden visual surveys
+visualsurveybg = visualsurvey[visualsurvey$site == 8892356,]
+
+# Prairie Ridge visual surveys
+visualsurveypr = visualsurvey[visualsurvey$site == 117,]
 
 
-beatsheet = orders3[grep("BEAT SHEET", orders3$notes.x),]
+# For separating the Prairie Ridge data:
+
+# Our visual surveys ONLY, not including repeat surveys
+# Checked data and "REPEAT SURVEY" only format used so far to indicate
+tempvis = visualsurveypr[!grepl("REPEAT SURVEY", visualsurveypr$notes.x),]
+labsurvey = tempvis[tempvis$userID %in% c(69, 130, 131, 132), ]
+
+# Our repeat surveys ONLY
+repsurvey = visualsurveypr[grep("REPEAT SURVEY", visualsurveypr$notes.x),]
+
+# Volunteer surveys
+volsurvey = visualsurveypr[visualsurveypr$userID == 129,]
+
+# Beat sheets and isolating # leaves into a new column
+beatsheet = orders4[grep("BEAT SHEET", orders4$notes.x),]
 leavesNumTemp <- word(beatsheet$notes.x, -1, sep = "= ")
-leavesNumTemp1 <- word(leavesNumTemp, 1, sep = "BEAT SHEET; Leaves  ")
-leavesNumTemp2 <- word(leavesNumTemp1, 1, sep = "BEAT SHEET; Leaves=")
+leavesNumTemp1 <- word(leavesNumTemp, -1, sep = "BEAT SHEET; Leaves  ")
+leavesNumTemp2 <- word(leavesNumTemp1, -1, sep = "BEAT SHEET; Leaves=")
 leavesNumTemp3 <- word(leavesNumTemp2, 1, sep = ";")
 leavesNumTemp4 <- word(leavesNumTemp3, 1, sep = ",")
-
-# Still errors in # leaves data
-
-
-# Pulling out # Leaves, use strsplit(orders3$notes.x, "BEAT SHEET; Leaves = ")
-
-
-splitbeat <- strsplit(as.character(beatsheet$notes.x), split = "BEAT SHEET; Leaves = ")
-beatsheet$leavesBeatTemp = splitbeat
-
-splitbeat1 <- strsplit(as.character(beatsheet$leavesBeatTemp), split = "BEAT SHEET; Leaves  = ")
+leavesNumTemp5 <- gsub(" ", "", leavesNumTemp4)
+leavesNumTemp6 <- gsub("\n", "", leavesNumTemp5)
+leavesNumTemp7 <- gsub("Unknown", "unknown", leavesNumTemp6)
+beatsheet$leavesNum <- as.numeric(leavesNumTemp7)
 
 
+# Pulling out # Leaves, use strsplit(orders4$notes.x, "BEAT SHEET; Leaves = ")
+# splitbeat <- strsplit(as.character(beatsheet$notes.x), split = "BEAT SHEET; Leaves = ")
+# beatsheet$leavesBeatTemp = splitbeat
 
-# Plotting
-tempvarPR <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpillars (Lepidoptera larvae)', 
-                             inputYear = '2015', inputSite = 117) # for Prairie Ridge plot
-plot(tempvarPR$julianday, tempvarPR$meanDensity, type = 'l', col = "blue")
 
-tempvarBG <- meanDensityByDay(surveyData = orders3, ordersToInclude = 'Caterpillars (Lepidoptera larvae)', 
-                            inputYear = '2015', inputSite = 8892356) # for Botanical Garden plot
-plot(tempvarBG$julianday, tempvarBG$meanDensity, type = 'l', col = "blue")
+# Plotting and calculations
 
-# Not sure if these are correct, never a mean density of 0?
-# Adding if else statements for if you don't want to input year and site?
+# Prairie Ridge
+# temporarily going to take out julian day 170, not a PR day and only one caterpillar seen on one survey
+
+labsurvey1 <- labsurvey[labsurvey$julianday != 170, ]
+twoorders <- c('LEPL', 'ORTH')
+
+# Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
+PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = T, color = 'blue')
+PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'plum')
+PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'red')
+PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'green')
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'plum', 'red', 'green'))
+
+
+# Botanical Garden
+BG = meanDensityByDay(visualsurveybg, 'LEPL', inputYear = '2015', inputSite = 8892356,
+                      plot = T, new = T, color = 'black') 
+
+
 
 
