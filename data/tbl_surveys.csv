@@ -3614,21 +3614,12 @@
 15475,117,69,3,A,7/24/2014 9:30,4/14/2015 10:10,70,80,Wind 1 m/s; Observer JD,Unidentified,0,uploads/survey69-15475.jpg,1
 15476,117,69,4,B,7/24/2014 9:30,4/14/2015 10:11,70,80,Wind 1 m/s; Observer JD,Unidentified,1,uploads/survey69-15476.jpg,1
 15477,117,69,5,D,7/24/2014 9:30,4/14/2015 10:11,70,80,Wind 1 m/s; Observer JD,Unidentified,1,uploads/survey69-15477.jpg,1
-15608,117,124,1,A,4/19/2015 18:13,4/19/2015 18:14,60,70,,Nyssa sylvatica (blackgum),0,JPEG_20150419_181407_-2109204554.jpg,0
 15609,117,69,7,B,7/24/2014 9:30,4/21/2015 15:10,70,80,Wind 1 m/s; Observer CLG,,2,uploads/survey69-15609.jpg,1
 15610,117,69,7,C,7/24/2014 9:30,4/21/2015 15:10,70,80,Wind 1 m/s; Observer CLG,,2,uploads/survey69-15610.jpg,1
 15611,117,69,8,D,7/24/2014 9:30,4/21/2015 15:11,70,80,Wind 1 m/s; Observer CLG,,1,uploads/survey69-15611.jpg,1
 15612,117,69,8,C,7/24/2014 9:30,4/21/2015 15:13,70,80,Wind 1 m/s; Observer CLG,,1,uploads/survey69-15612.jpg,1
 15613,117,69,3,E,7/24/2014 9:30,4/21/2015 15:16,70,80,Wind 1 m/s; Observer JD,,1,uploads/survey69-15613.jpg,1
 15614,117,69,6,E,7/24/2014 9:30,4/21/2015 15:29,70,80,Wind 1 m/s; Observer JD,,1,uploads/survey69-15614.jpg,1
-15615,117,124,1,A,4/22/2015 14:16,4/22/2015 16:50,60,70,,Red maple,0,JPEG_20150422_144956_153152351.jpg,0
-15616,117,124,1,A,4/23/2015 9:40,4/23/2015 11:40,60,70,,Red maple,0,JPEG_20150423_094040_1065686313.jpg,0
-15617,117,124,1,A,4/24/2015 11:55,4/24/2015 13:57,60,70,,Red maple,0,JPEG_20150424_115602_-802842552.jpg,0
-15619,117,124,1,A,4/28/2015 14:07,4/28/2015 14:08,60,70,,Red maple,0,JPEG_20150428_140801_1021240509.jpg,0
-15620,117,124,1,A,4/28/2015 14:24,4/28/2015 14:25,60,70,,Red maple,0,JPEG_20150428_142426_-949795290.jpg,0
-15623,117,124,1,A,4/30/2015 12:29,4/30/2015 12:30,60,70,,Red maple,0,JPEG_20150430_122929_2084614790.jpg,0
-15629,117,123,1,A,5/1/2015 14:50,5/1/2015 14:50,60,70,,Red maple,0,JPEG_20150501_145039_-1056833948.jpg,0
-15630,117,123,6,E,5/1/2015 14:53,5/1/2015 14:53,60,70,,,2,uploads/survey123-15630.jpg,0
 15642,117,69,1,A,5/15/2015 9:47,5/15/2015 9:51,60,70,,,2,JPEG_20150515_095059_-1168401065.jpg,1
 15643,117,69,1,E,5/15/2015 9:51,5/15/2015 9:54,60,70,,,2,JPEG_20150515_095418_135787488.jpg,1
 15657,8892356,131,8,C,5/14/2015 2:38,5/19/2015 14:29,70,80,,Spicebush,2,uploads/survey131-15657.jpg,1
@@ -3833,9 +3824,9 @@
 15823,117,131,4,B,5/18/2015 10:50,5/20/2015 13:50,80,90,,Unidentified ,1,uploads/survey131-15823.jpg,1
 15824,117,131,4,E,5/18/2015 10:50,5/20/2015 13:51,80,90,,Box elder,1,uploads/survey131-15824.jpg,1
 15825,117,131,4,D,5/18/2015 10:51,5/20/2015 13:54,80,90,,Unidentified ,1,uploads/survey131-15825.jpg,1
-15826,117,131,4,C,5/20/2015 14:03,5/20/2015 14:03,80,90,,Common persimmon,2,uploads/survey131-15826.jpg,1
+15826,117,131,4,C,5/18/2015 11:03,5/20/2015 14:03,80,90,BEAT SHEET; Leaves = 103,Common persimmon,2,uploads/survey131-15826.jpg,1
 15827,117,131,4,A,5/18/2015 10:50,5/20/2015 14:11,80,90,,Sweet gum,1,uploads/survey131-15827.jpg,1
-15828,117,131,3,A,5/20/2015 14:13,5/20/2015 14:13,80,90,,Devils-walkingstick,1,uploads/survey131-15828.jpg,1
+15828,117,131,3,A,5/18/2015 11:13,5/20/2015 14:13,80,90,BEAT SHEET: Leaves = 50,Devils-walkingstick,1,uploads/survey131-15828.jpg,1
 15829,117,131,3,E,5/18/2015 10:50,5/20/2015 14:13,80,90,,Devils-walkingstick,1,uploads/survey131-15829.jpg,1
 15830,117,131,3,B,5/18/2015 10:50,5/20/2015 14:15,80,90,,Silverbell,1,uploads/survey131-15830.jpg,1
 15831,117,131,3,D,5/18/2015 10:50,5/20/2015 14:16,80,90,,Bitternut hickory,1,uploads/survey131-15831.jpg,1
@@ -3879,8 +3870,6 @@
 15872,8892356,131,8,B,5/19/2015 11:30,5/20/2015 16:40,80,90,,Sugar maple,1,uploads/survey131-15872.jpg,1
 15873,8892356,131,8,D,5/19/2015 11:30,5/20/2015 16:42,80,90,,Sugar maple,3,uploads/survey131-15873.jpg,1
 15874,8892356,131,8,A,5/19/2015 11:30,5/20/2015 16:45,80,90,,Sugar maple,2,uploads/survey131-15874.jpg,1
-15875,117,69,1,A,5/21/2015 7:52,5/21/2015 7:53,60,70,delete me,Red maple,0,JPEG_20150521_075315_523686221.jpg,1
-15877,8892356,69,1,A,5/22/2015 8:33,5/22/2015 8:34,60,70,delete,Red maple,0,JPEG_20150522_083354_523686221.jpg,1
 15878,8892356,131,1,D,5/22/2015 8:38,5/22/2015 13:40,50,60,,Paw-paw,1,uploads/survey131-15878.jpg,1
 15879,8892356,131,1,A,5/22/2015 8:45,5/22/2015 13:41,50,60,,Spicebush,1,uploads/survey131-15879.jpg,1
 15880,8892356,132,2,B,5/22/2015 9:05,5/22/2015 13:41,60,70,,Spicebush,1,uploads/survey132-15880.jpg,1
@@ -7567,3 +7556,1150 @@ No survey recorded on data sheet--website requires survey to be selected before 
 19525,117,130,11,D,7/9/2015 10:41,7/10/2015 8:28,80,90,,Common persimmon,1,uploads/survey130-19525.jpg,1
 19526,117,132,11,C,7/9/2015 10:36,7/10/2015 8:32,80,90,,American sycamore,1,uploads/survey132-19526.jpg,1
 19527,117,131,9,A,7/9/2015 9:25,7/10/2015 8:32,80,90,BEAT SHEET; Leaves = 39,Box elder,0,uploads/survey131-19527.jpg,1
+19528,117,131,1,C,7/9/2015 9:34,7/10/2015 8:36,80,90,BEAT SHEET; Leaves = 27,Box elder,0,uploads/survey131-19528.jpg,1
+19529,117,131,2,B,7/9/2015 9:43,7/10/2015 8:36,80,90,BEAT SHEET; Leaves = 25,Sweet gum,0,uploads/survey131-19529.jpg,1
+19530,117,131,3,B,7/9/2015 9:50,7/10/2015 8:41,80,90,BEAT SHEET; Leaves = 20,Silverbell,0,uploads/survey131-19530.jpg,1
+19531,117,132,7,C,7/9/2015 10:44,7/10/2015 8:41,80,90,,Pin oak,1,uploads/survey132-19531.jpg,1
+19532,117,130,7,A,7/9/2015 10:47,7/10/2015 8:42,80,90,,Pin oak,1,uploads/survey130-19532.jpg,1
+19533,117,131,3,E,7/9/2015 9:57,7/10/2015 8:43,80,90,BEAT SHEET; Leaves = 56,Devils-walkingstick,0,uploads/survey131-19533.jpg,1
+19534,117,131,4,E,7/9/2015 10:02,7/10/2015 8:44,80,90,BEAT SHEET; Leaves = 40,Box elder,0,uploads/survey131-19534.jpg,1
+19535,117,132,7,D,7/9/2015 10:51,7/10/2015 8:45,80,90,,Tuliptree,1,uploads/survey132-19535.jpg,1
+19536,117,131,4,A,7/9/2015 10:08,7/10/2015 8:45,80,90,BEAT SHEET; Leaves = 15,Sweet gum,0,uploads/survey131-19536.jpg,1
+19537,117,130,8,B,7/9/2015 10:55,7/10/2015 8:45,80,90,,Sugar maple,1,uploads/survey130-19537.jpg,1
+19538,117,131,5,D,7/9/2015 10:13,7/10/2015 8:45,80,90,BEAT SHEET; Leaves = 34,Red maple,0,uploads/survey131-19538.jpg,1
+19539,117,132,8,C,7/9/2015 10:57,7/10/2015 8:46,80,90,,American beech,1,uploads/survey132-19539.jpg,1
+19540,117,130,10,B,7/9/2015 9:15,7/10/2015 8:48,80,90,BEAT SHEET; Leaves = 61,Box elder,0,uploads/survey130-19540.jpg,1
+19541,117,131,5,B,7/9/2015 10:18,7/10/2015 8:48,80,90,BEAT SHEET; Leaves = 18,Unidentified,0,uploads/survey131-19541.jpg,1
+19542,117,132,1,A,7/9/2015 13:57,7/10/2015 8:49,90,100,REPEAT SURVEY,Mulberry,1,uploads/survey132-19542.jpg,1
+19543,117,131,12,C,7/9/2015 10:23,7/10/2015 8:49,80,90,BEAT SHEET; Leaves = 20,Unidentified,0,uploads/survey131-19543.jpg,1
+19544,117,132,2,A,7/9/2015 14:01,7/10/2015 8:50,90,100,REPEAT SURVEY,Red maple,1,uploads/survey132-19544.jpg,1
+19545,117,132,3,A,7/9/2015 14:05,7/10/2015 8:51,90,100,REPEAT SURVEY,Devils-walkingstick,1,uploads/survey132-19545.jpg,1
+19546,117,131,6,A,7/9/2015 10:29,7/10/2015 8:51,80,90,BEAT SHEET; Leaves = 32,Carolina ash,0,uploads/survey131-19546.jpg,1
+19547,117,131,6,C,7/9/2015 10:33,7/10/2015 8:51,80,90,BEAT SHEET; Leaves = 27,Fringetree,0,uploads/survey131-19547.jpg,1
+19548,117,132,3,C,7/9/2015 14:09,7/10/2015 8:52,90,100,REPEAT SURVEY,Sweet gum,1,uploads/survey132-19548.jpg,1
+19549,117,130,9,D,7/9/2015 9:23,7/10/2015 8:52,80,90,BEAT SHEET; Leaves = 49,Sweet gum,0,uploads/survey130-19549.jpg,1
+19550,117,132,4,E,7/9/2015 14:11,7/10/2015 8:53,90,100,REPEAT SURVEY,Box elder,2,uploads/survey132-19550.jpg,1
+19551,117,131,11,B,7/9/2015 10:39,7/10/2015 8:54,80,90,BEAT SHEET; Leaves = 30,Red maple,0,uploads/survey131-19551.jpg,1
+19552,117,132,5,A,7/9/2015 14:15,7/10/2015 8:55,90,100,REPEAT SURVEY,American bladdernut,1,uploads/survey132-19552.jpg,1
+19553,117,130,1,E,7/9/2015 9:30,7/10/2015 8:55,80,90,BEAT SHEET; Leaves = 44,Common persimmon,0,uploads/survey130-19553.jpg,1
+19554,117,131,7,B,7/9/2015 10:46,7/10/2015 8:55,80,90,BEAT SHEET; Leaves = 40,Common persimmon,0,uploads/survey131-19554.jpg,1
+19555,117,132,6,B,7/9/2015 14:20,7/10/2015 8:56,90,100,REPEAT SURVEY,Common persimmon,1,uploads/survey132-19555.jpg,1
+19556,117,131,8,A,7/9/2015 10:57,7/10/2015 8:56,80,90,BEAT SHEET; Leaves = 35,Chalk maple,0,uploads/survey131-19556.jpg,1
+19557,117,130,1,A,7/9/2015 9:38,7/10/2015 8:56,80,90,BEAT SHEET; Leaves = 30,Mulberry,0,uploads/survey130-19557.jpg,1
+19558,117,131,8,E,7/9/2015 11:03,7/10/2015 8:57,80,90,BEAT SHEET; Leaves = 60,Chalk maple,0,uploads/survey131-19558.jpg,1
+19559,117,132,7,C,7/9/2015 14:28,7/10/2015 8:57,90,100,REPEAT SURVEY,Pin oak,1,uploads/survey132-19559.jpg,1
+19560,117,130,2,E,7/9/2015 9:45,7/10/2015 8:58,80,90,BEAT SHEET; Leaves = 63,Box elder,0,uploads/survey130-19560.jpg,1
+19561,117,132,8,E,7/9/2015 14:31,7/10/2015 9:00,90,100,REPEAT SURVEY,Chalk maple,0,uploads/survey132-19561.jpg,1
+19562,117,132,8,B,7/9/2015 14:35,7/10/2015 9:01,90,100,REPEAT SURVEY,Chalk maple,1,uploads/survey132-19562.jpg,1
+19563,117,132,10,A,7/9/2015 9:14,7/10/2015 9:02,80,90,BEAT SHEET; Leaves = 33,Common persimmon,0,uploads/survey132-19563.jpg,1
+19564,117,130,3,D,7/9/2015 9:54,7/10/2015 9:03,80,90,BEAT SHEET; Leaves = 109,Bitternut hickory,0,uploads/survey130-19564.jpg,1
+19565,117,132,9,B,7/9/2015 9:21,7/10/2015 9:04,80,90,BEAT SHEET; Leaves = 30,Box elder,0,uploads/survey132-19565.jpg,1
+19566,117,130,4,D,7/9/2015 10:01,7/10/2015 9:04,80,90,BEAT SHEET; Leaves = 62,Unidentified,0,uploads/survey130-19566.jpg,1
+19567,117,132,9,C,7/9/2015 9:27,7/10/2015 9:05,80,90,BEAT SHEET; Leaves = 33,Common persimmon,0,uploads/survey132-19567.jpg,1
+19568,117,130,4,B,7/9/2015 10:06,7/10/2015 9:07,80,90,BEAT SHEET; Leaves = 46,Unidentified,0,uploads/survey130-19568.jpg,1
+19569,117,132,1,B,7/9/2015 9:34,7/10/2015 9:07,80,90,BEAT SHEET; Leaves = 35,Box elder,0,uploads/survey132-19569.jpg,1
+19570,117,132,2,A,7/9/2015 9:42,7/10/2015 9:08,80,90,BEAT SHEET; Leaves = 30,Red maple,0,uploads/survey132-19570.jpg,1
+19571,117,130,5,C,7/9/2015 10:13,7/10/2015 9:09,80,90,BEAT SHEET; Leaves = 28,Tuliptree,0,uploads/survey130-19571.jpg,1
+19572,117,131,7,A,7/6/2015 9:12,7/10/2015 9:10,80,90,Wet leaves,Pin oak,1,uploads/survey131-19572.jpg,1
+19573,117,131,7,D,7/6/2015 9:21,7/10/2015 9:11,80,90,Wet leaves,Tuliptree,1,uploads/survey131-19573.jpg,1
+19574,117,132,2,D,7/9/2015 9:52,7/10/2015 9:12,80,90,BEAT SHEET; Leaves = 52,Sweet gum,0,uploads/survey132-19574.jpg,1
+19575,117,130,12,A,7/9/2015 10:19,7/10/2015 9:12,80,90,BEAT SHEET; Leaves = 57,Sweet gum,0,uploads/survey130-19575.jpg,1
+19576,117,131,11,B,7/6/2015 9:27,7/10/2015 9:12,80,90,Wet leaves,Red maple,1,uploads/survey131-19576.jpg,1
+19577,117,130,6,E,7/9/2015 10:25,7/10/2015 9:13,80,90,BEAT SHEET; Leaves = 38,Sweet gum,0,uploads/survey130-19577.jpg,1
+19578,117,132,3,A,7/9/2015 9:59,7/10/2015 9:13,80,90,BEAT SHEET; Leaves = 58,Devils-walkingstick,0,uploads/survey132-19578.jpg,1
+19579,117,131,6,E,7/6/2015 9:33,7/10/2015 9:14,80,90,Wet leaves,Unidentified,1,uploads/survey131-19579.jpg,1
+19580,117,130,6,E,7/9/2015 10:32,7/10/2015 9:16,80,90,BEAT SHEET; Leaves = 31,Unidentified,0,uploads/survey130-19580.jpg,1
+19581,117,132,4,C,7/9/2015 10:07,7/10/2015 9:17,80,90,BEAT SHEET; Leaves = 40,Common persimmon,0,uploads/survey132-19581.jpg,1
+19582,117,131,6,B,7/6/2015 9:39,7/10/2015 9:17,80,90,Wet leaves,Common persimmon,1,uploads/survey131-19582.jpg,1
+19583,117,131,12,A,7/6/2015 9:45,7/10/2015 9:18,80,90,Wet leaves,Sweet gum,1,uploads/survey131-19583.jpg,1
+19584,117,130,11,E,7/9/2015 10:38,7/10/2015 9:19,80,90,BEAT SHEET; Leaves = 44,Common persimmon,0,uploads/survey130-19584.jpg,1
+19585,117,132,5,A,7/9/2015 10:14,7/10/2015 9:19,80,90,BEAT SHEET; Leaves = 53,American bladdernut,0,uploads/survey132-19585.jpg,1
+19586,117,130,11,D,7/9/2015 10:44,7/10/2015 9:19,80,90,BEAT SHEET; Leaves = 35,Common persimmon,0,uploads/survey130-19586.jpg,1
+19587,117,130,7,A,7/9/2015 10:52,7/10/2015 9:22,80,90,BEAT SHEET; Leaves = 39,Pin oak,0,uploads/survey130-19587.jpg,1
+19588,117,131,5,D,7/6/2015 9:51,7/10/2015 9:22,80,90,,Red maple,1,uploads/survey131-19588.jpg,1
+19589,117,131,4,E,7/6/2015 9:57,7/10/2015 9:23,80,90,,Box elder,1,uploads/survey131-19589.jpg,1
+19590,117,132,12,B,7/9/2015 10:20,7/10/2015 9:23,80,90,BEAT SHEET; Leaves = 40,Sweet gum,0,uploads/survey132-19590.jpg,1
+19591,117,130,8,B,7/9/2015 11:00,7/10/2015 9:23,80,90,BEAT SHEET; Leaves = 76,Sugar maple,0,uploads/survey130-19591.jpg,1
+19592,117,132,12,E,7/9/2015 10:26,7/10/2015 9:24,80,90,BEAT SHEET; Leaves = 27,Sweet gum,0,uploads/survey132-19592.jpg,1
+19593,117,130,10,C,7/9/2015 9:17,7/10/2015 9:25,80,90,BEAT SHEET; Leaves = 38,Mulberry,0,uploads/survey130-19593.jpg,1
+19594,117,131,4,C,7/6/2015 10:02,7/10/2015 9:26,80,90,,Common persimmon,1,uploads/survey131-19594.jpg,1
+19595,117,132,6,D,7/9/2015 10:32,7/10/2015 9:26,80,90,BEAT SHEET; Leaves = 31,Common persimmon,0,uploads/survey132-19595.jpg,1
+19596,117,130,9,E,7/9/2015 9:29,7/10/2015 9:27,80,90,BEAT SHEET; Leaves = 28,Sweet gum,0,uploads/survey130-19596.jpg,1
+19597,117,130,11,A,7/9/2015 10:35,7/10/2015 9:29,80,90,BEAT SHEET; Leaves = 60,Sourwood,0,uploads/survey130-19597.jpg,1
+19598,117,132,11,C,7/9/2015 10:41,7/10/2015 9:33,80,90,BEAT SHEET; Leaves = 17,American sycamore,0,uploads/survey132-19598.jpg,1
+19599,117,131,3,D,7/6/2015 10:11,7/10/2015 9:34,80,90,,Bitternut hickory,1,uploads/survey131-19599.jpg,1
+19600,117,132,7,C,7/9/2015 10:48,7/10/2015 9:34,80,90,BEAT SHEET; Leaves = 49,Pin oak,0,uploads/survey132-19600.jpg,1
+19601,117,132,7,D,7/9/2015 10:54,7/10/2015 9:36,80,90,BEAT SHEET; Leaves = 37,Tuliptree,0,uploads/survey132-19601.jpg,1
+19602,117,132,8,C,7/9/2015 10:57,7/10/2015 9:38,80,90,BEAT SHEET; Leaves = 48,American beech,0,uploads/survey132-19602.jpg,1
+19603,117,130,10,C,7/9/2015 9:15,7/10/2015 9:39,80,90,,Mulberry,1,uploads/survey130-19603.jpg,1
+19604,117,130,9,E,7/9/2015 9:25,7/10/2015 9:44,80,90,,Sweet gum,1,uploads/survey130-19604.jpg,1
+19605,117,130,11,A,7/9/2015 10:30,7/10/2015 9:48,80,90,,Sourwood,2,uploads/survey130-19605.jpg,1
+19606,117,131,3,B,7/6/2015 10:16,7/10/2015 9:49,80,90,,Silverbell,1,uploads/survey131-19606.jpg,1
+19607,117,131,2,B,7/6/2015 10:24,7/10/2015 9:49,80,90,,Sweet gum,1,uploads/survey131-19607.jpg,1
+19608,117,131,2,C,7/6/2015 10:28,7/10/2015 9:51,80,90,,Sweet gum,1,uploads/survey131-19608.jpg,1
+19609,117,132,8,E,7/6/2015 9:05,7/10/2015 9:52,70,80,BEAT SHEET; Leaves = 55,Chalk maple,0,uploads/survey132-19609.jpg,1
+19610,117,131,1,E,7/6/2015 10:34,7/10/2015 9:53,80,90,,Common persimmon,1,uploads/survey131-19610.jpg,1
+19611,117,132,8,A,7/6/2015 9:10,7/10/2015 9:54,70,80,BEAT SHEET; Leaves = 35; wet leaves,Chalk maple,0,uploads/survey132-19611.jpg,1
+19612,117,132,7,A,7/6/2015 9:17,7/10/2015 9:55,70,80,BEAT SHEET; Leaves = 30; wet leaves,Pin oak,0,uploads/survey132-19612.jpg,1
+19613,117,132,7,D,7/6/2015 9:26,7/10/2015 9:56,70,80,BEAT SHEET; Leaves = 20; wet leaves,Tuliptree,0,uploads/survey132-19613.jpg,1
+19614,117,132,11,B,7/6/2015 9:30,7/10/2015 9:59,70,80,BEAT SHEET; Leaves = 34; wet leaves,Red maple,0,uploads/survey132-19614.jpg,1
+19615,117,131,1,E,7/6/2015 10:34,7/10/2015 10:00,80,90,,Common persimmon,1,uploads/survey131-19615.jpg,1
+19616,117,131,9,A,7/6/2015 10:39,7/10/2015 10:00,80,90,,Box elder,1,uploads/survey131-19616.jpg,1
+19617,117,132,6,E,7/6/2015 9:36,7/10/2015 10:00,70,80,BEAT SHEET; Leaves = 22,Unidentified,0,uploads/survey132-19617.jpg,1
+19618,117,131,9,E,7/6/2015 10:43,7/10/2015 10:01,80,90,,Sweet gum,1,uploads/survey131-19618.jpg,1
+19619,117,132,6,B,7/6/2015 9:43,7/10/2015 10:02,70,80,BEAT SHEET; Leaves = 30,Common persimmon,0,uploads/survey132-19619.jpg,1
+19620,117,131,10,E,7/6/2015 10:50,7/10/2015 10:03,80,90,,Flowering dogwood,2,uploads/survey131-19620.jpg,1
+19621,117,132,12,A,7/6/2015 9:48,7/10/2015 10:03,70,80,BEAT SHEET; Leaves = 30,Sweet gum,0,uploads/survey132-19621.jpg,1
+19622,117,132,5,D,7/6/2015 9:54,7/10/2015 10:04,70,80,BEAT SHEET; Leaves = 30,Red maple,0,uploads/survey132-19622.jpg,1
+19623,117,132,4,E,7/6/2015 9:59,7/10/2015 10:07,70,80,BEAT SHEET; Leaves = 45,Box elder,0,uploads/survey132-19623.jpg,1
+19624,117,132,4,C,7/6/2015 10:06,7/10/2015 10:08,70,80,BEAT SHEET; Leaves = 25,Common persimmon,0,uploads/survey132-19624.jpg,1
+19625,117,132,3,D,7/6/2015 10:14,7/10/2015 10:09,70,80,BEAT SHEET; Leaves = 54,Bitternut hickory,0,uploads/survey132-19625.jpg,1
+19626,117,132,3,B,7/6/2015 10:19,7/10/2015 10:10,70,80,BEAT SHEET; Leaves = 25,Silverbell,0,uploads/survey132-19626.jpg,1
+19627,117,132,2,B,7/6/2015 10:27,7/10/2015 10:10,70,80,BEAT SHEET; Leaves = 20,Sweet gum,0,uploads/survey132-19627.jpg,1
+19628,117,132,2,C,7/6/2015 10:32,7/10/2015 10:12,70,80,BEAT SHEET; Leaves = 24,Sweet gum,0,uploads/survey132-19628.jpg,1
+19629,117,132,1,E,7/6/2015 10:37,7/10/2015 10:13,70,80,BEAT SHEET; Leaves = 27,Common persimmon,0,uploads/survey132-19629.jpg,1
+19630,117,132,1,E,7/6/2015 10:37,7/10/2015 10:13,70,80,BEAT SHEET; Leaves = 27,Common persimmon,0,uploads/survey132-19630.jpg,1
+19631,117,132,9,A,7/6/2015 10:42,7/10/2015 10:15,70,80,BEAT SHEET; Leaves = 39,Box elder,0,uploads/survey132-19631.jpg,1
+19632,117,132,9,E,7/6/2015 10:47,7/10/2015 10:15,70,80,BEAT SHEET; Leaves = 35,Sweet gum,0,uploads/survey132-19632.jpg,1
+19633,117,132,10,E,7/6/2015 10:53,7/10/2015 10:17,70,80,BEAT SHEET; Leaves = 27,Flowering dogwood,0,uploads/survey132-19633.jpg,1
+19634,8892356,131,8,A,7/7/2015 8:36,7/10/2015 11:01,70,80,,Sugar maple,1,uploads/survey131-19634.jpg,1
+19635,8892356,131,8,E,7/7/2015 8:42,7/10/2015 11:01,70,80,,Sugar maple,1,uploads/survey131-19635.jpg,1
+19636,8892356,131,7,A,7/7/2015 8:49,7/10/2015 11:03,70,80,,American beech,2,uploads/survey131-19636.jpg,1
+19637,8892356,131,7,E,7/7/2015 8:55,7/10/2015 11:04,70,80,,Sugar maple,1,uploads/survey131-19637.jpg,1
+19638,8892356,131,6,E,7/7/2015 9:01,7/10/2015 12:23,70,80,,Sourwood,1,uploads/survey131-19638.jpg,1
+19639,8892356,131,6,A,7/7/2015 9:07,7/10/2015 12:24,70,80,,Sugar maple,1,uploads/survey131-19639.jpg,1
+19640,8892356,131,5,B,7/7/2015 9:16,7/10/2015 12:25,70,80,,American beech,1,uploads/survey131-19640.jpg,1
+19641,8892356,131,5,C,7/7/2015 9:21,7/10/2015 12:47,70,80,,Sourwood,1,uploads/survey131-19641.jpg,1
+19642,8892356,131,4,B,7/7/2015 9:29,7/10/2015 12:54,70,80,,Mapleleaf viburnum,1,uploads/survey131-19642.jpg,1
+19643,8892356,131,3,C,7/7/2015 9:36,7/10/2015 12:58,70,80,,Unidentified,1,uploads/survey131-19643.jpg,1
+19644,8892356,131,3,B,7/7/2015 9:41,7/10/2015 13:05,70,80,,American beech,1,uploads/survey131-19644.jpg,1
+19645,8892356,131,3,D,7/7/2015 9:46,7/10/2015 13:05,70,80,,American beech,1,uploads/survey131-19645.jpg,1
+19646,8892356,131,2,E,7/7/2015 9:51,7/10/2015 13:06,70,80,,Spicebush,1,uploads/survey131-19646.jpg,1
+19647,8892356,131,2,A,7/7/2015 9:56,7/10/2015 13:06,70,80,,Red oak,1,uploads/survey131-19647.jpg,1
+19648,8892356,131,1,A,7/7/2015 10:05,7/10/2015 13:07,70,80,,Spicebush,1,uploads/survey131-19648.jpg,1
+19649,8892356,131,1,C,7/7/2015 10:10,7/10/2015 13:09,70,80,,Unidentified,1,uploads/survey131-19649.jpg,1
+19650,8892356,131,8,A,7/7/2015 8:41,7/10/2015 13:11,70,80,BEAT SHEET; Leaves = 25,Sugar maple,0,uploads/survey131-19650.jpg,1
+19651,8892356,131,8,E,7/7/2015 8:46,7/10/2015 13:13,70,80,BEAT SHEET; Leaves = 18,Sugar maple,0,uploads/survey131-19651.jpg,1
+19652,8892356,131,7,A,7/7/2015 8:52,7/10/2015 13:14,70,80,BEAT SHEET; Leaves = 27,American beech,0,uploads/survey131-19652.jpg,1
+19653,8892356,131,7,E,7/7/2015 8:57,7/10/2015 13:16,70,80,BEAT SHEET; Leaves = 30,Sugar maple,0,uploads/survey131-19653.jpg,1
+19654,8892356,131,6,E,7/7/2015 9:04,7/10/2015 13:16,70,80,BEAT SHEET; Leaves = 35,Sourwood,0,uploads/survey131-19654.jpg,1
+19655,8892356,131,6,A,7/7/2015 9:11,7/10/2015 13:17,70,80,BEAT SHEET; Leaves = 30,Sugar maple,0,uploads/survey131-19655.jpg,1
+19656,8892356,131,5,B,7/7/2015 9:19,7/10/2015 13:18,70,80,BEAT SHEET; Leaves = 28,American beech,0,uploads/survey131-19656.jpg,1
+19657,8892356,131,5,C,7/7/2015 9:23,7/10/2015 13:20,70,80,BEAT SHEET; Leaves = 20,Sourwood,0,uploads/survey131-19657.jpg,1
+19658,8892356,131,4,B,7/7/2015 9:32,7/10/2015 13:21,70,80,BEAT SHEET; Leaves = 18,Mapleleaf viburnum,0,uploads/survey131-19658.jpg,1
+19659,8892356,131,3,C,7/7/2015 9:40,7/10/2015 13:21,70,80,BEAT SHEET; Leaves = 30,Unidentified,0,uploads/survey131-19659.jpg,1
+19660,8892356,131,3,B,7/7/2015 9:43,7/10/2015 13:23,70,80,BEAT SHEET; Leaves = 21,American beech,0,uploads/survey131-19660.jpg,1
+19661,8892356,131,3,D,7/7/2015 9:49,7/10/2015 13:24,70,80,BEAT SHEET; Leaves = 27,American beech,0,uploads/survey131-19661.jpg,1
+19662,8892356,131,2,E,7/7/2015 9:55,7/10/2015 13:25,70,80,BEAT SHEET; Leaves = 40,Spicebush,0,uploads/survey131-19662.jpg,1
+19663,8892356,131,2,A,7/7/2015 9:59,7/10/2015 13:27,70,80,BEAT SHEET; Leaves = 40,Red oak,0,uploads/survey131-19663.jpg,1
+19664,8892356,131,1,A,7/7/2015 10:08,7/10/2015 13:27,70,80,BEAT SHEET; Leaves = 24,Spicebush,0,uploads/survey131-19664.jpg,1
+19665,8892356,131,1,C,7/7/2015 10:14,7/10/2015 13:29,70,80,BEAT SHEET; Leaves = 20,Unidentified,0,uploads/survey131-19665.jpg,1
+19666,117,130,8,B,7/13/2015 9:38,7/13/2015 14:00,70,80,Wet leaves,Sugar maple,1,uploads/survey130-19666.jpg,1
+19667,117,130,7,A,7/13/2015 9:45,7/13/2015 14:01,70,80,Wet leaves,Pin oak,1,uploads/survey130-19667.jpg,1
+19668,117,130,11,B,7/13/2015 9:53,7/13/2015 14:03,70,80,Wet leaves,Red maple,1,uploads/survey130-19668.jpg,1
+19669,117,130,11,C,7/13/2015 10:00,7/13/2015 14:08,70,80,Wet leaves,American sycamore,1,uploads/survey130-19669.jpg,1
+19670,117,132,6,A,7/13/2015 10:05,7/13/2015 14:08,70,80,wet leaves,Carolina ash,1,uploads/survey132-19670.jpg,1
+19671,117,130,6,E,7/13/2015 10:07,7/13/2015 14:09,70,80,Wet leaves,Unidentified,1,uploads/survey130-19671.jpg,1
+19672,117,132,12,E,7/13/2015 10:10,7/13/2015 14:09,70,80,wet leaves,Sweet gum,1,uploads/survey132-19672.jpg,1
+19673,117,130,12,D,7/13/2015 10:13,7/13/2015 14:12,70,80,Wet leaves,Sweet gum,1,uploads/survey130-19673.jpg,1
+19674,117,132,12,B,7/13/2015 10:15,7/13/2015 14:12,70,80,wet leaves,Sweet gum,1,uploads/survey132-19674.jpg,1
+19675,117,130,5,C,7/13/2015 10:27,7/13/2015 14:13,70,80,Wet leaves,Tuliptree,1,uploads/survey130-19675.jpg,1
+19676,117,132,5,E,7/13/2015 10:20,7/13/2015 14:14,70,80,wet leaves,Sweet gum,2,uploads/survey132-19676.jpg,1
+19677,117,130,4,C,7/13/2015 10:36,7/13/2015 14:14,70,80,Wet leaves,Common persimmon,1,uploads/survey130-19677.jpg,1
+19678,117,132,5,A,7/13/2015 10:25,7/13/2015 14:15,70,80,wet leaves,American bladdernut,1,uploads/survey132-19678.jpg,1
+19679,117,130,3,C,7/13/2015 10:57,7/13/2015 14:15,70,80,Wet leaves,Sugar maple,1,uploads/survey130-19679.jpg,1
+19680,117,132,8,E,7/13/2015 9:30,7/13/2015 14:16,70,80,wet leaves,Chalk maple,1,uploads/survey132-19680.jpg,1
+19681,117,130,2,C,7/13/2015 11:04,7/13/2015 14:17,70,80,Wet leaves,Sweet gum,1,uploads/survey130-19681.jpg,1
+19682,117,132,8,A,7/13/2015 9:35,7/13/2015 14:18,70,80,wet leaves,Chalk maple,1,uploads/survey132-19682.jpg,1
+19683,117,130,1,E,7/13/2015 11:13,7/13/2015 14:19,70,80,Wet leaves,Common persimmon,1,uploads/survey130-19683.jpg,1
+19684,117,130,1,A,7/13/2015 11:18,7/13/2015 14:20,70,80,Wet leaves,Mulberry,1,uploads/survey130-19684.jpg,1
+19685,117,132,7,E,7/13/2015 9:40,7/13/2015 14:20,70,80,wet leaves,Sweet gum,1,uploads/survey132-19685.jpg,1
+19686,117,130,9,B,7/13/2015 11:23,7/13/2015 14:21,70,80,Wet leaves,American beech,2,uploads/survey130-19686.jpg,1
+19687,117,132,7,D,7/13/2015 9:45,7/13/2015 14:21,70,80,wet leaves,Tuliptree,1,uploads/survey132-19687.jpg,1
+19688,117,130,9,C,7/13/2015 11:28,7/13/2015 14:22,70,80,Wet leaves,Common persimmon,1,uploads/survey130-19688.jpg,1
+19689,117,130,9,D,7/13/2015 11:34,7/13/2015 14:23,70,80,Wet leaves,Sweet gum,1,uploads/survey130-19689.jpg,1
+19690,117,132,11,A,7/13/2015 9:50,7/13/2015 14:23,70,80,wet leaves,Sourwood,1,uploads/survey132-19690.jpg,1
+19691,117,130,10,A,7/13/2015 11:41,7/13/2015 14:24,70,80,Wet leaves,Common persimmon,1,uploads/survey130-19691.jpg,1
+19692,117,132,6,C,7/13/2015 10:00,7/13/2015 14:24,70,80,wet leaves,Fringetree,1,uploads/survey132-19692.jpg,1
+19693,117,130,10,D,7/13/2015 11:46,7/13/2015 14:25,70,80,Wet leaves,Box elder,1,uploads/survey130-19693.jpg,1
+19694,117,131,8,C,7/13/2015 9:38,7/13/2015 14:25,70,80,Wet leaves,American beech,1,uploads/survey131-19694.jpg,1
+19695,117,132,4,B,7/13/2015 10:30,7/13/2015 14:26,70,80,wet leaves,Unidentified,3,uploads/survey132-19695.jpg,1
+19696,117,132,4,D,7/13/2015 10:35,7/13/2015 14:27,70,80,wet leaves,Unidentified,1,uploads/survey132-19696.jpg,1
+19697,117,132,3,E,7/13/2015 10:45,7/13/2015 14:29,70,80,wet leaves,Devils-walkingstick,1,uploads/survey132-19697.jpg,1
+19698,117,132,3,A,7/13/2015 10:50,7/13/2015 14:30,70,80,wet leaves,Devils-walkingstick,1,uploads/survey132-19698.jpg,1
+19699,117,130,8,B,7/13/2015 9:41,7/13/2015 14:33,70,80,BEAT SHEET; Leaves = 54; Wet leaves,Sugar maple,0,uploads/survey130-19699.jpg,1
+19700,117,132,8,D,7/13/2015 9:38,7/13/2015 14:34,70,80,wet leaves,Slippery elm,1,uploads/survey132-19700.jpg,1
+19701,117,130,7,A,7/13/2015 9:48,7/13/2015 14:34,70,80,BEAT SHEET; Leaves = 43; Wet leaves,Pin oak,0,uploads/survey130-19701.jpg,1
+19702,117,132,11,E,7/13/2015 9:56,7/13/2015 14:35,70,80,wet leaves,Common persimmon,2,uploads/survey132-19702.jpg,1
+19703,117,131,7,B,7/13/2015 9:43,7/13/2015 14:36,70,80,Wet leaves,Common persimmon,1,uploads/survey131-19703.jpg,1
+19704,117,130,11,B,7/13/2015 9:57,7/13/2015 14:36,70,80,BEAT SHEET; Leaves = 72; Wet leaves,Red maple,0,uploads/survey130-19704.jpg,1
+19705,117,131,7,C,7/13/2015 9:51,7/13/2015 14:36,70,80,Wet leaves,Pin oak,1,uploads/survey131-19705.jpg,1
+19706,117,132,6,D,7/13/2015 10:10,7/13/2015 14:37,70,80,wet leaves,Common persimmon,1,uploads/survey132-19706.jpg,1
+19707,117,131,11,D,7/13/2015 10:00,7/13/2015 14:37,70,80,Wet leaves,Common persimmon,1,uploads/survey131-19707.jpg,1
+19708,117,130,11,C,7/13/2015 10:04,7/13/2015 14:37,70,80,BEAT SHEET; Leaves = 17; Wet leaves,American sycamore,0,uploads/survey130-19708.jpg,1
+19709,117,131,6,B,7/13/2015 10:05,7/13/2015 14:38,70,80,Wet leaves,Common persimmon,1,uploads/survey131-19709.jpg,1
+19710,117,132,4,A,7/13/2015 10:47,7/13/2015 14:39,70,80,wet leaves,Sweet gum,1,uploads/survey132-19710.jpg,1
+19711,117,131,12,C,7/13/2015 10:11,7/13/2015 14:40,70,80,Wet leaves,Unidentified,1,uploads/survey131-19711.jpg,1
+19712,117,131,12,A,7/13/2015 10:16,7/13/2015 14:41,70,80,Wet leaves,Sweet gum,1,uploads/survey131-19712.jpg,1
+19713,117,132,2,A,7/13/2015 11:10,7/13/2015 14:41,70,80,wet leaves,Red maple,1,uploads/survey132-19713.jpg,1
+19714,117,131,5,D,7/13/2015 10:23,7/13/2015 14:41,70,80,Wet leaves,Red maple,1,uploads/survey131-19714.jpg,1
+19715,117,132,1,D,7/13/2015 11:21,7/13/2015 14:42,70,80,wet leaves,Box elder,2,uploads/survey132-19715.jpg,1
+19716,117,130,6,E,7/13/2015 10:10,7/13/2015 14:42,70,80,BEAT SHEET; Leaves = 22; Wet leaves,Unidentified,0,uploads/survey130-19716.jpg,1
+19717,117,132,10,B,7/13/2015 11:43,7/13/2015 14:42,70,80,wet leaves,Unidentified,2,uploads/survey132-19717.jpg,1
+19718,117,130,12,D,7/13/2015 10:17,7/13/2015 14:45,70,80,BEAT SHEET; Leaves = 50; Wet leaves,Sweet gum,0,uploads/survey130-19718.jpg,1
+19719,117,130,5,C,7/13/2015 10:32,7/13/2015 14:46,70,80,BEAT SHEET; Leaves = 33; Wet leaves,Tuliptree,0,uploads/survey130-19719.jpg,1
+19720,117,130,4,C,7/13/2015 10:50,7/13/2015 14:47,70,80,BEAT SHEET; Leaves = 56; Wet leaves,Common persimmon,0,uploads/survey130-19720.jpg,1
+19721,117,132,8,E,7/13/2015 9:30,7/13/2015 14:48,70,80,BEAT SHEET; Leaves = 30; wet leaves,Chalk maple,0,uploads/survey132-19721.jpg,1
+19722,117,130,3,C,7/13/2015 10:59,7/13/2015 14:48,70,80,BEAT SHEET; Leaves = 37; Wet leaves,Sugar maple,0,uploads/survey130-19722.jpg,1
+19723,117,132,8,A,7/13/2015 9:35,7/13/2015 14:48,70,80,BEAT SHEET; Leaves = 20; wet leaves,Chalk maple,0,uploads/survey132-19723.jpg,1
+19724,117,130,2,C,7/13/2015 11:09,7/13/2015 14:50,70,80,BEAT SHEET; Leaves = 58; Wet leaves,Sweet gum,0,uploads/survey130-19724.jpg,1
+19725,117,132,7,E,7/13/2015 9:40,7/13/2015 14:50,70,80,BEAT SHEET; Leaves = 30; wet leaves,Sweet gum,0,uploads/survey132-19725.jpg,1
+19726,117,130,1,E,7/13/2015 11:15,7/13/2015 14:51,70,80,BEAT SHEET; Leaves = 41; Wet leaves,Common persimmon,0,uploads/survey130-19726.jpg,1
+19727,117,131,5,B,7/13/2015 10:31,7/13/2015 14:52,70,80,Wet leaves,Unidentified,1,uploads/survey131-19727.jpg,1
+19728,117,132,7,D,7/13/2015 9:45,7/13/2015 14:52,70,80,BEAT SHEET; Leaves = 20; wet leaves,Tuliptree,0,uploads/survey132-19728.jpg,1
+19729,117,131,4,E,7/13/2015 10:37,7/13/2015 14:53,70,80,Wet leaves,Box elder,1,uploads/survey131-19729.jpg,1
+19730,117,131,3,D,7/13/2015 10:48,7/13/2015 14:53,70,80,Wet leaves,Bitternut hickory,1,uploads/survey131-19730.jpg,1
+19731,117,130,1,A,7/13/2015 11:20,7/13/2015 14:53,70,80,BEAT SHEET; Leaves = 21; Wet leaves,Mulberry,0,uploads/survey130-19731.jpg,1
+19732,117,132,11,A,7/13/2015 9:50,7/13/2015 14:54,70,80,BEAT SHEET; Leaves = 15; wet leaves,Sourwood,0,uploads/survey132-19732.jpg,1
+19733,117,131,3,B,7/13/2015 10:51,7/13/2015 14:54,70,80,Wet leaves,Silverbell,1,uploads/survey131-19733.jpg,1
+19734,117,130,9,B,7/13/2015 11:26,7/13/2015 14:55,70,80,BEAT SHEET; Leaves = 33; Wet leaves,American beech,0,uploads/survey130-19734.jpg,1
+19735,117,132,6,C,7/13/2015 10:00,7/13/2015 14:55,70,80,BEAT SHEET; Leaves = 15; wet leaves,Fringetree,0,uploads/survey132-19735.jpg,1
+19736,117,131,2,D,7/13/2015 10:57,7/13/2015 14:55,70,80,Wet leaves,Sweet gum,1,uploads/survey131-19736.jpg,1
+19737,117,130,9,C,7/13/2015 11:31,7/13/2015 14:56,70,80,BEAT SHEET; Leaves = 21; Wet leaves,Common persimmon,0,uploads/survey130-19737.jpg,1
+19738,117,130,9,D,7/13/2015 11:37,7/13/2015 14:56,70,80,BEAT SHEET; Leaves = 48; Wet leaves,Sweet gum,0,uploads/survey130-19738.jpg,1
+19739,117,132,6,A,7/13/2015 10:05,7/13/2015 14:57,70,80,BEAT SHEET; Leaves = 15; wet leaves,Carolina ash,0,uploads/survey132-19739.jpg,1
+19740,117,130,10,A,7/13/2015 11:44,7/13/2015 14:58,70,80,BEAT SHEET; Leaves = 39; Wet leaves,Common persimmon,0,uploads/survey130-19740.jpg,1
+19741,117,132,12,E,7/13/2015 10:10,7/13/2015 14:59,70,80,BEAT SHEET; Leaves = 55; wet leaves,Sweet gum,0,uploads/survey132-19741.jpg,1
+19742,117,130,10,D,7/13/2015 11:49,7/13/2015 14:59,70,80,BEAT SHEET; Leaves = 42; Wet leaves,Box elder,0,uploads/survey130-19742.jpg,1
+19743,117,131,2,E,7/13/2015 11:05,7/13/2015 15:00,70,80,Wet leaves,Box elder,1,uploads/survey131-19743.jpg,1
+19744,117,132,12,B,7/13/2015 10:15,7/13/2015 15:00,70,80,BEAT SHEET; Leaves = 20; wet leaves,Sweet gum,0,uploads/survey132-19744.jpg,1
+19745,117,131,1,C,7/13/2015 11:18,7/13/2015 15:00,70,80,Wet leaves,Box elder,1,uploads/survey131-19745.jpg,1
+19746,117,131,2,B,7/13/2015 11:10,7/13/2015 15:01,70,80,Wet leaves,Sweet gum,1,uploads/survey131-19746.jpg,1
+19747,117,131,9,E,7/13/2015 11:23,7/13/2015 15:01,70,80,Wet leaves,Sweet gum,1,uploads/survey131-19747.jpg,1
+19748,117,131,9,A,7/13/2015 11:31,7/13/2015 15:02,70,80,Wet leaves,Box elder,1,uploads/survey131-19748.jpg,1
+19749,117,131,10,E,7/13/2015 11:36,7/13/2015 15:03,70,80,Wet leaves,Flowering dogwood,1,uploads/survey131-19749.jpg,1
+19750,117,131,10,C,7/13/2015 11:45,7/13/2015 15:03,70,80,Wet leaves,Mulberry,1,uploads/survey131-19750.jpg,1
+19751,117,132,5,E,7/13/2015 10:20,7/13/2015 15:04,70,80,BEAT SHEET; Leaves = unknown; wet leaves,Sweet gum,0,uploads/survey132-19751.jpg,1
+19752,117,132,5,A,7/13/2015 10:25,7/13/2015 15:05,70,80,BEAT SHEET; Leaves = 25; wet leaves,American bladdernut,0,uploads/survey132-19752.jpg,1
+19753,117,132,4,B,7/13/2015 10:30,7/13/2015 15:09,70,80,BEAT SHEET; Leaves = 25; wet leaves,Unidentified,0,uploads/survey132-19753.jpg,1
+19754,117,131,8,C,7/13/2015 9:41,7/13/2015 15:10,70,80,BEAT SHEET; Leaves = 30; Wet leaves,American beech,0,uploads/survey131-19754.jpg,1
+19755,117,131,7,B,7/13/2015 9:46,7/13/2015 15:12,70,80,BEAT SHEET; Leaves = 24; Wet leaves,Common persimmon,0,uploads/survey131-19755.jpg,1
+19756,117,131,7,C,7/13/2015 9:53,7/13/2015 15:13,70,80,BEAT SHEET; Leaves = 28; Wet leaves,Pin oak,0,uploads/survey131-19756.jpg,1
+19757,117,132,4,D,7/13/2015 10:35,7/13/2015 15:14,70,80,BEAT SHEET; Leaves = 15; wet leaves,Unidentified,0,uploads/survey132-19757.jpg,1
+19758,117,131,11,D,7/13/2015 10:03,7/13/2015 15:14,70,80,BEAT SHEET; Leaves = 50; Wet leaves,Common persimmon,0,uploads/survey131-19758.jpg,1
+19759,117,131,6,B,7/13/2015 10:09,7/13/2015 15:19,70,80,BEAT SHEET; Leaves = 40; Wet leaves,Common persimmon,0,uploads/survey131-19759.jpg,1
+19760,117,132,3,E,7/13/2015 10:45,7/13/2015 15:20,70,80,BEAT SHEET; Leaves = 15; wet leaves,Devils-walkingstick,0,uploads/survey132-19760.jpg,1
+19761,117,131,12,C,7/13/2015 10:13,7/13/2015 15:20,70,80,BEAT SHEET; Leaves = 30; Wet leaves,Unidentified,0,uploads/survey131-19761.jpg,1
+19762,117,132,3,A,7/13/2015 10:50,7/13/2015 15:21,70,80,BEAT SHEET; Leaves = 20; wet leaves,Devils-walkingstick,0,uploads/survey132-19762.jpg,1
+19763,117,131,12,A,7/13/2015 10:22,7/13/2015 15:24,70,80,BEAT SHEET; Leaves = 25; Wet leaves,Sweet gum,0,uploads/survey131-19763.jpg,1
+19764,117,132,8,D,7/13/2015 9:43,7/13/2015 15:26,70,80,BEAT SHEET; Leaves = 28; wet leaves,Slippery elm,0,uploads/survey132-19764.jpg,1
+19765,117,132,11,E,7/13/2015 10:00,7/13/2015 15:34,70,80,BEAT SHEET; Leaves = 27; wet leaves,Common persimmon,0,uploads/survey132-19765.jpg,1
+19766,117,132,6,D,7/13/2015 10:13,7/13/2015 15:34,70,80,BEAT SHEET; Leaves = 28; wet leaves,Common persimmon,0,uploads/survey132-19766.jpg,1
+19767,117,132,4,A,7/13/2015 10:49,7/13/2015 15:36,70,80,BEAT SHEET; Leaves = 25; wet leaves,Sweet gum,0,uploads/survey132-19767.jpg,1
+19768,117,132,2,A,7/13/2015 11:12,7/13/2015 15:36,70,80,BEAT SHEET; Leaves = 25; wet leaves,Red maple,0,uploads/survey132-19768.jpg,1
+19769,117,132,1,D,7/13/2015 11:24,7/13/2015 15:39,70,80,BEAT SHEET; Leaves = 29; wet leaves,Box elder,0,uploads/survey132-19769.jpg,1
+19770,117,132,10,B,7/13/2015 11:47,7/13/2015 15:41,70,80,BEAT SHEET; Leaves = 37; wet leaves,Unidentified,0,uploads/survey132-19770.jpg,1
+19771,117,131,5,D,7/13/2015 10:27,7/13/2015 15:45,70,80,BEAT SHEET; Leaves = 40; Wet leaves,Red maple,0,uploads/survey131-19771.jpg,1
+19772,117,131,5,B,7/13/2015 10:33,7/13/2015 15:56,70,80,BEAT SHEET; Leaves = 20; Wet leaves,Unidentified,0,uploads/survey131-19772.jpg,1
+19773,117,131,4,E,7/13/2015 10:42,7/13/2015 15:57,70,80,BEAT SHEET; Leaves = 21; Wet leaves,Box elder,0,uploads/survey131-19773.jpg,1
+19774,117,131,3,D,7/13/2015 10:50,7/13/2015 15:58,70,80,BEAT SHEET; Leaves = 40; Wet leaves,Bitternut hickory,0,uploads/survey131-19774.jpg,1
+19775,117,131,3,B,7/13/2015 10:54,7/13/2015 15:59,70,80,BEAT SHEET; Leaves = 25; Wet leaves,Silverbell,0,uploads/survey131-19775.jpg,1
+19776,117,131,2,D,7/13/2015 10:59,7/13/2015 16:00,70,80,BEAT SHEET; Leaves = 22; Wet leaves,Sweet gum,0,uploads/survey131-19776.jpg,1
+19777,117,131,2,E,7/13/2015 11:08,7/13/2015 16:01,70,80,BEAT SHEET; Leaves = 21; Wet leaves,Box elder,0,uploads/survey131-19777.jpg,1
+19778,117,131,2,B,7/13/2015 11:13,7/13/2015 16:01,70,80,BEAT SHEET; Leaves = 30; Wet leaves,Sweet gum,0,uploads/survey131-19778.jpg,1
+19779,117,131,1,C,7/13/2015 11:21,7/13/2015 16:02,70,80,BEAT SHEET; Leaves = 40; Wet leaves,Box elder,0,uploads/survey131-19779.jpg,1
+19780,117,131,9,E,7/13/2015 11:28,7/13/2015 16:02,70,80,BEAT SHEET; Leaves = 30; Wet leaves,Sweet gum,0,uploads/survey131-19780.jpg,1
+19781,117,131,9,A,7/13/2015 11:34,7/13/2015 16:03,70,80,BEAT SHEET; Leaves = 18; Wet leaves,Box elder,0,uploads/survey131-19781.jpg,1
+19782,117,131,10,E,7/13/2015 11:43,7/13/2015 16:03,70,80,BEAT SHEET; Leaves = 21; Wet leaves,Flowering dogwood,0,uploads/survey131-19782.jpg,1
+19783,117,131,10,C,7/13/2015 11:47,7/13/2015 16:06,70,80,BEAT SHEET; Leaves = 30; Wet leaves,Mulberry,0,uploads/survey131-19783.jpg,1
+19784,117,129,1,E,8/19/2014 10:30,7/14/2015 12:24,80,90,,not listed,3,uploads/survey129-19784.jpg,1
+19785,117,129,1,A,8/19/2014 10:30,7/14/2015 12:24,80,90,,not listed,2,uploads/survey129-19785.jpg,1
+19786,117,129,2,B,8/19/2014 10:30,7/14/2015 12:25,80,90,,not listed,4,uploads/survey129-19786.jpg,1
+19787,117,129,2,C,8/19/2014 10:30,7/14/2015 12:25,80,90,,not listed,3,uploads/survey129-19787.jpg,1
+19788,117,129,3,B,8/19/2014 10:30,7/14/2015 12:25,80,90,,not listed,1,uploads/survey129-19788.jpg,1
+19789,117,129,3,C,8/19/2014 10:30,7/14/2015 12:26,80,90,,not listed,2,uploads/survey129-19789.jpg,1
+19790,117,129,4,D,8/19/2014 10:30,7/14/2015 12:26,80,90,,not listed,2,uploads/survey129-19790.jpg,1
+19791,117,129,4,A,8/19/2014 10:30,7/14/2015 12:27,80,90,,not listed,4,uploads/survey129-19791.jpg,1
+19792,117,129,5,C,8/19/2014 10:30,7/14/2015 12:27,80,90,,not listed,3,uploads/survey129-19792.jpg,1
+19793,117,129,5,A,8/19/2014 10:30,7/14/2015 12:27,80,90,,not listed,4,uploads/survey129-19793.jpg,1
+19794,117,129,6,D,8/19/2014 10:30,7/14/2015 12:28,80,90,,not listed,4,uploads/survey129-19794.jpg,1
+19795,117,129,6,E,8/19/2014 10:30,7/14/2015 12:28,80,90,,not listed,3,uploads/survey129-19795.jpg,1
+19796,117,129,7,E,8/19/2014 10:30,7/14/2015 12:29,80,90,,not listed,4,uploads/survey129-19796.jpg,1
+19797,117,129,7,D,8/19/2014 10:30,7/14/2015 12:29,80,90,,not listed,2,uploads/survey129-19797.jpg,1
+19798,117,129,8,D,8/19/2014 10:30,7/14/2015 12:29,80,90,,not listed,3,uploads/survey129-19798.jpg,1
+19799,117,129,1,B,8/19/2014 10:30,7/14/2015 12:30,80,90,,not listed,3,uploads/survey129-19799.jpg,1
+19800,117,129,1,C,8/19/2014 10:30,7/14/2015 12:31,80,90,,not listed,4,uploads/survey129-19800.jpg,1
+19801,117,129,1,D,8/19/2014 10:30,7/14/2015 12:31,80,90,,not listed,1,uploads/survey129-19801.jpg,1
+19802,117,129,2,A,8/19/2014 10:30,7/14/2015 12:31,80,90,,not listed,1,uploads/survey129-19802.jpg,1
+19803,117,129,2,E,8/19/2014 10:30,7/14/2015 12:32,80,90,,not listed,2,uploads/survey129-19803.jpg,1
+19804,117,129,2,D,8/19/2014 10:30,7/14/2015 12:32,80,90,,not listed,1,uploads/survey129-19804.jpg,1
+19805,117,129,3,E,8/19/2014 10:30,7/14/2015 12:32,80,90,,not listed,1,uploads/survey129-19805.jpg,1
+19806,117,129,3,A,8/19/2014 10:30,7/14/2015 12:33,80,90,,not listed,1,uploads/survey129-19806.jpg,1
+19807,117,129,4,E,8/19/2014 10:30,7/14/2015 12:33,80,90,,not listed,1,uploads/survey129-19807.jpg,1
+19808,117,129,4,C,8/19/2014 10:30,7/14/2015 12:34,80,90,,not listed,1,uploads/survey129-19808.jpg,1
+19809,117,129,4,B,8/19/2014 10:30,7/14/2015 12:34,80,90,,not listed,2,uploads/survey129-19809.jpg,1
+19810,117,129,5,B,8/19/2014 10:30,7/14/2015 12:34,80,90,,not listed,1,uploads/survey129-19810.jpg,1
+19811,117,129,5,E,8/19/2014 10:30,7/14/2015 12:35,80,90,,not listed,1,uploads/survey129-19811.jpg,1
+19812,117,129,5,D,8/19/2014 10:30,7/14/2015 12:35,80,90,,not listed,1,uploads/survey129-19812.jpg,1
+19813,117,129,6,A,8/19/2014 10:30,7/14/2015 12:36,80,90,,not listed,1,uploads/survey129-19813.jpg,1
+19814,117,129,6,C,8/19/2014 10:30,7/14/2015 12:36,80,90,,not listed,2,uploads/survey129-19814.jpg,1
+19815,117,129,6,B,8/19/2014 10:30,7/14/2015 12:37,80,90,,not listed,1,uploads/survey129-19815.jpg,1
+19816,117,129,7,A,8/19/2014 10:30,7/14/2015 12:37,80,90,,not listed,2,uploads/survey129-19816.jpg,1
+19817,117,129,7,C,8/19/2014 10:30,7/14/2015 12:38,80,90,,not listed,2,uploads/survey129-19817.jpg,1
+19818,117,129,7,B,8/19/2014 10:30,7/14/2015 12:38,80,90,,not listed,1,uploads/survey129-19818.jpg,1
+19819,117,129,8,A,8/19/2014 10:30,7/14/2015 12:38,80,90,,not listed,1,uploads/survey129-19819.jpg,1
+19820,117,129,8,B,8/19/2014 10:30,7/14/2015 12:39,80,90,,not listed,1,uploads/survey129-19820.jpg,1
+19821,117,129,8,E,8/19/2014 10:30,7/14/2015 12:39,80,90,,not listed,1,uploads/survey129-19821.jpg,1
+19822,117,129,1,C,8/5/2014 9:30,7/14/2015 12:40,70,80,,not listed,3,uploads/survey129-19822.jpg,1
+19823,117,129,2,E,8/5/2014 10:30,7/14/2015 12:40,70,80,,not listed,2,uploads/survey129-19823.jpg,1
+19824,117,129,3,E,8/5/2014 10:30,7/14/2015 12:41,70,80,,not listed,1,uploads/survey129-19824.jpg,1
+19825,117,129,4,C,8/5/2014 10:30,7/14/2015 12:42,70,80,no herbivory listed--didn't check for bugs because of poison ivy ,not listed,0,uploads/survey129-19825.jpg,1
+19826,117,129,4,D,8/5/2014 10:30,7/14/2015 12:44,70,80,,not listed,1,uploads/survey129-19826.jpg,1
+19827,117,129,5,D,8/5/2014 10:30,7/14/2015 12:45,70,80,,not listed,1,uploads/survey129-19827.jpg,1
+19828,117,129,6,E,8/5/2014 10:30,7/14/2015 12:46,70,80,,not listed,1,uploads/survey129-19828.jpg,1
+19829,117,129,7,E,8/5/2014 10:30,7/14/2015 12:46,70,80,,not listed,2,uploads/survey129-19829.jpg,1
+19830,117,129,8,E,8/5/2014 10:30,7/14/2015 12:46,70,80,,not listed,1,uploads/survey129-19830.jpg,1
+19831,117,129,8,D,8/5/2014 10:30,7/14/2015 12:47,70,80,,not listed,2,uploads/survey129-19831.jpg,1
+19832,8892356,130,1,B,7/14/2015 8:48,7/14/2015 12:49,70,80,Wet leaves,Spicebush,1,uploads/survey130-19832.jpg,1
+19833,8892356,130,2,C,7/14/2015 9:06,7/14/2015 12:51,70,80,Wet leaves,Spicebush,1,uploads/survey130-19833.jpg,1
+19834,8892356,130,3,E,7/14/2015 9:25,7/14/2015 12:55,70,80,Wet leaves,American beech,1,uploads/survey130-19834.jpg,1
+19835,8892356,130,4,D,7/14/2015 9:53,7/14/2015 12:58,70,80,Wet leaves,American beech,1,uploads/survey130-19835.jpg,1
+19836,8892356,132,1,E,7/14/2015 8:39,7/14/2015 12:58,70,80,Wet leaves,Spicebush,1,uploads/survey132-19836.jpg,1
+19837,8892356,132,1,D,7/14/2015 8:45,7/14/2015 12:59,70,80,Wet leaves,Paw-paw,1,uploads/survey132-19837.jpg,1
+19838,8892356,132,2,B,7/14/2015 8:56,7/14/2015 13:01,70,80,Wet leaves,Spicebush,1,uploads/survey132-19838.jpg,1
+19839,8892356,132,2,A,7/14/2015 9:02,7/14/2015 13:02,70,80,Wet leaves,Red oak,1,uploads/survey132-19839.jpg,1
+19840,8892356,132,3,B,7/14/2015 9:14,7/14/2015 13:05,70,80,Wet leaves,American beech,2,uploads/survey132-19840.jpg,1
+19841,8892356,132,3,A,7/14/2015 9:23,7/14/2015 13:05,70,80,Wet leaves,American beech,1,uploads/survey132-19841.jpg,1
+19842,8892356,130,6,D,7/14/2015 10:16,7/14/2015 13:06,70,80,Wet leaves,Sugar maple,1,uploads/survey130-19842.jpg,1
+19843,8892356,132,4,E,7/14/2015 9:38,7/14/2015 13:06,70,80,Wet leaves,Sugar maple,1,uploads/survey132-19843.jpg,1
+19844,8892356,130,7,B,7/14/2015 10:27,7/14/2015 13:07,70,80,Wet leaves,Spicebush,1,uploads/survey130-19844.jpg,1
+19845,8892356,132,4,B,7/14/2015 9:43,7/14/2015 13:07,70,80,Wet leaves,Mapleleaf viburnum,1,uploads/survey132-19845.jpg,1
+19846,8892356,132,5,E,7/14/2015 9:53,7/14/2015 13:08,70,80,Wet leaves,American beech,1,uploads/survey132-19846.jpg,1
+19847,8892356,130,8,E,7/14/2015 10:42,7/14/2015 13:08,70,80,Wet leaves,Sugar maple,1,uploads/survey130-19847.jpg,1
+19848,8892356,132,5,D,7/14/2015 9:59,7/14/2015 13:09,70,80,Wet leaves,Unidentified,1,uploads/survey132-19848.jpg,1
+19849,8892356,130,1,B,7/14/2015 8:51,7/14/2015 13:10,70,80,BEAT SHEET; Leaves = 23; Wet leaves,Spicebush,1,uploads/survey130-19849.jpg,1
+19850,8892356,132,6,B,7/14/2015 10:09,7/14/2015 13:11,70,80,Wet leaves,American beech,2,uploads/survey132-19850.jpg,1
+19851,8892356,132,6,C,7/14/2015 10:14,7/14/2015 13:13,70,80,Wet leaves,American beech,1,uploads/survey132-19851.jpg,1
+19852,8892356,130,2,C,7/14/2015 9:10,7/14/2015 13:14,70,80,BEAT SHEET; Leaves = 34; Wet leaves,Spicebush,0,uploads/survey130-19852.jpg,1
+19853,8892356,132,7,C,7/14/2015 10:22,7/14/2015 13:14,70,80,Wet leaves,Sugar maple,1,uploads/survey132-19853.jpg,1
+19854,8892356,130,3,E,7/14/2015 9:28,7/14/2015 13:15,70,80,BEAT SHEET; Leaves = 41; Wet leaves,American beech,0,uploads/survey130-19854.jpg,1
+19855,8892356,132,7,D,7/14/2015 10:27,7/14/2015 13:15,70,80,Wet leaves,Sugar maple,2,uploads/survey132-19855.jpg,1
+19856,8892356,130,4,D,7/14/2015 9:55,7/14/2015 13:16,70,80,BEAT SHEET; Leaves = 43; Wet leaves,American beech,0,uploads/survey130-19856.jpg,1
+19857,8892356,130,6,D,7/14/2015 10:17,7/14/2015 13:17,70,80,BEAT SHEET; Leaves = 39; Wet leaves,Sugar maple,0,uploads/survey130-19857.jpg,1
+19858,8892356,132,8,D,7/14/2015 10:34,7/14/2015 13:17,70,80,Wet leaves,Sugar maple,1,uploads/survey132-19858.jpg,1
+19859,8892356,132,8,B,7/14/2015 10:44,7/14/2015 13:18,70,80,Wet leaves,Sugar maple,1,uploads/survey132-19859.jpg,1
+19860,8892356,130,7,B,7/14/2015 10:29,7/14/2015 13:19,70,80,BEAT SHEET; Leaves = 41; Wet leaves,Spicebush,0,uploads/survey130-19860.jpg,1
+19861,8892356,132,1,E,7/14/2015 8:41,7/14/2015 13:38,70,80,BEAT SHEET; Leaves = 34; Wet leaves,Spicebush,0,uploads/survey132-19861.jpg,1
+19862,8892356,130,8,E,7/14/2015 10:43,7/14/2015 13:40,70,80,BEAT SHEET; Leaves = 38; Wet leaves,Sugar maple,0,uploads/survey130-19862.jpg,1
+19863,8892356,132,1,D,7/14/2015 8:49,7/14/2015 13:40,70,80,BEAT SHEET; Leaves = 14; Wet leaves,Paw-paw,0,uploads/survey132-19863.jpg,1
+19864,8892356,132,2,B,7/14/2015 8:58,7/14/2015 13:41,70,80,BEAT SHEET; Leaves = 41; Wet leaves,Spicebush,0,uploads/survey132-19864.jpg,1
+19865,8892356,132,2,A,7/14/2015 9:07,7/14/2015 13:42,70,80,BEAT SHEET; Leaves = 21; Wet leaves,Red oak,0,uploads/survey132-19865.jpg,1
+19866,8892356,132,3,B,7/14/2015 9:18,7/14/2015 13:43,70,80,BEAT SHEET; Leaves = 21; Wet leaves,American beech,0,uploads/survey132-19866.jpg,1
+19867,8892356,132,3,A,7/14/2015 9:28,7/14/2015 13:48,70,80,BEAT SHEET; Leaves = 19; Wet leaves,American beech,0,uploads/survey132-19867.jpg,1
+19868,8892356,132,4,E,7/14/2015 9:40,7/14/2015 13:50,70,80,BEAT SHEET; Leaves = 52; Wet leaves,Sugar maple,0,uploads/survey132-19868.jpg,1
+19869,8892356,132,4,B,7/14/2015 9:46,7/14/2015 13:52,70,80,BEAT SHEET; Leaves = 30; Wet leaves,Mapleleaf viburnum,0,uploads/survey132-19869.jpg,1
+19870,8892356,132,5,E,7/14/2015 9:56,7/14/2015 13:53,70,80,BEAT SHEET; Leaves = 23; Wet leaves,American beech,0,uploads/survey132-19870.jpg,1
+19871,8892356,132,5,D,7/14/2015 10:04,7/14/2015 13:54,70,80,BEAT SHEET; Leaves = 29; Wet leaves,Unidentified,0,uploads/survey132-19871.jpg,1
+19872,8892356,132,6,B,7/14/2015 10:12,7/14/2015 13:57,70,80,BEAT SHEET; Leaves = 23; Wet leaves,American beech,0,uploads/survey132-19872.jpg,1
+19873,8892356,132,6,C,7/14/2015 10:16,7/14/2015 13:58,70,80,BEAT SHEET; Leaves = 28; Wet leaves,American beech,0,uploads/survey132-19873.jpg,1
+19874,8892356,132,7,C,7/14/2015 10:24,7/14/2015 13:59,70,80,BEAT SHEET; Leaves = 45; Wet leaves,Sugar maple,0,uploads/survey132-19874.jpg,1
+19875,8892356,132,7,D,7/14/2015 10:30,7/14/2015 13:59,70,80,BEAT SHEET; Leaves = 41; Wet leaves,Sugar maple,0,uploads/survey132-19875.jpg,1
+19876,8892356,132,8,D,7/14/2015 10:41,7/14/2015 14:02,70,80,BEAT SHEET; Leaves = 32; Wet leaves,Sugar maple,0,uploads/survey132-19876.jpg,1
+19877,8892356,132,8,B,7/14/2015 10:45,7/14/2015 14:03,70,80,BEAT SHEET; Leaves = 39; Wet leaves,Sugar maple,0,uploads/survey132-19877.jpg,1
+19878,8892356,131,1,A,7/14/2015 8:56,7/15/2015 8:12,70,80,Wet leaves,Spicebush,1,uploads/survey131-19878.jpg,1
+19879,8892356,131,1,C,7/14/2015 8:46,7/15/2015 8:12,70,80,Wet leaves,Unidentified,1,uploads/survey131-19879.jpg,1
+19880,8892356,131,2,E,7/14/2015 8:55,7/15/2015 8:13,70,80,Wet leaves,Spicebush,1,uploads/survey131-19880.jpg,1
+19881,8892356,131,2,D,7/14/2015 9:06,7/15/2015 8:13,70,80,Wet leaves,Spicebush,1,uploads/survey131-19881.jpg,1
+19882,8892356,131,3,C,7/14/2015 9:14,7/15/2015 8:14,70,80,Wet leaves,Unidentified,1,uploads/survey131-19882.jpg,1
+19883,8892356,131,3,D,7/14/2015 9:20,7/15/2015 8:15,70,80,Wet leaves,American beech,1,uploads/survey131-19883.jpg,1
+19884,8892356,131,4,A,7/14/2015 9:37,7/15/2015 8:16,70,80,Wet leaves,American beech,1,uploads/survey131-19884.jpg,1
+19885,8892356,131,4,C,7/14/2015 9:42,7/15/2015 8:16,70,80,Wet leaves,American beech,1,uploads/survey131-19885.jpg,1
+19886,8892356,131,5,B,7/14/2015 9:53,7/15/2015 8:17,70,80,Wet leaves,American beech,1,uploads/survey131-19886.jpg,1
+19887,8892356,131,5,A,7/14/2015 9:57,7/15/2015 9:30,70,80,Wet leaves,Red maple,1,uploads/survey131-19887.jpg,1
+19888,8892356,131,5,C,7/14/2015 10:03,7/15/2015 9:44,70,80,Wet leaves,Sourwood,1,uploads/survey131-19888.jpg,1
+19889,8892356,131,6,A,7/14/2015 10:11,7/15/2015 9:45,70,80,Wet leaves,Sugar maple,1,uploads/survey131-19889.jpg,1
+19890,8892356,131,6,E,7/14/2015 10:15,7/15/2015 9:46,70,80,Wet leaves,Sourwood,1,uploads/survey131-19890.jpg,1
+19891,8892356,131,7,E,7/14/2015 10:22,7/15/2015 9:47,70,80,Wet leaves,Sugar maple,1,uploads/survey131-19891.jpg,1
+19892,8892356,131,7,A,7/14/2015 10:27,7/15/2015 9:48,70,80,Wet leaves,American beech,1,uploads/survey131-19892.jpg,1
+19893,8892356,131,8,A,7/14/2015 10:34,7/15/2015 9:51,70,80,Wet leaves,Sugar maple,1,uploads/survey131-19893.jpg,1
+19894,8892356,131,8,C,7/14/2015 10:41,7/15/2015 9:52,70,80,Wet leaves,Spicebush,1,uploads/survey131-19894.jpg,1
+19895,8892356,131,1,A,7/14/2015 8:42,7/15/2015 9:55,70,80,BEAT SHEET; Leaves = 30; Wet leaves,Spicebush,0,uploads/survey131-19895.jpg,1
+19896,8892356,131,1,C,7/14/2015 8:48,7/15/2015 9:56,70,80,BEAT SHEET; Leaves = 24; Wet leaves,Unidentified,0,uploads/survey131-19896.jpg,1
+19897,8892356,131,2,E,7/14/2015 9:00,7/15/2015 9:58,70,80,BEAT SHEET; Leaves = 34; Wet leaves,Spicebush,0,uploads/survey131-19897.jpg,1
+19898,8892356,131,2,D,7/14/2015 9:06,7/15/2015 9:59,70,80,BEAT SHEET; Leaves = 22; Wet leaves,Spicebush,0,uploads/survey131-19898.jpg,1
+19899,8892356,131,3,C,7/14/2015 9:18,7/15/2015 9:59,70,80,BEAT SHEET; Leaves = 31; Wet leaves,Unidentified,0,uploads/survey131-19899.jpg,1
+19900,8892356,131,4,A,7/14/2015 9:40,7/15/2015 10:02,70,80,BEAT SHEET; Leaves = 29; Wet leaves,American beech,0,uploads/survey131-19900.jpg,1
+19901,8892356,131,4,C,7/14/2015 9:45,7/15/2015 10:03,70,80,BEAT SHEET; Leaves = 25; Wet leaves,American beech,0,uploads/survey131-19901.jpg,1
+19902,8892356,131,5,B,7/14/2015 9:56,7/15/2015 10:19,70,80,BEAT SHEET; Leaves = 30; Wet leaves,American beech,0,uploads/survey131-19902.jpg,1
+19903,8892356,131,5,A,7/14/2015 9:59,7/15/2015 10:21,70,80,BEAT SHEET; Leaves = 28; Wet leaves,Red maple,0,uploads/survey131-19903.jpg,1
+19904,8892356,131,5,C,7/14/2015 10:07,7/15/2015 10:22,70,80,BEAT SHEET; Leaves = 45; Wet leaves,Sourwood,0,uploads/survey131-19904.jpg,1
+19905,8892356,131,6,A,7/14/2015 10:14,7/15/2015 10:23,70,80,BEAT SHEET; Leaves = 34; Wet leaves,Sugar maple,0,uploads/survey131-19905.jpg,1
+19906,8892356,131,6,E,7/14/2015 10:18,7/15/2015 11:04,70,80,BEAT SHEET; Leaves = 32; Wet leaves,Sourwood,0,uploads/survey131-19906.jpg,1
+19907,8892356,131,7,E,7/14/2015 10:25,7/15/2015 11:05,70,80,BEAT SHEET; Leaves = 51; Wet leaves,Sugar maple,0,uploads/survey131-19907.jpg,1
+19908,8892356,131,7,A,7/14/2015 10:30,7/15/2015 11:06,70,80,BEAT SHEET; Leaves = 39; Wet leaves,American beech,0,uploads/survey131-19908.jpg,1
+19909,8892356,131,8,A,7/14/2015 10:38,7/15/2015 11:07,70,80,BEAT SHEET; Leaves = 32; Wet leaves,Sugar maple,0,uploads/survey131-19909.jpg,1
+19910,8892356,131,8,C,7/14/2015 10:45,7/15/2015 11:07,70,80,BEAT SHEET; Leaves = 32; Wet leaves,Spicebush,0,uploads/survey131-19910.jpg,1
+19911,117,129,1,B,8/5/2014 9:30,7/15/2015 11:29,70,80,,not listed,2,uploads/survey129-19911.jpg,1
+19912,117,129,2,A,8/5/2014 9:30,7/15/2015 11:30,70,80,,not listed,1,uploads/survey129-19912.jpg,1
+19913,117,129,2,C,8/5/2014 9:30,7/15/2015 11:30,70,80,,not listed,1,uploads/survey129-19913.jpg,1
+19914,117,129,3,B,8/5/2014 9:30,7/15/2015 11:31,70,80,,not listed,1,uploads/survey129-19914.jpg,1
+19915,117,129,4,E,8/5/2014 9:30,7/15/2015 11:32,70,80,,not listed,1,uploads/survey129-19915.jpg,1
+19916,117,129,5,C,8/5/2014 9:30,7/15/2015 11:33,70,80,,not listed,1,uploads/survey129-19916.jpg,1
+19917,117,129,6,D,8/5/2014 9:30,7/15/2015 11:33,70,80,,not listed,2,uploads/survey129-19917.jpg,1
+19918,117,129,7,D,8/5/2014 9:30,7/15/2015 11:33,70,80,,not listed,1,uploads/survey129-19918.jpg,1
+19919,117,129,8,A,8/5/2014 9:30,7/15/2015 11:34,70,80,,not listed,1,uploads/survey129-19919.jpg,1
+19920,117,129,1,D,8/5/2014 9:30,7/15/2015 11:34,70,80,,not listed,3,uploads/survey129-19920.jpg,1
+19921,117,129,2,D,8/5/2014 9:30,7/15/2015 11:35,70,80,,not listed,1,uploads/survey129-19921.jpg,1
+19922,117,129,3,A,8/5/2014 9:30,7/15/2015 11:36,70,80,,not listed,1,uploads/survey129-19922.jpg,1
+19923,117,129,3,D,8/5/2014 9:30,7/15/2015 11:36,70,80,,not listed,1,uploads/survey129-19923.jpg,1
+19924,117,129,4,B,8/5/2014 9:30,7/15/2015 11:37,70,80,,not listed,2,uploads/survey129-19924.jpg,1
+19925,117,129,5,A,8/5/2014 9:30,7/15/2015 11:37,70,80,,not listed,2,uploads/survey129-19925.jpg,1
+19926,117,129,6,C,8/5/2014 9:30,7/15/2015 11:38,70,80,,not listed,2,uploads/survey129-19926.jpg,1
+19927,117,129,6,B,8/5/2014 9:30,7/15/2015 11:38,70,80,,not listed,0,uploads/survey129-19927.jpg,1
+19928,117,129,7,A,8/5/2014 9:30,7/15/2015 11:38,70,80,,not listed,2,uploads/survey129-19928.jpg,1
+19929,117,129,7,B,8/5/2014 9:30,7/15/2015 11:39,70,80,,not listed,2,uploads/survey129-19929.jpg,1
+19930,117,129,8,C,8/5/2014 9:30,7/15/2015 11:39,70,80,,not listed,1,uploads/survey129-19930.jpg,1
+19931,117,129,1,E,8/5/2014 9:30,7/15/2015 11:40,70,80,,not listed,2,uploads/survey129-19931.jpg,1
+19932,117,129,1,A,8/5/2014 9:30,7/15/2015 11:40,70,80,,not listed,2,uploads/survey129-19932.jpg,1
+19933,117,129,2,B,8/5/2014 9:30,7/15/2015 11:41,70,80,,not listed,3,uploads/survey129-19933.jpg,1
+19934,117,129,3,C,8/5/2014 9:30,7/15/2015 11:41,70,80,,not listed,2,uploads/survey129-19934.jpg,1
+19935,117,129,4,A,8/5/2014 9:30,7/15/2015 11:42,70,80,,not listed,3,uploads/survey129-19935.jpg,1
+19936,117,129,5,E,8/5/2014 9:30,7/15/2015 11:42,70,80,,not listed,1,uploads/survey129-19936.jpg,1
+19937,117,129,5,E,8/5/2014 9:30,7/15/2015 11:42,70,80,,not listed,1,uploads/survey129-19937.jpg,1
+19938,117,129,6,A,8/5/2014 9:30,7/15/2015 11:43,70,80,,not listed,1,uploads/survey129-19938.jpg,1
+19939,117,129,7,C,8/5/2014 9:30,7/15/2015 11:43,70,80,,not listed,2,uploads/survey129-19939.jpg,1
+19940,117,129,8,B,8/5/2014 9:30,7/15/2015 11:43,70,80,,not listed,1,uploads/survey129-19940.jpg,1
+19941,117,129,1,A,7/2/2015 13:40,7/15/2015 12:33,80,90,,mulberry,1,uploads/survey129-19941.jpg,1
+19942,117,129,1,B,7/2/2015 13:40,7/15/2015 12:34,80,90,,Box elder,1,uploads/survey129-19942.jpg,1
+19943,117,129,1,C,7/2/2015 13:40,7/15/2015 12:34,80,90,,Box elder,2,uploads/survey129-19943.jpg,1
+19944,117,129,2,B,7/2/2015 13:40,7/15/2015 12:36,80,90,,Sweet gum,1,uploads/survey129-19944.jpg,1
+19945,117,129,2,C,7/2/2015 13:40,7/15/2015 12:37,80,90,,Sweet gum,1,uploads/survey129-19945.jpg,1
+19946,117,129,3,E,7/2/2015 13:40,7/15/2015 12:39,80,90,,devils walking stick,1,uploads/survey129-19946.jpg,1
+19947,117,129,3,D,7/2/2015 13:40,7/15/2015 12:40,80,90,no herbivory score listed on data sheet,not listed,0,uploads/survey129-19947.jpg,1
+19948,117,129,3,A,7/2/2015 13:40,7/15/2015 12:40,80,90,,devils walking stick,1,uploads/survey129-19948.jpg,1
+19949,117,129,4,D,7/2/2015 13:40,7/15/2015 13:27,80,90,,not listed,1,uploads/survey129-19949.jpg,1
+19950,117,129,4,B,7/2/2015 13:40,7/15/2015 13:27,80,90,,not listed,3,uploads/survey129-19950.jpg,1
+19951,117,129,4,A,7/2/2015 13:40,7/15/2015 13:28,80,90,,Sweet gum,1,uploads/survey129-19951.jpg,1
+19952,117,129,5,E,7/2/2015 13:40,7/15/2015 13:29,80,90,,Sweet gum,1,uploads/survey129-19952.jpg,1
+19953,117,129,5,C,7/2/2015 13:40,7/15/2015 13:29,80,90,,tulip poplar,1,uploads/survey129-19953.jpg,1
+19954,117,129,5,B,7/2/2015 13:40,7/15/2015 13:31,80,90,,not listed,1,uploads/survey129-19954.jpg,1
+19955,117,129,6,B,7/2/2015 13:40,7/15/2015 13:32,80,90,,Common persimmon,1,uploads/survey129-19955.jpg,1
+19956,117,129,6,C,7/2/2015 13:40,7/15/2015 13:34,80,90,,fringe tree,1,uploads/survey129-19956.jpg,1
+19957,117,129,7,C,7/2/2015 13:40,7/15/2015 13:44,80,90,,pin oak,1,uploads/survey129-19957.jpg,1
+19958,117,129,7,D,7/2/2015 13:40,7/15/2015 13:45,80,90,,Tuliptree,3,uploads/survey129-19958.jpg,1
+19959,117,129,7,B,7/2/2015 13:40,7/15/2015 13:46,80,90,,not listed,2,uploads/survey129-19959.jpg,1
+19960,117,129,8,A,7/2/2015 13:40,7/15/2015 13:46,80,90,,chalk maple,1,uploads/survey129-19960.jpg,1
+19961,117,129,8,D,7/2/2015 13:40,7/15/2015 13:47,80,90,,slippery elm,1,uploads/survey129-19961.jpg,1
+19962,117,129,1,E,7/2/2015 13:35,7/15/2015 13:48,80,90,,Common persimmon,3,uploads/survey129-19962.jpg,1
+19963,117,129,1,D,7/2/2015 13:35,7/15/2015 13:48,80,90,,Box elder,2,uploads/survey129-19963.jpg,1
+19964,117,129,2,A,7/2/2015 13:35,7/15/2015 13:49,80,90,,Red maple,2,uploads/survey129-19964.jpg,1
+19965,117,129,2,E,7/2/2015 13:35,7/15/2015 13:50,80,90,,not listed,2,uploads/survey129-19965.jpg,1
+19966,117,129,2,D,7/2/2015 13:35,7/15/2015 13:50,80,90,,Sweet gum,1,uploads/survey129-19966.jpg,1
+19967,117,129,3,B,7/2/2015 13:35,7/15/2015 13:51,80,90,,carolina silverbell,1,uploads/survey129-19967.jpg,1
+19968,117,129,3,C,7/2/2015 13:35,7/15/2015 13:52,80,90,,Sweet gum,2,uploads/survey129-19968.jpg,1
+19969,117,129,4,E,7/2/2015 13:35,7/15/2015 13:53,80,90,,Box elder,2,uploads/survey129-19969.jpg,1
+19970,117,129,4,C,7/2/2015 13:35,7/15/2015 13:53,80,90,,Common persimmon,2,uploads/survey129-19970.jpg,1
+19971,117,129,5,D,7/2/2015 13:35,7/15/2015 13:54,80,90,,not listed,1,uploads/survey129-19971.jpg,1
+19972,117,129,5,A,7/2/2015 13:35,7/15/2015 13:55,80,90,,bladdernut,1,uploads/survey129-19972.jpg,1
+19973,117,129,6,A,7/2/2015 13:35,7/15/2015 13:56,80,90,,carolina ash,2,uploads/survey129-19973.jpg,1
+19974,117,129,6,E,7/2/2015 13:35,7/15/2015 13:56,80,90,,not listed,0,uploads/survey129-19974.jpg,1
+19975,117,129,6,D,7/2/2015 13:35,7/15/2015 13:57,80,90,,Common persimmon,1,uploads/survey129-19975.jpg,1
+19976,117,129,7,A,7/2/2015 13:35,7/15/2015 13:57,80,90,,pin oak,3,uploads/survey129-19976.jpg,1
+19977,117,129,7,D,7/2/2015 13:35,7/15/2015 13:59,80,90,,Sweet gum,2,uploads/survey129-19977.jpg,1
+19978,117,129,8,E,7/2/2015 13:35,7/15/2015 13:59,80,90,,chalk maple,2,uploads/survey129-19978.jpg,1
+19979,117,129,8,B,7/2/2015 13:35,7/15/2015 14:00,80,90,,chalk maple,1,uploads/survey129-19979.jpg,1
+19980,117,129,8,C,7/2/2015 13:35,7/15/2015 14:00,80,90,,American beech,1,uploads/survey129-19980.jpg,1
+19981,117,129,1,E,7/9/2015 13:35,7/15/2015 14:03,90,100,,Common persimmon,3,uploads/survey129-19981.jpg,1
+19982,117,129,1,A,7/9/2015 13:35,7/15/2015 14:04,90,100,,mulberry,2,uploads/survey129-19982.jpg,1
+19983,117,129,1,B,7/9/2015 13:35,7/15/2015 14:04,90,100,,Box elder,3,uploads/survey129-19983.jpg,1
+19984,117,129,2,B,7/9/2015 13:35,7/15/2015 14:05,90,100,,Sweet gum,2,uploads/survey129-19984.jpg,1
+19985,117,129,2,E,7/9/2015 13:35,7/15/2015 14:05,90,100,,statton,3,uploads/survey129-19985.jpg,1
+19986,117,129,2,C,7/9/2015 13:35,7/15/2015 14:06,90,100,,Sweet gum,2,uploads/survey129-19986.jpg,1
+19987,117,129,3,B,7/9/2015 13:35,7/15/2015 14:07,90,100,,carolina silverbell,3,uploads/survey129-19987.jpg,1
+19988,117,129,3,C,7/9/2015 13:35,7/15/2015 14:07,90,100,no herbivory score listed,Sweet gum,0,uploads/survey129-19988.jpg,1
+19989,117,129,4,B,7/9/2015 13:35,7/15/2015 14:09,90,100,,not listed,4,uploads/survey129-19989.jpg,1
+19990,117,129,4,A,7/9/2015 13:35,7/15/2015 14:10,90,100,,Sweet gum,2,uploads/survey129-19990.jpg,1
+19991,117,129,5,C,7/9/2015 13:35,7/15/2015 14:11,90,100,,tulip poplar,2,uploads/survey129-19991.jpg,1
+19992,117,129,5,D,7/9/2015 13:35,7/15/2015 14:11,90,100,no herbivory score listed,not listed,0,uploads/survey129-19992.jpg,1
+19993,117,129,5,B,7/9/2015 13:35,7/15/2015 14:12,90,100,no herbivory score listed,not listed,2,uploads/survey129-19993.jpg,1
+19994,117,129,5,A,7/9/2015 13:35,7/15/2015 14:13,90,100,no herbivory score listed,bladdernut,1,uploads/survey129-19994.jpg,1
+19995,117,129,6,A,7/9/2015 13:35,7/15/2015 14:14,90,100,,carolina ash,2,uploads/survey129-19995.jpg,1
+19996,117,129,6,E,7/9/2015 13:35,7/15/2015 14:14,90,100,no herbivory score listed,not listed,0,uploads/survey129-19996.jpg,1
+19997,117,129,6,D,7/9/2015 13:35,7/15/2015 14:15,90,100,,Common persimmon,2,uploads/survey129-19997.jpg,1
+19998,117,129,7,A,7/9/2015 13:35,7/15/2015 14:16,90,100,,pin oak,3,uploads/survey129-19998.jpg,1
+19999,117,129,7,D,7/9/2015 13:35,7/15/2015 14:16,90,100,no herbivory score listed,Tuliptree,0,uploads/survey129-19999.jpg,1
+20000,117,129,7,E,7/9/2015 13:35,7/15/2015 14:17,90,100,,Sweet gum,1,uploads/survey129-20000.jpg,1
+20001,117,129,8,A,7/9/2015 13:35,7/15/2015 14:19,90,100,,chalk maple,1,uploads/survey129-20001.jpg,1
+20002,117,129,8,E,7/9/2015 13:35,7/15/2015 14:19,90,100,,chalk maple,2,uploads/survey129-20002.jpg,1
+20003,117,129,8,B,7/9/2015 13:35,7/15/2015 14:20,90,100,,chalk maple,1,uploads/survey129-20003.jpg,1
+20004,117,129,8,C,7/9/2015 13:35,7/15/2015 14:20,90,100,,American beech,2,uploads/survey129-20004.jpg,1
+20005,117,129,1,C,7/9/2015 13:35,7/15/2015 14:23,90,100,,Box elder,4,uploads/survey129-20005.jpg,1
+20006,117,129,1,D,7/9/2015 13:35,7/15/2015 14:23,90,100,,Box elder,3,uploads/survey129-20006.jpg,1
+20007,117,129,2,A,7/9/2015 13:35,7/15/2015 14:25,90,100,,Red maple,3,uploads/survey129-20007.jpg,1
+20008,117,129,2,D,7/9/2015 13:35,7/15/2015 14:26,90,100,,Sweet gum,1,uploads/survey129-20008.jpg,1
+20009,117,129,3,E,7/9/2015 13:35,7/15/2015 14:27,90,100,,devils walking stick,2,uploads/survey129-20009.jpg,1
+20010,117,129,3,A,7/9/2015 13:35,7/15/2015 14:28,90,100,,devils walking stick,1,uploads/survey129-20010.jpg,1
+20011,117,129,3,D,7/9/2015 13:35,7/15/2015 14:29,90,100,no herbivory score listed,not listed,0,uploads/survey129-20011.jpg,1
+20012,117,129,4,C,7/9/2015 13:35,7/15/2015 14:29,90,100,,Common persimmon,2,uploads/survey129-20012.jpg,1
+20013,117,129,4,E,7/9/2015 13:35,7/15/2015 14:30,90,100,,Box elder,3,uploads/survey129-20013.jpg,1
+20014,117,129,5,E,7/9/2015 13:35,7/15/2015 14:31,90,100,,not listed,2,uploads/survey129-20014.jpg,1
+20015,117,129,5,A,7/9/2015 13:35,7/15/2015 14:31,90,100,,not listed,1,uploads/survey129-20015.jpg,1
+20016,117,129,5,D,7/9/2015 13:35,7/15/2015 14:32,90,100,,not listed,2,uploads/survey129-20016.jpg,1
+20017,117,129,6,B,7/9/2015 13:35,7/15/2015 14:32,90,100,,Common persimmon,2,uploads/survey129-20017.jpg,1
+20018,117,129,6,C,7/9/2015 13:35,7/15/2015 14:33,90,100,no herbivory score listed,fringe tree,0,uploads/survey129-20018.jpg,1
+20019,117,129,7,B,7/9/2015 13:35,7/15/2015 14:33,90,100,,Common persimmon,2,uploads/survey129-20019.jpg,1
+20020,117,129,7,C,7/9/2015 13:35,7/15/2015 14:34,90,100,,pin oak,1,uploads/survey129-20020.jpg,1
+20021,117,129,8,B,7/9/2015 13:35,7/15/2015 14:35,90,100,,chalk maple,1,uploads/survey129-20021.jpg,1
+20022,117,129,8,D,7/9/2015 13:35,7/15/2015 14:35,90,100,,slippery elm,3,uploads/survey129-20022.jpg,1
+20023,117,129,8,B,7/11/2015 9:38,7/15/2015 14:37,80,90,,chalk maple,0,uploads/survey129-20023.jpg,1
+20024,117,129,8,A,7/11/2015 9:38,7/15/2015 14:38,80,90,,chalk maple,0,uploads/survey129-20024.jpg,1
+20025,117,129,7,B,7/11/2015 9:38,7/15/2015 14:39,80,90,,not listed,1,uploads/survey129-20025.jpg,1
+20026,117,129,7,E,7/11/2015 9:38,7/15/2015 14:40,80,90,,Sweet gum,0,uploads/survey129-20026.jpg,1
+20027,117,129,7,D,7/11/2015 9:38,7/15/2015 14:40,80,90,,Tuliptree,1,uploads/survey129-20027.jpg,1
+20028,117,129,6,C,7/11/2015 9:38,7/15/2015 14:41,80,90,,fringe tree,1,uploads/survey129-20028.jpg,1
+20029,117,129,6,D,7/11/2015 9:38,7/15/2015 14:42,80,90,,Common persimmon,1,uploads/survey129-20029.jpg,1
+20030,117,129,6,B,7/11/2015 9:38,7/15/2015 14:42,80,90,,Common persimmon,1,uploads/survey129-20030.jpg,1
+20031,117,129,5,E,7/11/2015 9:38,7/15/2015 14:43,80,90,,Sweet gum,0,uploads/survey129-20031.jpg,1
+20032,117,129,5,C,7/11/2015 9:38,7/15/2015 14:43,80,90,,tulip poplar,1,uploads/survey129-20032.jpg,1
+20033,117,129,5,C,7/11/2015 9:38,7/15/2015 14:44,80,90,,tulip poplar,1,uploads/survey129-20033.jpg,1
+20034,117,129,4,B,7/11/2015 9:38,7/15/2015 14:44,80,90,,not listed,2,uploads/survey129-20034.jpg,1
+20035,117,129,4,C,7/11/2015 9:38,7/15/2015 14:45,80,90,,not listed,3,uploads/survey129-20035.jpg,1
+20036,117,129,4,D,7/11/2015 9:38,7/15/2015 14:45,80,90,,not listed,1,uploads/survey129-20036.jpg,1
+20037,117,129,3,C,7/11/2015 9:38,7/15/2015 14:46,80,90,,Sweet gum,1,uploads/survey129-20037.jpg,1
+20038,117,129,3,E,7/11/2015 9:38,7/15/2015 14:47,80,90,,devils walking stick,1,uploads/survey129-20038.jpg,1
+20039,117,129,3,B,7/11/2015 9:38,7/15/2015 14:47,80,90,,carolina silverbell,1,uploads/survey129-20039.jpg,1
+20040,117,129,2,C,7/11/2015 9:38,7/15/2015 14:50,80,90,,Sweet gum,1,uploads/survey129-20040.jpg,1
+20041,117,129,2,E,7/11/2015 9:38,7/15/2015 14:51,80,90,,not listed,2,uploads/survey129-20041.jpg,1
+20042,117,129,1,D,7/11/2015 9:38,7/15/2015 14:51,80,90,,Box elder,2,uploads/survey129-20042.jpg,1
+20043,117,129,1,E,7/11/2015 9:38,7/15/2015 14:51,80,90,,Common persimmon,1,uploads/survey129-20043.jpg,1
+20044,117,129,1,A,7/11/2015 9:38,7/15/2015 14:52,80,90,,mulberry,2,uploads/survey129-20044.jpg,1
+20045,117,129,8,C,7/11/2015 9:30,7/15/2015 14:53,80,90,,American beech,1,uploads/survey129-20045.jpg,1
+20046,117,129,8,D,7/11/2015 9:30,7/15/2015 14:53,80,90,,slippery elm,2,uploads/survey129-20046.jpg,1
+20047,117,129,8,E,7/11/2015 9:30,7/15/2015 14:54,80,90,,chalk maple,0,uploads/survey129-20047.jpg,1
+20048,117,129,7,A,7/11/2015 9:30,7/15/2015 14:54,80,90,,pin oak,2,uploads/survey129-20048.jpg,1
+20049,117,129,7,B,7/11/2015 21:30,7/15/2015 14:55,80,90,there are 2 trees labeled 7b,Common persimmon,2,uploads/survey129-20049.jpg,1
+20050,117,129,7,C,7/11/2015 9:30,7/15/2015 14:55,80,90,,pin oak,1,uploads/survey129-20050.jpg,1
+20051,117,129,6,E,7/11/2015 9:30,7/15/2015 14:56,80,90,,not listed,2,uploads/survey129-20051.jpg,1
+20052,117,129,6,A,7/11/2015 9:30,7/15/2015 14:56,80,90,,carolina ash,1,uploads/survey129-20052.jpg,1
+20053,117,129,5,B,7/11/2015 9:30,7/15/2015 14:57,80,90,,not listed,1,uploads/survey129-20053.jpg,1
+20054,117,129,5,A,7/11/2015 9:30,7/15/2015 14:57,80,90,,bladdernut,1,uploads/survey129-20054.jpg,1
+20055,117,129,5,D,7/11/2015 9:30,7/15/2015 14:57,80,90,,not listed,1,uploads/survey129-20055.jpg,1
+20056,117,129,4,A,7/11/2015 9:30,7/15/2015 14:58,80,90,,Sweet gum,1,uploads/survey129-20056.jpg,1
+20057,117,129,4,E,7/11/2015 9:30,7/15/2015 14:59,80,90,,Box elder,3,uploads/survey129-20057.jpg,1
+20058,117,129,3,D,7/11/2015 9:30,7/15/2015 14:59,80,90,,not listed,2,uploads/survey129-20058.jpg,1
+20059,117,129,3,A,7/11/2015 9:30,7/15/2015 14:59,80,90,,devils walking stick,1,uploads/survey129-20059.jpg,1
+20060,117,129,2,A,7/11/2015 9:30,7/15/2015 15:00,80,90,,Red maple,2,uploads/survey129-20060.jpg,1
+20061,117,129,1,C,7/11/2015 9:30,7/15/2015 15:01,80,90,"2b missing
+",Box elder,2,uploads/survey129-20061.jpg,1
+20062,117,129,1,B,7/11/2015 9:30,7/15/2015 15:01,80,90,"
+",Box elder,2,uploads/survey129-20062.jpg,1
+20063,117,131,1,A,7/16/2015 13:58,7/16/2015 16:02,80,90,REPEAT SURVEY,Mulberry,1,uploads/survey131-20063.jpg,1
+20064,117,130,1,B,7/16/2015 13:58,7/16/2015 16:03,80,90,REPEAT SURVEY,Box elder,2,uploads/survey130-20064.jpg,1
+20065,117,131,1,A,7/16/2015 13:58,7/16/2015 16:04,80,90,REPEAT SURVEY,Mulberry,1,uploads/survey131-20065.jpg,1
+20066,117,131,2,B,7/16/2015 14:03,7/16/2015 16:09,80,90,REPEAT SURVEY,Sweet gum,1,uploads/survey131-20066.jpg,1
+20067,117,132,10,A,7/16/2015 8:51,7/16/2015 16:12,70,80,,Common persimmon,1,uploads/survey132-20067.jpg,1
+20068,117,132,9,E,7/16/2015 9:04,7/16/2015 16:13,70,80,,Sweet gum,1,uploads/survey132-20068.jpg,1
+20069,117,131,2,C,7/16/2015 14:06,7/16/2015 16:14,80,90,REPEAT SURVEY,Sweet gum,1,uploads/survey131-20069.jpg,1
+20070,117,130,1,C,7/16/2015 14:01,7/16/2015 16:14,80,90,REPEAT SURVEY,Box elder,2,uploads/survey130-20070.jpg,1
+20071,117,132,2,A,7/16/2015 9:22,7/16/2015 16:14,70,80,,Red maple,1,uploads/survey132-20071.jpg,1
+20072,117,132,6,A,7/16/2015 9:57,7/16/2015 16:15,70,80,,Carolina ash,1,uploads/survey132-20072.jpg,1
+20073,117,132,6,D,7/16/2015 10:04,7/16/2015 16:16,70,80,,Common persimmon,1,uploads/survey132-20073.jpg,1
+20074,117,130,2,E,7/16/2015 14:11,7/16/2015 16:16,80,90,REPEAT SURVEY,Box elder,2,uploads/survey130-20074.jpg,1
+20075,117,131,2,D,7/16/2015 14:11,7/16/2015 16:17,80,90,REPEAT SURVEY,Sweet gum,1,uploads/survey131-20075.jpg,1
+20077,117,130,3,B,7/16/2015 14:15,7/16/2015 16:18,80,90,REPEAT SURVEY,Carolina silverbell,1,uploads/survey130-20077.jpg,1
+20079,117,130,4,C,7/16/2015 14:19,7/16/2015 16:19,80,90,REPEAT SURVEY,Common persimmon,1,uploads/survey130-20079.jpg,1
+20080,117,131,3,D,7/16/2015 14:14,7/16/2015 16:19,80,90,REPEAT SURVEY,Bitternut hickory,1,uploads/survey131-20080.jpg,1
+20081,117,130,4,B,7/16/2015 14:21,7/16/2015 16:20,80,90,REPEAT SURVEY,Unidentified,1,uploads/survey130-20081.jpg,1
+20082,117,130,5,E,7/16/2015 14:25,7/16/2015 16:22,80,90,REPEAT SURVEY,Sweet gum,1,uploads/survey130-20082.jpg,1
+20083,117,130,6,A,7/16/2015 14:31,7/16/2015 16:23,80,90,REPEAT SURVEY,Carolina ash,1,uploads/survey130-20083.jpg,1
+20084,117,130,6,E,7/16/2015 14:34,7/16/2015 16:24,80,90,REPEAT SURVEY,Unidentified,1,uploads/survey130-20084.jpg,1
+20085,117,130,7,C,7/16/2015 14:39,7/16/2015 16:26,80,90,REPEAT SURVEY,Pin oak,1,uploads/survey130-20085.jpg,1
+20086,117,130,8,A,7/16/2015 14:47,7/16/2015 16:27,80,90,REPEAT SURVEY,Chalk maple,1,uploads/survey130-20086.jpg,1
+20087,117,132,10,A,7/16/2015 8:54,7/16/2015 16:28,70,80,BEAT SHEET; Leaves = 39,Common persimmon,0,uploads/survey132-20087.jpg,1
+20088,117,132,9,E,7/16/2015 9:07,7/16/2015 16:29,70,80,BEAT SHEET; Leaves = 20,Sweet gum,0,uploads/survey132-20088.jpg,1
+20089,117,132,2,A,7/16/2015 9:24,7/16/2015 16:30,70,80,BEAT SHEET; Leaves = 21,Red maple,0,uploads/survey132-20089.jpg,1
+20090,117,130,8,D,7/16/2015 14:51,7/16/2015 16:30,80,90,REPEAT SURVEY,Slippery elm,1,uploads/survey130-20090.jpg,1
+20091,117,130,8,B,7/16/2015 14:53,7/16/2015 16:31,80,90,REPEAT SURVEY,Chalk maple,1,uploads/survey130-20091.jpg,1
+20092,117,132,6,A,7/16/2015 10:00,7/16/2015 16:31,70,80,BEAT SHEET; Leaves = 60,Carolina ash,0,uploads/survey132-20092.jpg,1
+20093,117,132,6,D,7/16/2015 10:07,7/16/2015 16:32,70,80,BEAT SHEET; Leaves = 42,Common persimmon,0,uploads/survey132-20093.jpg,1
+20094,117,132,11,D,7/16/2015 10:16,7/16/2015 16:35,70,80,BEAT SHEET; Leaves = 39,Common persimmon,0,uploads/survey132-20094.jpg,1
+20095,117,132,8,C,7/16/2015 10:26,7/16/2015 16:36,70,80,BEAT SHEET; Leaves = 27,American beech,0,uploads/survey132-20095.jpg,1
+20096,8892356,131,8,A,7/17/2015 8:33,7/17/2015 10:26,70,80,,Sugar maple,1,uploads/survey131-20096.jpg,1
+20097,8892356,131,8,A,7/17/2015 8:33,7/17/2015 10:27,70,80,,Sugar maple,1,uploads/survey131-20097.jpg,1
+20098,8892356,131,8,E,7/17/2015 8:39,7/17/2015 10:28,70,80,,Sugar maple,1,uploads/survey131-20098.jpg,1
+20099,8892356,131,7,D,7/17/2015 8:46,7/17/2015 10:28,70,80,,Sugar maple,1,uploads/survey131-20099.jpg,1
+20100,8892356,131,7,A,7/17/2015 8:50,7/17/2015 10:30,70,80,,American beech,2,uploads/survey131-20100.jpg,1
+20101,117,130,10,E,7/16/2015 8:44,7/17/2015 10:33,70,80,,Flowering dogwood,1,uploads/survey130-20101.jpg,1
+20102,8892356,131,6,A,7/17/2015 8:54,7/17/2015 10:34,70,80,,Sugar maple,1,uploads/survey131-20102.jpg,1
+20103,117,130,10,B,7/16/2015 8:53,7/17/2015 10:42,70,80,,Unidentified,2,uploads/survey130-20103.jpg,1
+20104,117,130,9,D,7/16/2015 8:58,7/17/2015 10:47,70,80,,Sweet gum,1,uploads/survey130-20104.jpg,1
+20105,8892356,131,6,C,7/17/2015 8:59,7/17/2015 10:48,70,80,,American beech,1,uploads/survey131-20105.jpg,1
+20106,8892356,131,5,B,7/17/2015 9:08,7/17/2015 10:49,70,80,,American beech,1,uploads/survey131-20106.jpg,1
+20107,117,130,9,A,7/16/2015 9:03,7/17/2015 10:49,70,80,,Box elder,3,uploads/survey130-20107.jpg,1
+20108,8892356,136,8,D,7/17/2015 8:34,7/17/2015 10:50,70,80,,Sugar maple,2,uploads/survey136-20108.jpg,1
+20109,117,130,1,B,7/16/2015 9:08,7/17/2015 10:50,70,80,,Box elder,2,uploads/survey130-20109.jpg,1
+20110,8892356,136,7,E,7/17/2015 8:40,7/17/2015 10:51,70,80,,Sugar maple,3,uploads/survey136-20110.jpg,1
+20111,117,132,1,E,7/16/2015 13:59,7/17/2015 10:51,80,90,REPEAT SURVEY,Common persimmon,1,uploads/survey132-20111.jpg,1
+20112,8892356,131,5,C,7/17/2015 9:13,7/17/2015 10:51,70,80,,Sourwood,1,uploads/survey131-20112.jpg,1
+20113,8892356,131,5,E,7/17/2015 9:19,7/17/2015 10:56,70,80,,American beech,1,uploads/survey131-20113.jpg,1
+20114,8892356,136,7,B,7/17/2015 8:47,7/17/2015 10:57,70,80,,Spicebush,1,uploads/survey136-20114.jpg,1
+20115,8892356,136,6,B,7/17/2015 8:54,7/17/2015 10:59,70,80,,American beech,2,uploads/survey136-20115.jpg,1
+20116,117,130,2,E,7/16/2015 9:14,7/17/2015 11:00,70,80,,Box elder,2,uploads/survey130-20116.jpg,1
+20117,117,130,3,B,7/16/2015 9:20,7/17/2015 11:02,70,80,,Carolina silverbell,1,uploads/survey130-20117.jpg,1
+20118,117,130,3,C,7/16/2015 9:25,7/17/2015 11:03,70,80,,Sweet gum,1,uploads/survey130-20118.jpg,1
+20119,8892356,131,4,A,7/17/2015 9:24,7/17/2015 11:03,70,80,,American beech,1,uploads/survey131-20119.jpg,1
+20120,117,132,1,D,7/16/2015 14:01,7/17/2015 11:04,80,90,REPEAT SURVEY,Box elder,2,uploads/survey132-20120.jpg,1
+20121,8892356,131,4,D,7/17/2015 9:28,7/17/2015 11:06,70,80,,American beech,1,uploads/survey131-20121.jpg,1
+20122,117,132,2,A,7/16/2015 14:06,7/17/2015 11:06,80,90,REPEAT SURVEY,Red maple,1,uploads/survey132-20122.jpg,1
+20123,117,132,3,A,7/16/2015 14:12,7/17/2015 11:07,80,90,REPEAT SURVEY,Devils-walkingstick,1,uploads/survey132-20123.jpg,1
+20124,117,130,4,D,7/16/2015 9:31,7/17/2015 11:07,70,80,,Unidentified,1,uploads/survey130-20124.jpg,1
+20125,8892356,131,3,C,7/17/2015 9:33,7/17/2015 11:07,70,80,,Unidentified,1,uploads/survey131-20125.jpg,1
+20126,8892356,131,3,E,7/17/2015 9:39,7/17/2015 12:32,70,80,,American beech,1,uploads/survey131-20126.jpg,1
+20127,8892356,131,2,D,7/17/2015 9:46,7/17/2015 12:33,70,80,,Spicebush,1,uploads/survey131-20127.jpg,1
+20128,8892356,131,2,C,7/17/2015 9:50,7/17/2015 12:34,70,80,,American beech,1,uploads/survey131-20128.jpg,1
+20129,8892356,136,4,B,7/17/2015 9:23,7/17/2015 12:35,70,80,,Mapleleaf viburnum ,1,uploads/survey136-20129.jpg,1
+20130,117,130,5,C,7/16/2015 9:36,7/17/2015 12:35,70,80,,Tuliptree,1,uploads/survey130-20130.jpg,1
+20131,8892356,131,1,D,7/17/2015 9:56,7/17/2015 12:35,70,80,,Paw-paw,1,uploads/survey131-20131.jpg,1
+20132,8892356,131,1,E,7/17/2015 10:00,7/17/2015 12:37,70,80,,Spicebush,1,uploads/survey131-20132.jpg,1
+20133,117,130,5,A,7/16/2015 9:41,7/17/2015 12:38,70,80,,American bladdernut,1,uploads/survey130-20133.jpg,1
+20134,117,132,3,C,7/16/2015 14:16,7/17/2015 12:39,80,90,REPEAT SURVEY,Sweet gum,1,uploads/survey132-20134.jpg,1
+20135,117,130,12,D,7/16/2015 9:46,7/17/2015 12:39,70,80,,Sweet gum,1,uploads/survey130-20135.jpg,1
+20136,8892356,136,4,C,7/17/2015 9:28,7/17/2015 12:39,70,80,,American beech,2,uploads/survey136-20136.jpg,1
+20137,117,130,6,C,7/16/2015 9:59,7/17/2015 12:40,70,80,,Fringetree,1,uploads/survey130-20137.jpg,1
+20138,117,132,4,A,7/16/2015 14:21,7/17/2015 12:40,80,90,REPEAT SURVEY,Sweet gum,1,uploads/survey132-20138.jpg,1
+20139,117,130,11,C,7/16/2015 10:07,7/17/2015 12:41,70,80,,American sycamore,1,uploads/survey130-20139.jpg,1
+20140,117,130,7,D,7/16/2015 10:16,7/17/2015 12:42,70,80,,Tuliptree,1,uploads/survey130-20140.jpg,1
+20141,8892356,136,3,A,7/17/2015 9:35,7/17/2015 12:42,70,80,,American beech,2,uploads/survey136-20141.jpg,1
+20142,117,132,5,C,7/16/2015 14:27,7/17/2015 12:43,80,90,REPEAT SURVEY,Tuliptree,1,uploads/survey132-20142.jpg,1
+20143,117,132,5,B,7/16/2015 14:30,7/17/2015 12:44,80,90,REPEAT SURVEY,Unidentified,1,uploads/survey132-20143.jpg,1
+20144,117,132,6,D,7/16/2015 14:34,7/17/2015 12:45,80,90,REPEAT SURVEY,Common persimmon,1,uploads/survey132-20144.jpg,1
+20145,8892356,136,2,E,7/17/2015 9:43,7/17/2015 12:46,70,80,,Unidentified,1,uploads/survey136-20145.jpg,1
+20146,117,132,7,A,7/16/2015 14:39,7/17/2015 12:47,80,90,REPEAT SURVEY,Pin oak,2,uploads/survey132-20146.jpg,1
+20147,8892356,131,8,A,7/17/2015 8:36,7/17/2015 12:47,70,80,BEAT SHEET; Leaves = 30,Sugar maple,0,uploads/survey131-20147.jpg,1
+20148,117,130,8,B,7/16/2015 10:23,7/17/2015 12:48,70,80,,Chalk maple,1,uploads/survey130-20148.jpg,1
+20149,8892356,131,8,E,7/17/2015 8:42,7/17/2015 12:49,70,80,BEAT SHEET; Leaves = 40,Sugar maple,0,uploads/survey131-20149.jpg,1
+20150,117,132,7,D,7/16/2015 14:45,7/17/2015 12:50,80,90,REPEAT SURVEY,Tuliptree,1,uploads/survey132-20150.jpg,1
+20151,8892356,131,7,D,7/17/2015 8:49,7/17/2015 12:51,70,80,BEAT SHEET; Leaves = 27,Sugar maple,0,uploads/survey131-20151.jpg,1
+20152,117,132,8,C,7/16/2015 14:51,7/17/2015 12:52,80,90,REPEAT SURVEY,American beech,1,uploads/survey132-20152.jpg,1
+20153,8892356,131,7,A,7/17/2015 8:52,7/17/2015 12:52,70,80,BEAT SHEET; Leaves = 36,American beech,0,uploads/survey131-20153.jpg,1
+20154,8892356,131,6,A,7/17/2015 8:57,7/17/2015 12:53,70,80,BEAT SHEET; Leaves = 37,Sugar maple,0,uploads/survey131-20154.jpg,1
+20155,8892356,131,6,C,7/17/2015 9:03,7/17/2015 12:54,70,80,BEAT SHEET; Leaves = 39,American beech,0,uploads/survey131-20155.jpg,1
+20156,8892356,131,5,B,7/17/2015 9:10,7/17/2015 12:55,70,80,BEAT SHEET; Leaves = 30,American beech,0,uploads/survey131-20156.jpg,1
+20157,8892356,131,5,C,7/17/2015 9:15,7/17/2015 12:56,70,80,BEAT SHEET; Leaves = 27,Sourwood,0,uploads/survey131-20157.jpg,1
+20158,117,130,10,E,7/16/2015 8:48,7/17/2015 12:57,70,80,BEAT SHEET; Leaves = 47,Flowering dogwood,0,uploads/survey130-20158.jpg,1
+20159,8892356,136,1,C,7/17/2015 9:52,7/17/2015 12:57,70,80,,Unidentified,3,uploads/survey136-20159.jpg,1
+20160,8892356,131,5,E,7/17/2015 9:22,7/17/2015 12:58,70,80,BEAT SHEET; Leaves = 24,American beech,0,uploads/survey131-20160.jpg,1
+20161,8892356,136,1,A,7/17/2015 9:56,7/17/2015 12:59,70,80,,Spicebush,1,uploads/survey136-20161.jpg,1
+20162,8892356,131,4,A,7/17/2015 9:27,7/17/2015 13:01,70,80,BEAT SHEET; Leaves = 24,American beech,0,uploads/survey131-20162.jpg,1
+20163,8892356,131,4,D,7/17/2015 9:31,7/17/2015 13:04,70,80,BEAT SHEET; Leaves = 36,American beech,0,uploads/survey131-20163.jpg,1
+20164,117,130,10,B,7/16/2015 8:55,7/17/2015 13:05,70,80,BEAT SHEET; Leaves = 31,Unidentified,0,uploads/survey130-20164.jpg,1
+20165,8892356,136,8,D,7/17/2015 8:37,7/17/2015 13:07,70,80,BEAT SHEET; 37,Sugar maple,2,uploads/survey136-20165.jpg,1
+20166,117,130,9,D,7/16/2015 9:01,7/17/2015 13:08,70,80,BEAT SHEET; Leaves = 34,Sweet gum,0,uploads/survey130-20166.jpg,1
+20167,117,130,9,A,7/16/2015 9:05,7/17/2015 13:11,70,80,BEAT SHEET; Leaves = 27,Box elder,0,uploads/survey130-20167.jpg,1
+20168,117,130,1,B,7/16/2015 9:10,7/17/2015 13:17,70,80,BEAT SHEET; Leaves = 31,Box elder,0,uploads/survey130-20168.jpg,1
+20169,117,132,2,B,7/16/2015 9:15,7/17/2015 13:17,70,80,,Sweet gum,1,uploads/survey132-20169.jpg,1
+20170,117,132,2,C,7/16/2015 9:20,7/17/2015 13:19,70,80,,Sweet gum,1,uploads/survey132-20170.jpg,1
+20171,117,132,3,E,7/16/2015 9:25,7/17/2015 13:20,70,80,,Devils-walkingstick,1,uploads/survey132-20171.jpg,1
+20172,117,130,2,E,7/16/2015 9:17,7/17/2015 13:20,70,80,BEAT SHEET; Leaves = 47,Box elder,0,uploads/survey130-20172.jpg,1
+20173,8892356,136,7,E,7/17/2015 8:42,7/17/2015 13:20,70,80,BEAT SHEET; 44,Sugar maple,3,uploads/survey136-20173.jpg,1
+20174,117,132,4,B,7/16/2015 9:35,7/17/2015 13:23,70,80,,Unidentified,2,uploads/survey132-20174.jpg,1
+20175,8892356,136,7,B,7/17/2015 8:51,7/17/2015 13:24,70,80,BEAT SHEET; 38,Spicebush,1,uploads/survey136-20175.jpg,1
+20176,117,130,3,B,7/16/2015 9:23,7/17/2015 13:24,70,80,BEAT SHEET; Leaves = 25,Carolina silverbell,0,uploads/survey130-20176.jpg,1
+20177,117,130,3,C,7/16/2015 9:29,7/17/2015 13:26,70,80,BEAT SHEET; Leaves = 53,Sweet gum,0,uploads/survey130-20177.jpg,1
+20178,117,130,4,D,7/16/2015 9:33,7/17/2015 13:28,70,80,BEAT SHEET; Leaves = 39,Unidentified,0,uploads/survey130-20178.jpg,1
+20179,8892356,136,6,B,7/17/2015 9:00,7/17/2015 13:29,70,80,BEAT SHEET; 34,American beech,2,uploads/survey136-20179.jpg,1
+20180,8892356,131,3,C,7/17/2015 9:36,7/17/2015 13:30,70,80,BEAT SHEET; Leaves = 36,Unidentified,0,uploads/survey131-20180.jpg,1
+20181,117,132,5,E,7/16/2015 9:40,7/17/2015 13:31,70,80,,Sweet gum,2,uploads/survey132-20181.jpg,1
+20182,8892356,131,3,E,7/17/2015 9:41,7/17/2015 13:31,70,80,BEAT SHEET; Leaves = 33,American beech,0,uploads/survey131-20182.jpg,1
+20183,8892356,131,2,D,7/17/2015 9:49,7/17/2015 13:31,70,80,BEAT SHEET; Leaves = 35,Spicebush,0,uploads/survey131-20183.jpg,1
+20184,8892356,136,4,B,7/17/2015 9:26,7/17/2015 13:32,70,80,BEAT SHEET; 29,Mapleleaf viburnum,1,uploads/survey136-20184.jpg,1
+20185,117,132,5,B,7/16/2015 9:45,7/17/2015 13:32,70,80,,Unidentified,1,uploads/survey132-20185.jpg,1
+20186,8892356,131,2,C,7/17/2015 9:54,7/17/2015 13:32,70,80,BEAT SHEET; Leaves = 30,American beech,0,uploads/survey131-20186.jpg,1
+20187,117,130,5,C,7/16/2015 9:38,7/17/2015 13:32,70,80,BEAT SHEET; Leaves = 30,Tuliptree,0,uploads/survey130-20187.jpg,1
+20188,8892356,131,1,D,7/17/2015 9:58,7/17/2015 13:33,70,80,BEAT SHEET; Leaves = 15,Paw-paw,0,uploads/survey131-20188.jpg,1
+20189,8892356,136,4,C,7/17/2015 9:30,7/17/2015 13:33,70,80,BEAT SHEET; 33,American beech,2,uploads/survey136-20189.jpg,1
+20190,8892356,131,1,E,7/17/2015 10:02,7/17/2015 13:33,70,80,BEAT SHEET; Leaves = 24,Spicebush,0,uploads/survey131-20190.jpg,1
+20191,8892356,136,3,A,7/17/2015 9:37,7/17/2015 13:39,70,80,BEAT SHEET; 29 ,American beech,2,uploads/survey136-20191.jpg,1
+20192,8892356,136,2,E,7/17/2015 9:46,7/17/2015 13:41,70,80,BEAT SHEET; 41 ,Unidentified ,1,uploads/survey136-20192.jpg,1
+20193,117,131,10,C,7/16/2015 8:45,7/17/2015 13:46,70,80,,Mulberry,1,uploads/survey131-20193.jpg,1
+20194,8892356,136,1,C,7/17/2015 9:54,7/17/2015 13:47,70,80,BEAT SHEET; 32 ,Unidentified,3,uploads/survey136-20194.jpg,1
+20195,8892356,136,1,A,7/17/2015 10:00,7/17/2015 13:49,70,80,BEAT SHEET; 39,Spicebush,1,uploads/survey136-20195.jpg,1
+20196,117,131,10,D,7/16/2015 8:51,7/17/2015 13:52,70,80,,Box elder,1,uploads/survey131-20196.jpg,1
+20197,117,131,9,C,7/16/2015 8:56,7/17/2015 13:53,70,80,,Common persimmon,1,uploads/survey131-20197.jpg,1
+20198,117,132,12,B,7/16/2015 9:50,7/17/2015 13:53,70,80,,Sweet gum,1,uploads/survey132-20198.jpg,1
+20199,117,131,9,B,7/16/2015 9:01,7/17/2015 13:54,70,80,,Box elder,3,uploads/survey131-20199.jpg,1
+20200,117,132,12,A,7/16/2015 9:55,7/17/2015 13:55,70,80,,Sweet gum,1,uploads/survey132-20200.jpg,1
+20201,117,130,5,A,7/16/2015 9:43,7/17/2015 14:38,70,80,BEAT SHEET; Leaves = 69,American bladdernut,0,uploads/survey130-20201.jpg,1
+20202,117,130,12,D,7/16/2015 9:53,7/17/2015 14:47,70,80,BEAT SHEET; Leaves = 36,Sweet gum,0,uploads/survey130-20202.jpg,1
+20203,117,130,6,C,7/16/2015 10:02,7/17/2015 14:49,70,80,BEAT SHEET; Leaves = 43,Fringetree,0,uploads/survey130-20203.jpg,1
+20204,117,130,11,C,7/16/2015 10:13,7/17/2015 14:52,70,80,BEAT SHEET; Leaves = 20,American sycamore,0,uploads/survey130-20204.jpg,1
+20205,117,130,7,D,7/16/2015 10:19,7/17/2015 14:58,70,80,BEAT SHEET; Leaves = 44,Tuliptree,0,uploads/survey130-20205.jpg,1
+20206,117,130,8,B,7/16/2015 10:26,7/17/2015 15:00,70,80,BEAT SHEET; Leaves = 67,Chalk maple,0,uploads/survey130-20206.jpg,1
+20207,117,132,6,B,7/16/2015 10:00,7/17/2015 15:11,70,80,,Common persimmon,1,uploads/survey132-20207.jpg,1
+20208,117,132,11,A,7/16/2015 10:05,7/17/2015 15:12,70,80,,Sourwood,1,uploads/survey132-20208.jpg,1
+20209,117,132,11,B,7/16/2015 10:10,7/17/2015 15:16,70,80,,Red maple,1,uploads/survey132-20209.jpg,1
+20210,117,132,7,C,7/16/2015 10:15,7/17/2015 15:24,70,80,,Pin oak,1,uploads/survey132-20210.jpg,1
+20211,117,132,7,E,7/16/2015 10:20,7/17/2015 15:26,70,80,,Sweet gum,1,uploads/survey132-20211.jpg,1
+20212,117,132,8,A,7/16/2015 10:25,7/17/2015 15:27,70,80,,Chalk maple,1,uploads/survey132-20212.jpg,1
+20213,117,132,8,D,7/16/2015 10:30,7/17/2015 15:32,70,80,,Slippery elm,1,uploads/survey132-20213.jpg,1
+20214,117,69,8,C,7/20/2015 9:17,7/20/2015 9:19,70,80,,American beech,1,JPEG_20150720_091918_135489806.jpg,1
+20215,117,69,8,C,7/20/2015 9:19,7/20/2015 9:21,70,80,BEAT SHEET; Leaves = 35,American beech,0,JPEG_20150720_091918_135489806.jpg,1
+20216,117,69,8,D,7/20/2015 9:22,7/20/2015 9:24,70,80,,Slippery elm,1,JPEG_20150720_092429_135489806.jpg,1
+20217,117,69,8,D,7/20/2015 9:24,7/20/2015 9:27,70,80,BEAT SHEET; Leaves = 37,Slippery elm,0,JPEG_20150720_092635_135489806.jpg,1
+20218,117,69,7,E,7/20/2015 9:33,7/20/2015 9:38,80,90,,Sweet gum,1,JPEG_20150720_093819_135489806.jpg,1
+20219,117,69,7,E,7/20/2015 9:38,7/20/2015 9:40,80,90,BEAT SHEET; Leaves = 40,Sweet gum,0,JPEG_20150720_093925_135489806.jpg,1
+20220,117,69,6,C,7/20/2015 9:41,7/20/2015 9:44,80,90,,Fringetree,1,JPEG_20150720_094429_135489806.jpg,1
+20221,117,69,6,C,7/20/2015 9:44,7/20/2015 9:46,80,90,BEAT SHEET; Leaves = 40,Fringetree,0,JPEG_20150720_094429_135489806.jpg,1
+20222,117,69,6,D,7/20/2015 9:46,7/20/2015 9:49,80,90,,Common persimmon,2,JPEG_20150720_094935_-1118417922.jpg,1
+20223,117,69,6,D,7/20/2015 9:49,7/20/2015 9:52,80,90,BEAT SHEET; Leaves = 36,Common persimmon,0,JPEG_20150720_094935_-1118417922.jpg,1
+20224,117,69,6,A,7/20/2015 9:53,7/20/2015 9:57,80,90,,Carolina ash,2,JPEG_20150720_095639_135489806.jpg,1
+20225,117,69,6,A,7/20/2015 9:57,7/20/2015 9:58,80,90,BEAT SHEET; Leaves = 32,Carolina ash,0,JPEG_20150720_095747_135489806.jpg,1
+20226,117,69,5,B,7/20/2015 10:03,7/20/2015 10:10,80,90,,Unidentified,1,JPEG_20150720_100403_-1060751428.jpg,1
+20227,117,69,5,B,7/20/2015 10:10,7/20/2015 10:12,80,90,BEAT SHEET; Leaves = 15,Unidentified,0,JPEG_20150720_101045_135489806.jpg,1
+20228,117,69,5,E,7/20/2015 10:15,7/20/2015 10:19,80,90,,Sweet gum,1,JPEG_20150720_101937_135489806.jpg,1
+20229,117,69,5,E,7/20/2015 10:19,7/20/2015 10:23,80,90,BEAT SHEET; Leaves = 29,Sweet gum,0,JPEG_20150720_102058_135489806.jpg,1
+20230,117,69,4,A,7/20/2015 10:28,7/20/2015 10:31,80,90,,Sweet gum,1,JPEG_20150720_103053_135489806.jpg,1
+20231,117,69,4,A,7/20/2015 10:31,7/20/2015 10:33,80,90,BEAT SHEET; Leaves = 32,Sweet gum,0,JPEG_20150720_103053_135489806.jpg,1
+20232,117,69,3,C,7/20/2015 10:37,7/20/2015 10:40,80,90,,Sweet gum,1,JPEG_20150720_104013_135489806.jpg,1
+20233,117,69,3,C,7/20/2015 10:40,7/20/2015 10:43,80,90,BEAT SHEET; Leaves = 55,Sweet gum,0,JPEG_20150720_104056_135489806.jpg,1
+20234,117,69,2,D,7/20/2015 10:44,7/20/2015 10:47,80,90,,Sweet gum,1,JPEG_20150720_104717_135489806.jpg,1
+20235,117,69,2,D,7/20/2015 10:47,7/20/2015 10:49,80,90,BEAT SHEET; Leaves = 48,Sweet gum,0,JPEG_20150720_104802_135489806.jpg,1
+20236,117,69,1,D,7/20/2015 10:56,7/20/2015 11:00,80,90,,Box elder,3,JPEG_20150720_110000_-1060751428.jpg,1
+20237,117,69,1,D,7/20/2015 11:00,7/20/2015 11:02,80,90,BEAT SHEET; Leaves = 24,Box elder,0,JPEG_20150720_110233_135489806.jpg,1
+20238,117,69,1,E,7/20/2015 11:02,7/20/2015 11:05,60,70,,Common persimmon,1,JPEG_20150720_110324_135489806.jpg,1
+20239,117,69,1,E,7/20/2015 11:05,7/20/2015 11:08,80,90,BEAT SHEET; Leaves = 37,Common persimmon,0,JPEG_20150720_110610_135489806.jpg,1
+20240,117,69,1,A,7/20/2015 11:08,7/20/2015 11:11,80,90,,Mulberry,1,JPEG_20150720_111118_135489806.jpg,1
+20241,117,69,1,A,7/20/2015 11:11,7/20/2015 11:13,80,90,BEAT SHEET; Leaves = 25,Mulberry,0,JPEG_20150720_111205_135489806.jpg,1
+20242,117,69,10,C,7/20/2015 11:22,7/20/2015 11:24,80,90,,Mulberry,1,JPEG_20150720_112359_-1060751428.jpg,1
+20243,117,69,10,C,7/20/2015 11:22,7/20/2015 11:27,80,90,BEAT SHEET; Leaves = 42,Mulberry,0,JPEG_20150720_112359_-1060751428.jpg,1
+20244,117,132,1,E,7/16/2015 9:00,7/20/2015 12:13,70,80,BEAT SHEET; Leaves = 30; Observer: Emily,Common persimmon,0,uploads/survey132-20244.jpg,1
+20245,117,132,1,C,7/16/2015 9:10,7/20/2015 12:15,70,80,BEAT SHEET; Leaves = 20; Observer: Emily,Box elder,0,uploads/survey132-20245.jpg,1
+20246,117,132,2,B,7/16/2015 9:15,7/20/2015 12:21,70,80,BEAT SHEET; Leaves = 50; Observer: Emily,Sweet gum,0,uploads/survey132-20246.jpg,1
+20247,117,132,2,C,7/16/2015 9:20,7/20/2015 12:23,70,80,BEAT SHEET; Leaves = 40; Observer: Emily,Sweet gum,0,uploads/survey132-20247.jpg,1
+20248,117,132,3,E,7/16/2015 9:25,7/20/2015 13:13,70,80,BEAT SHEET; Leaves = 35; Observer: Emily,Devils-walkingstick,0,uploads/survey132-20248.jpg,1
+20249,117,132,4,A,7/16/2015 9:30,7/20/2015 13:18,70,80,BEAT SHEET; Leaves = 15; Observer: Emily,Sweet gum,0,uploads/survey132-20249.jpg,1
+20250,117,132,4,B,7/16/2015 9:35,7/20/2015 13:19,70,80,BEAT SHEET; Leaves = 25; Observer: Emily,Unidentified,0,uploads/survey132-20250.jpg,1
+20251,117,132,5,E,7/16/2015 9:40,7/20/2015 13:21,70,80,BEAT SHEET; Leaves = 30; Observer: Emily,Sweet gum,0,uploads/survey132-20251.jpg,1
+20252,117,132,5,B,7/16/2015 9:45,7/20/2015 13:22,70,80,BEAT SHEET; Leaves = 10; Observer: Emily,Unidentified,0,uploads/survey132-20252.jpg,1
+20253,117,132,12,B,7/16/2015 9:50,7/20/2015 13:24,70,80,BEAT SHEET; Leaves = 20; Observer: Emily,Sweet gum,0,uploads/survey132-20253.jpg,1
+20254,117,132,12,A,7/16/2015 9:55,7/20/2015 13:25,70,80,BEAT SHEET; Leaves = 30; Observer: Emily,Sweet gum,0,uploads/survey132-20254.jpg,1
+20255,117,132,6,B,7/16/2015 10:00,7/20/2015 13:26,70,80,BEAT SHEET; Leaves = 35; Observer: Emily,Common persimmon,0,uploads/survey132-20255.jpg,1
+20256,117,132,11,A,7/16/2015 10:05,7/20/2015 13:31,70,80,BEAT SHEET; Leaves = 20; Observer: Emily,Sourwood,0,uploads/survey132-20256.jpg,1
+20257,117,132,11,B,7/16/2015 10:10,7/20/2015 13:33,70,80,BEAT SHEET; Leaves = 35; Observer: Emily,Red maple,0,uploads/survey132-20257.jpg,1
+20258,117,132,7,C,7/16/2015 10:15,7/20/2015 13:34,70,80,BEAT SHEET; Leaves = 25; Observer: Emily,Pin oak,0,uploads/survey132-20258.jpg,1
+20259,117,132,7,E,7/16/2015 10:20,7/20/2015 13:35,70,80,BEAT SHEET; Leaves = 30; Observer: Emily,Sweet gum,0,uploads/survey132-20259.jpg,1
+20260,117,132,8,A,7/16/2015 10:25,7/20/2015 13:36,70,80,BEAT SHEET; Leaves = 30; Observer: Emily,Chalk maple,0,uploads/survey132-20260.jpg,1
+20261,117,132,8,D,7/16/2015 10:30,7/20/2015 13:38,70,80,BEAT SHEET; Leaves = 40; Observer: Emily,Slippery elm,0,uploads/survey132-20261.jpg,1
+20262,117,131,8,E,7/20/2015 9:16,7/20/2015 14:22,80,90,,Chalk maple,1,uploads/survey131-20262.jpg,1
+20263,117,131,8,A,7/20/2015 9:21,7/20/2015 14:23,80,90,,Chalk maple,1,uploads/survey131-20263.jpg,1
+20264,117,131,7,A,7/20/2015 9:25,7/20/2015 14:25,80,90,,Pin oak,1,uploads/survey131-20264.jpg,1
+20265,117,131,7,C,7/20/2015 9:30,7/20/2015 14:27,80,90,,Pin oak,1,uploads/survey131-20265.jpg,1
+20266,117,131,11,E,7/20/2015 9:41,7/20/2015 14:27,80,90,,Common persimmon,1,uploads/survey131-20266.jpg,1
+20267,117,131,11,D,7/20/2015 9:47,7/20/2015 14:33,80,90,,Common persimmon,1,uploads/survey131-20267.jpg,1
+20268,117,131,11,A,7/20/2015 9:52,7/20/2015 14:34,80,90,,Sourwood,1,uploads/survey131-20268.jpg,1
+20269,117,131,6,B,7/20/2015 9:56,7/20/2015 14:34,80,90,,Common persimmon,1,uploads/survey131-20269.jpg,1
+20270,117,131,12,D,7/20/2015 10:02,7/20/2015 14:38,80,90,,Sweet gum,1,uploads/survey131-20270.jpg,1
+20271,117,131,12,E,7/20/2015 10:06,7/20/2015 14:43,80,90,,Sweet gum,1,uploads/survey131-20271.jpg,1
+20272,117,131,12,A,7/20/2015 10:11,7/20/2015 14:43,80,90,,Sweet gum,1,uploads/survey131-20272.jpg,1
+20273,117,131,5,D,7/20/2015 10:16,7/20/2015 14:45,80,90,,Red maple,1,uploads/survey131-20273.jpg,1
+20274,117,131,4,B,7/20/2015 10:21,7/20/2015 14:46,80,90,,Unidentified,2,uploads/survey131-20274.jpg,1
+20275,117,132,8,B,7/20/2015 9:19,7/20/2015 14:54,80,90,wet leaves,Chalk maple,1,uploads/survey132-20275.jpg,1
+20276,117,131,4,E,7/20/2015 10:29,7/20/2015 14:55,80,90,,Box elder,3,uploads/survey131-20276.jpg,1
+20277,117,132,7,B,7/20/2015 9:24,7/20/2015 14:55,80,90,,Common persimmon,1,uploads/survey132-20277.jpg,1
+20278,117,131,3,D,7/20/2015 10:34,7/20/2015 14:55,80,90,,Bitternut hickory,1,uploads/survey131-20278.jpg,1
+20279,117,131,3,E,7/20/2015 10:38,7/20/2015 14:56,80,90,,Devils-walkingstick,1,uploads/survey131-20279.jpg,1
+20280,117,132,7,D,7/20/2015 9:31,7/20/2015 14:56,80,90,,Tuliptree,1,uploads/survey132-20280.jpg,1
+20281,117,131,3,B,7/20/2015 10:42,7/20/2015 14:57,80,90,,Silverbell,1,uploads/survey131-20281.jpg,1
+20282,117,132,11,B,7/20/2015 9:40,7/20/2015 14:57,80,90,,Red maple,2,uploads/survey132-20282.jpg,1
+20283,117,131,2,E,7/20/2015 10:47,7/20/2015 14:58,80,90,,Box elder,1,uploads/survey131-20283.jpg,1
+20284,117,131,2,B,7/20/2015 10:52,7/20/2015 15:02,80,90,,Sweet gum,1,uploads/survey131-20284.jpg,1
+20285,117,132,11,C,7/20/2015 9:48,7/20/2015 15:03,80,90,,American sycamore,1,uploads/survey132-20285.jpg,1
+20286,117,132,6,E,7/20/2015 9:56,7/20/2015 15:04,80,90,,Unidentified,1,uploads/survey132-20286.jpg,1
+20287,117,132,12,C,7/20/2015 10:02,7/20/2015 15:06,80,90,,Unidentified,1,uploads/survey132-20287.jpg,1
+20288,117,131,1,C,7/20/2015 10:58,7/20/2015 15:06,80,90,,Box elder,3,uploads/survey131-20288.jpg,1
+20289,117,131,9,E,7/20/2015 11:03,7/20/2015 15:07,80,90,,Sweet gum,1,uploads/survey131-20289.jpg,1
+20290,117,132,12,B,7/20/2015 10:07,7/20/2015 15:07,80,90,,Sweet gum,2,uploads/survey132-20290.jpg,1
+20291,117,131,9,A,7/20/2015 11:11,7/20/2015 15:07,80,90,,Box elder,3,uploads/survey131-20291.jpg,1
+20292,117,131,9,D,7/20/2015 11:16,7/20/2015 15:08,80,90,,Sweet gum,1,uploads/survey131-20292.jpg,1
+20293,117,131,10,B,7/20/2015 11:21,7/20/2015 15:08,80,90,,Red oak,2,uploads/survey131-20293.jpg,1
+20294,117,132,5,A,7/20/2015 10:13,7/20/2015 15:08,80,90,,American bladdernut,1,uploads/survey132-20294.jpg,1
+20295,117,131,10,D,7/20/2015 11:26,7/20/2015 15:09,80,90,,Box elder,2,uploads/survey131-20295.jpg,1
+20296,117,132,5,C,7/20/2015 10:17,7/20/2015 15:14,80,90,,Tuliptree,2,uploads/survey132-20296.jpg,1
+20297,117,132,4,C,7/20/2015 10:28,7/20/2015 15:18,80,90,,Common persimmon,2,uploads/survey132-20297.jpg,1
+20298,117,132,4,D,7/20/2015 10:33,7/20/2015 15:20,80,90,,Unidentified,2,uploads/survey132-20298.jpg,1
+20299,117,131,8,E,7/20/2015 9:20,7/20/2015 15:27,80,90,BEAT SHEET; Leaves = 60,Chalk maple,0,uploads/survey131-20299.jpg,1
+20300,117,131,8,A,7/20/2015 9:24,7/20/2015 15:28,80,90,BEAT SHEET; Leaves = 25,Chalk maple,0,uploads/survey131-20300.jpg,1
+20301,117,131,7,A,7/20/2015 9:29,7/20/2015 15:29,80,90,BEAT SHEET; Leaves = 40,Pin oak,0,uploads/survey131-20301.jpg,1
+20302,117,131,7,C,7/20/2015 9:39,7/20/2015 15:30,80,90,BEAT SHEET; Leaves = 30,Pin oak,0,uploads/survey131-20302.jpg,1
+20303,117,131,11,E,7/20/2015 9:44,7/20/2015 15:33,80,90,BEAT SHEET; Leaves = 25,Common persimmon,0,uploads/survey131-20303.jpg,1
+20304,117,131,11,D,7/20/2015 9:51,7/20/2015 15:35,80,90,BEAT SHEET; Leaves = 27,Common persimmon,0,uploads/survey131-20304.jpg,1
+20305,117,132,3,A,7/20/2015 10:38,7/20/2015 15:37,80,90,,Devils-walkingstick,1,uploads/survey132-20305.jpg,1
+20306,117,131,11,A,7/20/2015 9:55,7/20/2015 15:38,80,90,BEAT SHEET; Leaves = 25,Sourwood,0,uploads/survey131-20306.jpg,1
+20307,117,132,2,A,7/20/2015 10:44,7/20/2015 15:39,80,90,,Red maple,1,uploads/survey132-20307.jpg,1
+20308,117,131,6,B,7/20/2015 9:59,7/20/2015 15:40,80,90,BEAT SHEET; Leaves = 40,Common persimmon,0,uploads/survey131-20308.jpg,1
+20309,117,132,2,C,7/20/2015 10:50,7/20/2015 15:42,80,90,,Sweet gum,1,uploads/survey132-20309.jpg,1
+20310,117,131,12,D,7/20/2015 10:05,7/20/2015 15:43,80,90,BEAT SHEET; Leaves = 31,Sweet gum,0,uploads/survey131-20310.jpg,1
+20311,117,131,12,E,7/20/2015 10:10,7/20/2015 15:48,80,90,BEAT SHEET; Leaves = 35,Sweet gum,0,uploads/survey131-20311.jpg,1
+20312,117,132,1,B,7/20/2015 11:00,7/20/2015 15:48,80,90,,Box elder,2,uploads/survey132-20312.jpg,1
+20313,117,131,12,A,7/20/2015 10:15,7/20/2015 15:53,80,90,BEAT SHEET; Leaves = 24,Sweet gum,0,uploads/survey131-20313.jpg,1
+20314,117,132,9,C,7/20/2015 11:05,7/20/2015 15:54,80,90,,Common persimmon,2,uploads/survey132-20314.jpg,1
+20315,117,131,5,D,7/20/2015 10:19,7/20/2015 15:55,80,90,BEAT SHEET; Leaves = 29,Red maple,0,uploads/survey131-20315.jpg,1
+20316,117,132,9,B,7/20/2015 11:12,7/20/2015 15:56,80,90,,Box elder,3,uploads/survey132-20316.jpg,1
+20317,117,131,4,B,7/20/2015 10:27,7/20/2015 15:57,80,90,BEAT SHEET; Leaves = 29,Unidentified,0,uploads/survey131-20317.jpg,1
+20318,117,131,4,E,7/20/2015 10:33,7/20/2015 16:01,80,90,BEAT SHEET; Leaves = 40,Box elder,0,uploads/survey131-20318.jpg,1
+20319,117,131,3,D,7/20/2015 10:37,7/20/2015 16:02,80,90,BEAT SHEET; Leaves = 60,Bitternut hickory,0,uploads/survey131-20319.jpg,1
+20320,117,131,3,E,7/20/2015 10:41,7/20/2015 16:02,80,90,BEAT SHEET; Leaves = 43,Devils-walkingstick,0,uploads/survey131-20320.jpg,1
+20321,117,132,10,A,7/20/2015 11:19,7/20/2015 16:02,80,90,,Common persimmon,1,uploads/survey132-20321.jpg,1
+20322,117,132,10,E,7/20/2015 11:25,7/20/2015 16:05,80,90,,Flowering dogwood,1,uploads/survey132-20322.jpg,1
+20323,117,131,3,B,7/20/2015 10:45,7/20/2015 16:06,80,90,BEAT SHEET; Leaves = 32,Silverbell,0,uploads/survey131-20323.jpg,1
+20324,117,131,2,E,7/20/2015 10:50,7/20/2015 16:08,80,90,BEAT SHEET; Leaves = 29,Box elder,0,uploads/survey131-20324.jpg,1
+20325,117,132,8,B,7/20/2015 9:22,7/20/2015 16:11,80,90,BEAT SHEET; Leaves = 26; wet leaves,Chalk maple,0,uploads/survey132-20325.jpg,1
+20326,117,132,7,B,7/20/2015 9:26,7/20/2015 16:16,80,90,BEAT SHEET; Leaves = 45,Common persimmon,0,uploads/survey132-20326.jpg,1
+20327,117,132,7,D,7/20/2015 9:34,7/20/2015 16:23,80,90,BEAT SHEET; Leaves = 25,Tuliptree,0,uploads/survey132-20327.jpg,1
+20328,117,132,11,B,7/20/2015 9:43,7/20/2015 16:24,80,90,BEAT SHEET; Leaves = 34,Red maple,0,uploads/survey132-20328.jpg,1
+20329,117,132,11,C,7/20/2015 9:52,7/20/2015 16:25,80,90,BEAT SHEET; Leaves = 15,American sycamore,0,uploads/survey132-20329.jpg,1
+20330,117,132,6,E,7/20/2015 9:59,7/20/2015 16:27,80,90,BEAT SHEET; Leaves = 27,Unidentified,0,uploads/survey132-20330.jpg,1
+20331,117,132,12,C,7/20/2015 10:05,7/20/2015 16:29,80,90,BEAT SHEET; Leaves = 26,Unidentified,0,uploads/survey132-20331.jpg,1
+20332,117,132,12,B,7/20/2015 10:11,7/20/2015 16:30,80,90,BEAT SHEET; Leaves = 25,Sweet gum,0,uploads/survey132-20332.jpg,1
+20333,117,132,5,A,7/20/2015 10:15,7/20/2015 16:30,80,90,BEAT SHEET; Leaves = 70,American bladdernut,0,uploads/survey132-20333.jpg,1
+20334,117,132,5,C,7/20/2015 10:20,7/20/2015 16:33,80,90,BEAT SHEET; Leaves = 30,Tuliptree,0,uploads/survey132-20334.jpg,1
+20335,117,132,4,C,7/20/2015 10:31,7/20/2015 16:34,80,90,BEAT SHEET; Leaves = 50,Common persimmon,0,uploads/survey132-20335.jpg,1
+20336,117,132,4,D,7/20/2015 10:36,7/20/2015 16:35,80,90,BEAT SHEET; Leaves = 40,Unidentified,0,uploads/survey132-20336.jpg,1
+20337,117,132,3,A,7/20/2015 10:40,7/20/2015 16:36,80,90,BEAT SHEET; Leaves = 35,Devils-walkingstick,0,uploads/survey132-20337.jpg,1
+20338,117,132,2,A,7/20/2015 10:46,7/20/2015 16:39,80,90,BEAT SHEET; Leaves = 25,Red maple,0,uploads/survey132-20338.jpg,1
+20339,117,132,2,C,7/20/2015 10:56,7/20/2015 16:40,80,90,BEAT SHEET; Leaves = 46,Sweet gum,0,uploads/survey132-20339.jpg,1
+20340,117,132,1,B,7/20/2015 11:02,7/20/2015 16:42,80,90,BEAT SHEET; Leaves = 39,Box elder,0,uploads/survey132-20340.jpg,1
+20341,117,132,9,C,7/20/2015 11:10,7/20/2015 16:43,80,90,BEAT SHEET; Leaves = 30,Common persimmon,0,uploads/survey132-20341.jpg,1
+20342,117,132,9,B,7/20/2015 11:15,7/20/2015 16:45,80,90,BEAT SHEET; Leaves = 24,Box elder,0,uploads/survey132-20342.jpg,1
+20343,117,132,10,A,7/20/2015 11:22,7/20/2015 16:46,80,90,BEAT SHEET; Leaves = 28,Common persimmon,0,uploads/survey132-20343.jpg,1
+20344,117,132,10,E,7/20/2015 11:28,7/20/2015 16:48,80,90,BEAT SHEET; Leaves = 23,Flowering dogwood,0,uploads/survey132-20344.jpg,1
+20345,8892356,69,1,B,7/21/2015 8:35,7/21/2015 8:37,70,80,,Spicebush,1,JPEG_20150721_083723_135489806.jpg,1
+20346,8892356,69,1,B,7/21/2015 8:37,7/21/2015 8:39,70,80,BEAT SHEET; Leaves = 12,Spicebush,0,JPEG_20150721_083828_135489806.jpg,1
+20347,8892356,69,2,C,7/21/2015 8:48,7/21/2015 8:53,70,80,,American beech,3,JPEG_20150721_085117_-1060751428.jpg,1
+20348,8892356,69,2,C,7/21/2015 8:53,7/21/2015 8:55,70,80,BEAT SHEET; Leaves = 29,American beech,0,JPEG_20150721_085117_-1060751428.jpg,1
+20349,8892356,69,3,E,7/21/2015 9:01,7/21/2015 9:05,70,80,,American beech,2,JPEG_20150721_090504_135489806.jpg,1
+20350,8892356,69,3,E,7/21/2015 9:05,7/21/2015 9:07,70,80,BEAT SHEET; Leaves = 34,American beech,0,JPEG_20150721_090610_135489806.jpg,1
+20351,8892356,69,4,D,7/21/2015 9:14,7/21/2015 9:17,80,90,,American beech,2,JPEG_20150721_091711_135489806.jpg,1
+20352,8892356,69,4,D,7/21/2015 9:17,7/21/2015 9:20,80,90,BEAT SHEET; Leaves = 24,American beech,0,JPEG_20150721_091711_135489806.jpg,1
+20353,8892356,69,5,D,7/21/2015 9:17,7/21/2015 9:31,80,90,,Unidentified,2,JPEG_20150721_093123_-1060751428.jpg,1
+20354,8892356,69,5,D,7/21/2015 9:32,7/21/2015 9:33,80,90,BEAT SHEET; Leaves = 19,Unidentified,0,JPEG_20150721_093123_-1060751428.jpg,1
+20355,8892356,69,6,D,7/21/2015 9:42,7/21/2015 9:46,80,90,,Sugar maple,1,JPEG_20150721_094437_135489806.jpg,1
+20356,8892356,69,6,D,7/21/2015 9:46,7/21/2015 9:48,80,90,BEAT SHEET; Leaves = 40,Sugar maple,0,JPEG_20150721_094820_135489806.jpg,1
+20357,8892356,69,7,B,7/21/2015 9:55,7/21/2015 9:58,80,90,,Spicebush,1,JPEG_20150721_095750_135489806.jpg,1
+20358,8892356,69,7,B,7/21/2015 9:58,7/21/2015 10:00,80,90,BEAT SHEET; Leaves = 44,Spicebush,0,JPEG_20150721_095750_135489806.jpg,1
+20359,8892356,69,8,E,7/21/2015 10:08,7/21/2015 10:12,80,90,,Sugar maple,1,JPEG_20150721_101218_-1060751428.jpg,1
+20360,8892356,69,8,E,7/21/2015 10:13,7/21/2015 10:15,80,90,BEAT SHEET; Leaves = 20,Sugar maple,0,JPEG_20150721_101516_135489806.jpg,1
+20361,117,132,11,D,7/16/2015 10:12,7/21/2015 11:38,70,80,,Common persimmon,1,uploads/survey132-20361.jpg,1
+20362,117,132,8,C,7/16/2015 10:24,7/21/2015 11:40,70,80,,American beech,1,uploads/survey132-20362.jpg,1
+20363,8892356,132,1,D,7/21/2015 8:30,7/21/2015 15:33,70,80,,Paw-paw,1,uploads/survey132-20363.jpg,1
+20364,8892356,132,1,E,7/21/2015 8:37,7/21/2015 15:39,70,80,,Spicebush,1,uploads/survey132-20364.jpg,1
+20365,8892356,132,2,A,7/21/2015 8:44,7/21/2015 15:40,70,80,,Red oak,2,uploads/survey132-20365.jpg,1
+20366,8892356,132,2,D,7/21/2015 8:50,7/21/2015 15:41,70,80,,Spicebush,1,uploads/survey132-20366.jpg,1
+20367,8892356,132,3,A,7/21/2015 8:59,7/21/2015 15:42,70,80,,American beech,1,uploads/survey132-20367.jpg,1
+20368,8892356,132,3,B,7/21/2015 9:03,7/21/2015 15:43,70,80,,American beech,2,uploads/survey132-20368.jpg,1
+20369,8892356,132,4,E,7/21/2015 9:10,7/21/2015 15:44,80,90,,Sugar maple,2,uploads/survey132-20369.jpg,1
+20370,8892356,132,4,B,7/21/2015 9:17,7/21/2015 15:45,80,90,,Mapleleaf viburnum,1,uploads/survey132-20370.jpg,1
+20371,8892356,132,5,E,7/21/2015 9:25,7/21/2015 15:46,80,90,,American beech,1,uploads/survey132-20371.jpg,1
+20372,8892356,132,5,A,7/21/2015 9:31,7/21/2015 15:49,80,90,,Red maple,1,uploads/survey132-20372.jpg,1
+20373,8892356,132,6,B,7/21/2015 9:40,7/21/2015 15:50,80,90,,American beech,2,uploads/survey132-20373.jpg,1
+20374,8892356,132,6,C,7/21/2015 9:46,7/21/2015 15:51,80,90,,American beech,1,uploads/survey132-20374.jpg,1
+20375,8892356,132,7,C,7/21/2015 9:54,7/21/2015 15:54,80,90,,Sugar maple,1,uploads/survey132-20375.jpg,1
+20376,8892356,132,7,D,7/21/2015 10:00,7/21/2015 15:55,80,90,,Sugar maple,2,uploads/survey132-20376.jpg,1
+20377,8892356,132,8,D,7/21/2015 10:05,7/21/2015 16:01,80,90,,Sugar maple,1,uploads/survey132-20377.jpg,1
+20378,8892356,132,8,B,7/21/2015 10:13,7/21/2015 16:02,80,90,,Sugar maple,2,uploads/survey132-20378.jpg,1
+20379,8892356,132,1,D,7/21/2015 8:33,7/21/2015 16:04,70,80,BEAT SHEET; Leaves = 14,Paw-paw,0,uploads/survey132-20379.jpg,1
+20380,8892356,132,1,E,7/21/2015 8:39,7/21/2015 16:05,70,80,BEAT SHEET; Leaves = 23,Spicebush,0,uploads/survey132-20380.jpg,1
+20381,8892356,132,2,A,7/21/2015 8:47,7/21/2015 16:07,70,80,BEAT SHEET; Leaves = 24,Red oak,0,uploads/survey132-20381.jpg,1
+20382,8892356,132,2,D,7/21/2015 8:53,7/21/2015 16:09,70,80,BEAT SHEET; Leaves = 65,Spicebush,0,uploads/survey132-20382.jpg,1
+20383,8892356,132,3,A,7/21/2015 9:01,7/21/2015 16:10,70,80,BEAT SHEET; Leaves = 22,American beech,0,uploads/survey132-20383.jpg,1
+20384,8892356,132,3,B,7/21/2015 9:06,7/21/2015 16:11,70,80,BEAT SHEET; Leaves = 24,American beech,0,uploads/survey132-20384.jpg,1
+20385,8892356,132,4,E,7/21/2015 9:13,7/21/2015 16:13,80,90,BEAT SHEET; Leaves = 44,Sugar maple,0,uploads/survey132-20385.jpg,1
+20386,8892356,132,4,B,7/21/2015 9:20,7/21/2015 16:15,80,90,BEAT SHEET; Leaves = 32,Mapleleaf viburnum,0,uploads/survey132-20386.jpg,1
+20387,8892356,132,5,E,7/21/2015 9:29,7/21/2015 16:16,80,90,BEAT SHEET; Leaves = 25,American beech,0,uploads/survey132-20387.jpg,1
+20388,8892356,132,5,A,7/21/2015 9:35,7/21/2015 16:17,80,90,BEAT SHEET; Leaves = 18,Red maple,0,uploads/survey132-20388.jpg,1
+20389,8892356,132,6,B,7/21/2015 9:44,7/21/2015 16:22,80,90,BEAT SHEET; Leaves = 30,American beech,0,uploads/survey132-20389.jpg,1
+20390,8892356,132,6,C,7/21/2015 9:49,7/21/2015 16:24,80,90,BEAT SHEET; Leaves = 36,American beech,0,uploads/survey132-20390.jpg,1
+20391,8892356,132,7,C,7/21/2015 9:58,7/21/2015 16:25,80,90,BEAT SHEET; Leaves = 32,Sugar maple,0,uploads/survey132-20391.jpg,1
+20392,8892356,132,7,D,7/21/2015 10:02,7/21/2015 16:27,80,90,BEAT SHEET; Leaves = 39,Sugar maple,0,uploads/survey132-20392.jpg,1
+20393,8892356,132,8,D,7/21/2015 10:08,7/21/2015 16:29,80,90,BEAT SHEET; Leaves = 32,Sugar maple,0,uploads/survey132-20393.jpg,1
+20394,8892356,132,8,B,7/21/2015 10:14,7/21/2015 16:30,80,90,BEAT SHEET; Leaves = 18,Sugar maple,0,uploads/survey132-20394.jpg,1
+20395,8892356,131,1,A,7/21/2015 8:30,7/22/2015 8:13,70,80,,Spicebush,1,uploads/survey131-20395.jpg,1
+20396,8892356,131,1,C,7/21/2015 8:36,7/22/2015 8:15,70,80,,Unidentified,1,uploads/survey131-20396.jpg,1
+20397,8892356,131,2,E,7/21/2015 8:46,7/22/2015 8:18,70,80,,Spicebush,1,uploads/survey131-20397.jpg,1
+20398,8892356,131,2,B,7/21/2015 8:51,7/22/2015 8:32,70,80,,Spicebush,1,uploads/survey131-20398.jpg,1
+20399,8892356,131,3,C,7/21/2015 8:58,7/22/2015 8:35,70,80,,Unidentified,1,uploads/survey131-20399.jpg,1
+20400,8892356,131,3,D,7/21/2015 9:04,7/22/2015 8:42,70,80,,American beech,1,uploads/survey131-20400.jpg,1
+20401,8892356,131,4,A,7/21/2015 9:13,7/22/2015 8:43,80,90,,American beech,1,uploads/survey131-20401.jpg,1
+20402,8892356,131,4,C,7/21/2015 9:18,7/22/2015 8:45,80,90,,American beech,1,uploads/survey131-20402.jpg,1
+20403,8892356,131,5,B,7/21/2015 9:27,7/22/2015 8:48,80,90,,American beech,1,uploads/survey131-20403.jpg,1
+20404,8892356,131,5,C,7/21/2015 9:33,7/22/2015 9:01,80,90,,Sourwood,1,uploads/survey131-20404.jpg,1
+20405,8892356,131,6,E,7/21/2015 9:40,7/22/2015 9:03,80,90,,Sourwood,1,uploads/survey131-20405.jpg,1
+20406,8892356,131,6,A,7/21/2015 9:47,7/22/2015 9:05,80,90,,Sugar maple,1,uploads/survey131-20406.jpg,1
+20407,8892356,131,7,A,7/21/2015 9:54,7/22/2015 9:11,80,90,,American beech,2,uploads/survey131-20407.jpg,1
+20408,8892356,131,7,E,7/21/2015 9:59,7/22/2015 9:12,80,90,,Sugar maple,1,uploads/survey131-20408.jpg,1
+20409,8892356,131,8,A,7/21/2015 10:05,7/22/2015 9:13,80,90,,Sugar maple,1,uploads/survey131-20409.jpg,1
+20410,8892356,131,8,C,7/21/2015 10:09,7/22/2015 9:13,80,90,,Spicebush,1,uploads/survey131-20410.jpg,1
+20411,8892356,131,1,A,7/21/2015 8:33,7/22/2015 9:23,80,90,BEAT SHEET; Leaves = 31,Spicebush,0,uploads/survey131-20411.jpg,1
+20412,8892356,131,1,C,7/21/2015 8:40,7/22/2015 9:30,80,90,BEAT SHEET; Leaves = 27,Unidentified,0,uploads/survey131-20412.jpg,1
+20413,8892356,131,2,E,7/21/2015 8:49,7/22/2015 9:36,80,90,BEAT SHEET; Leaves = 32,Spicebush,0,uploads/survey131-20413.jpg,1
+20414,8892356,131,2,B,7/21/2015 8:54,7/22/2015 9:43,80,90,"BEAT SHEET; Leaves = 30
+",Spicebush,0,uploads/survey131-20414.jpg,1
+20415,8892356,131,3,C,7/21/2015 9:01,7/22/2015 9:46,80,90,"BEAT SHEET; Leaves = 24
+",Unidentified,0,uploads/survey131-20415.jpg,1
+20416,8892356,131,3,D,7/21/2015 9:07,7/22/2015 9:49,80,90,"BEAT SHEET; Leaves = 27
+",American beech,0,uploads/survey131-20416.jpg,1
+20417,8892356,131,4,A,7/21/2015 9:16,7/22/2015 9:51,80,90,"BEAT SHEET; Leaves = 29
+",American beech,0,uploads/survey131-20417.jpg,1
+20418,8892356,131,4,C,7/21/2015 9:21,7/22/2015 9:52,80,90,"BEAT SHEET; Leaves = 33
+",American beech,0,uploads/survey131-20418.jpg,1
+20419,8892356,131,5,B,7/21/2015 9:27,7/22/2015 9:56,80,90,"BEAT SHEET; Leaves = 31
+",American beech,0,uploads/survey131-20419.jpg,1
+20420,8892356,131,5,C,7/21/2015 9:37,7/22/2015 9:57,80,90,"BEAT SHEET; Leaves = 18
+",Sourwood,0,uploads/survey131-20420.jpg,1
+20421,8892356,131,6,E,7/21/2015 9:49,7/22/2015 9:58,80,90,"BEAT SHEET; Leaves = 28
+",Sourwood,0,uploads/survey131-20421.jpg,1
+20422,8892356,131,6,A,7/21/2015 9:51,7/22/2015 9:59,80,90,"BEAT SHEET; Leaves = 40
+",Sugar maple,0,uploads/survey131-20422.jpg,1
+20423,8892356,131,7,A,7/21/2015 9:57,7/22/2015 10:01,80,90,"BEAT SHEET; Leaves = 27
+",American beech,0,uploads/survey131-20423.jpg,1
+20424,8892356,131,7,E,7/21/2015 10:02,7/22/2015 10:01,80,90,"BEAT SHEET; Leaves = 24
+",Sugar maple,0,uploads/survey131-20424.jpg,1
+20426,8892356,131,8,A,7/21/2015 10:08,7/22/2015 10:05,80,90,"BEAT SHEET; Leaves = 27
+",Sugar maple,0,uploads/survey131-20426.jpg,1
+20427,8892356,131,8,C,7/21/2015 10:12,7/22/2015 10:06,80,90,"BEAT SHEET; Leaves = 34
+",Spicebush,0,uploads/survey131-20427.jpg,1
+20428,117,131,2,B,7/20/2015 10:55,7/22/2015 10:11,80,90,"BEAT SHEET; Leaves = 40
+",Sweet gum,0,uploads/survey131-20428.jpg,1
+20429,117,131,1,C,7/20/2015 11:01,7/22/2015 10:12,80,90,"BEAT SHEET; Leaves = 32
+",Box elder,0,uploads/survey131-20429.jpg,1
+20430,117,131,9,E,7/20/2015 11:09,7/22/2015 10:13,80,90,"BEAT SHEET; Leaves = 32
+",Sweet gum,0,uploads/survey131-20430.jpg,1
+20431,117,131,9,A,7/20/2015 10:14,7/22/2015 10:14,80,90,"BEAT SHEET; Leaves = 36
+",Box elder,0,uploads/survey131-20431.jpg,1
+20432,117,131,9,D,7/20/2015 11:20,7/22/2015 10:15,80,90,"BEAT SHEET; Leaves = 31
+",Sweet gum,0,uploads/survey131-20432.jpg,1
+20433,117,131,10,B,7/20/2015 11:24,7/22/2015 10:16,80,90,"BEAT SHEET; Leaves = 27
+",Red oak,0,uploads/survey131-20433.jpg,1
+20434,117,131,10,D,7/20/2015 11:30,7/22/2015 10:16,80,90,"BEAT SHEET; Leaves = 34
+",Box elder,0,uploads/survey131-20434.jpg,1
+20435,117,69,10,C,7/23/2015 8:50,7/23/2015 8:55,70,80,,Mulberry,1,JPEG_20150723_085526_135489806.jpg,1
+20436,117,69,10,C,7/23/2015 8:50,7/23/2015 8:58,70,80,BEAT SHEET; Leaves = 20,Mulberry,0,JPEG_20150723_085526_135489806.jpg,1
+20437,117,69,3,C,7/23/2015 9:32,7/23/2015 9:37,70,80,,Sweet gum,1,JPEG_20150723_093721_135489806.jpg,1
+20438,117,69,3,C,7/23/2015 9:38,7/23/2015 9:40,70,80,BEAT SHEET; Leaves = 32,Sweet gum,0,JPEG_20150723_094028_135489806.jpg,1
+20439,117,69,7,E,7/23/2015 10:19,7/23/2015 10:23,70,80,,Sweet gum,1,JPEG_20150723_102317_-1118417922.jpg,1
+20440,117,69,1,D,7/23/2015 13:51,7/23/2015 13:53,80,90,REPEAT SURVEY,Box elder,3,JPEG_20150723_135328_135489806.jpg,1
+20441,117,69,1,C,7/23/2015 13:54,7/23/2015 13:56,80,90,REPEAT SURVEY,Box elder,3,JPEG_20150723_135328_135489806.jpg,1
+20442,117,69,2,C,7/23/2015 13:57,7/23/2015 14:00,80,90,REPEAT SURVEY,Sweet gum,1,JPEG_20150723_140004_-1060751428.jpg,1
+20443,117,69,3,C,7/23/2015 14:01,7/23/2015 14:05,80,90,REPEAT SURVEY,Sweet gum,1,JPEG_20150723_140455_135489806.jpg,1
+20444,117,69,4,D,7/23/2015 14:05,7/23/2015 14:07,80,90,REPEAT SURVEY,Unidentified,1,JPEG_20150723_140722_135489806.jpg,1
+20445,117,69,5,D,7/23/2015 14:09,7/23/2015 14:11,80,90,REPEAT SURVEY,Red maple,1,JPEG_20150723_141128_-1060751428.jpg,1
+20446,117,69,5,E,7/23/2015 14:12,7/23/2015 14:14,80,90,REPEAT SURVEY,Sweet gum,1,JPEG_20150723_141421_886102009.jpg,1
+20447,117,69,6,D,7/23/2015 14:15,7/23/2015 14:17,80,90,REPEAT SURVEY,Common persimmon,1,JPEG_20150723_141721_135489806.jpg,1
+20448,117,69,7,E,7/23/2015 14:20,7/23/2015 14:25,80,90,REPEAT SURVEY,Sweet gum,1,JPEG_20150723_142254_-1060751428.jpg,1
+20449,117,131,10,D,7/23/2015 8:49,7/23/2015 15:27,70,80,,Box elder,1,uploads/survey131-20449.jpg,1
+20450,117,131,9,E,7/23/2015 8:57,7/23/2015 15:35,70,80,,Sweet gum,1,uploads/survey131-20450.jpg,1
+20451,117,131,1,E,7/23/2015 9:06,7/23/2015 15:36,70,80,,Common persimmon,1,uploads/survey131-20451.jpg,1
+20452,117,131,1,D,7/23/2015 9:14,7/23/2015 15:38,70,80,,Box elder,2,uploads/survey131-20452.jpg,1
+20453,117,132,1,A,7/23/2015 13:51,7/23/2015 15:39,80,90,REPEAT SURVEY,Mulberry,1,uploads/survey132-20453.jpg,1
+20454,117,131,2,C,7/23/2015 9:22,7/23/2015 15:39,70,80,,Sweet gum,1,uploads/survey131-20454.jpg,1
+20455,117,130,1,B,7/23/2015 13:51,7/23/2015 15:39,80,90,REPEAT SURVEY,Box elder,2,uploads/survey130-20455.jpg,1
+20456,117,131,3,D,7/23/2015 9:29,7/23/2015 15:41,70,80,,Bitternut hickory,1,uploads/survey131-20456.jpg,1
+20457,117,132,2,A,7/23/2015 13:56,7/23/2015 15:42,80,90,REPEAT SURVEY,Red maple,2,uploads/survey132-20457.jpg,1
+20458,117,131,4,E,7/23/2015 9:35,7/23/2015 15:43,70,80,,Box elder,2,uploads/survey131-20458.jpg,1
+20459,117,130,2,E,7/23/2015 13:56,7/23/2015 15:43,80,90,REPEAT SURVEY,Box elder,2,uploads/survey130-20459.jpg,1
+20460,117,132,3,A,7/23/2015 14:01,7/23/2015 15:43,80,90,REPEAT SURVEY,Devils-walkingstick,1,uploads/survey132-20460.jpg,1
+20461,117,131,4,A,7/23/2015 9:42,7/23/2015 15:44,70,80,,Sweet gum,1,uploads/survey131-20461.jpg,1
+20462,117,132,3,E,7/23/2015 14:04,7/23/2015 15:44,80,90,REPEAT SURVEY,Devils-walkingstick,1,uploads/survey132-20462.jpg,1
+20463,117,130,2,D,7/23/2015 13:59,7/23/2015 15:45,80,90,REPEAT SURVEY,Sweet gum,1,uploads/survey130-20463.jpg,1
+20464,117,132,4,A,7/23/2015 14:07,7/23/2015 15:45,80,90,REPEAT SURVEY,Sweet gum,1,uploads/survey132-20464.jpg,1
+20465,117,130,3,B,7/23/2015 14:03,7/23/2015 15:48,80,90,REPEAT SURVEY,Carolina silverbell,1,uploads/survey130-20465.jpg,1
+20466,117,131,5,E,7/23/2015 9:49,7/23/2015 15:48,70,80,,Sweet gum,1,uploads/survey131-20466.jpg,1
+20467,117,130,4,C,7/23/2015 14:06,7/23/2015 15:49,80,90,REPEAT SURVEY,Common persimmon,2,uploads/survey130-20467.jpg,1
+20468,117,132,5,A,7/23/2015 14:10,7/23/2015 15:49,80,90,REPEAT SURVEY,American bladdernut,1,uploads/survey132-20468.jpg,1
+20469,117,131,12,C,7/23/2015 9:54,7/23/2015 15:49,70,80,,Unidentified,1,uploads/survey131-20469.jpg,1
+20470,117,132,6,B,7/23/2015 14:14,7/23/2015 15:52,80,90,REPEAT SURVEY,Common persimmon,2,uploads/survey132-20470.jpg,1
+20471,117,132,7,A,7/23/2015 14:20,7/23/2015 15:53,80,90,REPEAT SURVEY,Pin oak,1,uploads/survey132-20471.jpg,1
+20472,117,130,5,C,7/23/2015 14:10,7/23/2015 15:53,80,90,REPEAT SURVEY,Tuliptree,1,uploads/survey130-20472.jpg,1
+20473,117,131,6,A,7/23/2015 9:59,7/23/2015 15:53,70,80,,Carolina ash,1,uploads/survey131-20473.jpg,1
+20474,117,132,7,D,7/23/2015 14:22,7/23/2015 15:55,80,90,REPEAT SURVEY,Tuliptree,1,uploads/survey132-20474.jpg,1
+20475,117,131,6,D,7/23/2015 10:03,7/23/2015 15:55,70,80,,Common persimmon,1,uploads/survey131-20475.jpg,1
+20476,117,130,6,A,7/23/2015 14:15,7/23/2015 15:55,80,90,REPEAT SURVEY,Carolina ash,1,uploads/survey130-20476.jpg,1
+20477,117,132,8,B,7/23/2015 14:27,7/23/2015 15:56,80,90,REPEAT SURVEY,Chalk maple,1,uploads/survey132-20477.jpg,1
+20478,117,130,6,E,7/23/2015 14:17,7/23/2015 15:57,80,90,REPEAT SURVEY,Unidentified,1,uploads/survey130-20478.jpg,1
+20479,117,131,11,E,7/23/2015 10:08,7/23/2015 15:58,70,80,,Common persimmon,1,uploads/survey131-20479.jpg,1
+20480,117,130,7,B,7/23/2015 14:21,7/23/2015 16:00,80,90,REPEAT SURVEY,Common persimmon,1,uploads/survey130-20480.jpg,1
+20481,117,131,7,C,7/23/2015 10:15,7/23/2015 16:00,70,80,,Pin oak,1,uploads/survey131-20481.jpg,1
+20482,117,131,8,C,7/23/2015 10:21,7/23/2015 16:02,70,80,,American beech,1,uploads/survey131-20482.jpg,1
+20483,117,130,8,E,7/23/2015 14:24,7/23/2015 16:07,80,90,REPEAT SURVEY,Chalk maple,1,uploads/survey130-20483.jpg,1
+20484,117,130,8,D,7/23/2015 14:26,7/23/2015 16:08,80,90,REPEAT SURVEY,Slippery elm,1,uploads/survey130-20484.jpg,1
+20485,117,132,1,E,7/16/2015 9:00,7/23/2015 16:10,70,80,Observer: Emily,Common persimmon,1,uploads/survey132-20485.jpg,1
+20486,117,130,10,E,7/23/2015 8:49,7/23/2015 16:14,70,80,,Flowering dogwood,1,uploads/survey130-20486.jpg,1
+20487,117,131,8,D,7/23/2015 10:27,7/23/2015 16:16,70,80,,Slippery elm,1,uploads/survey131-20487.jpg,1
+20488,117,132,1,C,7/16/2015 9:10,7/23/2015 16:17,70,80,Observer: Emily,Box elder,1,uploads/survey132-20488.jpg,1
+20489,117,132,4,A,7/16/2015 9:30,7/23/2015 16:21,70,80,Observer: Emily,Sweet gum,1,uploads/survey132-20489.jpg,1
+20490,117,132,10,A,7/23/2015 8:49,7/23/2015 16:33,70,80,,Common persimmon,1,uploads/survey132-20490.jpg,1
+20491,117,130,9,D,7/23/2015 8:59,7/23/2015 16:42,70,80,,Sweet gum,1,uploads/survey130-20491.jpg,1
+20492,117,132,10,B,7/23/2015 8:55,7/23/2015 16:53,70,80,,Unidentified,2,uploads/survey132-20492.jpg,1
+20493,117,130,9,A,7/23/2015 9:05,7/24/2015 8:14,70,80,,Box elder,3,uploads/survey130-20493.jpg,1
+20494,117,132,10,B,7/23/2015 8:55,7/24/2015 8:16,70,80,,Unidentified,2,uploads/survey132-20494.jpg,1
+20495,117,130,1,B,7/23/2015 9:11,7/24/2015 8:18,70,80,,Box elder,1,uploads/survey130-20495.jpg,1
+20496,117,131,1,E,7/23/2015 13:51,7/24/2015 8:19,80,90,REPEAT SURVEYS,Common persimmon,1,uploads/survey131-20496.jpg,1
+20497,117,132,9,B,7/23/2015 9:04,7/24/2015 8:19,70,80,,Box elder,3,uploads/survey132-20497.jpg,1
+20498,117,130,2,E,7/23/2015 9:19,7/24/2015 8:22,70,80,,Box elder,2,uploads/survey130-20498.jpg,1
+20499,117,130,3,B,7/23/2015 9:28,7/24/2015 8:23,70,80,,Carolina silverbell,1,uploads/survey130-20499.jpg,1
+20500,117,131,2,B,7/23/2015 13:57,7/24/2015 8:23,80,90,REPEAT SURVEYS,Sweet gum,1,uploads/survey131-20500.jpg,1
+20501,117,130,4,C,7/23/2015 9:36,7/24/2015 8:25,70,80,,Common persimmon,1,uploads/survey130-20501.jpg,1
+20502,117,132,1,A,7/23/2015 9:13,7/24/2015 8:25,70,80,,Mulberry,1,uploads/survey132-20502.jpg,1
+20503,117,131,3,D,7/23/2015 14:01,7/24/2015 8:26,80,90,REPEAT SURVEY,Bitternut hickory,1,uploads/survey131-20503.jpg,1
+20504,117,130,5,A,7/23/2015 9:43,7/24/2015 8:26,70,80,,American bladdernut,1,uploads/survey130-20504.jpg,1
+20505,117,132,2,A,7/23/2015 9:24,7/24/2015 8:26,70,80,,Red maple,1,uploads/survey132-20505.jpg,1
+20506,117,131,4,E,7/23/2015 14:05,7/24/2015 8:27,80,90,REPEAT SURVEY,Box elder,2,uploads/survey131-20506.jpg,1
+20507,117,132,3,A,7/23/2015 9:30,7/24/2015 8:30,70,80,,Devils-walkingstick,1,uploads/survey132-20507.jpg,1
+20508,117,131,4,B,7/23/2015 14:08,7/24/2015 8:32,80,90,REPEAT SURVEY,Unidentified,2,uploads/survey131-20508.jpg,1
+20509,117,131,5,B,7/23/2015 14:11,7/24/2015 8:34,80,90,REPEAT SURVEY,Unidentified,1,uploads/survey131-20509.jpg,1
+20510,117,130,12,A,7/23/2015 9:51,7/24/2015 8:35,70,80,,Sweet gum,1,uploads/survey130-20510.jpg,1
+20511,117,131,6,C,7/23/2015 14:14,7/24/2015 8:35,80,90,REPEAT SURVEY,Fringetree,1,uploads/survey131-20511.jpg,1
+20512,117,132,4,D,7/23/2015 9:37,7/24/2015 8:36,70,80,,Unidentified,1,uploads/survey132-20512.jpg,1
+20513,117,132,5,B,7/23/2015 9:44,7/24/2015 8:38,70,80,,Unidentified,1,uploads/survey132-20513.jpg,1
+20514,117,131,7,C,7/23/2015 14:19,7/24/2015 8:40,80,90,REPEAT SURVEY,Pin oak,1,uploads/survey131-20514.jpg,1
+20515,117,131,8,C,7/23/2015 14:24,7/24/2015 8:44,80,90,REPEAT SURVEY,American beech,1,uploads/survey131-20515.jpg,1
+20516,117,131,8,A,7/23/2015 14:28,7/24/2015 8:45,80,90,REPEAT SURVEY,Chalk maple,1,uploads/survey131-20516.jpg,1
+20517,117,131,10,D,7/23/2015 8:52,7/24/2015 8:50,70,80,BEAT SHEET; Leaves = 38,Box elder,0,uploads/survey131-20517.jpg,1
+20518,117,131,9,E,7/23/2015 9:02,7/24/2015 8:53,70,80,BEAT SHEET; Leaves = 27,Sweet gum,0,uploads/survey131-20518.jpg,1
+20519,117,132,5,C,7/23/2015 9:51,7/24/2015 8:55,70,80,,Tuliptree,1,uploads/survey132-20519.jpg,1
+20520,117,131,1,E,7/23/2015 9:11,7/24/2015 8:55,70,80,BEAT SHEET; Leaves = 31,Common persimmon,0,uploads/survey131-20520.jpg,1
+20521,117,131,1,D,7/23/2015 9:17,7/24/2015 8:57,70,80,BEAT SHEET; Leaves = 21,Box elder,0,uploads/survey131-20521.jpg,1
+20522,117,131,2,C,7/23/2015 9:24,7/24/2015 8:59,70,80,BEAT SHEET; Leaves = 29,Sweet gum,0,uploads/survey131-20522.jpg,1
+20523,117,132,12,D,7/23/2015 9:58,7/24/2015 9:00,70,80,,Sweet gum,1,uploads/survey132-20523.jpg,1
+20524,117,131,3,D,7/23/2015 9:32,7/24/2015 9:00,70,80,BEAT SHEET; Leaves = 64,Bitternut hickory,0,uploads/survey131-20524.jpg,1
+20525,117,132,6,E,7/23/2015 10:04,7/24/2015 9:01,70,80,,Unidentified,1,uploads/survey132-20525.jpg,1
+20526,117,131,4,E,7/23/2015 9:39,7/24/2015 9:01,70,80,BEAT SHEET; Leaves = 30,Box elder,0,uploads/survey131-20526.jpg,1
+20527,117,131,4,A,7/23/2015 9:46,7/24/2015 9:02,70,80,BEAT SHEET; Leaves = 28,Sweet gum,0,uploads/survey131-20527.jpg,1
+20528,117,132,11,C,7/23/2015 10:10,7/24/2015 9:02,70,80,,American sycamore,2,uploads/survey132-20528.jpg,1
+20529,117,131,5,E,7/23/2015 9:52,7/24/2015 9:03,70,80,BEAT SHEET; Leaves = 32,Sweet gum,0,uploads/survey131-20529.jpg,1
+20530,117,132,7,B,7/23/2015 10:20,7/24/2015 9:03,70,80,,Common persimmon,1,uploads/survey132-20530.jpg,1
+20531,117,131,12,C,7/23/2015 9:57,7/24/2015 9:04,70,80,BEAT SHEET; Leaves = 34,Unidentified,0,uploads/survey131-20531.jpg,1
+20532,117,130,12,E,7/23/2015 9:58,7/24/2015 9:04,70,80,,Sweet gum,1,uploads/survey130-20532.jpg,1
+20533,117,131,6,A,7/23/2015 10:02,7/24/2015 9:05,70,80,BEAT SHEET; Leaves = 60,Carolina ash,0,uploads/survey131-20533.jpg,1
+20534,117,130,6,C,7/23/2015 10:08,7/24/2015 9:05,70,80,,Fringetree,1,uploads/survey130-20534.jpg,1
+20535,117,132,8,E,7/23/2015 10:28,7/24/2015 9:06,70,80,,Chalk maple,1,uploads/survey132-20535.jpg,1
+20536,117,130,11,D,7/23/2015 10:14,7/24/2015 9:06,70,80,,Common persimmon,1,uploads/survey130-20536.jpg,1
+20537,117,131,6,D,7/23/2015 10:07,7/24/2015 9:07,70,80,BEAT SHEET; Leaves = 39,Common persimmon,0,uploads/survey131-20537.jpg,1
+20538,117,131,11,E,7/23/2015 10:12,7/24/2015 9:08,70,80,BEAT SHEET; Leaves = 26,Common persimmon,0,uploads/survey131-20538.jpg,1
+20539,117,130,7,D,7/23/2015 10:19,7/24/2015 9:09,70,80,,Tuliptree,1,uploads/survey130-20539.jpg,1
+20540,117,131,7,C,7/23/2015 10:18,7/24/2015 9:09,70,80,BEAT SHEET; Leaves = 36,Pin oak,0,uploads/survey131-20540.jpg,1
+20541,117,131,8,C,7/23/2015 10:25,7/24/2015 9:10,70,80,BEAT SHEET; Leaves = 34,American beech,0,uploads/survey131-20541.jpg,1
+20542,117,130,8,B,7/23/2015 10:27,7/24/2015 9:10,70,80,,Sugar maple,1,uploads/survey130-20542.jpg,1
+20543,117,131,8,D,7/23/2015 10:31,7/24/2015 9:11,70,80,BEAT SHEET; Leaves = 32,Slippery elm,0,uploads/survey131-20543.jpg,1
+20544,117,130,10,E,7/23/2015 8:57,7/24/2015 9:13,70,80,BEAT SHEET; Leaves = 29,Flowering dogwood,0,uploads/survey130-20544.jpg,1
+20545,117,132,10,A,7/23/2015 8:51,7/24/2015 9:17,70,80,BEAT SHEET; Leaves = 27,Common persimmon,0,uploads/survey132-20545.jpg,1
+20546,117,131,1,A,7/16/2015 9:07,7/24/2015 9:19,70,80,,Mulberry,1,uploads/survey131-20546.jpg,1
+20547,117,131,1,D,7/16/2015 9:11,7/24/2015 9:20,70,80,,Box elder,3,uploads/survey131-20547.jpg,1
+20548,117,131,2,D,7/16/2015 9:15,7/24/2015 9:20,70,80,,Sweet gum,1,uploads/survey131-20548.jpg,1
+20549,117,130,9,D,7/23/2015 9:01,7/24/2015 9:21,70,80,BEAT SHEET; Leaves = 42,Sweet gum,0,uploads/survey130-20549.jpg,1
+20550,117,131,3,D,7/16/2015 9:21,7/24/2015 9:21,70,80,,Bitternut hickory,1,uploads/survey131-20550.jpg,1
+20551,117,131,3,A,7/16/2015 9:25,7/24/2015 9:21,70,80,,Devils-walkingstick,1,uploads/survey131-20551.jpg,1
+20552,117,130,9,A,7/23/2015 9:07,7/24/2015 9:22,70,80,BEAT SHEET; Leaves = 61,Box elder,0,uploads/survey130-20552.jpg,1
+20553,117,130,1,B,7/23/2015 9:15,7/24/2015 9:22,70,80,BEAT SHEET; Leaves = 35,Box elder,0,uploads/survey130-20553.jpg,1
+20554,117,131,4,E,7/16/2015 9:30,7/24/2015 9:23,70,80,,Box elder,2,uploads/survey131-20554.jpg,1
+20555,117,131,4,C,7/16/2015 9:35,7/24/2015 9:23,70,80,,Common persimmon,1,uploads/survey131-20555.jpg,1
+20556,117,131,5,D,7/16/2015 9:39,7/24/2015 9:24,70,80,,Red maple,1,uploads/survey131-20556.jpg,1
+20557,117,130,2,E,7/23/2015 9:24,7/24/2015 9:24,70,80,BEAT SHEET; Leaves = 46,Box elder,0,uploads/survey130-20557.jpg,1
+20558,117,131,12,C,7/16/2015 9:45,7/24/2015 9:24,70,80,,Unidentified,1,uploads/survey131-20558.jpg,1
+20559,117,131,12,E,7/16/2015 9:53,7/24/2015 9:25,70,80,,Sweet gum,1,uploads/survey131-20559.jpg,1
+20560,117,131,6,E,7/16/2015 9:58,7/24/2015 9:25,70,80,,Unidentified,1,uploads/survey131-20560.jpg,1
+20561,117,130,3,B,7/23/2015 9:30,7/24/2015 9:26,70,80,BEAT SHEET; Leaves = 49,Carolina silverbell,0,uploads/survey130-20561.jpg,1
+20562,117,131,11,E,7/16/2015 10:05,7/24/2015 9:26,70,80,,Common persimmon,1,uploads/survey131-20562.jpg,1
+20563,117,131,7,B,7/16/2015 10:12,7/24/2015 9:27,70,80,,Common persimmon,1,uploads/survey131-20563.jpg,1
+20564,117,131,7,A,7/16/2015 10:17,7/24/2015 9:28,70,80,,Pin oak,1,uploads/survey131-20564.jpg,1
+20565,117,131,8,E,7/16/2015 10:22,7/24/2015 9:29,70,80,,Chalk maple,1,uploads/survey131-20565.jpg,1
+20566,117,131,3,E,7/16/2015 14:17,7/24/2015 9:33,80,90,REPEAT SURVEY,Devils-walkingstick,1,uploads/survey131-20566.jpg,1
+20567,117,131,4,E,7/16/2015 14:20,7/24/2015 9:34,80,90,REPEAT SURVEY,Box-elder,2,uploads/survey131-20567.jpg,1
+20568,117,131,4,D,7/16/2015 14:23,7/24/2015 9:37,80,90,REPEAT SURVEY,Unidentified,1,uploads/survey131-20568.jpg,1
+20569,117,130,4,C,7/23/2015 9:38,7/24/2015 9:38,70,80,BEAT SHEET; Leaves = 50,Common persimmon,0,uploads/survey130-20569.jpg,1
+20570,117,131,5,D,7/16/2015 14:26,7/24/2015 9:39,80,90,REPEAT SURVEY,Red maple,1,uploads/survey131-20570.jpg,1
+20571,117,132,10,B,7/23/2015 9:00,7/24/2015 9:42,70,80,BEAT SHEET; Leaves = 33,Unidentified,0,uploads/survey132-20571.jpg,1
+20572,117,130,5,A,7/23/2015 9:46,7/24/2015 9:43,70,80,BEAT SHEET; Leaves = 85,American bladdernut,0,uploads/survey130-20572.jpg,1
+20573,117,131,5,A,7/16/2015 14:29,7/24/2015 9:44,80,90,REPEAT SURVEY,Bladdernut,1,uploads/survey131-20573.jpg,1
+20574,117,132,9,B,7/23/2015 9:09,7/24/2015 9:45,70,80,BEAT SHEET; Leaves = 27,Box elder,0,uploads/survey132-20574.jpg,1
+20575,117,131,6,B,7/16/2015 14:34,7/24/2015 9:46,80,90,REPEAT SURVEY,Common persimmon,1,uploads/survey131-20575.jpg,1
+20576,117,130,12,A,7/23/2015 9:55,7/24/2015 9:48,70,80,BEAT SHEET; Leaves = 41,Sweet gum,0,uploads/survey130-20576.jpg,1
+20577,117,132,1,A,7/23/2015 9:21,7/24/2015 9:48,70,80,BEAT SHEET; Leaves = 29,Mulberry,0,uploads/survey132-20577.jpg,1
+20578,117,131,6,C,7/16/2015 14:38,7/24/2015 9:48,80,90,REPEAT SURVEY,Fringetree,1,uploads/survey131-20578.jpg,1
+20579,117,131,7,B,7/16/2015 14:41,7/24/2015 9:49,80,90,REPEAT SURVEY,Common persimmon,1,uploads/survey131-20579.jpg,1
+20580,117,130,12,E,7/23/2015 10:00,7/24/2015 9:49,70,80,BEAT SHEET; Leaves = 47,Sweet gum,0,uploads/survey130-20580.jpg,1
+20581,117,132,2,A,7/23/2015 9:27,7/24/2015 9:49,70,80,BEAT SHEET; Leaves = 29,Red maple,0,uploads/survey132-20581.jpg,1
+20582,117,131,7,E,7/16/2015 2:45,7/24/2015 9:50,80,90,REPEAT SURVEY,Sweet gum,1,uploads/survey131-20582.jpg,1
+20583,117,132,3,A,7/23/2015 9:33,7/24/2015 9:50,70,80,BEAT SHEET; Leaves = 48,Devils-walkingstick,0,uploads/survey132-20583.jpg,1
+20584,117,131,8,E,7/16/2015 14:50,7/24/2015 9:53,80,90,REPEAT SURVEY,Chalk maple,1,uploads/survey131-20584.jpg,1
+20585,117,132,4,D,7/23/2015 9:40,7/24/2015 9:56,70,80,BEAT SHEET; Leaves = 58,Unidentified,0,uploads/survey132-20585.jpg,1
+20586,117,132,5,B,7/23/2015 9:49,7/24/2015 9:57,70,80,BEAT SHEET; Leaves = 22,Unidentified,0,uploads/survey132-20586.jpg,1
+20587,117,130,6,C,7/23/2015 10:11,7/24/2015 10:00,70,80,BEAT SHEET; Leaves = 43,Fringetree,0,uploads/survey130-20587.jpg,1
+20588,117,132,5,C,7/23/2015 9:54,7/24/2015 10:03,70,80,BEAT SHEET; Leaves = 49,Tuliptree,0,uploads/survey132-20588.jpg,1
+20589,117,131,10,C,7/16/2015 8:48,7/24/2015 10:04,70,80,BEAT SHEET; Leaves = 25,Mulberry,0,uploads/survey131-20589.jpg,1
+20590,117,130,11,E,7/23/2015 10:17,7/24/2015 10:07,70,80,BEAT SHEET; Leaves = 36,Common persimmon,0,uploads/survey130-20590.jpg,1
+20591,117,132,12,D,7/23/2015 10:01,7/24/2015 10:07,70,80,BEAT SHEET; Leaves = 51,Sweet gum,0,uploads/survey132-20591.jpg,1
+20592,117,130,7,D,7/23/2015 10:23,7/24/2015 10:07,70,80,BEAT SHEET; Leaves = 32,Tuliptree,0,uploads/survey130-20592.jpg,1
+20593,117,131,10,D,7/16/2015 8:54,7/24/2015 10:08,70,80,BEAT SHEET; Leaves = 30,Box elder,0,uploads/survey131-20593.jpg,1
+20594,117,130,8,B,7/23/2015 10:29,7/24/2015 10:08,70,80,BEAT SHEET; Leaves = 44,Sugar maple,0,uploads/survey130-20594.jpg,1
+20595,117,132,6,E,7/23/2015 10:07,7/24/2015 10:08,70,80,BEAT SHEET; Leaves = 27,Unidentified,0,uploads/survey132-20595.jpg,1
+20596,117,131,9,C,7/16/2015 9:00,7/24/2015 10:10,70,80,BEAT SHEET; Leaves = 27,Common persimmon,0,uploads/survey131-20596.jpg,1
+20597,117,132,11,C,7/23/2015 10:11,7/24/2015 10:10,70,80,BEAT SHEET; Leaves = 12,American sycamore,0,uploads/survey132-20597.jpg,1
+20598,117,131,9,B,7/16/2015 9:04,7/24/2015 10:11,70,80,BEAT SHEET; Leaves = 33,Box elder,0,uploads/survey131-20598.jpg,1
+20599,117,131,1,A,7/16/2015 9:10,7/24/2015 10:12,70,80,BEAT SHEET; Leaves = 24,Mulberry,0,uploads/survey131-20599.jpg,1
+20600,117,132,7,B,7/23/2015 10:23,7/24/2015 10:13,70,80,BEAT SHEET; Leaves = 47,Common persimmon,0,uploads/survey132-20600.jpg,1
+20601,117,131,1,D,7/16/2015 9:14,7/24/2015 10:13,70,80,BEAT SHEET; Leaves = 21,Box elder,0,uploads/survey131-20601.jpg,1
+20602,117,131,2,D,7/16/2015 9:18,7/24/2015 10:15,70,80,BEAT SHEET; Leaves = 30,Sweet gum,0,uploads/survey131-20602.jpg,1
+20603,117,131,3,D,7/16/2015 9:22,7/24/2015 10:17,70,80,BEAT SHEET; Leaves = 52,Bitternut hickory,0,uploads/survey131-20603.jpg,1
+20604,117,131,3,A,7/16/2015 9:27,7/24/2015 10:17,70,80,BEAT SHEET; Leaves = 40,Devils-walkingstick,0,uploads/survey131-20604.jpg,1
+20605,117,131,4,E,7/16/2015 9:34,7/24/2015 10:18,70,80,BEAT SHEET; Leaves = 45,Box elder,0,uploads/survey131-20605.jpg,1
+20606,117,131,4,C,7/16/2015 9:38,7/24/2015 10:19,70,80,BEAT SHEET; Leaves = 33,Common persimmon,0,uploads/survey131-20606.jpg,1
+20607,117,131,5,D,7/16/2015 9:43,7/24/2015 10:19,70,80,BEAT SHEET; Leaves = 35,Red maple,0,uploads/survey131-20607.jpg,1
+20608,117,131,12,C,7/16/2015 9:48,7/24/2015 10:20,70,80,BEAT SHEET; Leaves = 30,Unidentified,0,uploads/survey131-20608.jpg,1
+20609,117,131,12,E,7/16/2015 9:54,7/24/2015 10:20,70,80,BEAT SHEET; Leaves = 30,Sweet gum,0,uploads/survey131-20609.jpg,1
+20610,117,132,8,E,7/23/2015 10:31,7/24/2015 10:21,70,80,BEAT SHEET; Leaves = 69,Chalk maple,0,uploads/survey132-20610.jpg,1
+20611,117,131,6,E,7/16/2015 10:00,7/24/2015 10:21,70,80,BEAT SHEET; Leaves = 21,Unidentified,0,uploads/survey131-20611.jpg,1
+20612,117,131,11,E,7/16/2015 10:08,7/24/2015 10:22,70,80,BEAT SHEET; Leaves = 27,Common persimmon,0,uploads/survey131-20612.jpg,1
+20613,117,131,7,B,7/16/2015 10:16,7/24/2015 10:23,70,80,BEAT SHEET; Leaves = 34,Common persimmon,0,uploads/survey131-20613.jpg,1
+20614,117,131,7,A,7/16/2015 10:20,7/24/2015 10:23,70,80,BEAT SHEET; Leaves = 41,Pin oak,0,uploads/survey131-20614.jpg,1
+20615,117,131,8,E,7/16/2015 10:25,7/24/2015 10:25,70,80,BEAT SHEET; Leaves = 45,Chalk maple,0,uploads/survey131-20615.jpg,1
+20616,8892356,130,8,C,7/17/2015 8:35,7/24/2015 11:17,70,80,,Spicebush,1,uploads/survey130-20616.jpg,1
+20617,8892356,130,8,B,7/17/2015 8:44,7/24/2015 11:19,70,80,,Sugar maple,2,uploads/survey130-20617.jpg,1
+20618,8892356,130,7,C,7/17/2015 8:50,7/24/2015 11:21,70,80,,Sugar maple,1,uploads/survey130-20618.jpg,1
+20619,8892356,130,6,E,7/17/2015 8:56,7/24/2015 11:22,70,80,,Sourwood,1,uploads/survey130-20619.jpg,1
+20620,8892356,130,6,D,7/17/2015 9:01,7/24/2015 11:23,70,80,,Sugar maple,1,uploads/survey130-20620.jpg,1
+20621,8892356,130,5,A,7/17/2015 9:09,7/24/2015 11:24,70,80,,Red maple,1,uploads/survey130-20621.jpg,1
+20622,8892356,130,5,D,7/17/2015 9:16,7/24/2015 11:28,70,80,,Unidentified,1,uploads/survey130-20622.jpg,1
+20623,8892356,130,4,E,7/17/2015 9:28,7/24/2015 11:28,70,80,,Sugar maple,1,uploads/survey130-20623.jpg,1
+20624,8892356,130,3,B,7/17/2015 9:34,7/24/2015 11:29,70,80,,American beech,1,uploads/survey130-20624.jpg,1
+20625,8892356,130,3,D,7/17/2015 9:41,7/24/2015 11:30,70,80,,American beech,1,uploads/survey130-20625.jpg,1
+20626,8892356,130,2,B,7/17/2015 9:47,7/24/2015 11:32,70,80,,Spicebush,1,uploads/survey130-20626.jpg,1
+20627,8892356,130,2,A,7/17/2015 9:51,7/24/2015 11:33,70,80,,Red oak,1,uploads/survey130-20627.jpg,1
+20628,8892356,130,1,B,7/17/2015 9:59,7/24/2015 11:35,70,80,,Spicebush,1,uploads/survey130-20628.jpg,1
+20629,8892356,130,8,C,7/17/2015 8:38,7/24/2015 11:38,70,80,BEAT SHEET; Leaves = 84,Spicebush,0,uploads/survey130-20629.jpg,1
+20630,8892356,130,8,B,7/17/2015 8:46,7/24/2015 11:39,70,80,BEAT SHEET; Leaves = 32,Sugar maple,0,uploads/survey130-20630.jpg,1
+20631,8892356,130,7,C,7/17/2015 8:53,7/24/2015 11:41,70,80,BEAT SHEET; Leaves = 35,Sugar maple,0,uploads/survey130-20631.jpg,1
+20632,8892356,130,6,E,7/17/2015 8:58,7/24/2015 11:42,70,80,BEAT SHEET; Leaves = 46,Sourwood,0,uploads/survey130-20632.jpg,1
+20633,8892356,130,6,D,7/17/2015 9:04,7/24/2015 11:43,70,80,BEAT SHEET; Leaves = 30,Sugar maple,0,uploads/survey130-20633.jpg,1
+20634,8892356,130,5,A,7/17/2015 9:13,7/24/2015 11:44,70,80,BEAT SHEET; Leaves = 38,Red maple,0,uploads/survey130-20634.jpg,1
+20635,8892356,130,5,D,7/17/2015 9:20,7/24/2015 11:45,70,80,BEAT SHEET; Leaves = 26,Unidentified,0,uploads/survey130-20635.jpg,1
+20636,8892356,130,4,E,7/17/2015 9:30,7/24/2015 11:46,70,80,BEAT SHEET; Leaves = 45,Sugar maple,0,uploads/survey130-20636.jpg,1
+20637,8892356,130,3,B,7/17/2015 9:38,7/24/2015 11:47,70,80,BEAT SHEET; Leaves = 36,American beech,0,uploads/survey130-20637.jpg,1
+20638,8892356,130,3,D,7/17/2015 9:43,7/24/2015 11:48,70,80,BEAT SHEET; Leaves = 49,American beech,0,uploads/survey130-20638.jpg,1
+20639,8892356,130,2,B,7/17/2015 9:49,7/24/2015 11:49,70,80,BEAT SHEET; Leaves = 46,Spicebush,0,uploads/survey130-20639.jpg,1
+20640,8892356,130,2,A,7/17/2015 9:55,7/24/2015 11:50,70,80,BEAT SHEET; Leaves = 22,Red oak,0,uploads/survey130-20640.jpg,1
+20641,8892356,130,1,B,7/17/2015 10:03,7/24/2015 11:51,70,80,BEAT SHEET; Leaves = 22,Spicebush,0,uploads/survey130-20641.jpg,1
+20642,117,129,1,E,7/16/2015 13:45,7/24/2015 12:37,80,90,cloudy/cool,Common persimmon,3,uploads/survey129-20642.jpg,1
+20643,117,129,1,C,7/16/2015 13:45,7/24/2015 12:38,80,90,cloudy/cool,Box elder,4,uploads/survey129-20643.jpg,1
+20644,117,129,1,D,7/16/2015 13:45,7/24/2015 12:39,80,90,cloudy/cool,Box elder,4,uploads/survey129-20644.jpg,1
+20645,117,129,2,B,7/16/2015 13:45,7/24/2015 12:40,80,90,cloudy/cool,sweetgum,2,uploads/survey129-20645.jpg,1
+20646,117,129,2,C,7/16/2015 13:45,7/24/2015 12:41,80,90,cloudy/cool,sweetgum,1,uploads/survey129-20646.jpg,1
+20647,117,129,3,D,7/16/2015 13:45,7/24/2015 12:41,80,90,cloudy/cool,not listed,1,uploads/survey129-20647.jpg,1
+20648,117,129,3,C,7/16/2015 13:45,7/24/2015 12:42,80,90,cloudy/cool,sweetgum,3,uploads/survey129-20648.jpg,1
+20649,117,129,3,B,7/16/2015 13:45,7/24/2015 12:43,80,90,cloudy/cool,carolina silver bell,2,uploads/survey129-20649.jpg,1
+20650,117,129,4,D,7/16/2015 13:45,7/24/2015 12:43,80,90,cloudy/cool,not listed,1,uploads/survey129-20650.jpg,1
+20651,117,129,4,A,7/16/2015 13:45,7/24/2015 12:45,80,90,cloudy/cool,sweetgum,1,uploads/survey129-20651.jpg,1
+20652,117,129,5,E,7/16/2015 13:45,7/24/2015 12:45,80,90,cloudy/cool,sweetgum,1,uploads/survey129-20652.jpg,1
+20653,117,129,5,A,7/16/2015 13:45,7/24/2015 12:50,80,90,cloudy/cool,bladdernut,1,uploads/survey129-20653.jpg,1
+20654,117,129,6,A,7/16/2015 13:45,7/24/2015 13:07,80,90,cloudy/cool,carolina ash,3,uploads/survey129-20654.jpg,1
+20655,117,129,6,E,7/16/2015 13:45,7/24/2015 13:11,80,90,cloudy/cool,not listed,1,uploads/survey129-20655.jpg,1
