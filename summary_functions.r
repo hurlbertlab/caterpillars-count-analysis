@@ -212,18 +212,12 @@ twoorders <- c('LEPL', 'ORTH')
 # Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
 
 # Caterpillars only, mean density
-PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = T, color = 'blue')
-PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'orange')
-PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'red')
-PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'green')
-
-PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = '', new = T, color = 'blue')
+PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue')
 PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange')
 PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red')
 PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green')
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
-
 
 # Caterpillars only, fraction of surveys with at least one caterpillar
 PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue')
@@ -233,13 +227,23 @@ PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, p
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
+# All orders, mean density
+PRam = meanDensityByDay(labsurvey1, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue')
+PRbs = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange')
+PRpm = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red')
+PRvol = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green')
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
 
-# All orders, fraction of surveys with at least one arthropod (?)
+# All orders, fraction of surveys with at least one arthropod
 PRam = meanDensityByDay(labsurvey1, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
-                        new = T, color = 'blue', ylim = c(0.6, 1.1), lwd = 3)
-PRbs = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'orange')
-PRpm = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red')
-PRvol = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'green')
+                        new = T, color = 'blue', ylim = c(0.6, 1.2), lwd = 3)
+PRbs = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
+                        new = F, color = 'orange', lwd = 3)
+PRpm = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
+                        new = F, color = 'red', lwd = 3)
+PRvol = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
+                        new = F, color = 'green', lwd = 3)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
