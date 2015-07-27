@@ -101,9 +101,10 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
                        inputYear,
                        inputSite, 
                        plot = F,
-                       plotVar = 'meanDensity',
+                       plotVar = 'meanDensity', # 'meanDensity' or 'fracSurveys'
                        new = T,
-                       color = 'black')                  
+                       color = 'black',
+                       ...)                  
   
   {
   dataYearSite = surveyData[surveyData$year == inputYear & surveyData$site == inputSite, ]
@@ -127,19 +128,20 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
     
   } else {
     temp2 = ddply(temp, .(site, julianday, year), summarize, 
-                  totalCount = sum(count))
+                  totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])))
   }
   
-  temp3 = merge(effortByDay, temp2[, c('julianday', 'totalCount')], by = 'julianday', all = T)
+  temp3 = merge(effortByDay, temp2[, c('julianday', 'totalCount', 'numSurveysGTzero')], 
+                by = 'julianday', all = T)
   temp3$totalCount[is.na(temp3$totalCount)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
-  temp3$fracSurveys = sum(temp3$totalCount > 0) / temp3$numSurveys
+  temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
   temp3$julianday = as.numeric(as.character(temp3$julianday))
   if (plot & new) {
     plot(temp3$julianday, temp3[, plotVar], type = 'l', 
-         col = color, xlab = "Julian day", ylab = plotVar)
+         col = color, xlab = "Julian day", ylab = plotVar, ...)
   } else if (plot & new==F) {
-    points(temp3$julianday, temp3[, plotVar], type = 'l', col = color)
+    points(temp3$julianday, temp3[, plotVar], type = 'l', col = color, ...)
   }
   return(temp3)
 }
@@ -208,35 +210,38 @@ labsurvey1 <- labsurvey[labsurvey$julianday != 170, ]
 twoorders <- c('LEPL', 'ORTH')
 
 # Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
+
+# Caterpillars only, mean density
 PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = T, color = 'blue')
 PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'orange')
 PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'red')
 PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'green')
 
 PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = '', new = T, color = 'blue')
-PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'plum')
+PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange')
 PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red')
 PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green')
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
-       col = c('blue', 'plum', 'red', 'green'))
+       col = c('blue', 'orange', 'red', 'green'))
 
 
-# Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
+# Caterpillars only, fraction of surveys with at least one caterpillar
 PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue')
-PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'plum')
+PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'orange')
 PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red')
 PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'green')
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
 
-# Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
-PRam = meanDensityByDay(labsurvey1, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue')
-PRbs = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'plum')
+# All orders, fraction of surveys with at least one arthropod (?)
+PRam = meanDensityByDay(labsurvey1, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
+                        new = T, color = 'blue', ylim = c(0.6, 1.1), lwd = 3)
+PRbs = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'orange')
 PRpm = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red')
 PRvol = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'green')
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
-       col = c('blue', 'plum', 'red', 'green'))
+       col = c('blue', 'orange', 'red', 'green'))
 
 
 
