@@ -205,9 +205,13 @@ beatsheet$leavesNum <- as.numeric(leavesNumTemp7)
 
 # Prairie Ridge
 # temporarily going to take out julian day 170, not a PR day and only one caterpillar seen on one survey
-
 labsurvey1 <- labsurvey[labsurvey$julianday != 170, ]
+
 twoorders <- c('LEPL', 'ORTH')
+
+# temporarily reducing counts with more than 5 caterpillars to 5 caterpillars:
+labsurvey1$count[labsurvey1$arthCode == "LEPL" & labsurvey1$count > 5]
+# something weird is happening with NAs, still working on this
 
 # Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
 
