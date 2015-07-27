@@ -41,19 +41,19 @@ WHERE `orderArthropod` = "True Bugs (Hemiptera)";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Box elder"
-WHERE `plantSpecies` = "Box elder ";
+WHERE `plantSpecies` IN ("Box elder ", "box elder", "Box-elder");
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Red maple"
-WHERE `plantSpecies` = "Red maple ";
+WHERE `plantSpecies` IN ("Red maple ", "red maple", "Acer rubrum (Red maple)");
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Sugar maple"
-WHERE `plantSpecies` = "Sugar Maple";
+WHERE `plantSpecies` IN ("Sugar Maple", "Acer saccharum (Sugar maple)");
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Sweet gum"
-WHERE `plantSpecies` IN ("Sweet gum ", "Liquidambar styraciflua (sweetgum)");
+WHERE `plantSpecies` IN ("Sweet gum ", "Liquidambar styraciflua (sweetgum)", "sweetgum", "Sweetgum");
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Spicebush"
@@ -61,7 +61,7 @@ WHERE `plantSpecies` = "Spicebush ";
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Tuliptree"
-WHERE `plantSpecies` IN ("Tulip tree", "Tulip Tree", "Liriodendron tulipifera (tuliptree)");
+WHERE `plantSpecies` IN ("Tulip tree", "Tulip Tree", "Liriodendron tulipifera (tuliptree)", "tulip poplar");
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "Common persimmon"
@@ -69,31 +69,59 @@ WHERE `plantSpecies` IN ("Common Persimmon", "Persimmon", "Common persimmon ", "
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "American beech"
-WHERE `plantSpecies` = "American beech ";
+WHERE `plantSpecies` IN ("American beech ", "Fagus grandifolia (American beech)", "beech");
 
 UPDATE `caterpillars`.`tbl_surveys` 
 SET `plantSpecies` = "American hornbeam"
 WHERE `plantSpecies` = "American hornbeam, ironwood";
 
 UPDATE `caterpillars`.`tbl_surveys` 
-SET `plantSpecies` = "American beech"
-WHERE `plantSpecies` = "Fagus grandifolia (American beech)";
+SET `plantSpecies` = "American bladdernut"
+WHERE `plantSpecies` IN ("bladdernut", "American Bladdernut");
 
 UPDATE `caterpillars`.`tbl_surveys` 
-SET `plantSpecies` = "Sugar maple"
-WHERE `plantSpecies` = "Acer saccharum (Sugar maple)";
+SET `plantSpecies` = "Carolina ash"
+WHERE `plantSpecies` = "carolina ash";
 
 UPDATE `caterpillars`.`tbl_surveys` 
-SET `plantSpecies` = "Sweet gum"
-WHERE `plantSpecies` = "Liquidambar styraciflua (sweetgum)";
+SET `plantSpecies` = "Carolina silverbell"
+WHERE `plantSpecies` IN ("carolina silver bell", "carolina silverbell", "silverbell");
 
 UPDATE `caterpillars`.`tbl_surveys` 
-SET `plantSpecies` = "Tuliptree"
-WHERE `plantSpecies` = "Liriodendron tulipifera (tuliptree)";
+SET `plantSpecies` = "Devils-walkingstick"
+WHERE `plantSpecies` = "devils walking stick";
 
 UPDATE `caterpillars`.`tbl_surveys` 
-SET `plantSpecies` = "Red maple"
-WHERE `plantSpecies` = "Acer rubrum (Red maple)";
+SET `plantSpecies` = "Pin oak"
+WHERE `plantSpecies` IN ("pin oak", "\nPin oak");
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Chalk maple"
+WHERE `plantSpecies` IN ("chalk maple", "\nChalk maple");
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Mulberry"
+WHERE `plantSpecies` = "mulberry";
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Slippery elm"
+WHERE `plantSpecies` = "slippery elm";
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Unidentified"
+WHERE `plantSpecies` IN ("not listed", "none listed");
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Fringetree"
+WHERE `plantSpecies` in ("fringe tree", "fringetree");
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "American sycamore"
+WHERE `plantSpecies` IN ("sycamore", "Sycamore", "american sycamore");
+
+UPDATE `caterpillars`.`tbl_surveys` 
+SET `plantSpecies` = "Bitternut hickory"
+WHERE `plantSpecies` ="Bitternut Hickory";
 
 
 # Counting occurrences of tree species names
