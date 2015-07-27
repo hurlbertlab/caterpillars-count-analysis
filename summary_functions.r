@@ -200,11 +200,11 @@ twoorders <- c('LEPL', 'ORTH')
 
 # Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
 PRam = meanDensityByDay(labsurvey1, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = T, color = 'blue')
-PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'plum')
+PRbs = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'orange')
 PRpm = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'red')
 PRvol = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, new = F, color = 'green')
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
-       col = c('blue', 'plum', 'red', 'green'))
+       col = c('blue', 'orange', 'red', 'green'))
 
 
 # Botanical Garden
