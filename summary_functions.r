@@ -172,10 +172,10 @@ visualsurveypr = visualsurvey[visualsurvey$site == 117,]
 
 # For separating the Prairie Ridge data:
 
-# Our visual surveys ONLY, not including repeat surveys
+# Our visual surveys from 2015 ONLY, not including repeat surveys
 # Checked data and "REPEAT SURVEY" only format used so far to indicate
 tempvis = visualsurveypr[!grepl("REPEAT SURVEY", visualsurveypr$notes.x),]
-labsurvey = tempvis[tempvis$userID %in% c(69, 130, 131, 132), ]
+labsurvey = tempvis[tempvis$userID %in% c(69, 130, 131, 132) & tempvis$year == 2015, ]
 
 # Our repeat surveys ONLY
 repsurvey = visualsurveypr[grep("REPEAT SURVEY", visualsurveypr$notes.x),]
@@ -203,15 +203,32 @@ beatsheet$leavesNum <- as.numeric(leavesNumTemp7)
 
 # Plotting and calculations
 
-# Prairie Ridge
-# temporarily going to take out julian day 170, not a PR day and only one caterpillar seen on one survey
+#################
+# Prairie Ridge #
+#################
+
+# Temporarily going to take out julian day 170, not a PR day and only one caterpillar seen on one survey
 labsurvey1 <- labsurvey[labsurvey$julianday != 170, ]
 
-twoorders <- c('LEPL', 'ORTH')
+# Change arthCodes to 'NONE' that were previously NA
+# Make sure data entered correctly before doing this
+labsurvey1$arthCode[is.na(labsurvey1$arthCode)] = "NONE"
+beatsheet$arthCode[is.na(beatsheet$arthCode)] = "NONE"
+repsurvey$arthCode[is.na(repsurvey$arthCode)] = "NONE"
+volsurvey$arthCode[is.na(volsurvey$arthCode)] = "NONE"
 
-# temporarily reducing counts with more than 5 caterpillars to 5 caterpillars:
-labsurvey1$count[labsurvey1$arthCode == "LEPL" & labsurvey1$count > 5]
-# something weird is happening with NAs, still working on this
+# Two possibilities of dealing with caterpillar colony outliers (choose one)
+# (Rerun the separating data section in between switching possibilities)
+# #1. Reducing counts with more than 5 caterpillars to 5 caterpillars:
+labsurvey1$count[labsurvey1$arthCode == "LEPL" & labsurvey1$count > 5] = 5
+beatsheet$count[beatsheet$arthCode == "LEPL" & beatsheet$count > 5] = 5
+labsurvey1$count[labsurvey1$arthCode == "LEPL" & labsurvey1$count > 5] = 5
+labsurvey1$count[labsurvey1$arthCode == "LEPL" & labsurvey1$count > 5] = 5
+# #2. Taking out large colonies completely:
+labsurvey1 <- labsurvey1[!(labsurvey1$arthCode == "LEPL" & labsurvey1$count > 10),]
+beatsheet <- beatsheet[!(beatsheet$arthCode == "LEPL" & beatsheet$count > 10),]
+repsurvey <- repsurvey[!(repsurvey$arthCode == "LEPL" & repsurvey$count > 10),]
+volsurvey <- volsurvey[!(volsurvey$arthCode == "LEPL" & volsurvey$count > 10),]
 
 # Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
 
@@ -232,21 +249,33 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
        col = c('blue', 'orange', 'red', 'green'))
 
 # All orders, mean density
-PRam = meanDensityByDay(labsurvey1, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue')
-PRbs = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange')
-PRpm = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red')
-PRvol = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green')
+PRam.all = meanDensityByDay(labsurvey1, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue')
+PRbs.all = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange')
+PRpm.all = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red')
+PRvol.all = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green')
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
+# Selected orders, mean density
+multorders <- c('LEPL', 'ORTH', 'ARAN') # based on Birds of North America online, fledgling diet preferences
+PRam.mult = meanDensityByDay(labsurvey1, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue')
+PRbs.mult = meanDensityByDay(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange')
+PRpm.mult = meanDensityByDay(repsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red')
+PRvol.mult = meanDensityByDay(volsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green')
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
+
+
+
+# Not really useful:
 # All orders, fraction of surveys with at least one arthropod
-PRam = meanDensityByDay(labsurvey1, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
+PRam.all = meanDensityByDay(labsurvey1, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
                         new = T, color = 'blue', ylim = c(0.6, 1.2), lwd = 3)
-PRbs = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
+PRbs.all = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
                         new = F, color = 'orange', lwd = 3)
-PRpm = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
+PRpm.all = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
                         new = F, color = 'red', lwd = 3)
-PRvol = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
+PRvol.all = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
                         new = F, color = 'green', lwd = 3)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
@@ -262,8 +291,10 @@ names(PRall2)[4] = 'density_pm'
 PRall = merge(PRall2, PRvol[,c('julianday','meanDensity')], by = 'julianday', all = T)
 names(PRall)[5] = 'density_vol'
 
+####################
+# Botanical Garden #
+####################
 
-# Botanical Garden
 BG = meanDensityByDay(visualsurveybg, 'LEPL', inputYear = '2015', inputSite = 8892356,
                       plot = T, new = T, color = 'black') 
 
