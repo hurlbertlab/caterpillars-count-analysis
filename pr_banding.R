@@ -37,14 +37,47 @@ bands <- bands[, c('bandNum', 'species', 'age', 'howAged', 'sex', 'howSexed', 's
                            'wingChord', 'weight', 'status', 'bandingDate', 'year', 'julianDay', 'netNestCavityDesig',
                            'location', 'remarks', 'lLegCol1', 'lLegCol2', 'rLegCol1', 'rLegCol2')]
 
+# Read in migration form data
+migform = read.csv('BBS-migration.csv')
+migform = migform[, c(1,3)]
+
+# Subset based on year
+bands1415 = subset(bands, (year == 2015 | year == 2014) & location == 'PRRI' & julianDay %in% 120:310)
+
+# Merge migration type data with banding data
+bandsmig = merge(bands1415, migform, by = 'species', all.x = T)
+
+# Subset based on migration type
+# nt = neotropical migrant, sd = short distance migrant, r = permanent resident
+bandsallm = bandsmig[(bandsmig$migration == 'nt'|bandsmig$migration == 'sd'),]
+bandsnt = bandsmig[bandsmig$migration == 'nt',]
+bandssd = bandsmig[bandsmig$migration == 'sd',]
+bandsr = bandsmig[bandsmig$migration == 'r',]
 
 # 2014 & 2015 hatch year %, based on Dr. Hurlbert's "hy_maps_phenology" script
-bands2015 = subset(bands, (year == 2015 | year == 2014) & location == 'PRRI')
 par(mar = c(5,5,1,1), mgp = c(3,1,0), las = 1, cex.lab = 1.5, cex.axis = 1.25)
-pr.hy = aggregate(bands2015$age, by=list(bands2015$julianDay), function(x) sum(x=='HY')/length(x)) # don't quite understand the function part of this
+pr.hy = aggregate(bands1415$age, by=list(bands1415$julianDay), function(x) sum(x=='HY')/length(x))
 plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "% Hatch Year Birds",
      xlim = c(120, 310), ylim = c(0, 1.3), cex = 2, col = 'plum', lty = 2, lwd = 3)
 
+# Graph the subsets based on migration type
+par(mar = c(5,5,1,1), mgp = c(3,1,0), las = 1, cex.lab = 1.5, cex.axis = 1.25)
+pr.hynt = aggregate(bandsnt$age, by=list(bandsnt$julianDay), function(x) sum(x=='HY')/length(x))
+plot(pr.hynt$Group.1, pr.hynt$x, xlab = "Julian Day", ylab = "% Hatch Year Birds",
+     xlim = c(120, 310), ylim = c(0, 1.3), cex = 2, col = 'brown', lty = 2, lwd = 3, type = 'l')
+pr.hysd = aggregate(bandssd$age, by=list(bandssd$julianDay), function(x) sum(x=='HY')/length(x))
+points(pr.hysd$Group.1, pr.hysd$x, col = 'green3', type = 'l', lwd = 3)
+pr.hyr = aggregate(bandsr$age, by=list(bandsr$julianDay), function(x) sum(x=='HY')/length(x))
+points(pr.hyr$Group.1, pr.hyr$x, col = 'lightslateblue', type = 'l', lwd = 3)
+legend("topleft", c('neotropical', 'short distance', 'resident'),lwd = 2, lty = 'solid', 
+       col = c('brown', 'green3', 'lightslateblue'))
+
+#Adding a parabola
+hy.lm = lm(x ~ Group.1 + I(Group.1^2), data = pr.hy)
+points(pr.hy$Group.1, hy.lm$fitted.values)
+
+hynt.lm = lm(x ~ Group.1 + I(Group.1^2), data = pr.hynt)
+points(pr.hynt$Group.1, hynt.lm$fitted.values)
 
 # Including hatch year points and mean arthropod density on same plot
 ################################################################################################
@@ -56,7 +89,7 @@ plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "% Hatch Ye
 # Hatch year and LEPL mean density
 # Before running, choose method of removing caterpillar colony outliers
 par(mar=c(5, 4, 4, 4) + 0.1)
-plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "% Hatch Year Birds",
+plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "Fraction Hatch Year Birds",
      xlim = c(120, 310), ylim = c(0, 1.3), cex = 1, cex.lab = 1.5, col = 'plum', lty = 3, lwd = 4)
 par(new = T)
 plot(PRbs$julianday, PRbs$meanDensity, col = "orange", type = 'l', axes = FALSE, 
@@ -64,11 +97,11 @@ plot(PRbs$julianday, PRbs$meanDensity, col = "orange", type = 'l', axes = FALSE,
 lines(PRam$julianday, PRam$meanDensity, col = "blue", lwd = 2)
 lines(PRpm$julianday, PRpm$meanDensity, col = "red", lwd = 2)
 lines(PRvol$julianday, PRvol$meanDensity, col = "green", lwd = 2)
-legend("topright", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys', '% hatch year'),
+legend("topright", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys', 'fraction hatch year'),
        lwd = c(2,2,2,2,4), lty = c(1,1,1,1,3), col = c('blue', 'orange', 'red', 'green', 'plum'))
 axis(side=4) # Need to adjust data before setting range
 mtext("Caterpillar Mean Density", side=4, cex = 1.5, las = 0, line = 3)
-title("% Hatch Year and Caterpillar Mean Density", line = 1)
+title("Fraction Hatch Year and Caterpillar Mean Density", line = 1)
 # (plotted beat sheet first since this graph has the highest peak)
 
 # Hatch year and fraction of surveys where at least one LEPL was recorded
@@ -78,7 +111,7 @@ PRbs$fracSurveys[is.na(PRbs$fracSurveys)] = 0
 PRpm$fracSurveys[is.na(PRpm$fracSurveys)] = 0
 PRvol$fracSurveys[is.na(PRvol$fracSurveys)] = 0
 par(mar=c(5, 4, 4, 4) + 0.1)
-plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "% Hatch Year Birds",
+plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "Fraction Hatch Year Birds",
      xlim = c(120, 310), ylim = c(0, 1.3), cex = 1, cex.lab = 1.5, col = 'plum', lty = 3, lwd = 4)
 par(new = T)
 plot(PRbs$julianday, PRbs$fracSurveys, col = "orange", type = 'l', axes = FALSE, 
@@ -86,11 +119,11 @@ plot(PRbs$julianday, PRbs$fracSurveys, col = "orange", type = 'l', axes = FALSE,
 lines(PRam$julianday, PRam$fracSurveys, col = "blue", lwd = 2)
 lines(PRpm$julianday, PRpm$fracSurveys, col = "red", lwd = 2)
 lines(PRvol$julianday, PRvol$fracSurveys, col = "green", lwd = 2)
-legend("topright", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys', '% hatch year'),
+legend("topright", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys', 'fraction hatch year'),
        lwd = c(2,2,2,2,4), lty = c(1,1,1,1,3), col = c('blue', 'orange', 'red', 'green', 'plum'))
 axis(side=4) # Need to adjust data before setting range
 mtext("Fraction of Surveys Caterpillars were Present", side=4, cex = 1.5, las = 0, line = 3)
-title("% Hatch Year and Caterpillar Presence", line = 1)
+title("Fraction Hatch Year and Caterpillar Presence", line = 1)
 # (plotted beat sheet first since this graph has the highest peak)
 
 # Run the functions for plots based on all arthropods
@@ -98,7 +131,7 @@ title("% Hatch Year and Caterpillar Presence", line = 1)
 # Hatch year and all arthropod mean density
 # Note that original decision on caterpillar colonies will affect this as well
 par(mar=c(5, 4, 4, 4) + 0.1)
-plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "% Hatch Year Birds",
+plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "Fraction Hatch Year Birds",
      xlim = c(120, 310), ylim = c(0, 1.3), cex = 1, cex.lab = 1.5, col = 'plum', lty = 3, lwd = 4)
 par(new = T)
 plot(PRvol.all$julianday, PRvol.all$meanDensity, col = "green", type = 'l', axes = FALSE, 
@@ -106,30 +139,30 @@ plot(PRvol.all$julianday, PRvol.all$meanDensity, col = "green", type = 'l', axes
 lines(PRbs.all$julianday, PRbs.all$meanDensity, col = "orange", lwd = 2)
 lines(PRpm.all$julianday, PRpm.all$meanDensity, col = "red", lwd = 2)
 lines(PRam.all$julianday, PRam.all$meanDensity, col = "blue", lwd = 2)
-legend("topright", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys', '% hatch year'),
+legend("topright", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys', 'fraction hatch year'),
        lwd = c(2,2,2,2,4), lty = c(1,1,1,1,3), col = c('blue', 'orange', 'red', 'green', 'plum'))
 axis(side=4) # Need to adjust data before setting range
 mtext("Arthropod Mean Density", side=4, cex = 1.5, las = 0, line = 3)
-title("% Hatch Year and Arthropod Mean Density", line = 1)
+title("Fraction Hatch Year and Arthropod Mean Density", line = 1)
 # (plotted volunteer surveys first since this graph has the highest peak)
 
 # Run the functions for plots based on selected arthropods
 
 # Hatch year and selected arthropod (LEPL, ORTH, ARAN) mean density
 par(mar=c(5, 4, 4, 4) + 0.1)
-plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "% Hatch Year Birds",
+plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "Fraction Hatch Year Birds",
      xlim = c(120, 310), ylim = c(0, 1.3), cex = 1, cex.lab = 1.5, col = 'plum', lty = 3, lwd = 4)
 par(new = T)
 plot(PRbs.mult$julianday, PRbs.mult$meanDensity, col = "orange", type = 'l', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(120, 310), lwd = 2)
+     bty = "n", xlab = "", ylab = "", xlim = c(120, 310), ylim = c(0, 1.1), lwd = 2)
 lines(PRam.mult$julianday, PRam.mult$meanDensity, col = "blue", lwd = 2)
 lines(PRpm.mult$julianday, PRpm.mult$meanDensity, col = "red", lwd = 2)
 lines(PRvol.mult$julianday, PRvol.mult$meanDensity, col = "green", lwd = 2)
-legend("topright", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys', '% hatch year'),
+legend("topright", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys', 'fraction hatch year'),
        lwd = c(2,2,2,2,4), lty = c(1,1,1,1,3), col = c('blue', 'orange', 'red', 'green', 'plum'))
 axis(side=4) # Need to adjust data before setting range
 mtext("Selected Arthropod Mean Density", side=4, cex = 1.5, las = 0, line = 3)
-title("% Hatch Year and Selected Arthropod Mean Density", line = 1)
+title("Fraction Hatch Year and Selected Arthropod Mean Density", line = 1)
 # (plotted beat sheet first since this graph has the highest peak, but other graphs much lower
 # so need readjusting)
 
