@@ -63,8 +63,8 @@ plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "% Hatch Ye
 # Graph the subsets based on migration type
 par(mar = c(5,5,1,1), mgp = c(3,1,0), las = 1, cex.lab = 1.5, cex.axis = 1.25)
 pr.hynt = aggregate(bandsnt$age, by=list(bandsnt$julianDay), function(x) sum(x=='HY')/length(x))
-plot(pr.hynt$Group.1, pr.hynt$x, xlab = "Julian Day", ylab = "% Hatch Year Birds",
-     xlim = c(120, 310), ylim = c(0, 1.3), cex = 2, col = 'brown', lty = 2, lwd = 3, type = 'l')
+plot(pr.hynt$Group.1, pr.hynt$x, xlab = "Julian Day", ylab = "Fraction Hatch Year Birds",
+     xlim = c(120, 310), ylim = c(0, 1.1), cex = 2, col = 'brown', lty = 1, lwd = 3, type = 'l')
 pr.hysd = aggregate(bandssd$age, by=list(bandssd$julianDay), function(x) sum(x=='HY')/length(x))
 points(pr.hysd$Group.1, pr.hysd$x, col = 'green3', type = 'l', lwd = 3)
 pr.hyr = aggregate(bandsr$age, by=list(bandsr$julianDay), function(x) sum(x=='HY')/length(x))
@@ -73,11 +73,32 @@ legend("topleft", c('neotropical', 'short distance', 'resident'),lwd = 2, lty = 
        col = c('brown', 'green3', 'lightslateblue'))
 
 #Adding a parabola
-hy.lm = lm(x ~ Group.1 + I(Group.1^2), data = pr.hy)
-points(pr.hy$Group.1, hy.lm$fitted.values)
 
+jd = c(120:310)
+
+# All migration types
+hy.lm = lm(x ~ Group.1 + I(Group.1^2), data = pr.hy)
+points(pr.hy$Group.1, hy.lm$fitted.values, type = 'l', col = 'plum')
+
+# Neotropical migrants
 hynt.lm = lm(x ~ Group.1 + I(Group.1^2), data = pr.hynt)
-points(pr.hynt$Group.1, hynt.lm$fitted.values)
+points(pr.hynt$Group.1, hynt.lm$fitted.values, type = 'l', col = 'brown')
+nt.predict = hynt.lm$coefficients[1] + hynt.lm$coefficients[2]*jd + hynt.lm$coefficients[3]*jd^2
+
+# Short distance migrants
+hysd.lm = lm(x ~ Group.1 + I(Group.1^2), data = pr.hysd)
+points(pr.hysd$Group.1, hysd.lm$fitted.values, type = 'l', col = 'green3')
+sd.predict = hysd.lm$coefficients[1] + hysd.lm$coefficients[2]*jd + hysd.lm$coefficients[3]*jd^2
+
+# Permanent residents
+hyr.lm = lm(x ~ Group.1 + I(Group.1^2), data = pr.hyr)
+points(pr.hyr$Group.1, hyr.lm$fitted.values, type = 'l', col = 'lightslateblue')
+r.predict = hyr.lm$coefficients[1] + hyr.lm$coefficients[2]*jd + hyr.lm$coefficients[3]*jd^2
+
+# Calculating peaks
+jd[nt.predict == max(nt.predict)] # neotropical migrant peak
+jd[sd.predict == max(sd.predict)] # short distance migrant peak
+jd[r.predict == max(r.predict)] # permanent resident peak
 
 # Including hatch year points and mean arthropod density on same plot
 ################################################################################################
