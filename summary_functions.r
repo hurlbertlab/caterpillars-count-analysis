@@ -111,7 +111,7 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
   effortByDay = data.frame(table(unique(dataYearSite[, c('surveyID', 'julianday')])$julianday))
   names(effortByDay) = c('julianday', 'numSurveys')
   
-  if(ordersToInclude=='All') {
+  if(length(ordersToInclude)==1 & ordersToInclude[1]=='All') {
     ordersToInclude = unique(surveyData$arthCode)
   }
   
@@ -208,7 +208,9 @@ beatsheet$leavesNum <- as.numeric(leavesNumTemp7)
 #################
 
 # Temporarily going to take out julian day 170, not a PR day and only one caterpillar seen on one survey
+# Also going to take out julian day 138, num surveys too high for Prairie Ridge
 labsurvey1 <- labsurvey[labsurvey$julianday != 170, ]
+labsurvey1 <- labsurvey[labsurvey$julianday != 138, ]
 
 # Change arthCodes to 'NONE' that were previously NA
 # Make sure data entered correctly before doing this
@@ -257,7 +259,7 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
        col = c('blue', 'orange', 'red', 'green'))
 
 # Selected orders, mean density
-multorders <- c('LEPL', 'ORTH', 'ARAN') # based on Birds of North America online, fledgling diet preferences
+multorders <- c('LEPL', 'ORTH', 'ARAN','COLE') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
 PRam.mult = meanDensityByDay(labsurvey1, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue')
 PRbs.mult = meanDensityByDay(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange')
 PRpm.mult = meanDensityByDay(repsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red')
