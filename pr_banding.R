@@ -190,21 +190,32 @@ title("Fraction Hatch Year and Arthropod Mean Density", line = 1)
 
 # Run the functions for plots based on selected arthropods
 
-# Hatch year and selected arthropod (LEPL, ORTH, ARAN, COLE) mean density
+# Hatch year and selected arthropod (LEPL, ORTH, ARAN, COLE, HEMI) mean density
 par(mar=c(5, 4, 4, 4) + 0.1)
 plot(pr.hy$Group.1, pr.hy$x, type = 'l', xlab = "Julian Day", ylab = "Fraction Hatch Year Birds",
      xlim = c(120, 310), ylim = c(0, 1.1), cex = 1, cex.lab = 1.5, col = 'plum', lty = 3, lwd = 4)
 par(new = T)
 plot(PRbs.mult$julianday, PRbs.mult$meanDensity, col = "orange", type = 'l', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(120, 310), ylim = c(0.3, 2.1), lwd = 2)
+     bty = "n", xlab = "", ylab = "", xlim = c(120, 310), ylim = c(0.3, 1.4), lwd = 2)
 lines(PRam.mult$julianday, PRam.mult$meanDensity, col = "blue", lwd = 2)
 lines(PRpm.mult$julianday, PRpm.mult$meanDensity, col = "red", lwd = 2)
 lines(PRvol.mult$julianday, PRvol.mult$meanDensity, col = "green", lwd = 2)
 legend("topright", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys', 'fraction hatch year'),
        lwd = c(2,2,2,2,4), lty = c(1,1,1,1,3), col = c('blue', 'orange', 'red', 'green', 'plum'))
-axis(side=4) # Need to adjust data before setting range
+axis(side=4)
 mtext("Selected Arthropod Mean Density", side=4, cex = 1.5, las = 0, line = 3)
 title("Fraction Hatch Year and Selected Arthropod Mean Density", line = 1)
+
+# Getting a better comparison with mismatching Julian Days
+birdday <- unique(pr.hy$Group.1)
+arthday <- unique(PRbs.mult$julianday)
+julianall1 <- c(birdday, arthday)
+julianall2 <- julianall1[order(julianall1)]
+julianall <- c(julianall2)
+pr.hyFull <- merge(pr.hy, julianall, by.x = 'Group.1', by.y = 'julianall', all = T)
+# still working on merging errors
+
+
 
 ###################
 # For final paper #
