@@ -157,8 +157,6 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
 
 # Separating the data:
 
-# For the word function:
-library(stringr)
 
 # All visual surveys
 visualsurvey = orders4[!grepl("BEAT SHEET", orders4$notes.x),]
@@ -259,11 +257,15 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
        col = c('blue', 'orange', 'red', 'green'))
 
 # Selected orders, mean density
-multorders <- c('LEPL', 'ORTH', 'ARAN','COLE') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
-PRam.mult = meanDensityByDay(labsurvey1, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue')
-PRbs.mult = meanDensityByDay(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange')
-PRpm.mult = meanDensityByDay(repsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red')
-PRvol.mult = meanDensityByDay(volsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green')
+multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
+PRam.mult = meanDensityByDay(labsurvey1, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
+                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+PRbs.mult = meanDensityByDay(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
+                             plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+PRpm.mult = meanDensityByDay(repsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
+                             plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
+PRvol.mult = meanDensityByDay(volsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
+                             plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
