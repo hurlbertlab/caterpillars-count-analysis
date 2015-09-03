@@ -31,11 +31,25 @@ subset.string <- read.csv(list.files(pattern = ".asc")[1], header = FALSE, as.is
 example = subset.string[1,]
 # still working on this
 
-# Download temperature data
-prtemp = read.csv('pr_temp.csv')
+# Download and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
+prtemp1 = read.csv('pr_temp.csv') # Data retrieved from the past 180 days on Sept. 1, 2015, includes Sept. 1 (?)
+prtemp1$julianday = c(65:244) # Add Julian Day for date conversion, do days match up?
+prtemp1$date = as.Date(prtemp1$julianday, origin = '2015-01-01')
+prtemp = prtemp1[,c(10,9,3,6,2)]
+names(prtemp) = c('date', 'julianday', 'maxtemp', 'mintemp', 'avgtemp')
+plot(prtemp$julianday, prtemp$maxtemp)
+
+# Download and clean temperature data NC Botanical Garden
 bgtemp1 = read.table('ncbg_temp.txt')
-bgtemp = bgtemp1[,c(1, 4, 5, 6)]
-names(bgtemp) = c('date', 'hitemp', 'lowtemp', 'outhum') # Each date has 23 temp values, one each hour except midnight
+bgtemp2 = bgtemp1[,c(1, 4, 5)]
+names(bgtemp2) = c('date', 'hitemp', 'lowtemp') # Each date has 23 temp values, one each hour except midnight
+datelist = unique(bgtemp2$date)
+
+maxvec = vector(length = length(datelist))
+
+for (i in 1:length(datelist)) {maxvec[i] = max(as.numeric(bgtemp2$hitemp[bgtemp2$date == datelist[i]]))}
+
+
 
 # Change date to date class
 bands$bandingDate <- as.Date(bands$bandingDate, '%m/%d/%Y')
