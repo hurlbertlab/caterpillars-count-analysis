@@ -52,9 +52,9 @@ plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l')
 
 # Download and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
-prtemp1 = read.csv('pr_temp.csv') # Data retrieved from the past 180 days on Sept. 1, 2015, includes Sept. 1 (?)
-prtemp1$julianday = c(65:244) # Add Julian Day for date conversion, do days match up?
-prtemp1$date = as.Date(prtemp1$julianday, origin = '2014-12-31')
+prtemp1 = read.csv('pr_temp.csv') # Data retrieved from the past 180 days on Sept. 1, 2015, does not include Sept. 1 
+prtemp1$julianday = c(64:243) # Add Julian Day for date conversion, do days match up?
+prtemp1$date = as.Date(prtemp1$julianday, origin = '2014-12-31') # JD 1 is Jan. 1, 2015
 prtemp = prtemp1[,c(10,9,3,6,2)]
 names(prtemp) = c('date', 'julianday', 'maxtemp', 'mintemp', 'avgtemp')
 plot(prtemp$julianday, prtemp$maxtemp)
@@ -74,10 +74,20 @@ for (i in 1:length(datelist)) {minvec[i] = min(as.numeric(bgtemp2$lowtemp[bgtemp
 bgtemp = data.frame(date = datelist, julianday = c(1:244), maxtemp = maxvec, mintemp = minvec)
 plot(bgtemp$julianday, bgtemp$maxtemp)
 plot(bgtemp$julianday, bgtemp$mintemp)
+# NEED TO CONVERT THESE TO CELSIUS!!!
 
 
-
-
+# Plotting everything together
+plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+     col = 'red', type = 'l')
+points(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+     col = 'blue', type = 'l')
+par(new = T)
+plot(bgtemp$julianday, bgtemp$maxtemp, col = 'red', axes = FALSE, 
+     bty = "n", xlab = "", ylab = "", xlim = c(0, 244), ylim = c(0, 40))
+par(new = T)
+plot(prtemp$julianday, prtemp$maxtemp, col = 'blue', axes = FALSE, 
+     bty = "n", xlab = "", ylab = "", xlim = c(0, 244), ylim = c(0, 40))
 
 
 # Change date to date class
