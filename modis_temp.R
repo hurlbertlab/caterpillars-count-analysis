@@ -41,7 +41,7 @@ bgmean1 <- apply(bgevi, 1, mean)
 bgmean2 <- bgmean1 / 1000
 bgmean <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
 plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
-     col = 'red', type = 'l')
+     col = 'blue', type = 'l')
 # Prairie Ridge:
 tempprevi = prmodis[grep("EVI", prmodis$V6),]
 previ <- tempprevi[11:91]
@@ -49,7 +49,7 @@ prmean1 <- apply(previ, 1, mean)
 prmean2 <- prmean1 / 1000
 prmean <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
 plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
-     col = 'blue', type = 'l')
+     col = 'red', type = 'l')
 
 # Download and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
 prtemp1 = read.csv('pr_temp.csv') # Data retrieved from the past 180 days on Sept. 1, 2015, does not include Sept. 1 
@@ -71,23 +71,30 @@ for (i in 1:length(datelist)) {maxvec[i] = max(as.numeric(bgtemp2$hitemp[bgtemp2
 minvec = vector(length = length(datelist))
 for (i in 1:length(datelist)) {minvec[i] = min(as.numeric(bgtemp2$lowtemp[bgtemp2$date == datelist[i]]))}
 #################
-bgtemp = data.frame(date = datelist, julianday = c(1:244), maxtemp = maxvec, mintemp = minvec)
+bgtemp = data.frame(date = datelist, julianday = c(1:244), maxtemp = ((maxvec - 32)*5/9), 
+                    mintemp = ((minvec - 32)*5/9))
 plot(bgtemp$julianday, bgtemp$maxtemp)
 plot(bgtemp$julianday, bgtemp$mintemp)
-# NEED TO CONVERT THESE TO CELSIUS!!!
 
 
 # Plotting everything together
+par(mar=c(5, 4, 4, 4) + 0.1)
 plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
-     col = 'red', type = 'l')
+     col = 'red', type = 'l', lwd = 3)
 points(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
-     col = 'blue', type = 'l')
+     col = 'blue', type = 'l', lwd = 3)
 par(new = T)
-plot(bgtemp$julianday, bgtemp$maxtemp, col = 'red', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(0, 244), ylim = c(0, 40))
+plot(bgtemp$julianday, bgtemp$maxtemp, col = 'red', axes = FALSE, bty = "n", 
+     xlab = "", ylab = "", type = 'l', xlim = c(0, 244), ylim = c(-5, 40))
 par(new = T)
-plot(prtemp$julianday, prtemp$maxtemp, col = 'blue', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(0, 244), ylim = c(0, 40))
+plot(prtemp$julianday, prtemp$maxtemp, col = 'blue', axes = FALSE, bty = "n", 
+     xlab = "", ylab = "", type = 'l', xlim = c(0, 244), ylim = c(-5, 40))
+axis(side=4)
+mtext("Maximum Temperature (C)", side=4, las = 0, line = 3)
+legend("topleft", c('BG mean EVI', 'PR mean EVI', 'BG max temp', 'PR max (temp'),
+       lwd = c(3,3,1,1), lty = c(1,1,1,1), col = c('blue', 'red', 'blue', 'red'))
+
+
 
 
 # Change date to date class
