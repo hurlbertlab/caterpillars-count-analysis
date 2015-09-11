@@ -38,7 +38,7 @@ prmodis$julianday <- as.numeric(substring(prmodis$V8, 6,8))
 tempbgevi = bgmodis[grep("EVI", bgmodis$V6),]
 bgevi <- tempbgevi[11:91]
 bgmean1 <- apply(bgevi, 1, mean)
-bgmean2 <- bgmean1 / 1000
+bgmean2 <- bgmean1 / 10000
 bgmean <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
 plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l')
@@ -46,7 +46,7 @@ plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
 tempprevi = prmodis[grep("EVI", prmodis$V6),]
 previ <- tempprevi[11:91]
 prmean1 <- apply(previ, 1, mean)
-prmean2 <- prmean1 / 1000
+prmean2 <- prmean1 / 10000
 prmean <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
 plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'red', type = 'l')
@@ -83,6 +83,8 @@ plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'red', type = 'l', lwd = 3)
 points(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l', lwd = 3)
+
+# Adding temperature data
 par(new = T)
 plot(bgtemp$julianday, bgtemp$maxtemp, col = 'red', axes = FALSE, bty = "n", 
      xlab = "", ylab = "", type = 'l', xlim = c(0, 244), ylim = c(-5, 40))
@@ -91,7 +93,21 @@ plot(prtemp$julianday, prtemp$maxtemp, col = 'blue', axes = FALSE, bty = "n",
      xlab = "", ylab = "", type = 'l', xlim = c(0, 244), ylim = c(-5, 40))
 axis(side=4)
 mtext("Maximum Temperature (C)", side=4, las = 0, line = 3)
-legend("topleft", c('BG mean EVI', 'PR mean EVI', 'BG max temp', 'PR max (temp'),
+legend("topleft", c('BG mean EVI', 'PR mean EVI', 'BG max temp', 'PR max temp'),
+       lwd = c(3,3,1,1), lty = c(1,1,1,1), col = c('blue', 'red', 'blue', 'red'))
+
+# Adding arth data to graph, see summary_functions.r and arth_analyses.r to run functions.
+# BG = Bot garden julian day and mean density
+# PRam = Prairie Ridge julian day and mean density
+par(new = T)
+plot(BG$julianday, BG$meanDensity, col = 'blue', axes = FALSE, bty = "n", 
+     xlab = "", ylab = "", type = 'l', xlim = c(0, 244), ylim = c(0.4, 1.4))
+par(new = T)
+plot(PRam$julianday, PRam$meanDensity, col = 'red', axes = FALSE, bty = "n", 
+     xlab = "", ylab = "", type = 'l', xlim = c(0, 244), ylim = c(0.4, 1.4))
+axis(side=4)
+mtext("Selected Arthropod Mean Density", side=4, las = 0, line = 3)
+legend("topleft", c('BG mean EVI', 'PR mean EVI', 'BG arth density', 'PR arth density'),
        lwd = c(3,3,1,1), lty = c(1,1,1,1), col = c('blue', 'red', 'blue', 'red'))
 
 
