@@ -51,14 +51,23 @@ prmean <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
 plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'red', type = 'l')
 
+# Taking into account pixel reliability?
+# Botanical Garden:
+tempbgpix = bgmodis[grep("reliability", bgmodis$V6),]
+# All data is either 0 (Use with confidence) or 1 (Useful, but look at other QA info)
+# 1s present on rows 19, 25-30
+
+# Calculating Growing Degree Days (GDD)
+GDD <- c()
+GDD$pr.ave <- 
+
 # Download and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
 prtemp1 = read.csv('pr_temp.csv') # Data retrieved from the past 180 days on Sept. 1, 2015, does not include Sept. 1 
 prtemp1$julianday = c(64:243) # Add Julian Day for date conversion, do days match up?
 prtemp1$date = as.Date(prtemp1$julianday, origin = '2014-12-31') # JD 1 is Jan. 1, 2015
-prtemp = prtemp1[,c(10,9,3,6,2)]
-names(prtemp) = c('date', 'julianday', 'maxtemp', 'mintemp', 'avgtemp')
-plot(prtemp$julianday, prtemp$maxtemp)
-plot(prtemp$julianday, prtemp$mintemp)
+prtemp1$avgmaxmin = (prtemp$maxtemp + prtemp$mintemp)/2
+prtemp = prtemp1[,c(10,9,3,6,2,11)]
+names(prtemp) = c('date', 'julianday', 'maxtemp', 'mintemp', 'avgtemp', 'avgmaxmin')
 
 # Download and clean temperature data NC Botanical Garden
 bgtemp1 = read.table('ncbg_temp.txt')
@@ -73,9 +82,20 @@ for (i in 1:length(datelist)) {minvec[i] = min(as.numeric(bgtemp2$lowtemp[bgtemp
 #################
 bgtemp = data.frame(date = datelist, julianday = c(1:244), maxtemp = ((maxvec - 32)*5/9), 
                     mintemp = ((minvec - 32)*5/9))
+bgtemp$avgmaxmin = (bgtemp$maxtemp + bgtemp$mintemp)/2
 plot(bgtemp$julianday, bgtemp$maxtemp)
 plot(bgtemp$julianday, bgtemp$mintemp)
 
+# Calculating Growing Degree Days (GDD), only using PR data because starts Jan. 1
+# (and is very similar to BG data anyway)
+pregdd <- prtemp$avgmaxmin
+pregdd[pregdd < 10] = 10
+pregdd[pregdd > 30] = 30 # need to do more research about thresholds
+pregdd1 <- pregdd - 10
+gdd <- cumsum(pregdd1)
+GDD <- data.frame(prtemp$julianday, gdd)
+names(GDD) <- c('julianday', 'gdd')
+plot(GDD$julianday, GDD$gdd)
 
 # Plotting everything together
 par(mar=c(5, 4, 4, 4) + 0.1)
