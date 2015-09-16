@@ -55,11 +55,39 @@ plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
 # Botanical Garden:
 tempbgpix = bgmodis[grep("reliability", bgmodis$V6),]
 # All data is either 0 (Use with confidence) or 1 (Useful, but look at other QA info)
-# 1s present on rows 19, 25-30
+# 1s present on rows 19, 25-30 
 
-# Calculating Growing Degree Days (GDD)
-GDD <- c()
-GDD$pr.ave <- 
+library(stats)
+# Fitting a logistic curve to EVI data and using this to estimate greenup date:
+
+# Prairie Ridge               
+prmean$EVIdis = prmean$EVImean - min(prmean$EVImean)+.01
+prlog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = prmean)
+par(mar=c(5, 4, 4, 4) + 0.1)
+plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+                             col = 'red', type = 'l', lwd = 3)
+points(prmean$julianday, predict(prlog)+min(prmean$EVImean)-.01, col = 'red', lwd = 3, 
+       lty = 'dashed', type = 'l')
+
+# Botanical Garden
+bgmean$EVIdis = bgmean$EVImean - min(bgmean$EVImean)+.01
+bglog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = bgmean)
+par(mar=c(5, 4, 4, 4) + 0.1)
+plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+     col = 'blue', type = 'l', lwd = 3)
+points(bgmean$julianday, predict(bglog)+min(bgmean$EVImean)-.01, col = 'blue', lwd = 3, 
+       lty = 'dashed', type = 'l')
+
+
+plot(prmean$julianday, predict(prlog)+min(prmean$EVImean)-.01, col = 'red', lwd = 3, 
+       lty = 'dashed', type = 'l', ylim = c(0.15, 0.53), xlab = "Julian Day", ylab = "Mean EVI")
+points(bgmean$julianday, predict(bglog)+min(bgmean$EVImean)-.01, col = 'blue', lwd = 3, 
+       lty = 'dashed', type = 'l')
+
+
+summary(prlog)
+summary(bglog)
+
 
 # Download and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
 prtemp1 = read.csv('pr_temp.csv') # Data retrieved from the past 180 days on Sept. 1, 2015, does not include Sept. 1 
@@ -86,30 +114,30 @@ bgtemp$avgmaxmin = (bgtemp$maxtemp + bgtemp$mintemp)/2
 plot(bgtemp$julianday, bgtemp$maxtemp)
 plot(bgtemp$julianday, bgtemp$mintemp)
 
-# Calculating Growing Degree Days (GDD), only using PR data because starts Jan. 1
-# (and is very similar to BG data anyway)
-pregdd <- prtemp$avgmaxmin
+# Calculating Growing Degree Days (GDD), only using BG data because starts Jan. 1
+# (and is very similar to PR data anyway)
+pregdd <- bgtemp$avgmaxmin
 pregdd[pregdd < 10] = 10
 pregdd[pregdd > 30] = 30 # need to do more research about thresholds
 pregdd1 <- pregdd - 10
 gdd <- cumsum(pregdd1)
-GDD <- data.frame(prtemp$julianday, gdd)
+GDD <- data.frame(bgtemp$julianday, gdd)
 names(GDD) <- c('julianday', 'gdd')
 plot(GDD$julianday, GDD$gdd)
 
 # Plotting everything together
 par(mar=c(5, 4, 4, 4) + 0.1)
 plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
-     col = 'red', type = 'l', lwd = 3)
-points(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l', lwd = 3)
+points(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+     col = 'red', type = 'l', lwd = 3)
 
 # Adding temperature data
 par(new = T)
-plot(bgtemp$julianday, bgtemp$maxtemp, col = 'red', axes = FALSE, bty = "n", 
+plot(bgtemp$julianday, bgtemp$maxtemp, col = 'blue', axes = FALSE, bty = "n", 
      xlab = "", ylab = "", type = 'l', xlim = c(0, 244), ylim = c(-5, 40))
 par(new = T)
-plot(prtemp$julianday, prtemp$maxtemp, col = 'blue', axes = FALSE, bty = "n", 
+plot(prtemp$julianday, prtemp$maxtemp, col = 'red', axes = FALSE, bty = "n", 
      xlab = "", ylab = "", type = 'l', xlim = c(0, 244), ylim = c(-5, 40))
 axis(side=4)
 mtext("Maximum Temperature (C)", side=4, las = 0, line = 3)
