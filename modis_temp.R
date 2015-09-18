@@ -57,6 +57,9 @@ tempbgpix = bgmodis[grep("reliability", bgmodis$V6),]
 # All data is either 0 (Use with confidence) or 1 (Useful, but look at other QA info)
 # 1s present on rows 19, 25-30 
 
+# Plotting MODIS data
+
+
 library(stats)
 # Fitting a logistic curve to EVI data and using this to estimate greenup date:
 
@@ -83,7 +86,7 @@ plot(prmean$julianday, predict(prlog)+min(prmean$EVImean)-.01, col = 'red', lwd 
        lty = 'dashed', type = 'l', ylim = c(0.15, 0.53), xlab = "Julian Day", ylab = "Mean EVI")
 points(bgmean$julianday, predict(bglog)+min(bgmean$EVImean)-.01, col = 'blue', lwd = 3, 
        lty = 'dashed', type = 'l')
-
+legend("topleft", c('BG mean EVI', 'PR mean EVI'), lwd = c(3,3), lty = c(2,2), col = c('blue', 'red'))
 
 summary(prlog)
 summary(bglog)
