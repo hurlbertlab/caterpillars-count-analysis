@@ -33,7 +33,7 @@ surveys$survey = as.character(surveys$survey)
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', all.x = T)
 
-orders2$date = as.POSIXlt(word(orders2$dateStart, 1, sep = " "), format = "%m/%d/%Y")
+orders2$date = as.POSIXlt(word(orders2$dateStart, 1, sep = " "), format = "%Y-%m-%d")
 orders2$julianday = yday(orders2$date)
 
 orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
