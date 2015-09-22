@@ -443,6 +443,21 @@ jds = c(140, 171, 201, 232)
 mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1, cex = 1.5)
 dev.off()
 
+# As above but without frass
+pdf('plots/PR_LEPL_frac_by_week.pdf', height = 6, width = 8)
+par(mgp = c(3, 1, 0), mar = c(3, 5, 1, 4), cex.lab = 1.5, cex.axis = 1.2)
+plot(c(20,35), c(0, 0.24), type = "n", xlab = "", xaxt = "n", ylab = "Fraction of surveys")
+PRam = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'blue', lwd = 3)
+PRbs = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'skyblue', lwd = 3)
+PRpm = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3)
+PRvol = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3, lty = 'dashed')
+
+legend("topleft", c('am Visual', 'am Beat sheet', 'pm Visual', 'pm Volunteers'),
+       lwd = c(3, 3, 3, 3), lty = c(rep('solid', 3), 'dashed'),
+       col = c('blue', 'skyblue', 'red', 'red'))
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1, cex = 1.5)
+dev.off()
 
 
 
