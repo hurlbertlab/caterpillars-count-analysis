@@ -197,6 +197,38 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
 }
 
 
+# Function for reading in frass data from GoogleDoc
+# *if aim is to backup GoogleDoc and write to disk only, then open =F and write = T
+# *if aim is to use data without writing to disk, then open = T and write = F
+frassData = function(open = F, write = F) {
+  require(gsheet)
+  url = "https://docs.google.com/spreadsheets/d/1RwXzwhHUbP0m5gKSOVhnKZbS1C_NrbdfHLglIVCzyFc/edit#gid=1479231778"
+  data = gsheet2tbl(url)
+  
+  if (write) {
+    # Write a copy
+    write.csv(data, paste('data/frass_', Sys.Date(), '.csv', sep = ''),
+              row.names = F)
+  }
+  if (open) { return (data) }
+}
+
+
+# Function that takes a date field (formatted as %m/%d/%Y) and a time field
+# (hh:mm in 24h time), converts the date to julian day and adds the fractional
+# day represented by the hours and minutes
+julianDayTime = function(date, hour_min) {
+  require(lubridate)
+  jday = yday(date)
+  temp = sapply(strsplit(hour_min, ":"), function(x) {
+    x = as.numeric(x)
+    x[1] + x[2]/60
+  })
+  output = jday + temp/24
+  return(output)
+}
+
+
 #--------------------------------------------------------------------------------
 
 # Create different subsets of data for beat sheets vs visual surveys, 
@@ -357,36 +389,61 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
 #----------------------------------------------------------------------------------------------------------------------------
 
 
+# Working with frass data
+frass = frassData(open = T)
+
+# Convert date class
+frass$Date.Set = as.Date(frass$Date.Set, format = "%m/%d/%Y")
+frass$Date.Collected = as.Date(frass$Date.Collected, format = "%m/%d/%Y")
+frass$jday.Set = julianDayTime(frass$Date.Set, frass$Time.Set)
+frass$jday.Collected = julianDayTime(frass$Date.Collected, frass$Time.Collected)
+
+frass$frass.mg.d = frass$Frass.mass..mg./(frass$jday.Collected - frass$jday.Set)
+
+frass$jday = floor(frass$jday.Collected)
+frass$week = floor(frass$jday/7) + 1
+
+meanFrassByDay = aggregate(frass$frass.mg.d, by = list(frass$Site, frass$jday), function(x) mean(x, na.rm=T))
+meanFrassByWeek = aggregate(frass$frass.mg.d, by = list(frass$Site, frass$week), function(x) mean(x, na.rm=T))
+names(meanFrassByWeek) = c('site', 'week', 'frass.mg.d')
+
+PRfrassW = subset(meanFrassByWeek, site == "Prairie Ridge")
+
+frassplot = function(site, frassdata, color = 'black', new = T) {
+  temp = subset(frassdata, Group.1 == site)
+  if (new) {
+    plot(temp$Group.2, temp$x, xlab = "Julian day", ylab = "Mean frass (mg / trap / day)",
+         type = 'b', col = color, ylim = range(frassdata$x), xlim = range(frassdata$Group.2))
+  } else {
+    points(temp$Group.2, temp$x, type = 'b', col = color)
+  }
+}
+
+
+
+
 # Prairie Ridge fraction of surveys with caterpillars plot
-pdf('plots/PR_LEPL_frac_by_week.pdf', height = 5, width = 7)
-par(mgp = c(3, 1, 0), mar = c(3, 5, 1, 1), cex.lab = 2, cex.axis = 1.25)
+pdf('plots/PR_LEPL_frac_by_week_wFrass.pdf', height = 6, width = 8)
+par(mgp = c(3, 1, 0), mar = c(3, 5, 1, 4), cex.lab = 1.5, cex.axis = 1.2)
 plot(c(20,35), c(0, 0.24), type = "n", xlab = "", xaxt = "n", ylab = "Fraction of surveys")
 PRam = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'blue', lwd = 3)
 PRbs = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'skyblue', lwd = 3)
 PRpm = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3)
 PRvol = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3, lty = 'dashed')
-legend("topleft", c('am Visual', 'am Beat sheet', 'pm Visual', 'pm Volunteers'),lwd = 3, lty = c(rep('solid', 3), 'dashed'),
-       col = c('blue', 'skyblue', 'red', 'red'))
+
+par(new = T)
+plot(PRfrassW$week, PRfrassW$frass.mg.d, type = 'b', col = 'darkgreen', lwd = 1, xlim = c(20, 35), ylim = c(1,7),
+     xlab = "", xaxt = "n", ylab = "", yaxt = "n")
+axis(4, 1:7, cex.axis = 1.2)
+mtext("Frass (mg/d)", 4, line = 2.5, cex = 1.5)
+legend("topleft", c('am Visual', 'am Beat sheet', 'pm Visual', 'pm Volunteers', 'Frass'),
+       lwd = c(3, 3, 3, 3, 1), lty = c(rep('solid', 3), 'dashed', 'solid'),
+       col = c('blue', 'skyblue', 'red', 'red', 'darkgreen'))
 jds = c(140, 171, 201, 232)
 mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1, cex = 1.5)
 dev.off()
 
 
-
-
-
-# Not really useful:
-# All orders, fraction of surveys with at least one arthropod
-PRam.all = meanDensityByDay(labsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
-                        new = T, color = 'blue', ylim = c(0.6, 1.2), lwd = 3)
-PRbs.all = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
-                        new = F, color = 'orange', lwd = 3)
-PRpm.all = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
-                        new = F, color = 'red', lwd = 3)
-PRvol.all = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', 
-                        new = F, color = 'green', lwd = 3)
-legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
-       col = c('blue', 'orange', 'red', 'green'))
 
 
 
