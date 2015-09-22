@@ -69,7 +69,8 @@ prlog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = prmean)
 par(mar=c(5, 4, 4, 4) + 0.1)
 plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
                              col = 'red', type = 'l', lwd = 3)
-points(prmean$julianday, predict(prlog)+min(prmean$EVImean)-.01, col = 'red', lwd = 3, 
+prmean$prEVIlog = predict(prlog)+min(prmean$EVImean)-.01
+points(prmean$julianday, prmean$prEVIlog, col = 'red', lwd = 3, 
        lty = 'dashed', type = 'l')
 
 # Botanical Garden
@@ -78,7 +79,8 @@ bglog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = bgmean)
 par(mar=c(5, 4, 4, 4) + 0.1)
 plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l', lwd = 3)
-points(bgmean$julianday, predict(bglog)+min(bgmean$EVImean)-.01, col = 'blue', lwd = 3, 
+bgmean$bgEVIlog = predict(bglog)+min(bgmean$EVImean)-.01
+points(bgmean$julianday, bgmean$bgEVIlog, col = 'blue', lwd = 3, 
        lty = 'dashed', type = 'l')
 
 
@@ -125,8 +127,8 @@ pregdd[pregdd > 30] = 30 # need to do more research about thresholds
 pregdd1 <- pregdd - 10
 gdd <- cumsum(pregdd1)
 GDD <- data.frame(bgtemp$julianday, gdd)
-names(GDD) <- c('julianday', 'gdd')
-plot(GDD$julianday, GDD$gdd)
+names(GDD) <- c('julianday', 'GDD')
+plot(GDD$julianday, GDD$GDD)
 
 # Plotting everything together
 par(mar=c(5, 4, 4, 4) + 0.1)
@@ -161,8 +163,22 @@ mtext("Selected Arthropod Mean Density", side=4, las = 0, line = 3)
 legend("topleft", c('BG mean EVI', 'PR mean EVI', 'BG arth density', 'PR arth density'),
        lwd = c(3,3,1,1), lty = c(1,1,1,1), col = c('blue', 'red', 'blue', 'red'))
 
-
-
+# Merging for writing data
+bgtempmerge = bgtemp[c(1,2,5)]
+names(bgtempmerge) = c('date', 'julianday', 'bgavgtemp')
+bgtempmerge$bgavgtemp = round(bgtempmerge$bgavgtemp, digits = 2)
+prtempmerge = prtemp[c(2,6)]
+names(prtempmerge) = c('julianday', 'pravgtemp')
+bgEVImerge = bgmean[c(1,2,4)]
+names(bgEVImerge) = c('julianday', 'bgEVI', 'bgEVIlog')
+prEVImerge = prmean[c(1,2,4)]
+names(prEVImerge) = c('julianday', 'prEVI', 'prEVIlog')
+mergetemp = merge(bgtempmerge, prtempmerge, by = 'julianday', all = T)
+mergeEVI = merge(bgEVImerge, prEVImerge, by = 'julianday', all = T)
+premerge = merge(mergetemp, mergeEVI, by = 'julianday', all = T)
+temp_EVI_GDD = merge(premerge, GDD, by = 'julianday', all = T)
+setwd('c:/git/caterpillars-count-analysis/data')
+write.csv(temp_EVI_GDD, file = "temp_EVI_GDD.csv")
 
 # Change date to date class
 bands$bandingDate <- as.Date(bands$bandingDate, '%m/%d/%Y')
