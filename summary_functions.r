@@ -477,6 +477,40 @@ names(PRall)[5] = 'density_vol'
 # Botanical Garden #
 ####################
 
+#-----------------------------------------------------------------------------------------------------------------
+# Plot our morning surveys and our beat sheet surveys for the botanical garden
+# Caterpillars only, mean density
+BGam.lepl = meanDensityByDay(labsurvey, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+BGbs.lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange'))
+
+# Caterpillars only, fraction of surveys with at least one caterpillar
+BGam.1lepl = meanDensityByDay(labsurvey, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(135, 250))
+BGbs.1lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
+legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange'))
+
+# All orders, mean density
+BGam.all = meanDensityByDay(labsurvey, "All", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+BGbs.all = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange'))
+
+# Selected orders, mean density
+multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
+BGam.mult = meanDensityByDay(labsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
+                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, 
+                             xlim = c(135, 250), ylim = c(0.1, 1))
+BGbs.mult = meanDensityByDay(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
+                             plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange'))
+
+
+
+
+
 BG = meanDensityByDay(visualsurveybg, 'LEPL', inputYear = '2015', inputSite = 8892356,
                       plot = T, new = T, color = 'black') 
 
