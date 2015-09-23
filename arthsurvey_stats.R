@@ -1,7 +1,7 @@
 # Linear regression, ANCOVA, for Prairie Ridge and NC Botanical Garden Arthropod Data
 
 # Tracie Hayes
-# September 22, 2015
+# September 23, 2015
 
 # Run summary_functions.r
 library(lattice)
