@@ -1,10 +1,15 @@
-# Linear regression, ANCOVA, for Prairie Ridge and NC Botanical Garden Arthropod Data
+######################################################
+# Script for linear regression for Prairie Ridge and 
+# NC Botanical Garden Arthropod Data from 
+# Caterpillars Count! data exported from the
+# phpMyAdmin project site.
 
-# Tracie Hayes
-# September 23, 2015
-
-# Run summary_functions.r
+# Run summary_functions.r, data_cleaning.R, general_plotting.R
 source('summary_functions.r')
+source('data_cleaning.R')
+source('general_plotting.R')
+
+# Load required libraries
 library(lattice)
 
 ## Merge mean densities into one dataframe
@@ -33,6 +38,7 @@ names(PRall.mult)[5] = 'density_vol'
 BGall.mult = merge(BGam.mult[,c('julianday','meanDensity')], BGbs.mult[, c('julianday','meanDensity')], by='julianday', all = T)
 names(BGall.mult) = c('julianday','density_am','density_bs')
 
+
 # As above but for weekly averages
 # Just caterpillars:
 PRall.lepl1.wk = merge(PRam.lepl.wk[,c('week','meanDensity')], PRbs.lepl.wk[, c('week','meanDensity')], by='week', all = T)
@@ -41,6 +47,9 @@ PRall.lepl2.wk = merge(PRall.lepl1.wk, PRpm.lepl.wk[,c('week','meanDensity')], b
 names(PRall.lepl2.wk)[4] = 'density_pm'
 PRall.lepl.wk = merge(PRall.lepl2.wk, PRvol.lepl.wk[,c('week','meanDensity')], by = 'week', all = T)
 names(PRall.lepl.wk)[5] = 'density_vol'
+# Botanical Garden
+BGall.lepl.wk = merge(BGam.lepl.wk[,c('julianday','meanDensity')], BGbs.lepl.wk[, c('julianday','meanDensity')], by='julianday', all = T)
+names(BGall.lepl.wk) = c('julianday','density_am','density_bs')
 
 # Selected orders:
 PRall.mult1.wk = merge(PRam.mult.wk[,c('week','meanDensity')], PRbs.mult.wk[, c('week','meanDensity')], by='week', all = T)
@@ -49,6 +58,9 @@ PRall.mult2.wk = merge(PRall.mult1.wk, PRpm.mult.wk[,c('week','meanDensity')], b
 names(PRall.mult2.wk)[4] = 'density_pm'
 PRall.mult.wk = merge(PRall.mult2.wk, PRvol.mult.wk[,c('week','meanDensity')], by = 'week', all = T)
 names(PRall.mult.wk)[5] = 'density_vol'
+# Botanical Garden
+BGall.mult.wk = merge(BGam.mult.wk[,c('julianday','meanDensity')], BGbs.mult.wk[, c('julianday','meanDensity')], by='julianday', all = T)
+names(BGall.mult.wk) = c('julianday','density_am','density_bs')
 
 
 # Matching by exact julian day
