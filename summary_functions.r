@@ -260,7 +260,8 @@ repsurvey = visualsurveypr[grep("REPEAT SURVEY", visualsurveypr$notes.x),]
 # Volunteer surveys
 volsurvey = visualsurveypr[visualsurveypr$userID == 129,]
 
-# Beat sheets and isolating # leaves into a new column
+
+# Beat sheets (PR and BG) and isolating # leaves into a new column
 beatsheet = orders4[grep("BEAT SHEET", orders4$notes.x),]
 leavesNumTemp <- word(beatsheet$notes.x, -1, sep = "= ")
 leavesNumTemp1 <- word(leavesNumTemp, -1, sep = "BEAT SHEET; Leaves  ")
@@ -290,6 +291,7 @@ labsurvey$arthCode[is.na(labsurvey$arthCode)] = "NONE"
 beatsheet$arthCode[is.na(beatsheet$arthCode)] = "NONE"
 repsurvey$arthCode[is.na(repsurvey$arthCode)] = "NONE"
 volsurvey$arthCode[is.na(volsurvey$arthCode)] = "NONE"
+visualsurveybg$arthCode[is.na(visualsurveybg$arthCode)] = "NONE"
 
 # Two possibilities of dealing with caterpillar colony outliers (choose one)
 # (Rerun the separating data section in between switching possibilities)
@@ -305,6 +307,7 @@ labsurvey <- labsurvey[!(labsurvey$arthCode == "LEPL" & labsurvey$count > 10),]
 beatsheet <- beatsheet[!(beatsheet$arthCode == "LEPL" & beatsheet$count > 10),]
 repsurvey <- repsurvey[!(repsurvey$arthCode == "LEPL" & repsurvey$count > 10),]
 volsurvey <- volsurvey[!(volsurvey$arthCode == "LEPL" & volsurvey$count > 10),]
+visualsurveybg <- visualsurveybg[!(visualsurveybg$arthCode == "LEPL" & volsurvey$count > 10),]
 
 #-----------------------------------------------------------------------------------------------------------------
 # Plot our morning surveys, our beat sheet surveys, our repeat surveys, and the volunteer surveys all on one graph
@@ -480,26 +483,26 @@ names(PRall)[5] = 'density_vol'
 #-----------------------------------------------------------------------------------------------------------------
 # Plot our morning surveys and our beat sheet surveys for the botanical garden
 # Caterpillars only, mean density
-BGam.lepl = meanDensityByDay(labsurvey, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+BGam.lepl = meanDensityByDay(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
 BGbs.lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange'))
 
 # Caterpillars only, fraction of surveys with at least one caterpillar
-BGam.1lepl = meanDensityByDay(labsurvey, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(135, 250))
+BGam.1lepl = meanDensityByDay(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(135, 250))
 BGbs.1lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange'))
 
 # All orders, mean density
-BGam.all = meanDensityByDay(labsurvey, "All", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+BGam.all = meanDensityByDay(visualsurveybg, "All", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
 BGbs.all = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange'))
 
 # Selected orders, mean density
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
-BGam.mult = meanDensityByDay(labsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
+BGam.mult = meanDensityByDay(visualsurveybg, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
                              plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, 
                              xlim = c(135, 250), ylim = c(0.1, 1))
 BGbs.mult = meanDensityByDay(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
