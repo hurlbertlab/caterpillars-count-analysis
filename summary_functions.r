@@ -8,6 +8,7 @@ library(plyr)
 library(dplyr)
 library(lubridate)
 library(stringr)
+library(gsheet)
 
 #--------------------------------------------------------------------------------------------------
 # FUNCTIONS
