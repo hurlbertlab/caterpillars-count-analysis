@@ -12,6 +12,8 @@ source('data_cleaning.R')
 # Prairie Ridge #
 #################
 
+dev.off()
+
 # Caterpillars only, mean density
 PRam.lepl = meanDensityByDay(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
 PRbs.lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
@@ -98,6 +100,10 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
 # Botanical Garden #
 ####################
 
+# Taking out julian day 259 for the botanical garden data (in visualsurveybg),
+# don't know where this survey came from
+visualsurveybg = visualsurveybg[visualsurveybg$julianday != 259,]
+
 # Plot our morning surveys and our beat sheet surveys for the botanical garden
 # Caterpillars only, mean density
 BGam.lepl = meanDensityByDay(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
@@ -120,8 +126,7 @@ legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid',
 # Selected orders, mean density
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
 BGam.mult = meanDensityByDay(visualsurveybg, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
-                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, 
-                             xlim = c(135, 250), ylim = c(0.1, 1))
+                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
 BGbs.mult = meanDensityByDay(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
                              plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
@@ -152,8 +157,7 @@ legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid',
 # Selected orders, mean density
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
 BGam.mult.wk = meanDensityByWeek(visualsurveybg, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
-                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, 
-                             xlim = c(135, 250), ylim = c(0.1, 1))
+                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
 BGbs.mult.wk = meanDensityByWeek(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
                              plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
