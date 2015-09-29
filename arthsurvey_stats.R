@@ -48,8 +48,8 @@ names(PRall.lepl2.wk)[4] = 'density_pm'
 PRall.lepl.wk = merge(PRall.lepl2.wk, PRvol.lepl.wk[,c('week','meanDensity')], by = 'week', all = T)
 names(PRall.lepl.wk)[5] = 'density_vol'
 # Botanical Garden
-BGall.lepl.wk = merge(BGam.lepl.wk[,c('julianday','meanDensity')], BGbs.lepl.wk[, c('julianday','meanDensity')], by='julianday', all = T)
-names(BGall.lepl.wk) = c('julianday','density_am','density_bs')
+BGall.lepl.wk = merge(BGam.lepl.wk[,c('week','meanDensity')], BGbs.lepl.wk[, c('week','meanDensity')], by='week', all = T)
+names(BGall.lepl.wk) = c('week','density_am','density_bs')
 
 # Selected orders:
 PRall.mult1.wk = merge(PRam.mult.wk[,c('week','meanDensity')], PRbs.mult.wk[, c('week','meanDensity')], by='week', all = T)
@@ -59,31 +59,36 @@ names(PRall.mult2.wk)[4] = 'density_pm'
 PRall.mult.wk = merge(PRall.mult2.wk, PRvol.mult.wk[,c('week','meanDensity')], by = 'week', all = T)
 names(PRall.mult.wk)[5] = 'density_vol'
 # Botanical Garden
-BGall.mult.wk = merge(BGam.mult.wk[,c('julianday','meanDensity')], BGbs.mult.wk[, c('julianday','meanDensity')], by='julianday', all = T)
-names(BGall.mult.wk) = c('julianday','density_am','density_bs')
+BGall.mult.wk = merge(BGam.mult.wk[,c('week','meanDensity')], BGbs.mult.wk[, c('week','meanDensity')], by='week', all = T)
+names(BGall.mult.wk) = c('week','density_am','density_bs')
 
 
 # Matching by exact julian day
 
 ## Linear regression plots for just caterpillars
 
+r2p.cex = 1.5
+par(mfcol = c(3, 2), mar = c(5, 5, 1, 2), oma = c(0, 0, 4, 0))
+
 # am bs
 # Prairie Ridge
-par(mfcol = c(3, 2), mar = c(4, 4, 1, 1), oma = c(0, 0, 4, 0))
 plot(PRall.lepl$density_am, PRall.lepl$density_bs, xlab = "am Visual", ylab = "am Beat sheet", col = 'red')
 lm.PRlepl.ambs = lm(PRall.lepl$density_bs ~ PRall.lepl$density_am)
 abline(lm.PRlepl.ambs, col = 'red')
 summary(lm.PRlepl.ambs)
-text(0.05, 0.24, expression(R^2 ==  0.1384), col = 'red')
-text(0.05, 0.22, "p-value = 0.1062", col = 'red')
-title("Caterpillars")
+R.PRlepl.ambs = summary(lm.PRlepl.ambs)$r.squared
+p.PRlepl.ambs = summary(lm.PRlepl.ambs)$coefficients[2,4]
+text(0.05, 0.24, bquote(R^2 == .(round(R.PRlepl.ambs, 2))), cex = r2p.cex, col = 'red')
+text(0.05, 0.22, bquote(p == .(round(p.PRlepl.ambs, 2))), cex = r2p.cex, col = 'red')
 # Botanical Garden
 points(BGall.lepl$density_am, BGall.lepl$density_bs, col = 'blue', xlab = "am Visual", ylab = "am Beat sheet")
 lm.BGlepl.ambs = lm(BGall.lepl$density_bs ~ BGall.lepl$density_am)
 abline(lm.BGlepl.ambs, col = 'blue')
 summary(lm.BGlepl.ambs)
-text(0.05, 0.18, expression(R^2 ==  0.4767), col = 'blue')
-text(0.05, 0.16, "p-value = 0.001516", col = 'blue')
+R.BGlepl.ambs = summary(lm.BGlepl.ambs)$r.squared
+p.BGlepl.ambs = summary(lm.BGlepl.ambs)$coefficients[2,4]
+text(0.05, 0.18, bquote(R^2 == .(round(R.BGlepl.ambs, 2))), cex = r2p.cex, col = 'blue')
+text(0.05, 0.16, bquote(p == .(round(p.BGlepl.ambs, 2))), cex = r2p.cex, col = 'blue')
 legend("topright", c('Prairie Ridge', 'Botanical Garden'),lwd = 1, lty = 'solid', 
        col = c('red', 'blue'))
 
@@ -92,19 +97,22 @@ plot(PRall.lepl$density_am, PRall.lepl$density_pm, xlab = "am Visual", ylab = "p
 lm.PRlepl.ampm = lm(PRall.lepl$density_pm ~ PRall.lepl$density_am)
 abline(lm.PRlepl.ampm)
 summary(lm.PRlepl.ampm)
-text(0.05, 0.11, expression(R^2 == 0.06012))
-text(0.05, 0.10, "p-value = 0.5584")
-title("Caterpillars")
+R.PRlepl.ampm = summary(lm.PRlepl.ampm)$r.squared
+p.PRlepl.ampm = summary(lm.PRlepl.ampm)$coefficients[2,4]
+text(0.05, 0.11, bquote(R^2 == .(round(R.PRlepl.ampm, 2))), cex = r2p.cex)
+text(0.05, 0.10, bquote(p == .(round(p.PRlepl.ampm, 2))), cex = r2p.cex)
 
 # pm vol
 plot(PRall.lepl$density_pm, PRall.lepl$density_vol, xlab = "pm Visual", ylab = "pm Volunteers")
 lm.PRlepl.pmvol = lm(PRall.lepl$density_vol ~ PRall.lepl$density_pm)
 abline(lm.PRlepl.pmvol)
 summary(lm.PRlepl.pmvol)
-text(0.03, 0.4, expression(R^2 == 0.007751))
-text(0.03, 0.35, "p-value = 0.8683")
-title("Caterpillars")
+R.PRlepl.pmvol = summary(lm.PRlepl.pmvol)$r.squared
+p.PRlepl.pmvol = summary(lm.PRlepl.pmvol)$coefficients[2,4]
+text(0.03, 0.4, bquote(R^2 == .(round(R.PRlepl.pmvol, 2))), cex = r2p.cex)
+text(0.03, 0.35, bquote(p == .(round(p.PRlepl.pmvol, 2))), cex = r2p.cex)
 
+mtext("Caterpillar density", 3, outer = T, at = 0.25, cex = 1.25)
 
 ## Linear regression plots for selected arthropods
 
@@ -114,16 +122,19 @@ plot(PRall.mult$density_am, PRall.mult$density_bs, col = 'red', xlab = "am Visua
 lm.PRmult.ambs = lm(PRall.mult$density_bs ~ PRall.mult$density_am)
 abline(lm.PRmult.ambs, col = 'red')
 summary(lm.PRmult.ambs)
-text(0.3, 1.1, expression(R^2 ==  0.1354), col = 'red')
-text(0.3, 1.0, "p-value = 0.1105", col ='red')
-title("Selected Arthropods")
+R.PRmult.ambs = summary(lm.PRmult.ambs)$r.squared
+p.PRmult.ambs = summary(lm.PRmult.ambs)$coefficients[2,4]
+text(0.3, 1.1, bquote(R^2 == .(round(R.PRmult.ambs, 2))), cex = r2p.cex, col = 'red')
+text(0.3, 1.0, bquote(p == .(round(p.PRmult.ambs, 2))), cex = r2p.cex, col = 'red')
 # Botanical Garden
 points(BGall.mult$density_am, BGall.mult$density_bs, col = 'blue', xlab = "am Visual", ylab = "am Beat sheet")
 lm.BGmult.ambs = lm(BGall.mult$density_bs ~ BGall.mult$density_am)
 abline(lm.BGmult.ambs, col = 'blue')
 summary(lm.BGmult.ambs)
-text(0.3, 0.9, expression(R^2 ==  0.2247), col = 'blue')
-text(0.3, 0.8, "p-value = 0.04691", col = 'blue')
+R.BGmult.ambs = summary(lm.BGmult.ambs)$r.squared
+p.BGmult.ambs = summary(lm.BGmult.ambs)$coefficients[2,4]
+text(0.3, 0.9, bquote(R^2 == .(round(R.BGmult.ambs, 2))), cex = r2p.cex, col = 'blue')
+text(0.3, 0.8, bquote(p == .(round(p.BGmult.ambs, 2))), cex = r2p.cex, col = 'blue')
 legend("topright", c('Prairie Ridge', 'Botanical Garden'),lwd = 1, lty = 'solid', 
        col = c('red', 'blue'))
 
@@ -132,18 +143,20 @@ plot(PRall.mult$density_am, PRall.mult$density_pm, xlab = "am Visual", ylab = "p
 lm.PRmult.ampm = lm(PRall.mult$density_pm ~ PRall.mult$density_am)
 abline(lm.PRmult.ampm)
 summary(lm.PRmult.ampm)
-text(0.3, 0.65, expression(R^2 == 0.1221))
-text(0.3, 0.6, "p-value = 0.3963")
-title("Selected Arthropods")
+R.PRmult.ampm = summary(lm.PRmult.ampm)$r.squared
+p.PRmult.ampm = summary(lm.PRmult.ampm)$coefficients[2,4]
+text(0.3, 0.65, bquote(R^2 == .(round(R.PRmult.ampm, 2))), cex = r2p.cex)
+text(0.3, 0.6, bquote(p == .(round(p.PRmult.ampm, 2))), cex = r2p.cex)
 
 # pm vol
 plot(PRall.mult$density_pm, PRall.mult$density_vol, xlab = "pm Visual", ylab = "pm Volunteers")
 lm.PRmult.pmvol = lm(PRall.mult$density_vol ~ PRall.mult$density_pm)
 abline(lm.PRmult.pmvol)
 summary(lm.PRmult.pmvol)
-text(0.3, 1.2, expression(R^2 == 0.7048))
-text(0.3, 1.1, "p-value = 0.03657")
-title("Selected Arthropods")
+R.PRmult.pmvol = summary(lm.PRmult.pmvol)$r.squared
+p.PRmult.pmvol = summary(lm.PRmult.pmvol)$coefficients[2,4]
+text(0.3, 1.2, bquote(R^2 == .(round(R.PRmult.pmvol, 2))), cex = r2p.cex)
+text(0.3, 1.1, bquote(p == .(round(p.PRmult.pmvol, 2))), cex = r2p.cex)
 
 mtext("Arthropod density", 3, outer = T, at = 0.75, cex = 1.25)
 
