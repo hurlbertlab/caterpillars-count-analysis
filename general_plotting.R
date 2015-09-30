@@ -240,4 +240,30 @@ jds = c(140, 171, 201, 232)
 mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1, cex = 1.5)
 dev.off()
 
+#-------------------------------------------------------------------------------------------------------
 
+## Merge mean densities into one dataframe
+
+# Just caterpillars:
+# Prairie Ridge
+PRall.lepl1 = merge(PRam.lepl[,c('julianday','meanDensity')], PRbs.lepl[, c('julianday','meanDensity')], by='julianday', all = T)
+names(PRall.lepl1) = c('julianday','density_am','density_bs')
+PRall.lepl2 = merge(PRall.lepl1, PRpm.lepl[,c('julianday','meanDensity')], by = 'julianday', all = T)
+names(PRall.lepl2)[4] = 'density_pm'
+PRall.lepl = merge(PRall.lepl2, PRvol.lepl[,c('julianday','meanDensity')], by = 'julianday', all = T)
+names(PRall.lepl)[5] = 'density_vol'
+# Botanical Garden
+BGall.lepl = merge(BGam.lepl[,c('julianday','meanDensity')], BGbs.lepl[, c('julianday','meanDensity')], by='julianday', all = T)
+names(BGall.lepl) = c('julianday','density_am','density_bs')
+
+# Selected orders:
+# Prairie Ridge
+PRall.mult1 = merge(PRam.mult[,c('julianday','meanDensity')], PRbs.mult[, c('julianday','meanDensity')], by='julianday', all = T)
+names(PRall.mult1) = c('julianday','density_am','density_bs')
+PRall.mult2 = merge(PRall.mult1, PRpm.mult[,c('julianday','meanDensity')], by = 'julianday', all = T)
+names(PRall.mult2)[4] = 'density_pm'
+PRall.mult = merge(PRall.mult2, PRvol.mult[,c('julianday','meanDensity')], by = 'julianday', all = T)
+names(PRall.mult)[5] = 'density_vol'
+# Botanical Garden
+BGall.mult = merge(BGam.mult[,c('julianday','meanDensity')], BGbs.mult[, c('julianday','meanDensity')], by='julianday', all = T)
+names(BGall.mult) = c('julianday','density_am','density_bs')
