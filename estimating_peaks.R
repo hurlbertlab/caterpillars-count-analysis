@@ -7,176 +7,556 @@ source('summary_functions.r')
 source('data_cleaning.R')
 source('general_plotting.R')
 
+jd = c(1:365)
+
+par(mfcol = c(2, 2))
+
 #------------------------------------------------------------------------------------------------------------
 ### Quadratic Fit
 
-jd = c(130:210)
-
 ## Caterpillars only
 
+## Prairie Ridge- run lepl PR plot in general_plotting.R to adds points
+
 #Prairie Ridge, 8 surveys a month
-jd1 = PRall.lepl$julianday
+PRlepl.am.quad = lm(density_am ~ julianday + I(julianday^2), data = PRall.lepl)
+PRlepl.am.quad.predict = PRlepl.am.quad$coefficients[1] + PRlepl.am.quad$coefficients[2]*jd + PRlepl.am.quad$coefficients[3]*jd^2
+points(jd, PRlepl.am.quad.predict, type = 'l', col = 'blue')
+PRlepl.am.quad.mday = jd[PRlepl.am.quad.predict == max(PRlepl.am.quad.predict)]
 
-PRlepl.am.quad = lm(PRall.lepl$density_am ~ jd1 + I(jd1^2))
-PRlepl.am.quad.predict = PRlepl.am.quad$coefficients[1] + PRlepl.am.quad$coefficients[2]*jd1 + PRlepl.am.quad$coefficients[3]*jd1^2
-points(jd1, PRlepl.am.quad.predict, type = 'l', col = 'blue')
-PRlepl.am.quad.mday = jd1[PRlepl.am.quad.predict == max(PRlepl.am.quad.predict)]
+PRlepl.bs.quad = lm(density_bs ~ julianday + I(julianday^2), data = PRall.lepl)
+PRlepl.bs.quad.predict = PRlepl.bs.quad$coefficients[1] + PRlepl.bs.quad$coefficients[2]*jd + PRlepl.bs.quad$coefficients[3]*jd^2
+points(jd, PRlepl.bs.quad.predict, type = 'l', col = 'orange')
+PRlepl.bs.quad.mday = jd[PRlepl.bs.quad.predict == max(PRlepl.bs.quad.predict)]
 
-PRlepl.bs.quad = lm(PRall.lepl$density_bs ~ jd1 + I(jd1^2))
-PRlepl.bs.quad.predict = PRlepl.bs.quad$coefficients[1] + PRlepl.bs.quad$coefficients[2]*jd1 + PRlepl.bs.quad$coefficients[3]*jd1^2
-points(jd1, PRlepl.bs.quad.predict, type = 'l', col = 'orange')
-PRlepl.bs.quad.mday = jd1[PRlepl.bs.quad.predict == max(PRlepl.bs.quad.predict)]
+PRlepl.pm.quad = lm(density_pm ~ julianday + I(julianday^2), data = PRall.lepl)
+PRlepl.pm.quad.predict = PRlepl.pm.quad$coefficients[1] + PRlepl.pm.quad$coefficients[2]*jd + PRlepl.pm.quad$coefficients[3]*jd^2
+points(jd, PRlepl.pm.quad.predict, type = 'l', col = 'red')
+PRlepl.pm.quad.mday = jd[PRlepl.pm.quad.predict == max(PRlepl.pm.quad.predict)]
 
-PRlepl.pm.quad = lm(PRall.lepl$density_pm ~ jd1 + I(jd1^2))
-PRlepl.pm.quad.predict = PRlepl.pm.quad$coefficients[1] + PRlepl.pm.quad$coefficients[2]*jd1 + PRlepl.pm.quad$coefficients[3]*jd1^2
-points(jd1, PRlepl.pm.quad.predict, type = 'l', col = 'red')
-PRlepl.pm.quad.mday = jd1[PRlepl.pm.quad.predict == max(PRlepl.pm.quad.predict)]
-
-PRlepl.vol.quad = lm(PRall.lepl$density_vol ~ jd1 + I(jd1^2))
-PRlepl.vol.quad.predict = PRlepl.vol.quad$coefficients[1] + PRlepl.vol.quad$coefficients[2]*jd1 + PRlepl.vol.quad$coefficients[3]*jd1^2
-points(jd1, PRlepl.vol.quad.predict, type = 'l', col = 'green')
-PRlepl.vol.quad.mday = jd1[PRlepl.vol.quad.predict == max(PRlepl.vol.quad.predict)]
-
-#Botanical Garden, 8 surveys a month
-jd2 = BGall.lepl$julianday
-
-BGlepl.am.quad = lm(BGall.lepl$density_am ~ jd2 + I(jd2^2))
-BGlepl.am.quad.predict = BGlepl.am.quad$coefficients[1] + BGlepl.am.quad$coefficients[2]*jd2 + BGlepl.am.quad$coefficients[3]*jd2^2
-points(jd2, BGlepl.am.quad.predict, type = 'l', col = 'blue')
-BGlepl.am.quad.mday = jd2[BGlepl.am.quad.predict == max(BGlepl.am.quad.predict)]
-
-BGlepl.bs.quad = lm(BGall.lepl$density_bs ~ jd2 + I(jd2^2))
-BGlepl.bs.quad.predict = BGlepl.bs.quad$coefficients[1] + BGlepl.bs.quad$coefficients[2]*jd2 + BGlepl.bs.quad$coefficients[3]*jd2^2
-points(jd2, BGlepl.bs.quad.predict, type = 'l', col = 'orange')
-BGlepl.bs.quad.mday = jd2[BGlepl.bs.quad.predict == max(BGlepl.bs.quad.predict)]
+PRlepl.vol.quad = lm(density_vol ~ julianday + I(julianday^2), data = PRall.lepl)
+PRlepl.vol.quad.predict = PRlepl.vol.quad$coefficients[1] + PRlepl.vol.quad$coefficients[2]*jd + PRlepl.vol.quad$coefficients[3]*jd^2
+points(jd, PRlepl.vol.quad.predict, type = 'l', col = 'green')
+PRlepl.vol.quad.mday = jd[PRlepl.vol.quad.predict == max(PRlepl.vol.quad.predict)]
 
 #Prairie Ridge, 4 surveys a month
 tempjd <- PRall.lepl$julianday[seq(1, length(PRall.lepl$julianday), 2)]
 PRall.lepl.4 <- PRall.lepl[PRall.lepl$julianday %in% tempjd,]
 
-jd3 = PRall.lepl.4$julianday
+PRlepl.am.quad.4 = lm(density_am ~ julianday + I(julianday^2), data = PRall.lepl.4)
+PRlepl.am.quad.4.predict = PRlepl.am.quad.4$coefficients[1] + PRlepl.am.quad.4$coefficients[2]*jd + PRlepl.am.quad.4$coefficients[3]*jd^2
+points(jd, PRlepl.am.quad.4.predict, type = 'l', col = 'blue')
+PRlepl.am.quad.4.mday = jd[PRlepl.am.quad.4.predict == max(PRlepl.am.quad.4.predict)]
 
-PRlepl.am.quad.4 = lm(PRall.lepl.4$density_am ~ jd3 + I(jd3^2))
-PRlepl.am.quad.4.predict = PRlepl.am.quad.4$coefficients[1] + PRlepl.am.quad.4$coefficients[2]*jd3 + PRlepl.am.quad.4$coefficients[3]*jd3^2
-points(jd3, PRlepl.am.quad.4.predict, type = 'l', col = 'blue')
-PRlepl.am.quad.4.mday = jd3[PRlepl.am.quad.4.predict == max(PRlepl.am.quad.4.predict)]
+PRlepl.bs.quad.4 = lm(density_bs ~ julianday + I(julianday^2), data = PRall.lepl.4)
+PRlepl.bs.quad.4.predict = PRlepl.bs.quad.4$coefficients[1] + PRlepl.bs.quad.4$coefficients[2]*jd + PRlepl.bs.quad.4$coefficients[3]*jd^2
+points(jd, PRlepl.bs.quad.4.predict, type = 'l', col = 'orange')
+PRlepl.bs.quad.4.mday = jd[PRlepl.bs.quad.4.predict == max(PRlepl.bs.quad.4.predict)]
 
-PRlepl.bs.quad.4 = lm(PRall.lepl.4$density_bs ~ jd3 + I(jd3^2))
-PRlepl.bs.quad.4.predict = PRlepl.bs.quad.4$coefficients[1] + PRlepl.bs.quad.4$coefficients[2]*jd3 + PRlepl.bs.quad.4$coefficients[3]*jd3^2
-points(jd3, PRlepl.bs.quad.4.predict, type = 'l', col = 'orange')
-PRlepl.bs.quad.4.mday = jd3[PRlepl.bs.quad.4.predict == max(PRlepl.bs.quad.4.predict)]
+PRlepl.pm.quad.4 = lm(density_pm ~ julianday + I(julianday^2), data = PRall.lepl.4)
+PRlepl.pm.quad.4.predict = PRlepl.pm.quad.4$coefficients[1] + PRlepl.pm.quad.4$coefficients[2]*jd + PRlepl.pm.quad.4$coefficients[3]*jd^2
+points(jd, PRlepl.pm.quad.4.predict, type = 'l', col = 'red')
+PRlepl.pm.quad.4.mday = jd[PRlepl.pm.quad.4.predict == max(PRlepl.pm.quad.4.predict)]
 
-PRlepl.pm.quad.4 = lm(PRall.lepl.4$density_pm ~ jd3 + I(jd3^2))
-PRlepl.pm.quad.4.predict = PRlepl.pm.quad.4$coefficients[1] + PRlepl.pm.quad.4$coefficients[2]*jd3 + PRlepl.pm.quad.4$coefficients[3]*jd3^2
-points(jd3, PRlepl.pm.quad.4.predict, type = 'l', col = 'red')
-PRlepl.pm.quad.4.mday = jd3[PRlepl.pm.quad.4.predict == max(PRlepl.pm.quad.4.predict)]
-
-PRlepl.vol.quad.4 = lm(PRall.lepl.4$density_vol ~ jd3 + I(jd3^2))
-PRlepl.vol.quad.4.predict = PRlepl.vol.quad.4$coefficients[1] + PRlepl.vol.quad.4$coefficients[2]*jd3 + PRlepl.vol.quad.4$coefficients[3]*jd3^2
-points(jd3, PRlepl.vol.quad.4.predict, type = 'l', col = 'green')
-PRlepl.vol.quad.4.mday = jd3[PRlepl.vol.quad.4.predict == max(PRlepl.vol.quad.4.predict)]
-
-#Botanical Garden, 4 surveys a month
-tempjd <- BGall.lepl$julianday[seq(1, length(BGall.lepl$julianday), 2)]
-BGall.lepl.4 <- BGall.lepl[BGall.lepl$julianday %in% tempjd,]
-
-jd4 = BGall.lepl.4$julianday
-
-BGlepl.am.quad.4 = lm(BGall.lepl.4$density_am ~ jd4 + I(jd4^2))
-BGlepl.am.quad.4.predict = BGlepl.am.quad.4$coefficients[1] + BGlepl.am.quad.4$coefficients[2]*jd + BGlepl.am.quad.4$coefficients[3]*jd^2
-points(jd, BGlepl.am.quad.4.predict, type = 'l', col = 'blue')
-BGlepl.am.quad.4.mday = jd[BGlepl.am.quad.4.predict == max(BGlepl.am.quad.4.predict)]
-
-BGlepl.bs.quad.4 = lm(BGall.lepl.4$density_bs ~ jd4 + I(jd4^2))
-BGlepl.bs.quad.4.predict = BGlepl.bs.quad.4$coefficients[1] + BGlepl.bs.quad.4$coefficients[2]*jd + BGlepl.bs.quad.4$coefficients[3]*jd^2
-points(jd, BGlepl.bs.quad.4.predict, type = 'l', col = 'orange')
-BGlepl.bs.quad.4.mday = jd[BGlepl.bs.quad.4.predict == max(BGlepl.bs.quad.4.predict)]
+PRlepl.vol.quad.4 = lm(density_vol ~ julianday + I(julianday^2), data = PRall.lepl.4)
+PRlepl.vol.quad.4.predict = PRlepl.vol.quad.4$coefficients[1] + PRlepl.vol.quad.4$coefficients[2]*jd + PRlepl.vol.quad.4$coefficients[3]*jd^2
+points(jd, PRlepl.vol.quad.4.predict, type = 'l', col = 'green')
+PRlepl.vol.quad.4.mday = jd[PRlepl.vol.quad.4.predict == max(PRlepl.vol.quad.4.predict)]
 
 #Prairie Ridge, 2 surveys a month
 tempjd <- PRall.lepl$julianday[seq(1, length(PRall.lepl$julianday), 4)]
 PRall.lepl.2 <- PRall.lepl[PRall.lepl$julianday %in% tempjd,]
 
-jd5 = PRall.lepl.2$julianday
-
-PRlepl.am.quad.2 = lm(PRall.lepl.2$density_am ~ jd5 + I(jd5^2))
+PRlepl.am.quad.2 = lm(density_am ~ julianday + I(julianday^2), data = PRall.lepl.2)
 PRlepl.am.quad.2.predict = PRlepl.am.quad.2$coefficients[1] + PRlepl.am.quad.2$coefficients[2]*jd + PRlepl.am.quad.2$coefficients[3]*jd^2
 points(jd, PRlepl.am.quad.2.predict, type = 'l', col = 'blue')
 PRlepl.am.quad.2.mday = jd[PRlepl.am.quad.2.predict == max(PRlepl.am.quad.2.predict)]
 
-PRlepl.bs.quad.2 = lm(PRall.lepl.2$density_bs ~ jd5 + I(jd5^2))
+PRlepl.bs.quad.2 = lm(density_bs ~ julianday + I(julianday^2), data = PRall.lepl.2)
 PRlepl.bs.quad.2.predict = PRlepl.bs.quad.2$coefficients[1] + PRlepl.bs.quad.2$coefficients[2]*jd + PRlepl.bs.quad.2$coefficients[3]*jd^2
 points(jd, PRlepl.bs.quad.2.predict, type = 'l', col = 'orange')
 PRlepl.bs.quad.2.mday = jd[PRlepl.bs.quad.2.predict == max(PRlepl.bs.quad.2.predict)]
 
-PRlepl.pm.quad.2 = lm(PRall.lepl.2$density_pm ~ jd5 + I(jd5^2))
+PRlepl.pm.quad.2 = lm(density_pm ~ julianday + I(julianday^2), data = PRall.lepl.2)
 PRlepl.pm.quad.2.predict = PRlepl.pm.quad.2$coefficients[1] + PRlepl.pm.quad.2$coefficients[2]*jd + PRlepl.pm.quad.2$coefficients[3]*jd^2
 points(jd, PRlepl.pm.quad.2.predict, type = 'l', col = 'red')
 PRlepl.pm.quad.2.mday = jd[PRlepl.pm.quad.2.predict == max(PRlepl.pm.quad.2.predict)]
 
-PRlepl.vol.quad.2 = lm(PRall.lepl.2$density_vol ~ jd5 + I(jd5^2))
+PRlepl.vol.quad.2 = lm(density_vol ~ julianday + I(julianday^2), data = PRall.lepl.2)
 PRlepl.vol.quad.2.predict = PRlepl.vol.quad.2$coefficients[1] + PRlepl.vol.quad.2$coefficients[2]*jd + PRlepl.vol.quad.2$coefficients[3]*jd^2
 points(jd, PRlepl.vol.quad.2.predict, type = 'l', col = 'green')
 PRlepl.vol.quad.2.mday = jd[PRlepl.vol.quad.2.predict == max(PRlepl.vol.quad.2.predict)]
-
-#Botanical Garden, 2 surveys a month
-tempjd <- BGall.lepl$julianday[seq(1, length(BGall.lepl$julianday), 4)]
-BGall.lepl.2 <- BGall.lepl[BGall.lepl$julianday %in% tempjd,]
-
-jd6 = BGall.lepl.2$julianday
-
-BGlepl.am.quad.2 = lm(BGall.lepl.2$density_am ~ jd6 + I(jd6^2))
-BGlepl.am.quad.2.predict = BGlepl.am.quad.2$coefficients[1] + BGlepl.am.quad.2$coefficients[2]*jd + BGlepl.am.quad.2$coefficients[3]*jd^2
-points(jd, BGlepl.am.quad.2.predict, type = 'l', col = 'blue')
-BGlepl.am.quad.2.mday = jd[BGlepl.am.quad.2.predict == max(BGlepl.am.quad.2.predict)]
-
-BGlepl.bs.quad.2 = lm(BGall.lepl.2$density_bs ~ jd6 + I(jd6^2))
-BGlepl.bs.quad.2.predict = BGlepl.bs.quad.2$coefficients[1] + BGlepl.bs.quad.2$coefficients[2]*jd + BGlepl.bs.quad.2$coefficients[3]*jd^2
-points(jd, BGlepl.bs.quad.2.predict, type = 'l', col = 'orange')
-BGlepl.bs.quad.2.mday = jd[BGlepl.bs.quad.2.predict == max(BGlepl.bs.quad.2.predict)]
 
 #Prairie Ridge, 1 survey a month
 tempjd <- PRall.lepl$julianday[seq(1, length(PRall.lepl$julianday), 8)]
 PRall.lepl.1 <- PRall.lepl[PRall.lepl$julianday %in% tempjd,]
 
-jd7 = PRall.lepl.1$julianday
-
-PRlepl.am.quad.1 = lm(PRall.lepl.1$density_am ~ jd7 + I(jd7^2))
+PRlepl.am.quad.1 = lm(density_am ~ julianday + I(julianday^2), data = PRall.lepl.1)
 PRlepl.am.quad.1.predict = PRlepl.am.quad.1$coefficients[1] + PRlepl.am.quad.1$coefficients[2]*jd + PRlepl.am.quad.1$coefficients[3]*jd^2
 points(jd, PRlepl.am.quad.1.predict, type = 'l', col = 'blue')
 PRlepl.am.quad.1.mday = jd[PRlepl.am.quad.1.predict == max(PRlepl.am.quad.1.predict)]
 
-PRlepl.bs.quad.1 = lm(PRall.lepl.1$density_bs ~ jd7 + I(jd7^2))
+PRlepl.bs.quad.1 = lm(density_bs ~ julianday + I(julianday^2), data = PRall.lepl.1)
 PRlepl.bs.quad.1.predict = PRlepl.bs.quad.1$coefficients[1] + PRlepl.bs.quad.1$coefficients[2]*jd + PRlepl.bs.quad.1$coefficients[3]*jd^2
 points(jd, PRlepl.bs.quad.1.predict, type = 'l', col = 'orange')
 PRlepl.bs.quad.1.mday = jd[PRlepl.bs.quad.1.predict == max(PRlepl.bs.quad.1.predict)]
 
-PRlepl.pm.quad.1 = lm(PRall.lepl.1$density_pm ~ jd7 + I(jd7^2))
+PRlepl.pm.quad.1 = lm(density_pm ~ julianday + I(julianday^2), data = PRall.lepl.1)
 PRlepl.pm.quad.1.predict = PRlepl.pm.quad.1$coefficients[1] + PRlepl.pm.quad.1$coefficients[2]*jd + PRlepl.pm.quad.1$coefficients[3]*jd^2
 points(jd, PRlepl.pm.quad.1.predict, type = 'l', col = 'red')
 PRlepl.pm.quad.1.mday = jd[PRlepl.pm.quad.1.predict == max(PRlepl.pm.quad.1.predict)]
 
-PRlepl.vol.quad.1 = lm(PRall.lepl.1$density_vol ~ jd7 + I(jd7^2))
+PRlepl.vol.quad.1 = lm(density_vol ~ julianday + I(julianday^2), data = PRall.lepl.1)
 PRlepl.vol.quad.1.predict = PRlepl.vol.quad.1$coefficients[1] + PRlepl.vol.quad.1$coefficients[2]*jd + PRlepl.vol.quad.1$coefficients[3]*jd^2
 points(jd, PRlepl.vol.quad.1.predict, type = 'l', col = 'green')
 PRlepl.vol.quad.1.mday = jd[PRlepl.vol.quad.1.predict == max(PRlepl.vol.quad.1.predict)]
+
+title('PR lepl quad fits')
+
+## Botanical Garden- run lepl BG plot in general_plotting.R to adds points
+
+#Botanical Garden, 8 surveys a month
+BGlepl.am.quad = lm(density_am ~ julianday + I(julianday^2), data = BGall.lepl)
+BGlepl.am.quad.predict = BGlepl.am.quad$coefficients[1] + BGlepl.am.quad$coefficients[2]*jd + BGlepl.am.quad$coefficients[3]*jd^2
+points(jd, BGlepl.am.quad.predict, type = 'l', col = 'blue')
+BGlepl.am.quad.mday = jd[BGlepl.am.quad.predict == max(BGlepl.am.quad.predict)]
+
+BGlepl.bs.quad = lm(density_bs ~ julianday + I(julianday^2), data = BGall.lepl)
+BGlepl.bs.quad.predict = BGlepl.bs.quad$coefficients[1] + BGlepl.bs.quad$coefficients[2]*jd + BGlepl.bs.quad$coefficients[3]*jd^2
+points(jd, BGlepl.bs.quad.predict, type = 'l', col = 'orange')
+BGlepl.bs.quad.mday = jd[BGlepl.bs.quad.predict == max(BGlepl.bs.quad.predict)]
+
+#Botanical Garden, 4 surveys a month
+tempjd <- BGall.lepl$julianday[seq(1, length(BGall.lepl$julianday), 2)]
+BGall.lepl.4 <- BGall.lepl[BGall.lepl$julianday %in% tempjd,]
+
+BGlepl.am.quad.4 = lm(density_am ~ julianday + I(julianday^2), data = BGall.lepl.4)
+BGlepl.am.quad.4.predict = BGlepl.am.quad.4$coefficients[1] + BGlepl.am.quad.4$coefficients[2]*jd + BGlepl.am.quad.4$coefficients[3]*jd^2
+points(jd, BGlepl.am.quad.4.predict, type = 'l', col = 'blue')
+BGlepl.am.quad.4.mday = jd[BGlepl.am.quad.4.predict == max(BGlepl.am.quad.4.predict)]
+
+BGlepl.bs.quad.4 = lm(density_bs ~ julianday + I(julianday^2), data = BGall.lepl.4)
+BGlepl.bs.quad.4.predict = BGlepl.bs.quad.4$coefficients[1] + BGlepl.bs.quad.4$coefficients[2]*jd + BGlepl.bs.quad.4$coefficients[3]*jd^2
+points(jd, BGlepl.bs.quad.4.predict, type = 'l', col = 'orange')
+BGlepl.bs.quad.4.mday = jd[BGlepl.bs.quad.4.predict == max(BGlepl.bs.quad.4.predict)]
+
+#Botanical Garden, 2 surveys a month
+tempjd <- BGall.lepl$julianday[seq(1, length(BGall.lepl$julianday), 4)]
+BGall.lepl.2 <- BGall.lepl[BGall.lepl$julianday %in% tempjd,]
+
+BGlepl.am.quad.2 = lm(density_am ~ julianday + I(julianday^2), data = BGall.lepl.2)
+BGlepl.am.quad.2.predict = BGlepl.am.quad.2$coefficients[1] + BGlepl.am.quad.2$coefficients[2]*jd + BGlepl.am.quad.2$coefficients[3]*jd^2
+points(jd, BGlepl.am.quad.2.predict, type = 'l', col = 'blue')
+BGlepl.am.quad.2.mday = jd[BGlepl.am.quad.2.predict == max(BGlepl.am.quad.2.predict)]
+
+BGlepl.bs.quad.2 = lm(density_bs ~ julianday + I(julianday^2), data = BGall.lepl.2)
+BGlepl.bs.quad.2.predict = BGlepl.bs.quad.2$coefficients[1] + BGlepl.bs.quad.2$coefficients[2]*jd + BGlepl.bs.quad.2$coefficients[3]*jd^2
+points(jd, BGlepl.bs.quad.2.predict, type = 'l', col = 'orange')
+BGlepl.bs.quad.2.mday = jd[BGlepl.bs.quad.2.predict == max(BGlepl.bs.quad.2.predict)]
 
 #Botanical Garden, 1 survey a month
 tempjd <- BGall.lepl$julianday[seq(1, length(BGall.lepl$julianday), 8)]
 BGall.lepl.1 <- BGall.lepl[BGall.lepl$julianday %in% tempjd,]
 
-jd8 = BGall.lepl.1$julianday
-
-BGlepl.am.quad.1 = lm(BGall.lepl.1$density_am ~ jd8 + I(jd8^2))
+BGlepl.am.quad.1 = lm(density_am ~ julianday + I(julianday^2), data = BGall.lepl.1)
 BGlepl.am.quad.1.predict = BGlepl.am.quad.1$coefficients[1] + BGlepl.am.quad.1$coefficients[2]*jd + BGlepl.am.quad.1$coefficients[3]*jd^2
 points(jd, BGlepl.am.quad.1.predict, type = 'l', col = 'blue')
 BGlepl.am.quad.1.mday = jd[BGlepl.am.quad.1.predict == max(BGlepl.am.quad.1.predict)]
 
-BGlepl.bs.quad.1 = lm(BGall.lepl.1$density_bs ~ jd8 + I(jd8^2))
+BGlepl.bs.quad.1 = lm(density_bs ~ julianday + I(julianday^2), data = BGall.lepl.1)
 BGlepl.bs.quad.1.predict = BGlepl.bs.quad.1$coefficients[1] + BGlepl.bs.quad.1$coefficients[2]*jd + BGlepl.bs.quad.1$coefficients[3]*jd^2
 points(jd, BGlepl.bs.quad.1.predict, type = 'l', col = 'orange')
 BGlepl.bs.quad.1.mday = jd[BGlepl.bs.quad.1.predict == max(BGlepl.bs.quad.1.predict)]
 
+title('BG lepl quad fits')
+
+## Plotting max days in relationship to frequency of surveys
+
+# PR, caterpillars only
+PRmaxdayam <- data.frame(frequency = c(8,4,2,1), maxday = c(PRlepl.am.quad.mday, PRlepl.am.quad.4.mday, PRlepl.am.quad.2.mday, PRlepl.am.quad.1.mday))
+PRmaxdaybs <- data.frame(frequency = c(8,4,2,1), maxday = c(PRlepl.bs.quad.mday, PRlepl.bs.quad.4.mday, PRlepl.bs.quad.2.mday, PRlepl.bs.quad.1.mday))
+PRmaxdaypm <- data.frame(frequency = c(8,4,2,1), maxday = c(PRlepl.pm.quad.mday, PRlepl.pm.quad.4.mday, PRlepl.pm.quad.2.mday, PRlepl.pm.quad.1.mday))
+PRmaxdayvol <- data.frame(frequency = c(8,4,2,1), maxday = c(PRlepl.vol.quad.mday, PRlepl.vol.quad.4.mday, PRlepl.vol.quad.2.mday, PRlepl.vol.quad.1.mday))
+plot(PRmaxdayam, col = 'blue', pch = 19, ylim = c(140,210))
+points(PRmaxdaybs, col = 'orange', pch = 19)
+points(PRmaxdaypm, col = 'red', pch = 19)
+points(PRmaxdayvol, col = 'green', pch = 19)
+title('PR lepl quad fit max day')
+
+# BG, caterpillars only
+BGmaxdayam <- data.frame(frequency = c(8,4,2,1), maxday = c(BGlepl.am.quad.mday, BGlepl.am.quad.4.mday, BGlepl.am.quad.2.mday, BGlepl.am.quad.1.mday))
+BGmaxdaybs <- data.frame(frequency = c(8,4,2,1), maxday = c(BGlepl.bs.quad.mday, BGlepl.bs.quad.4.mday, BGlepl.bs.quad.2.mday, BGlepl.bs.quad.1.mday))
+plot(BGmaxdayam, col = 'blue', pch = 19, ylim = c(140,210))
+points(BGmaxdaybs, col = 'orange', pch = 19)
+title('BG lepl quad fit max day')
 
 
 
-PRmaxday <- c()
+## Selected arthropods
+
+## Prairie Ridge- run mult PR plot in general_plotting.R to adds points
+
+#Prairie Ridge, 8 surveys a month
+PRmult.am.quad = lm(density_am ~ julianday + I(julianday^2), data = PRall.mult)
+PRmult.am.quad.predict = PRmult.am.quad$coefficients[1] + PRmult.am.quad$coefficients[2]*jd + PRmult.am.quad$coefficients[3]*jd^2
+points(jd, PRmult.am.quad.predict, type = 'l', col = 'blue')
+PRmult.am.quad.mday = jd[PRmult.am.quad.predict == max(PRmult.am.quad.predict)]
+
+PRmult.bs.quad = lm(density_bs ~ julianday + I(julianday^2), data = PRall.mult)
+PRmult.bs.quad.predict = PRmult.bs.quad$coefficients[1] + PRmult.bs.quad$coefficients[2]*jd + PRmult.bs.quad$coefficients[3]*jd^2
+points(jd, PRmult.bs.quad.predict, type = 'l', col = 'orange')
+PRmult.bs.quad.mday = jd[PRmult.bs.quad.predict == max(PRmult.bs.quad.predict)]
+
+PRmult.pm.quad = lm(density_pm ~ julianday + I(julianday^2), data = PRall.mult)
+PRmult.pm.quad.predict = PRmult.pm.quad$coefficients[1] + PRmult.pm.quad$coefficients[2]*jd + PRmult.pm.quad$coefficients[3]*jd^2
+points(jd, PRmult.pm.quad.predict, type = 'l', col = 'red')
+PRmult.pm.quad.mday = jd[PRmult.pm.quad.predict == max(PRmult.pm.quad.predict)]
+
+PRmult.vol.quad = lm(density_vol ~ julianday + I(julianday^2), data = PRall.mult)
+PRmult.vol.quad.predict = PRmult.vol.quad$coefficients[1] + PRmult.vol.quad$coefficients[2]*jd + PRmult.vol.quad$coefficients[3]*jd^2
+points(jd, PRmult.vol.quad.predict, type = 'l', col = 'green')
+PRmult.vol.quad.mday = jd[PRmult.vol.quad.predict == max(PRmult.vol.quad.predict)]
+
+#Prairie Ridge, 4 surveys a month
+tempjd <- PRall.mult$julianday[seq(1, length(PRall.mult$julianday), 2)]
+PRall.mult.4 <- PRall.mult[PRall.mult$julianday %in% tempjd,]
+
+PRmult.am.quad.4 = lm(density_am ~ julianday + I(julianday^2), data = PRall.mult.4)
+PRmult.am.quad.4.predict = PRmult.am.quad.4$coefficients[1] + PRmult.am.quad.4$coefficients[2]*jd + PRmult.am.quad.4$coefficients[3]*jd^2
+points(jd, PRmult.am.quad.4.predict, type = 'l', col = 'blue')
+PRmult.am.quad.4.mday = jd[PRmult.am.quad.4.predict == max(PRmult.am.quad.4.predict)]
+
+PRmult.bs.quad.4 = lm(density_bs ~ julianday + I(julianday^2), data = PRall.mult.4)
+PRmult.bs.quad.4.predict = PRmult.bs.quad.4$coefficients[1] + PRmult.bs.quad.4$coefficients[2]*jd + PRmult.bs.quad.4$coefficients[3]*jd^2
+points(jd, PRmult.bs.quad.4.predict, type = 'l', col = 'orange')
+PRmult.bs.quad.4.mday = jd[PRmult.bs.quad.4.predict == max(PRmult.bs.quad.4.predict)]
+
+PRmult.pm.quad.4 = lm(density_pm ~ julianday + I(julianday^2), data = PRall.mult.4)
+PRmult.pm.quad.4.predict = PRmult.pm.quad.4$coefficients[1] + PRmult.pm.quad.4$coefficients[2]*jd + PRmult.pm.quad.4$coefficients[3]*jd^2
+points(jd, PRmult.pm.quad.4.predict, type = 'l', col = 'red')
+PRmult.pm.quad.4.mday = jd[PRmult.pm.quad.4.predict == max(PRmult.pm.quad.4.predict)]
+
+PRmult.vol.quad.4 = lm(density_vol ~ julianday + I(julianday^2), data = PRall.mult.4)
+PRmult.vol.quad.4.predict = PRmult.vol.quad.4$coefficients[1] + PRmult.vol.quad.4$coefficients[2]*jd + PRmult.vol.quad.4$coefficients[3]*jd^2
+points(jd, PRmult.vol.quad.4.predict, type = 'l', col = 'green')
+PRmult.vol.quad.4.mday = jd[PRmult.vol.quad.4.predict == max(PRmult.vol.quad.4.predict)]
+
+#Prairie Ridge, 2 surveys a month
+tempjd <- PRall.mult$julianday[seq(1, length(PRall.mult$julianday), 4)]
+PRall.mult.2 <- PRall.mult[PRall.mult$julianday %in% tempjd,]
+
+PRmult.am.quad.2 = lm(density_am ~ julianday + I(julianday^2), data = PRall.mult.2)
+PRmult.am.quad.2.predict = PRmult.am.quad.2$coefficients[1] + PRmult.am.quad.2$coefficients[2]*jd + PRmult.am.quad.2$coefficients[3]*jd^2
+points(jd, PRmult.am.quad.2.predict, type = 'l', col = 'blue')
+PRmult.am.quad.2.mday = jd[PRmult.am.quad.2.predict == max(PRmult.am.quad.2.predict)]
+
+PRmult.bs.quad.2 = lm(density_bs ~ julianday + I(julianday^2), data = PRall.mult.2)
+PRmult.bs.quad.2.predict = PRmult.bs.quad.2$coefficients[1] + PRmult.bs.quad.2$coefficients[2]*jd + PRmult.bs.quad.2$coefficients[3]*jd^2
+points(jd, PRmult.bs.quad.2.predict, type = 'l', col = 'orange')
+PRmult.bs.quad.2.mday = jd[PRmult.bs.quad.2.predict == max(PRmult.bs.quad.2.predict)]
+
+PRmult.pm.quad.2 = lm(density_pm ~ julianday + I(julianday^2), data = PRall.mult.2)
+PRmult.pm.quad.2.predict = PRmult.pm.quad.2$coefficients[1] + PRmult.pm.quad.2$coefficients[2]*jd + PRmult.pm.quad.2$coefficients[3]*jd^2
+points(jd, PRmult.pm.quad.2.predict, type = 'l', col = 'red')
+PRmult.pm.quad.2.mday = jd[PRmult.pm.quad.2.predict == max(PRmult.pm.quad.2.predict)]
+
+PRmult.vol.quad.2 = lm(density_vol ~ julianday + I(julianday^2), data = PRall.mult.2)
+PRmult.vol.quad.2.predict = PRmult.vol.quad.2$coefficients[1] + PRmult.vol.quad.2$coefficients[2]*jd + PRmult.vol.quad.2$coefficients[3]*jd^2
+points(jd, PRmult.vol.quad.2.predict, type = 'l', col = 'green')
+PRmult.vol.quad.2.mday = jd[PRmult.vol.quad.2.predict == max(PRmult.vol.quad.2.predict)]
+
+#Prairie Ridge, 1 survey a month
+tempjd <- PRall.mult$julianday[seq(1, length(PRall.mult$julianday), 8)]
+PRall.mult.1 <- PRall.mult[PRall.mult$julianday %in% tempjd,]
+
+PRmult.am.quad.1 = lm(density_am ~ julianday + I(julianday^2), data = PRall.mult.1)
+PRmult.am.quad.1.predict = PRmult.am.quad.1$coefficients[1] + PRmult.am.quad.1$coefficients[2]*jd + PRmult.am.quad.1$coefficients[3]*jd^2
+points(jd, PRmult.am.quad.1.predict, type = 'l', col = 'blue')
+PRmult.am.quad.1.mday = jd[PRmult.am.quad.1.predict == max(PRmult.am.quad.1.predict)]
+
+PRmult.bs.quad.1 = lm(density_bs ~ julianday + I(julianday^2), data = PRall.mult.1)
+PRmult.bs.quad.1.predict = PRmult.bs.quad.1$coefficients[1] + PRmult.bs.quad.1$coefficients[2]*jd + PRmult.bs.quad.1$coefficients[3]*jd^2
+points(jd, PRmult.bs.quad.1.predict, type = 'l', col = 'orange')
+PRmult.bs.quad.1.mday = jd[PRmult.bs.quad.1.predict == max(PRmult.bs.quad.1.predict)]
+
+PRmult.pm.quad.1 = lm(density_pm ~ julianday + I(julianday^2), data = PRall.mult.1)
+PRmult.pm.quad.1.predict = PRmult.pm.quad.1$coefficients[1] + PRmult.pm.quad.1$coefficients[2]*jd + PRmult.pm.quad.1$coefficients[3]*jd^2
+points(jd, PRmult.pm.quad.1.predict, type = 'l', col = 'red')
+PRmult.pm.quad.1.mday = jd[PRmult.pm.quad.1.predict == max(PRmult.pm.quad.1.predict)]
+
+PRmult.vol.quad.1 = lm(density_vol ~ julianday + I(julianday^2), data = PRall.mult.1)
+PRmult.vol.quad.1.predict = PRmult.vol.quad.1$coefficients[1] + PRmult.vol.quad.1$coefficients[2]*jd + PRmult.vol.quad.1$coefficients[3]*jd^2
+points(jd, PRmult.vol.quad.1.predict, type = 'l', col = 'green')
+PRmult.vol.quad.1.mday = jd[PRmult.vol.quad.1.predict == max(PRmult.vol.quad.1.predict)]
+
+title('PR mult quad fits')
+
+
+## Botanical Garden- run mult BG plot in general_plotting.R to adds points
+
+#Botanical Garden, 8 surveys a month
+BGmult.am.quad = lm(density_am ~ julianday + I(julianday^2), data = BGall.mult)
+BGmult.am.quad.predict = BGmult.am.quad$coefficients[1] + BGmult.am.quad$coefficients[2]*jd + BGmult.am.quad$coefficients[3]*jd^2
+points(jd, BGmult.am.quad.predict, type = 'l', col = 'blue')
+BGmult.am.quad.mday = jd[BGmult.am.quad.predict == max(BGmult.am.quad.predict)]
+
+BGmult.bs.quad = lm(density_bs ~ julianday + I(julianday^2), data = BGall.mult)
+BGmult.bs.quad.predict = BGmult.bs.quad$coefficients[1] + BGmult.bs.quad$coefficients[2]*jd + BGmult.bs.quad$coefficients[3]*jd^2
+points(jd, BGmult.bs.quad.predict, type = 'l', col = 'orange')
+BGmult.bs.quad.mday = jd[BGmult.bs.quad.predict == max(BGmult.bs.quad.predict)]
+
+#Botanical Garden, 4 surveys a month
+tempjd <- BGall.mult$julianday[seq(1, length(BGall.mult$julianday), 2)]
+BGall.mult.4 <- BGall.mult[BGall.mult$julianday %in% tempjd,]
+
+BGmult.am.quad.4 = lm(density_am ~ julianday + I(julianday^2), data = BGall.mult.4)
+BGmult.am.quad.4.predict = BGmult.am.quad.4$coefficients[1] + BGmult.am.quad.4$coefficients[2]*jd + BGmult.am.quad.4$coefficients[3]*jd^2
+points(jd, BGmult.am.quad.4.predict, type = 'l', col = 'blue')
+BGmult.am.quad.4.mday = jd[BGmult.am.quad.4.predict == max(BGmult.am.quad.4.predict)]
+
+BGmult.bs.quad.4 = lm(density_bs ~ julianday + I(julianday^2), data = BGall.mult.4)
+BGmult.bs.quad.4.predict = BGmult.bs.quad.4$coefficients[1] + BGmult.bs.quad.4$coefficients[2]*jd + BGmult.bs.quad.4$coefficients[3]*jd^2
+points(jd, BGmult.bs.quad.4.predict, type = 'l', col = 'orange')
+BGmult.bs.quad.4.mday = jd[BGmult.bs.quad.4.predict == max(BGmult.bs.quad.4.predict)]
+
+#Botanical Garden, 2 surveys a month
+tempjd <- BGall.mult$julianday[seq(1, length(BGall.mult$julianday), 4)]
+BGall.mult.2 <- BGall.mult[BGall.mult$julianday %in% tempjd,]
+
+BGmult.am.quad.2 = lm(density_am ~ julianday + I(julianday^2), data = BGall.mult.2)
+BGmult.am.quad.2.predict = BGmult.am.quad.2$coefficients[1] + BGmult.am.quad.2$coefficients[2]*jd + BGmult.am.quad.2$coefficients[3]*jd^2
+points(jd, BGmult.am.quad.2.predict, type = 'l', col = 'blue')
+BGmult.am.quad.2.mday = jd[BGmult.am.quad.2.predict == max(BGmult.am.quad.2.predict)]
+
+BGmult.bs.quad.2 = lm(density_bs ~ julianday + I(julianday^2), data = BGall.mult.2)
+BGmult.bs.quad.2.predict = BGmult.bs.quad.2$coefficients[1] + BGmult.bs.quad.2$coefficients[2]*jd + BGmult.bs.quad.2$coefficients[3]*jd^2
+points(jd, BGmult.bs.quad.2.predict, type = 'l', col = 'orange')
+BGmult.bs.quad.2.mday = jd[BGmult.bs.quad.2.predict == max(BGmult.bs.quad.2.predict)]
+
+#Botanical Garden, 1 survey a month
+tempjd <- BGall.mult$julianday[seq(1, length(BGall.mult$julianday), 8)]
+BGall.mult.1 <- BGall.mult[BGall.mult$julianday %in% tempjd,]
+
+BGmult.am.quad.1 = lm(density_am ~ julianday + I(julianday^2), data = BGall.mult.1)
+BGmult.am.quad.1.predict = BGmult.am.quad.1$coefficients[1] + BGmult.am.quad.1$coefficients[2]*jd + BGmult.am.quad.1$coefficients[3]*jd^2
+points(jd, BGmult.am.quad.1.predict, type = 'l', col = 'blue')
+BGmult.am.quad.1.mday = jd[BGmult.am.quad.1.predict == max(BGmult.am.quad.1.predict)]
+
+BGmult.bs.quad.1 = lm(density_bs ~ julianday + I(julianday^2), data = BGall.mult.1)
+BGmult.bs.quad.1.predict = BGmult.bs.quad.1$coefficients[1] + BGmult.bs.quad.1$coefficients[2]*jd + BGmult.bs.quad.1$coefficients[3]*jd^2
+points(jd, BGmult.bs.quad.1.predict, type = 'l', col = 'orange')
+BGmult.bs.quad.1.mday = jd[BGmult.bs.quad.1.predict == max(BGmult.bs.quad.1.predict)]
+
+title('BG mult quad fits')
+
+## Plotting max days in relationship to frequency of surveys
+
+# PR, selected arthropods
+PRmaxdayam <- data.frame(frequency = c(8,4,2,1), maxday = c(PRmult.am.quad.mday, PRmult.am.quad.4.mday, PRmult.am.quad.2.mday, PRmult.am.quad.1.mday))
+PRmaxdaybs <- data.frame(frequency = c(8,4,2,1), maxday = c(PRmult.bs.quad.mday, PRmult.bs.quad.4.mday, PRmult.bs.quad.2.mday, PRmult.bs.quad.1.mday))
+PRmaxdaypm <- data.frame(frequency = c(8,4,2,1), maxday = c(PRmult.pm.quad.mday, PRmult.pm.quad.4.mday, PRmult.pm.quad.2.mday, PRmult.pm.quad.1.mday))
+PRmaxdayvol <- data.frame(frequency = c(8,4,2,1), maxday = c(PRmult.vol.quad.mday, PRmult.vol.quad.4.mday, PRmult.vol.quad.2.mday, PRmult.vol.quad.1.mday))
+plot(PRmaxdayam, col = 'blue', pch = 19, ylim = c(140,210))
+points(PRmaxdaybs, col = 'orange', pch = 19)
+points(PRmaxdaypm, col = 'red', pch = 19)
+points(PRmaxdayvol, col = 'green', pch = 19)
+title('PR mult quad fit max day')
+
+# BG, selected arthropods
+BGmaxdayam <- data.frame(frequency = c(8,4,2,1), maxday = c(BGmult.am.quad.mday, BGmult.am.quad.4.mday, BGmult.am.quad.2.mday, BGmult.am.quad.1.mday))
+BGmaxdaybs <- data.frame(frequency = c(8,4,2,1), maxday = c(BGmult.bs.quad.mday, BGmult.bs.quad.4.mday, BGmult.bs.quad.2.mday, BGmult.bs.quad.1.mday))
+plot(BGmaxdayam, col = 'blue', pch = 19, ylim = c(140,210))
+points(BGmaxdaybs, col = 'orange', pch = 19)
+title('PR mult quad fit max day')
+
+
+
+
+
+#------------------------------------------------------------------------------------------------------------
+### Cubic Fit
+
+jd = c(130:210)
+
+## Caterpillars only
+
+## Prairie Ridge- run lepl PR plot in general_plotting.R to adds points
+
+#Prairie Ridge, 8 surveys a month
+PRlepl.am.cub = lm(density_am ~ julianday + I(julianday^2) + I(julianday^3), data = PRall.lepl)
+PRlepl.am.cub.predict = PRlepl.am.cub$coefficients[1] + PRlepl.am.cub$coefficients[2]*jd + PRlepl.am.cub$coefficients[3]*jd^2 + PRlepl.am.cub$coefficients[4]*jd^3
+points(jd, PRlepl.am.cub.predict, type = 'l', col = 'blue')
+PRlepl.am.cub.mday = jd[PRlepl.am.cub.predict == max(PRlepl.am.cub.predict)]
+
+PRlepl.bs.cub = lm(density_bs ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl)
+PRlepl.bs.cub.predict = PRlepl.bs.cub$coefficients[1] + PRlepl.bs.cub$coefficients[2]*jd + PRlepl.bs.cub$coefficients[3]*jd^2 + PRlepl.bs.cub$coefficients[4]*jd^3
+points(jd, PRlepl.bs.cub.predict, type = 'l', col = 'orange')
+PRlepl.bs.cub.mday = jd[PRlepl.bs.cub.predict == max(PRlepl.bs.cub.predict)]
+
+PRlepl.pm.cub = lm(density_pm ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl)
+PRlepl.pm.cub.predict = PRlepl.pm.cub$coefficients[1] + PRlepl.pm.cub$coefficients[2]*jd + PRlepl.pm.cub$coefficients[3]*jd^2 + PRlepl.pm.cub$coefficients[4]*jd^3
+points(jd, PRlepl.pm.cub.predict, type = 'l', col = 'red')
+PRlepl.pm.cub.mday = jd[PRlepl.pm.cub.predict == max(PRlepl.pm.cub.predict)]
+
+PRlepl.vol.cub = lm(density_vol ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl)
+PRlepl.vol.cub.predict = PRlepl.vol.cub$coefficients[1] + PRlepl.vol.cub$coefficients[2]*jd + PRlepl.vol.cub$coefficients[3]*jd^2  + PRlepl.vol.cub$coefficients[4]*jd^3
+points(jd, PRlepl.vol.cub.predict, type = 'l', col = 'green')
+PRlepl.vol.cub.mday = jd[PRlepl.vol.cub.predict == max(PRlepl.vol.cub.predict)]
+
+#Prairie Ridge, 4 surveys a month
+tempjd <- PRall.lepl$julianday[seq(1, length(PRall.lepl$julianday), 2)]
+PRall.lepl.4 <- PRall.lepl[PRall.lepl$julianday %in% tempjd,]
+
+PRlepl.am.cub.4 = lm(density_am ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.4)
+PRlepl.am.cub.4.predict = PRlepl.am.cub.4$coefficients[1] + PRlepl.am.cub.4$coefficients[2]*jd + PRlepl.am.cub.4$coefficients[3]*jd^2 + PRlepl.am.cub.4$coefficients[4]*jd^3
+points(jd, PRlepl.am.cub.4.predict, type = 'l', col = 'blue')
+PRlepl.am.cub.4.mday = jd[PRlepl.am.cub.4.predict == max(PRlepl.am.cub.4.predict)]
+
+PRlepl.bs.cub.4 = lm(density_bs ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.4)
+PRlepl.bs.cub.4.predict = PRlepl.bs.cub.4$coefficients[1] + PRlepl.bs.cub.4$coefficients[2]*jd + PRlepl.bs.cub.4$coefficients[3]*jd^2 + PRlepl.bs.cub.4$coefficients[4]*jd^3
+points(jd, PRlepl.bs.cub.4.predict, type = 'l', col = 'orange')
+PRlepl.bs.cub.4.mday = jd[PRlepl.bs.cub.4.predict == max(PRlepl.bs.cub.4.predict)]
+
+PRlepl.pm.cub.4 = lm(density_pm ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.4)
+PRlepl.pm.cub.4.predict = PRlepl.pm.cub.4$coefficients[1] + PRlepl.pm.cub.4$coefficients[2]*jd + PRlepl.pm.cub.4$coefficients[3]*jd^2 + PRlepl.pm.cub.4$coefficients[4]*jd^3
+points(jd, PRlepl.pm.cub.4.predict, type = 'l', col = 'red')
+PRlepl.pm.cub.4.mday = jd[PRlepl.pm.cub.4.predict == max(PRlepl.pm.cub.4.predict)]
+
+PRlepl.vol.cub.4 = lm(density_vol ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.4)
+PRlepl.vol.cub.4.predict = PRlepl.vol.cub.4$coefficients[1] + PRlepl.vol.cub.4$coefficients[2]*jd + PRlepl.vol.cub.4$coefficients[3]*jd^2 + PRlepl.vol.cub.4$coefficients[4]*jd^3
+points(jd, PRlepl.vol.cub.4.predict, type = 'l', col = 'green')
+PRlepl.vol.cub.4.mday = jd[PRlepl.vol.cub.4.predict == max(PRlepl.vol.cub.4.predict)]
+
+#Prairie Ridge, 2 surveys a month
+tempjd <- PRall.lepl$julianday[seq(1, length(PRall.lepl$julianday), 4)]
+PRall.lepl.2 <- PRall.lepl[PRall.lepl$julianday %in% tempjd,]
+
+PRlepl.am.cub.2 = lm(density_am ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.2)
+PRlepl.am.cub.2.predict = PRlepl.am.cub.2$coefficients[1] + PRlepl.am.cub.2$coefficients[2]*jd + PRlepl.am.cub.2$coefficients[3]*jd^2 + PRlepl.am.cub.2$coefficients[4]*jd^3
+points(jd, PRlepl.am.cub.2.predict, type = 'l', col = 'blue')
+PRlepl.am.cub.2.mday = jd[PRlepl.am.cub.2.predict == max(PRlepl.am.cub.2.predict)]
+
+PRlepl.bs.cub.2 = lm(density_bs ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.2)
+PRlepl.bs.cub.2.predict = PRlepl.bs.cub.2$coefficients[1] + PRlepl.bs.cub.2$coefficients[2]*jd + PRlepl.bs.cub.2$coefficients[3]*jd^2 + PRlepl.bs.cub.2$coefficients[4]*jd^3
+points(jd, PRlepl.bs.cub.2.predict, type = 'l', col = 'orange')
+PRlepl.bs.cub.2.mday = jd[PRlepl.bs.cub.2.predict == max(PRlepl.bs.cub.2.predict)]
+
+PRlepl.pm.cub.2 = lm(density_pm ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.2)
+PRlepl.pm.cub.2.predict = PRlepl.pm.cub.2$coefficients[1] + PRlepl.pm.cub.2$coefficients[2]*jd + PRlepl.pm.cub.2$coefficients[3]*jd^2 + PRlepl.pm.cub.2$coefficients[4]*jd^3
+points(jd, PRlepl.pm.cub.2.predict, type = 'l', col = 'red')
+PRlepl.pm.cub.2.mday = jd[PRlepl.pm.cub.2.predict == max(PRlepl.pm.cub.2.predict)]
+
+PRlepl.vol.cub.2 = lm(density_vol ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.2)
+PRlepl.vol.cub.2.predict = PRlepl.vol.cub.2$coefficients[1] + PRlepl.vol.cub.2$coefficients[2]*jd + PRlepl.vol.cub.2$coefficients[3]*jd^2 + PRlepl.vol.cub.2$coefficients[4]*jd^3
+points(jd, PRlepl.vol.cub.2.predict, type = 'l', col = 'green')
+PRlepl.vol.cub.2.mday = jd[PRlepl.vol.cub.2.predict == max(PRlepl.vol.cub.2.predict)]
+
+#Prairie Ridge, 1 survey a month
+tempjd <- PRall.lepl$julianday[seq(1, length(PRall.lepl$julianday), 8)]
+PRall.lepl.1 <- PRall.lepl[PRall.lepl$julianday %in% tempjd,]
+
+PRlepl.am.cub.1 = lm(density_am ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.1)
+PRlepl.am.cub.1.predict = PRlepl.am.cub.1$coefficients[1] + PRlepl.am.cub.1$coefficients[2]*jd + PRlepl.am.cub.1$coefficients[3]*jd^2 + PRlepl.am.cub.1$coefficients[4]*jd^3
+points(jd, PRlepl.am.cub.1.predict, type = 'l', col = 'blue')
+PRlepl.am.cub.1.mday = jd[PRlepl.am.cub.1.predict == max(PRlepl.am.cub.1.predict)]
+
+PRlepl.bs.cub.1 = lm(density_bs ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.1)
+PRlepl.bs.cub.1.predict = PRlepl.bs.cub.1$coefficients[1] + PRlepl.bs.cub.1$coefficients[2]*jd + PRlepl.bs.cub.1$coefficients[3]*jd^2 + PRlepl.bs.cub.1$coefficients[4]*jd^3
+points(jd, PRlepl.bs.cub.1.predict, type = 'l', col = 'orange')
+PRlepl.bs.cub.1.mday = jd[PRlepl.bs.cub.1.predict == max(PRlepl.bs.cub.1.predict)]
+
+PRlepl.pm.cub.1 = lm(density_pm ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.1)
+PRlepl.pm.cub.1.predict = PRlepl.pm.cub.1$coefficients[1] + PRlepl.pm.cub.1$coefficients[2]*jd + PRlepl.pm.cub.1$coefficients[3]*jd^2 + PRlepl.pm.cub.1$coefficients[4]*jd^3
+points(jd, PRlepl.pm.cub.1.predict, type = 'l', col = 'red')
+PRlepl.pm.cub.1.mday = jd[PRlepl.pm.cub.1.predict == max(PRlepl.pm.cub.1.predict)]
+
+PRlepl.vol.cub.1 = lm(density_vol ~ julianday + I(julianday^2 + I(julianday^3), data = PRall.lepl.1)
+PRlepl.vol.cub.1.predict = PRlepl.vol.cub.1$coefficients[1] + PRlepl.vol.cub.1$coefficients[2]*jd + PRlepl.vol.cub.1$coefficients[3]*jd^2 + PRlepl.vol.cub.1$coefficients[4]*jd^3
+points(jd, PRlepl.vol.cub.1.predict, type = 'l', col = 'green')
+PRlepl.vol.cub.1.mday = jd[PRlepl.vol.cub.1.predict == max(PRlepl.vol.cub.1.predict)]
+
+title('PR lepl cub fits')
+
+## Botanical Garden- run lepl BG plot in general_plotting.R to adds points
+
+#Botanical Garden, 8 surveys a month
+BGlepl.am.cub = lm(density_am ~ julianday + I(julianday^2 + I(julianday^3), data = BGall.lepl)
+BGlepl.am.cub.predict = BGlepl.am.cub$coefficients[1] + BGlepl.am.cub$coefficients[2]*jd + BGlepl.am.cub$coefficients[3]*jd^2 + BGlepl.am.cub$coefficients[4]*jd^3
+points(jd, BGlepl.am.cub.predict, type = 'l', col = 'blue')
+BGlepl.am.cub.mday = jd[BGlepl.am.cub.predict == max(BGlepl.am.cub.predict)]
+
+BGlepl.bs.cub = lm(density_bs ~ julianday + I(julianday^2 + I(julianday^3), data = BGall.lepl)
+BGlepl.bs.cub.predict = BGlepl.bs.cub$coefficients[1] + BGlepl.bs.cub$coefficients[2]*jd + BGlepl.bs.cub$coefficients[3]*jd^2 + BGlepl.bs.cub$coefficients[4]*jd^3
+points(jd, BGlepl.bs.cub.predict, type = 'l', col = 'orange')
+BGlepl.bs.cub.mday = jd[BGlepl.bs.cub.predict == max(BGlepl.bs.cub.predict)]
+
+#Botanical Garden, 4 surveys a month
+tempjd <- BGall.lepl$julianday[seq(1, length(BGall.lepl$julianday), 2)]
+BGall.lepl.4 <- BGall.lepl[BGall.lepl$julianday %in% tempjd,]
+
+BGlepl.am.cub.4 = lm(density_am ~ julianday + I(julianday^2 + I(julianday^3), data = BGall.lepl.4)
+BGlepl.am.cub.4.predict = BGlepl.am.cub.4$coefficients[1] + BGlepl.am.cub.4$coefficients[2]*jd + BGlepl.am.cub.4$coefficients[3]*jd^2 + BGlepl.am.cub.4$coefficients[4]*jd^3
+points(jd, BGlepl.am.cub.4.predict, type = 'l', col = 'blue')
+BGlepl.am.cub.4.mday = jd[BGlepl.am.cub.4.predict == max(BGlepl.am.cub.4.predict)]
+
+BGlepl.bs.cub.4 = lm(density_bs ~ julianday + I(julianday^2 + I(julianday^3), data = BGall.lepl.4)
+BGlepl.bs.cub.4.predict = BGlepl.bs.cub.4$coefficients[1] + BGlepl.bs.cub.4$coefficients[2]*jd + BGlepl.bs.cub.4$coefficients[3]*jd^2 + BGlepl.bs.cub.4$coefficients[4]*jd^3
+points(jd, BGlepl.bs.cub.4.predict, type = 'l', col = 'orange')
+BGlepl.bs.cub.4.mday = jd[BGlepl.bs.cub.4.predict == max(BGlepl.bs.cub.4.predict)]
+
+#Botanical Garden, 2 surveys a month
+tempjd <- BGall.lepl$julianday[seq(1, length(BGall.lepl$julianday), 4)]
+BGall.lepl.2 <- BGall.lepl[BGall.lepl$julianday %in% tempjd,]
+
+BGlepl.am.cub.2 = lm(density_am ~ julianday + I(julianday^2 + I(julianday^3), data = BGall.lepl.2)
+BGlepl.am.cub.2.predict = BGlepl.am.cub.2$coefficients[1] + BGlepl.am.cub.2$coefficients[2]*jd + BGlepl.am.cub.2$coefficients[3]*jd^2 + BGlepl.am.cub.2$coefficients[4]*jd^3
+points(jd, BGlepl.am.cub.2.predict, type = 'l', col = 'blue')
+BGlepl.am.cub.2.mday = jd[BGlepl.am.cub.2.predict == max(BGlepl.am.cub.2.predict)]
+
+BGlepl.bs.cub.2 = lm(density_bs ~ julianday + I(julianday^2 + I(julianday^3), data = BGall.lepl.2)
+BGlepl.bs.cub.2.predict = BGlepl.bs.cub.2$coefficients[1] + BGlepl.bs.cub.2$coefficients[2]*jd + BGlepl.bs.cub.2$coefficients[3]*jd^2 + BGlepl.bs.cub.2$coefficients[4]*jd^3
+points(jd, BGlepl.bs.cub.2.predict, type = 'l', col = 'orange')
+BGlepl.bs.cub.2.mday = jd[BGlepl.bs.cub.2.predict == max(BGlepl.bs.cub.2.predict)]
+
+#Botanical Garden, 1 survey a month
+tempjd <- BGall.lepl$julianday[seq(1, length(BGall.lepl$julianday), 8)]
+BGall.lepl.1 <- BGall.lepl[BGall.lepl$julianday %in% tempjd,]
+
+BGlepl.am.cub.1 = lm(density_am ~ julianday + I(julianday^2 + I(julianday^3), data = BGall.lepl.1)
+BGlepl.am.cub.1.predict = BGlepl.am.cub.1$coefficients[1] + BGlepl.am.cub.1$coefficients[2]*jd + BGlepl.am.cub.1$coefficients[3]*jd^2 + BGlepl.am.cub.1$coefficients[4]*jd^3
+points(jd, BGlepl.am.cub.1.predict, type = 'l', col = 'blue')
+BGlepl.am.cub.1.mday = jd[BGlepl.am.cub.1.predict == max(BGlepl.am.cub.1.predict)]
+
+BGlepl.bs.cub.1 = lm(density_bs ~ julianday + I(julianday^2 + I(julianday^3), data = BGall.lepl.1)
+BGlepl.bs.cub.1.predict = BGlepl.bs.cub.1$coefficients[1] + BGlepl.bs.cub.1$coefficients[2]*jd + BGlepl.bs.cub.1$coefficients[3]*jd^2 + BGlepl.bs.cub.1$coefficients[4]*jd^3
+points(jd, BGlepl.bs.cub.1.predict, type = 'l', col = 'orange')
+BGlepl.bs.cub.1.mday = jd[BGlepl.bs.cub.1.predict == max(BGlepl.bs.cub.1.predict)]
+
+title('BG lepl cub fits')
+
+## Plotting max days in relationship to frequency of surveys
+
+# PR, caterpillars only
+PRmaxdayam <- data.frame(frequency = c(8,4,2,1), maxday = c(PRlepl.am.cub.mday, PRlepl.am.cub.4.mday, PRlepl.am.cub.2.mday, PRlepl.am.cub.1.mday))
+PRmaxdaybs <- data.frame(frequency = c(8,4,2,1), maxday = c(PRlepl.bs.cub.mday, PRlepl.bs.cub.4.mday, PRlepl.bs.cub.2.mday, PRlepl.bs.cub.1.mday))
+PRmaxdaypm <- data.frame(frequency = c(8,4,2,1), maxday = c(PRlepl.pm.cub.mday, PRlepl.pm.cub.4.mday, PRlepl.pm.cub.2.mday, PRlepl.pm.cub.1.mday))
+PRmaxdayvol <- data.frame(frequency = c(8,4,2,1), maxday = c(PRlepl.vol.cub.mday, PRlepl.vol.cub.4.mday, PRlepl.vol.cub.2.mday, PRlepl.vol.cub.1.mday))
+plot(PRmaxdayam, col = 'blue', pch = 19, ylim = c(140,210))
+points(PRmaxdaybs, col = 'orange', pch = 19)
+points(PRmaxdaypm, col = 'red', pch = 19)
+points(PRmaxdayvol, col = 'green', pch = 19)
+title('PR lepl cub fit max day')
+
+# BG, caterpillars only
+BGmaxdayam <- data.frame(frequency = c(8,4,2,1), maxday = c(BGlepl.am.cub.mday, BGlepl.am.cub.4.mday, BGlepl.am.cub.2.mday, BGlepl.am.cub.1.mday))
+BGmaxdaybs <- data.frame(frequency = c(8,4,2,1), maxday = c(BGlepl.bs.cub.mday, BGlepl.bs.cub.4.mday, BGlepl.bs.cub.2.mday, BGlepl.bs.cub.1.mday))
+plot(BGmaxdayam, col = 'blue', pch = 19, ylim = c(140,210))
+points(BGmaxdaybs, col = 'orange', pch = 19)
+title('BG lepl cub fit max day')
+
+
+
+## Selected arthropods
+
+## Prairie Ridge- run mult PR plot in general_plotting.R to adds points
+
