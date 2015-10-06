@@ -93,6 +93,23 @@ cleandata = merge(cleandata, beatsheet, by = c("surveyID", "userID", "site", "su
 # Not sure if beat sheet merging is appropriate
 
 
+# Subsetting 2015 data for use in estimating_peaks.R, with a min length of 5 mm
+
+cleandata.pr <- cleandata[cleandata$site == 117 & cleandata$year == 2015,]
+cleandata.bg <- cleandata[cleandata$site == 8892356 & cleandata$year == 2015,]
+# (Should I subset these later in estimating_peaks.R?)
+
+amsurvey.pr <- surveySubset(cleandata.pr, subset = "visual am", minLength = 5)
+pmsurvey.pr <- surveySubset(cleandata.pr, subset = "visual pm", minLength = 5)
+beatsheet.pr <- surveySubset(cleandata.pr, subset = "beat sheet", minLength = 5)
+volunteer.pr <- surveySubset(cleandata.pr, subset = "volunteer", minLength = 5)
+
+amsurvey.bg <- surveySubset(cleandata.bg, subset = "visual am", minLength = 5)
+beatsheet.bg <- surveySubset(cleandata.bg, subset = "beat sheet", minLength = 5)
+
+
+
+
 
 
 
