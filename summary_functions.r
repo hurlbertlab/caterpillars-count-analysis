@@ -13,7 +13,37 @@ library(gsheet)
 #--------------------------------------------------------------------------------------------------
 # FUNCTIONS
 
+
+# Function for subsetting data based on survey type and time of survey
+
+surveySubset = function(cleandata, subset = "visual am", minLength = 0) 
+  
+  {tempdata = cleandata[cleandata$length >= minLength,]
+  
+  if (subset == "visual am"){
+    visualsurvey = tempdata[!grepl("BEAT SHEET", tempdata$notes.x),]
+    amsurvey = visualsurvey[!grepl("REPEAT SURVEY", visualsurvey$notes.x),]
+    labsurvey = amsurvey[amsurvey$userID %in% c(69, 130, 131, 132), ] # make more general
+    data.out = labsurvey
+  }
+  if (subset == "beat sheet"){
+    beatsheet = tempdata[grep("BEAT SHEET", tempdata$notes.x),]
+    data.out = beatsheet
+  }
+  if (subset == "visual pm"){
+    repsurvey = tempdata[grep("REPEAT SURVEY", tempdata$notes.x),]
+    data.out = repsurvey
+  }
+  if (subset == "volunteer"){
+    volsurvey = tempdata[tempdata$userID == 129,] # make more general
+    data.out = volsurvey
+  }
+  return(data.out)
+}
+
+
 # Function for checking survey events for a given site and year
+
 surveyCount = function(events, site, year) {
   subevents = subset(events, site == site & year == year)
   #Count number of survey locations per date
