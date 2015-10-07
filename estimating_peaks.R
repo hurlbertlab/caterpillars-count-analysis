@@ -16,27 +16,49 @@ par(mfcol = c(2, 2))
 PR
 
 
-usefulname = function(alldata) {
+maxjdStat = function(alldata, arthropods, site) {
   
+  samp.dataframe = c()
 
-for (circles in 4:max.circles) {
+for (circle in 4:(length(unique(alldata$circle)))) {
   for (i in 1:10) {
-  circlesToUse = sample(1:12, circles, replace = F)
+  circlesToUse = sample(1:12, (length(unique(alldata$circle))), replace = F)
   sampledata = subset(alldata, circle %in% circlesToUse)
     for (freq in 1:8) {
       for (startval in 1:freq) {
         uniqJDs = unique(sampledata$julianday)
-        jdsToUse = uniqJDs[seq(1, length(uniqJDs), 4)]
-        subsampledata = subset(sampledata, jd %in% jdsToUse)
-        #run linear model
-        PRlepl.am.quad = lm(density_am ~ julianday + I(julianday^2), data = PRall.lepl)
-        #extract max, R2, p
+        jdsToUse = uniqJDs[seq(startval, length(uniqJDs), freq)]
+        subsampledata = subset(sampledata, julianday %in% jdsToUse)
+        statdata = meanDensityByDay(subsampledata, ordersToInclude = arthropods, plotVar = 'meanDensity', 
+                                    inputYear = 2015, inputSite = site) #need to fix meanDensity function so that year and site aren't required?
         
-        #run cubic model
+        # Max day without fit
+        max.jd = statdata$julianday[statdata$meanDensity == max(statdata$meanDensity)]
         
-        Samp.output = c(circle, I, freq, startval, max.jd.quad, R2.quad, p.quad, max.jd.cub, R2.cub, etc)
+        # For smooth fits:
+        jd = c(min(statdata$julianday):max(statdata$julianday))
+        
+        # Run quadratic model
+        quad = lm(meanDensity ~ julianday + I(julianday^2), data = statdata)
+        R2.quad = summary(quad)$r.squared
+        p.quad = summary(quad)$coefficients[2,4]
+        quad.predict = quad$coefficients[1] + quad$coefficients[2]*jd + quad$coefficients[3]*jd^2
+        max.jd.quad = jd[quad.predict == max(quad.predict)]
+        
+        # Run cubic model
+        cub = lm(meanDensity ~ julianday + I(julianday^2) + I(julianday^3), data = statdata)
+        R2.cub = summary(cub)$r.squared
+        p.cub = summary(cub)$coefficients[2,4]
+        cub.predict = cub$coefficients[1] + cub$coefficients[2]*jd + cub$coefficients[3]*jd^2 + cub$coefficients[4]*jd^2
+        max.jd.cub = jd[cub.predict == max(cub.predict)] 
+        
+        samp.output = c(circle, i, freq, startval, max.jd, max.jd.quad, R2.quad, p.quad, max.jd.cub, R2.cub, p.cub)
+        
+        samp.dataframe = rbind(samp.dataframe, samp.output)
       }
     } # end freq loop
+  } # end i loop
+} # end circle loop
     
     
 
