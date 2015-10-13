@@ -29,6 +29,11 @@ names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
 # Convert 'survey' field to character from factor
 surveys$survey = as.character(surveys$survey)
 
+# Create effortByDay dataframe for use in summary functions
+surveys$date = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d"))
+effortByDay = data.frame(table(surveys[, c('site', 'date')]))
+effortByDay = effortByDay[effortByDay$Freq!=0, ]
+effortByDay$date = as.POSIXlt(effortByDay$date, format = "%Y-%m-%d")
 
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', all.x = T)
@@ -68,7 +73,7 @@ cleandata$year = tempdate
 events = unique(cleandata[, c("surveyID", "userID", "date", "year", "julianday", "site", "circle", "survey")])
 
 # Change arthCodes to 'NONE' that were previously NA
-labsurvey$arthCode[is.na(labsurvey$arthCode)] = "NONE"
+cleandata$arthCode[is.na(cleandata$arthCode)] = "NONE"
 
 # Taking out large colonies completely:
 cleandata <- cleandata[!(cleandata$arthCode == "LEPL" & cleandata$count > 10),]
