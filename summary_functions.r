@@ -57,32 +57,35 @@ surveyCount = function(events, site, year) {
 }
 
 
+#effortByDay = function(surveyData)
+#{
+#  effortByDay = data.frame(table(unique(surveyData[, c('surveyID', 'julianday')])$julianday))
+#  names(effortByDay) = c('julianday', 'numSurveys')
+#  return(effortByDay)
+#}
+
+
 # Calculate mean density per survey per julian day
 
-meanDensityByDay = function(surveyData,            # merged dataframe of surveys and orders tables
+meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders tables
+                            effortByDay = effortByDay # dataframe with effort by day in data_cleaning.R
                        ordersToInclude = 'All',       # which arthropod orders to calculate density for (codes)
                        byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
-                       minLength = 0,         # minimum arthropod size to include
-                       inputYear,
-                       inputSite, 
+                       minLength = 0,         # minimum arthropod size to include 
+                       inputSite,
                        plot = F,
                        plotVar = 'meanDensity', # 'meanDensity' or 'fracSurveys'
                        new = T,
                        color = 'black',
                        ...)                  
   
-  {
-  dataYearSite = surveyData[surveyData$year == inputYear & surveyData$site == inputSite, ]
-  effortByDay = data.frame(table(unique(dataYearSite[, c('surveyID', 'julianday')])$julianday))
-  names(effortByDay) = c('julianday', 'numSurveys')
+  {surveyData = surveyData[surveyData$site == inputSite,]
   
   if(length(ordersToInclude)==1 & ordersToInclude[1]=='All') {
     ordersToInclude = unique(surveyData$arthCode)
   }
   
   temp = filter(surveyData,
-                surveyData$year == inputYear & 
-                surveyData$site == inputSite &
                 length >= minLength & 
                 arthCode %in% ordersToInclude)
   
@@ -96,12 +99,21 @@ meanDensityByDay = function(surveyData,            # merged dataframe of surveys
                   totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])))
   }
   
-  temp3 = merge(effortByDay, temp2[, c('julianday', 'totalCount', 'numSurveysGTzero')], 
-                by = 'julianday', all = T)
+  
+  if(nrow(temp2) > 0) {
+    temp3 = merge(effortByDay, temp2[, c('julianday', 'totalCount', 'numSurveysGTzero')], 
+                  by = 'julianday', all.y = T) # need to add julianday to effort by day dataframe in order to merge
+  } else {
+    temp3 = temp2
+    temp3$totalCount = 0
+    temp3$numSurveysGTzero = 0
+  }
   temp3$totalCount[is.na(temp3$totalCount)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
   temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
   temp3$julianday = as.numeric(as.character(temp3$julianday))
+  
+  
   if (plot & new) {
     plot(temp3$julianday, temp3[, plotVar], type = 'l', 
          col = color, xlab = "Julian day", ylab = plotVar, ...)
