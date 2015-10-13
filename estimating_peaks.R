@@ -5,32 +5,32 @@
 # Run summary_functions.r, data_cleaning.R, general_plotting.R
 source('summary_functions.r')
 source('data_cleaning.R')
-source('general_plotting.R')
 
-jd = c(1:365)
 
-par(mfcol = c(2, 2))
 
-# PRall.mult, PRall.lepl. BGall.mult, BGall.lepl
-
-PR
 
 
 maxjdStat = function(alldata, arthropods, site) {
   
-  samp.dataframe = c()
+  samp.dataframe = data.frame(circle = integer(),
+                              i = integer(),
+                              freq= integer(), 
+                              startval = integer(), 
+                              max.jd = integer(), 
+                              max.jd.quad = numeric(), 
+                              R2.quad = numeric(),
+                              p.quad = numeric())
 
-for (circle in 4:(length(unique(alldata$circle)))) {
+for (circleSample in 4:(length(unique(alldata$circle)))) {
   for (i in 1:10) {
-  circlesToUse = sample(1:12, (length(unique(alldata$circle))), replace = F)
+  circlesToUse = sample(1:12, circleSample, replace = F)
   sampledata = subset(alldata, circle %in% circlesToUse)
     for (freq in 1:8) {
       for (startval in 1:freq) {
         uniqJDs = unique(sampledata$julianday)
         jdsToUse = uniqJDs[seq(startval, length(uniqJDs), freq)]
         subsampledata = subset(sampledata, julianday %in% jdsToUse)
-        statdata = meanDensityByDay(subsampledata, ordersToInclude = arthropods, plotVar = 'meanDensity', 
-                                    inputYear = 2015, inputSite = site) #need to fix meanDensity function so that year and site aren't required?
+        statdata = meanDensityByDay(subsampledata, ordersToInclude = arthropods, plotVar = 'meanDensity', inputYear = 2015, inputSite = site)
         
         # Max day without fit
         max.jd = statdata$julianday[statdata$meanDensity == max(statdata$meanDensity)]
@@ -39,33 +39,38 @@ for (circle in 4:(length(unique(alldata$circle)))) {
         jd = c(min(statdata$julianday):max(statdata$julianday))
         
         # Run quadratic model
-        quad = lm(meanDensity ~ julianday + I(julianday^2), data = statdata)
-        R2.quad = summary(quad)$r.squared
-        p.quad = summary(quad)$coefficients[2,4]
-        quad.predict = quad$coefficients[1] + quad$coefficients[2]*jd + quad$coefficients[3]*jd^2
-        max.jd.quad = jd[quad.predict == max(quad.predict)]
+        if (length(statdata$meanDensity[statdata$meanDensity > 0]) >= 4) {
+          quad = lm(meanDensity ~ julianday + I(julianday^2), data = statdata)
+          R2.quad = summary(quad)$r.squared
+          p.quad = summary(quad)$coefficients[2,4]
+          quad.predict = quad$coefficients[1] + quad$coefficients[2]*jd + quad$coefficients[3]*jd^2
+          max.jd.quad = jd[quad.predict == max(quad.predict)]
+        } else {
+          R2.quad = NA
+          p.quad = NA
+          max.jd.quad = NA
+        }
+
+        temp.dataframe = data.frame(circle = circleSample,
+                                    i,
+                                    freq, 
+                                    startval, 
+                                    max.jd, 
+                                    max.jd.quad, 
+                                    R2.quad,
+                                    p.quad)
         
-        # Run cubic model
-        cub = lm(meanDensity ~ julianday + I(julianday^2) + I(julianday^3), data = statdata)
-        R2.cub = summary(cub)$r.squared
-        p.cub = summary(cub)$coefficients[2,4]
-        cub.predict = cub$coefficients[1] + cub$coefficients[2]*jd + cub$coefficients[3]*jd^2 + cub$coefficients[4]*jd^2
-        max.jd.cub = jd[cub.predict == max(cub.predict)] 
-        
-        samp.output = c(circle, i, freq, startval, max.jd, max.jd.quad, R2.quad, p.quad, max.jd.cub, R2.cub, p.cub)
-        
-        samp.dataframe = rbind(samp.dataframe, samp.output)
+        samp.dataframe = rbind(samp.dataframe, temp.dataframe)
       }
     } # end freq loop
   } # end i loop
 } # end circle loop
     
-    
-
+return(samp.dataframe)
 } # end function
 
 
-
+# make if/else for when meanDensity is NA for quad and cub fits within function
 
 
 

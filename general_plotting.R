@@ -15,40 +15,40 @@ source('data_cleaning.R')
 dev.off()
 
 # Caterpillars only, mean density
-PRam.lepl = meanDensityByDay(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-PRbs.lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
-PRpm.lepl = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
-PRvol.lepl = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
+PRam.lepl = meanDensityByDay(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+PRbs.lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+PRpm.lepl = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
+PRvol.lepl = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
 # Caterpillars only, fraction of surveys with at least one caterpillar
-#PRam.1lepl = meanDensityByDay(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(135, 250))
-#PRbs.1lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
-#PRpm.1lepl = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', minLength = 5)
-#PRvol.1lepl = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'green', minLength = 5)
+#PRam.1lepl = meanDensityByDay(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(135, 250))
+#PRbs.1lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
+#PRpm.1lepl = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'red', minLength = 5)
+#PRvol.1lepl = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'green', minLength = 5)
 #legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
 #       col = c('blue', 'orange', 'red', 'green'))
 
 # All orders, mean density
-#PRam.all = meanDensityByDay(labsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-#PRbs.all = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
-#PRpm.all = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
-#PRvol.all = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
+#PRam.all = meanDensityByDay(labsurvey, "All", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+#PRbs.all = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+#PRpm.all = meanDensityByDay(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
+#PRvol.all = meanDensityByDay(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
 #legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
 #       col = c('blue', 'orange', 'red', 'green'))
 
 # Selected orders, mean density
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
 PRam.mult = meanDensityByDay(labsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, 
+                             plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, 
                              xlim = c(135, 250), ylim = c(0.1, 1))
 PRbs.mult = meanDensityByDay(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                             plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+                             plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 PRpm.mult = meanDensityByDay(repsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                             plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
+                             plot = F, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
 PRvol.mult = meanDensityByDay(volsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                              plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
+                              plot = F, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
@@ -57,40 +57,40 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
 # Plots as above but averaged per week instead of by day
 
 # Caterpillars only, mean density
-PRam.lepl.wk = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-PRbs.lepl.wk = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
-PRpm.lepl.wk = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
-PRvol.lepl.wk = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
+PRam.lepl.wk = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+PRbs.lepl.wk = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+PRpm.lepl.wk = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
+PRvol.lepl.wk = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
 # Caterpillars only, fraction of surveys with at least one caterpillar
-#PRam.1lepl.wk = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(20, 35), ylim = c(0, 0.2))
-#PRbs.1lepl.wk = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
-#PRpm.1lepl.wk = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', minLength = 5)
-#PRvol.1lepl.wk = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'green', minLength = 5)
+#PRam.1lepl.wk = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(20, 35), ylim = c(0, 0.2))
+#PRbs.1lepl.wk = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
+#PRpm.1lepl.wk = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'red', minLength = 5)
+#PRvol.1lepl.wk = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'green', minLength = 5)
 #legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
 #       col = c('blue', 'orange', 'red', 'green'))
 
 # All orders, mean density
-#PRam.all.wk = meanDensityByWeek(labsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-#PRbs.all.wk = meanDensityByWeek(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
-#PRpm.all.wk = meanDensityByWeek(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
-#PRvol.all.wk = meanDensityByWeek(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
+#PRam.all.wk = meanDensityByWeek(labsurvey, "All", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+#PRbs.all.wk = meanDensityByWeek(beatsheet, "All", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+#PRpm.all.wk = meanDensityByWeek(repsurvey, "All", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
+#PRvol.all.wk = meanDensityByWeek(volsurvey, "All", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
 #legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
 #       col = c('blue', 'orange', 'red', 'green'))
 
 # Selected orders, mean density
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
 PRam.mult.wk = meanDensityByWeek(labsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                                 plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, xlim = c(20, 35),
+                                 plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, xlim = c(20, 35),
                                  ylim = c(0.1, 1))
 PRbs.mult.wk = meanDensityByWeek(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                                 plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+                                 plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 PRpm.mult.wk = meanDensityByWeek(repsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                                 plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
+                                 plot = F, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
 PRvol.mult.wk = meanDensityByWeek(volsurvey, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                                  plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
+                                  plot = F, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 #----------------------------------------------------------------------------------------------------------------------------
@@ -106,29 +106,29 @@ visualsurveybg = visualsurveybg[visualsurveybg$julianday != 259,]
 
 # Plot our morning surveys and our beat sheet surveys for the botanical garden
 # Caterpillars only, mean density
-BGam.lepl = meanDensityByDay(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-BGbs.lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+BGam.lepl = meanDensityByDay(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+BGbs.lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange'))
 
 # Caterpillars only, fraction of surveys with at least one caterpillar
-#BGam.1lepl = meanDensityByDay(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(135, 250))
-#BGbs.1lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
+#BGam.1lepl = meanDensityByDay(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(135, 250))
+#BGbs.1lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
 #legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
 #       col = c('blue', 'orange'))
 
 # All orders, mean density
-#BGam.all = meanDensityByDay(visualsurveybg, "All", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-#BGbs.all = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+#BGam.all = meanDensityByDay(visualsurveybg, "All", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+#BGbs.all = meanDensityByDay(beatsheet, "All", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 #legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
 #       col = c('blue', 'orange'))
 
 # Selected orders, mean density
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
 BGam.mult = meanDensityByDay(visualsurveybg, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
-                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+                             plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
 BGbs.mult = meanDensityByDay(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
-                             plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+                             plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange'))
 
@@ -137,29 +137,29 @@ legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid',
 
 # Plot our morning surveys and our beat sheet surveys for the botanical garden
 # Caterpillars only, mean density
-BGam.lepl.wk = meanDensityByWeek(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-BGbs.lepl.wk = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+BGam.lepl.wk = meanDensityByWeek(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+BGbs.lepl.wk = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange'))
 
 # Caterpillars only, fraction of surveys with at least one caterpillar
-#BGam.1lepl.wk = meanDensityByWeek(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(135, 250))
-#BGbs.1lepl.wk = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
+#BGam.1lepl.wk = meanDensityByWeek(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'fracSurveys', new = T, color = 'blue', minLength = 5, xlim = c(135, 250))
+#BGbs.1lepl.wk = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'fracSurveys', new = F, color = 'orange', minLength = 5)
 #legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
 #       col = c('blue', 'orange'))
 
 # All orders, mean density
-#BGam.all.wk = meanDensityByWeek(visualsurveybg, "All", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-#BGbs.all.wk = meanDensityByWeek(beatsheet, "All", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+#BGam.all.wk = meanDensityByWeek(visualsurveybg, "All", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+#BGbs.all.wk = meanDensityByWeek(beatsheet, "All", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 #legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
 #       col = c('blue', 'orange'))
 
 # Selected orders, mean density
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
 BGam.mult.wk = meanDensityByWeek(visualsurveybg, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
-                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+                             plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
 BGbs.mult.wk = meanDensityByWeek(beatsheet, ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, 
-                             plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+                             plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange'))
 
@@ -207,10 +207,10 @@ frassplot = function(site, frassdata, color = 'black', new = T) {
 pdf('plots/PR_LEPL_frac_by_week_wFrass.pdf', height = 6, width = 8)
 par(mgp = c(3, 1, 0), mar = c(3, 5, 1, 4), cex.lab = 1.5, cex.axis = 1.2)
 plot(c(20,35), c(0, 0.24), type = "n", xlab = "", xaxt = "n", ylab = "Fraction of surveys")
-PRam = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'blue', lwd = 3)
-PRbs = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'skyblue', lwd = 3)
-PRpm = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3)
-PRvol = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3, lty = 'dashed')
+PRam = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'blue', lwd = 3)
+PRbs = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'skyblue', lwd = 3)
+PRpm = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3)
+PRvol = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3, lty = 'dashed')
 
 par(new = T)
 plot(PRfrassW$week, PRfrassW$frass.mg.d, type = 'b', col = 'darkgreen', lwd = 1, xlim = c(20, 35), ylim = c(1,7),
@@ -228,10 +228,10 @@ dev.off()
 pdf('plots/PR_LEPL_frac_by_week.pdf', height = 6, width = 8)
 par(mgp = c(3, 1, 0), mar = c(3, 5, 1, 4), cex.lab = 1.5, cex.axis = 1.2)
 plot(c(20,35), c(0, 0.24), type = "n", xlab = "", xaxt = "n", ylab = "Fraction of surveys")
-PRam = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'blue', lwd = 3)
-PRbs = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'skyblue', lwd = 3)
-PRpm = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3)
-PRvol = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3, lty = 'dashed')
+PRam = meanDensityByWeek(labsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'blue', lwd = 3)
+PRbs = meanDensityByWeek(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'skyblue', lwd = 3)
+PRpm = meanDensityByWeek(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3)
+PRvol = meanDensityByWeek(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3, lty = 'dashed')
 
 legend("topleft", c('am Visual', 'am Beat sheet', 'pm Visual', 'pm Volunteers'),
        lwd = c(3, 3, 3, 3), lty = c(rep('solid', 3), 'dashed'),
