@@ -68,18 +68,18 @@ surveyCount = function(events, site, year) {
 # Calculate mean density per survey per julian day
 
 meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders tables
-                            effortByDay = effortByDay # dataframe with effort by day in data_cleaning.R
+                            effort = effortByDay, # dataframe with effort by day in data_cleaning.R
                        ordersToInclude = 'All',       # which arthropod orders to calculate density for (codes)
                        byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
                        minLength = 0,         # minimum arthropod size to include 
                        inputSite,
+                       inputYear,
                        plot = F,
                        plotVar = 'meanDensity', # 'meanDensity' or 'fracSurveys'
                        new = T,
                        color = 'black',
                        ...)                  
-  
-  {surveyData = surveyData[surveyData$site == inputSite,]
+{
   
   if(length(ordersToInclude)==1 & ordersToInclude[1]=='All') {
     ordersToInclude = unique(surveyData$arthCode)
@@ -87,7 +87,9 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
   
   temp = filter(surveyData,
                 length >= minLength & 
-                arthCode %in% ordersToInclude)
+                arthCode %in% ordersToInclude & 
+                site == inputSite &
+                year == inputYear)
   
   
   if (byTreeSpecies) {
@@ -101,10 +103,13 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
   
   
   if(nrow(temp2) > 0) {
-    temp3 = merge(effortByDay, temp2[, c('julianday', 'totalCount', 'numSurveysGTzero')], 
-                  by = 'julianday', all.y = T) # need to add julianday to effort by day dataframe in order to merge
+    temp3 = merge(effort[,c('site','numSurveys','julianday','year')], temp2, by = c('julianday', 'site', 'year'), all.y = T) 
   } else {
-    temp3 = temp2
+    # Need to figure out a different way to get through function where there is no data
+    temp3$julianday = NA # can't do this
+    temp3$site = inputSite
+    temp3$year = inputYear
+    temp3$numSurveys = 1 # (just to have a number that the zeroes are divided by)
     temp3$totalCount = 0
     temp3$numSurveysGTzero = 0
   }
