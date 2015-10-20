@@ -10,7 +10,7 @@ source('data_cleaning.R')
 
 
 
-maxjdStat = function(alldata, arthropods, site) {
+maxjdStat = function(alldata, arthropods, site, year) {
   
   samp.dataframe = data.frame(circle = integer(),
                               i = integer(),
@@ -30,7 +30,7 @@ for (circleSample in 4:(length(unique(alldata$circle)))) {
         uniqJDs = unique(sampledata$julianday)
         jdsToUse = uniqJDs[seq(startval, length(uniqJDs), freq)]
         subsampledata = subset(sampledata, julianday %in% jdsToUse)
-        statdata = meanDensityByDay(subsampledata, ordersToInclude = arthropods, plotVar = 'meanDensity', inputYear = 2015, inputSite = site)
+        statdata = meanDensityByDay(subsampledata, ordersToInclude = arthropods, plotVar = 'meanDensity', inputYear = year, inputSite = site)
         
         # Max day without fit
         max.jd = statdata$julianday[statdata$meanDensity == max(statdata$meanDensity)]
