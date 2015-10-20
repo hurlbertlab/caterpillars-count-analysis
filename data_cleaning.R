@@ -32,9 +32,12 @@ surveys$survey = as.character(surveys$survey)
 # Create effortByDay dataframe for use in summary functions
 surveys$date = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d"))
 effortByDay = data.frame(table(surveys[, c('site', 'date')]))
-names(effortByDay) = c('site', 'date', 'numSurveys') # need to add julianday
+names(effortByDay) = c('site', 'date', 'numSurveys')
 effortByDay = effortByDay[effortByDay$numSurveys!=0, ]
 effortByDay$date = as.POSIXlt(effortByDay$date, format = "%Y-%m-%d")
+effortByDay$julianday = yday(effortByDay$date)
+tempyear <- substring(effortByDay$date, 1, 4)
+effortByDay$year = tempyear 
 
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', all.x = T)
