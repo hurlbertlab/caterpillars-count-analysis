@@ -19,13 +19,14 @@ maxjdStat = function(alldata, arthropods, site, year) {
                               max.jd = integer(), 
                               max.jd.quad = numeric(), 
                               R2.quad = numeric(),
-                              p.quad = numeric())
+                              p.quad = numeric(),
+                              p.quad2 = numeric())
 
 for (circleSample in 4:(length(unique(alldata$circle)))) {
   for (i in 1:10) {
   circlesToUse = sample(1:12, circleSample, replace = F)
   sampledata = subset(alldata, circle %in% circlesToUse)
-    for (freq in 1:8) {
+    for (freq in 1:6) {
       for (startval in 1:freq) {
         uniqJDs = unique(sampledata$julianday)
         jdsToUse = uniqJDs[seq(startval, length(uniqJDs), freq)]
@@ -43,11 +44,13 @@ for (circleSample in 4:(length(unique(alldata$circle)))) {
           quad = lm(meanDensity ~ julianday + I(julianday^2), data = statdata)
           R2.quad = summary(quad)$r.squared
           p.quad = summary(quad)$coefficients[2,4]
+          p.quad2 = summary(quad)$coefficients[3,4]
           quad.predict = quad$coefficients[1] + quad$coefficients[2]*jd + quad$coefficients[3]*jd^2
           max.jd.quad = jd[quad.predict == max(quad.predict)]
         } else {
           R2.quad = NA
           p.quad = NA
+          p.quad2 = NA
           max.jd.quad = NA
         }
 
@@ -58,7 +61,8 @@ for (circleSample in 4:(length(unique(alldata$circle)))) {
                                     max.jd, 
                                     max.jd.quad, 
                                     R2.quad,
-                                    p.quad)
+                                    p.quad,
+                                    p.quad2)
         
         samp.dataframe = rbind(samp.dataframe, temp.dataframe)
       }
@@ -69,15 +73,78 @@ for (circleSample in 4:(length(unique(alldata$circle)))) {
 return(samp.dataframe)
 } # end function
 
+circleSample = 12
+alldata = amsurvey.pr
+freq = 1
+startval = 1
+arthropods = multorders
+site = 117
+minLength = 5
+inputSite = 117
+inputYear = 2015
+year = 2015
 
-# make if/else for when meanDensity is NA for quad and cub fits within function
 
 
+# About the dataframe created:
+# circle: number of survey circles used for calculations
+# i: 
+# freq: inverse frequency (a freq of 6 is 1 survey for every 6 done maximally)
+# startval: integer denoting which julian day to start freq pattern
+# max.jd: maximum julian data based on raw data
+# max.jd.quad: 
 
 
+multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
+PRam.max = maxjdStat(amsurvey.pr, multorders, 117, 2015)
+write.table(PRam.max, file = "PR_am_survey_max_jd")
+
+colfunc <- colorRampPalette(c('blue', 'green'))
+
+plot(PRam.max[PRam.max$circle == 4,]$freq, PRam.max[PRam.max$circle == 4,]$max.jd.quad, col = colfunc(1), pch = 16)
+points(PRam.max[PRam.max$circle == 5,]$freq, PRam.max[PRam.max$circle == 5,]$max.jd.quad, col = colfunc(2), pch = 16)
+points(PRam.max[PRam.max$circle == 6,]$freq, PRam.max[PRam.max$circle == 6,]$max.jd.quad, col = colfunc(3),, pch = 16)
+points(PRam.max[PRam.max$circle == 7,]$freq, PRam.max[PRam.max$circle == 7,]$max.jd.quad, col = colfunc(4), pch = 16)
+points(PRam.max[PRam.max$circle == 8,]$freq, PRam.max[PRam.max$circle == 8,]$max.jd.quad, col = colfunc(5), pch = 16)
+points(PRam.max[PRam.max$circle == 9,]$freq, PRam.max[PRam.max$circle == 9,]$max.jd.quad, col = colfunc(6), pch = 16)
+points(PRam.max[PRam.max$circle == 10,]$freq, PRam.max[PRam.max$circle == 10,]$max.jd.quad, col = colfunc(7), pch = 16)
+points(PRam.max[PRam.max$circle == 11,]$freq, PRam.max[PRam.max$circle == 11,]$max.jd.quad, col = colfunc(8), pch = 16)
+points(PRam.max[PRam.max$circle == 12,]$freq, PRam.max[PRam.max$circle == 12,]$max.jd.quad, col = colfunc(9), pch = 16)
+
+# 'numCircles', 'aveMax', 'stanDev', 'aveMaxQuad', 'stanDevQuad'
+
+aveMaxPerCircleNum = data.frame(numCircles = interger(), aveMax = numeric(), )
+
+for (i in 4:(max(PRam.max$circle))) {
+
+  aveMax = mean(PRam.max[PRam.max$circle == i,]$max.jd, na.rm = T)
+  stanDev = sd(PRam.max[PRam.max$circle == i,]$max.jd, na.rm = T)
+  aveMaxQuad = mean(PRam.max[PRam.max$circle == i,]$max.jd.quad, na.rm = T)
+  stanDevQuad = sd(PRam.max[PRam.max$circle == i,]$max.jd.quad, na.rm = T)
+
+  temp = c(numCircles = i, aveMax = aveMax, stanDev = stanDev, aveMaxQuad = aveMaxQuad, stanDevQuad = stanDevQuad)
+
+  aveMaxPerCircleNum = rbind(aveMaxPerCircleNum, temp)
+}
+
+aveMaxPerCircleNum = data.frame(aveMaxPerCircleNum$num)
 
 
+#at meeting
+mean.maxjd.quad = aggregate(PRam.max$max.jd.quad, by = list(PRam.max$circle, PRam.max$freq), function(x) mean(x, na.rm = T))
+mean.maxjds = aggregate(PRam.max$max.jd, by = list(PRam.max$circle, PRam.max$freq), function(x) mean(x, na.rm = T))
+plot(mean.maxjd.quad$Group.2, mean.maxjd.quad$x, col = mean.maxjd.quad$Group.1, pch = 16)
 
+statdata = meanDensityByDay(subsampledata, ordersToInclude = arthropods, plotVar = 'meanDensity', inputYear = year, inputSite = site)
+plot(statdata$julianday, statdata$meanDensity)
+statdata = meanDensityByDay(subsampledata, ordersToInclude = 'LEPL', plotVar = 'meanDensity', inputYear = year, inputSite = site)
+plot(statdata$julianday, statdata$meanDensity)
+spline(statdata$julianday, statdata$meanDensity)
+points(spline(statdata$julianday, statdata$meanDensity, n = 3), type = 'l', col = 'red')
+points(spline(statdata$julianday, statdata$meanDensity, n = 5), type = 'l', col = 'red')
+points(spline(statdata$julianday, statdata$meanDensity, n = 8), type = 'l', col = 'red')
+points(spline(statdata$julianday, statdata$meanDensity, n = 12), type = 'l', col = 'red')
+points(spline(statdata$julianday, statdata$meanDensity, n = 34), type = 'l', col = 'blue')
 
 #------------------------------------------------------------------------------------------------------------
 ### Quadratic Fit
