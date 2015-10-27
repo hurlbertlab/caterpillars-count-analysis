@@ -111,9 +111,29 @@ points(PRam.max[PRam.max$circle == 10,]$freq, PRam.max[PRam.max$circle == 10,]$m
 points(PRam.max[PRam.max$circle == 11,]$freq, PRam.max[PRam.max$circle == 11,]$max.jd.quad, col = colfunc(8), pch = 16)
 points(PRam.max[PRam.max$circle == 12,]$freq, PRam.max[PRam.max$circle == 12,]$max.jd.quad, col = colfunc(9), pch = 16)
 
+
+
+multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
+PRbs.max = maxjdStat(beatsheet.pr, multorders, 117, 2015)
+colfunc <- colorRampPalette(c('blue', 'green'))
+
+plot(PRbs.max[PRbs.max$circle == 4,]$freq, PRbs.max[PRbs.max$circle == 4,]$max.jd.quad, col = colfunc(1), pch = 16)
+points(PRbs.max[PRbs.max$circle == 5,]$freq, PRbs.max[PRbs.max$circle == 5,]$max.jd.quad, col = colfunc(2), pch = 16)
+points(PRbs.max[PRbs.max$circle == 6,]$freq, PRbs.max[PRbs.max$circle == 6,]$max.jd.quad, col = colfunc(3),, pch = 16)
+points(PRbs.max[PRbs.max$circle == 7,]$freq, PRbs.max[PRbs.max$circle == 7,]$max.jd.quad, col = colfunc(4), pch = 16)
+points(PRbs.max[PRbs.max$circle == 8,]$freq, PRbs.max[PRbs.max$circle == 8,]$max.jd.quad, col = colfunc(5), pch = 16)
+points(PRbs.max[PRbs.max$circle == 9,]$freq, PRbs.max[PRbs.max$circle == 9,]$max.jd.quad, col = colfunc(6), pch = 16)
+points(PRbs.max[PRbs.max$circle == 10,]$freq, PRbs.max[PRbs.max$circle == 10,]$max.jd.quad, col = colfunc(7), pch = 16)
+points(PRbs.max[PRbs.max$circle == 11,]$freq, PRbs.max[PRbs.max$circle == 11,]$max.jd.quad, col = colfunc(8), pch = 16)
+points(PRbs.max[PRbs.max$circle == 12,]$freq, PRbs.max[PRbs.max$circle == 12,]$max.jd.quad, col = colfunc(9), pch = 16)
+
+
+
+
+
 # 'numCircles', 'aveMax', 'stanDev', 'aveMaxQuad', 'stanDevQuad'
 
-aveMaxPerCircleNum = data.frame(numCircles = interger(), aveMax = numeric(), )
+aveMaxPerCircleNum = data.frame(numCircles = integer(), aveMax = numeric(), ) #this function doesn't work
 
 for (i in 4:(max(PRam.max$circle))) {
 
