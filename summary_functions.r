@@ -106,12 +106,12 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
     temp3 = merge(effort[,c('site','numSurveys','julianday','year')], temp2, by = c('julianday', 'site', 'year'), all.y = T) 
   } else {
     # Need to figure out a different way to get through function where there is no data
-    temp3$julianday = 0 # can I do this
-    temp3$site = inputSite
-    temp3$year = inputYear
-    temp3$numSurveys = 1 # (just to have a number that the zeroes are divided by)
-    temp3$totalCount = 0
-    temp3$numSurveysGTzero = 0
+    temp3 <- data.frame(julianday = 0, # can I do this
+    site = inputSite,
+    year = inputYear,
+    numSurveys = 1, # (just to have a number that the zeroes are divided by)
+    totalCount = 0,
+    numSurveysGTzero = 0)
   }
   temp3$totalCount[is.na(temp3$totalCount)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
