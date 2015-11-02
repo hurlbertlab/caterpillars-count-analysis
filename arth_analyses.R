@@ -73,13 +73,12 @@ max.jd.auchquad = jd[auchquad.predict == max(auchquad.predict)]
 
 title(xlab = "Julian day",
       ylab = "Mean density",
-      outer = TRUE, line = 2, cex.main = 2)
+      outer = TRUE, line = 2, cex.lab = 2)
 
 }
 
 
 pdf('amsurvey.pr.pdf', width = 7, height = 9)
-dev.new()
 arthplot(amsurvey.pr, site = 117, year = 2015)
 title(main = 'Prairie Ridge am survey', outer = T, cex.main = 2)
 dev.off()
@@ -93,9 +92,28 @@ title(main = 'NCBG am survey', outer = T, cex.main = 2)
 arthplot(beatsheet.bg, site = 8892356, year = 2015)
 title(main = 'NCBG beat sheet', outer = T, cex.main = 2)
 
+#-----------------------------------------------------------------------------------------
 
+LEPLprbs = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'LEPL', inputYear = 2015, inputSite = 117)
+ORTHprbs = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'ORTH', inputYear = 2015, inputSite = 117)
+AUCHprbs = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'AUCH', inputYear = 2015, inputSite = 117)
 
+par(mfrow = c(1, 3))
 
+LEPLORTH = merge(LEPLprbs, ORTHprbs, by = 'julianday', all = F)
+plot(LEPLORTH$meanDensity.x, LEPLORTH$meanDensity.y, main = 'LEPL & ORTH')
+LEPLORTHlm = lm(LEPLORTH$meanDensity.y ~ LEPLORTH$meanDensity.x)
+abline(LEPLORTHlm)
+
+LEPLAUCH = merge(LEPLprbs, AUCHprbs, by = 'julianday', all = F)
+plot(LEPLAUCH$meanDensity.x, LEPLAUCH$meanDensity.y, main = 'LEPL & AUCH')
+LEPLAUCHlm = lm(LEPLAUCH$meanDensity.y ~ LEPLAUCH$meanDensity.x)
+abline(LEPLAUCHlm)
+
+ORTHAUCH = merge(ORTHprbs, AUCHprbs, by = 'julianday', all = F)
+plot(ORTHAUCH$meanDensity.x, ORTHAUCH$meanDensity.y, main = 'ORTH & AUCH')
+ORTHAUCHlm = lm(ORTHAUCH$meanDensity.y ~ ORTHAUCH$meanDensity.x)
+abline(ORTHAUCHlm)
 
 
 
