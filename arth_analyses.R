@@ -3,7 +3,8 @@
 ######################
 
 
-# By order, AM surveys
+# Function for plotting the mean density over julian days for six arthropod orders 
+# (LEPL, ORTH, COLE, HEMI, ARAN, AUCH) as a multiplot
 
 arthplot = function(cleandata, ebd = effortByDay, site, year) {
 
@@ -77,11 +78,11 @@ title(xlab = "Julian day",
 
 }
 
+# Create 4-page pdf of the multiplots for visual PR, beat sheet PR, visual BG, beat sheet BG
+pdf('arth_density_multiplots.pdf', width = 7, height = 9)
 
-pdf('amsurvey.pr.pdf', width = 7, height = 9)
 arthplot(amsurvey.pr, site = 117, year = 2015)
 title(main = 'Prairie Ridge am survey', outer = T, cex.main = 2)
-dev.off()
 
 arthplot(beatsheet.pr, site = 117, year = 2015)
 title(main = 'Prairie Ridge beat sheet', outer = T, cex.main = 2)
@@ -92,8 +93,11 @@ title(main = 'NCBG am survey', outer = T, cex.main = 2)
 arthplot(beatsheet.bg, site = 8892356, year = 2015)
 title(main = 'NCBG beat sheet', outer = T, cex.main = 2)
 
+dev.off()
 #-----------------------------------------------------------------------------------------
 
+
+# Comparing peaks between orders
 LEPLprbs = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'LEPL', inputYear = 2015, inputSite = 117)
 ORTHprbs = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'ORTH', inputYear = 2015, inputSite = 117)
 AUCHprbs = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'AUCH', inputYear = 2015, inputSite = 117)
@@ -114,78 +118,6 @@ ORTHAUCH = merge(ORTHprbs, AUCHprbs, by = 'julianday', all = F)
 plot(ORTHAUCH$meanDensity.x, ORTHAUCH$meanDensity.y, main = 'ORTH & AUCH')
 ORTHAUCHlm = lm(ORTHAUCH$meanDensity.y ~ ORTHAUCH$meanDensity.x)
 abline(ORTHAUCHlm)
-
-
-
-
-# By order, beat sheet surveys
-
-par(mfrow = c(3, 2), mar = c(5, 5, 2, 2))
-
-lepl = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'LEPL', inputYear = '2015', inputSite = 117, plot = T, new = T, lwd = 2, main = 'LEPL')
-leplquad = lm(meanDensity ~ julianday + I(julianday^2), data = lepl)
-R2.quad = summary(leplquad)$r.squared
-p.quad = summary(leplquad)$coefficients[2,4]
-p.quad2 = summary(leplquad)$coefficients[3,4]
-jd = c(min(lepl$julianday):max(lepl$julianday))
-leplquad.predict = leplquad$coefficients[1] + leplquad$coefficients[2]*jd + leplquad$coefficients[3]*jd^2
-points(jd, leplquad.predict, type = 'l')
-max.jd.leplquad = jd[leplquad.predict == max(leplquad.predict)]
-
-orth = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'ORTH', inputYear = '2015', inputSite = 117, plot = T, new = T, lwd = 2, main = 'ORTH')
-orthquad = lm(meanDensity ~ julianday + I(julianday^2), data = orth)
-R2.quad = summary(orthquad)$r.squared
-p.quad = summary(orthquad)$coefficients[2,4]
-p.quad2 = summary(orthquad)$coefficients[3,4]
-jd = c(min(orth$julianday):max(orth$julianday))
-orthquad.predict = orthquad$coefficients[1] + orthquad$coefficients[2]*jd + orthquad$coefficients[3]*jd^2
-points(jd, orthquad.predict, type = 'l')
-max.jd.orthquad = jd[orthquad.predict == max(orthquad.predict)]
-
-cole = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'COLE', inputYear = '2015', inputSite = 117, plot = T, new = T, lwd = 2, main = 'COLE')
-colequad = lm(meanDensity ~ julianday + I(julianday^2), data = cole)
-R2.quad = summary(colequad)$r.squared
-p.quad = summary(colequad)$coefficients[2,4]
-p.quad2 = summary(colequad)$coefficients[3,4]
-jd = c(min(cole$julianday):max(cole$julianday))
-colequad.predict = colequad$coefficients[1] + colequad$coefficients[2]*jd + colequad$coefficients[3]*jd^2
-points(jd, colequad.predict, type = 'l')
-max.jd.colequad = jd[colequad.predict == max(colequad.predict)]
-
-hemi = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'HEMI', inputYear = '2015', inputSite = 117, plot = T, new = T, lwd = 2, main = 'HEMI')
-hemiquad = lm(meanDensity ~ julianday + I(julianday^2), data = hemi)
-R2.quad = summary(hemiquad)$r.squared
-p.quad = summary(hemiquad)$coefficients[2,4]
-p.quad2 = summary(hemiquad)$coefficients[3,4]
-jd = c(min(hemi$julianday):max(hemi$julianday))
-hemiquad.predict = hemiquad$coefficients[1] + hemiquad$coefficients[2]*jd + hemiquad$coefficients[3]*jd^2
-points(jd, hemiquad.predict, type = 'l')
-max.jd.hemiquad = jd[hemiquad.predict == max(hemiquad.predict)]
-
-aran = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'ARAN', inputYear = '2015', inputSite = 117, plot = T, new = T, lwd = 2, main = 'ARAN')
-aranquad = lm(meanDensity ~ julianday + I(julianday^2), data = aran)
-R2.quad = summary(aranquad)$r.squared
-p.quad = summary(aranquad)$coefficients[2,4]
-p.quad2 = summary(aranquad)$coefficients[3,4]
-jd = c(min(aran$julianday):max(aran$julianday))
-aranquad.predict = aranquad$coefficients[1] + aranquad$coefficients[2]*jd + aranquad$coefficients[3]*jd^2
-points(jd, aranquad.predict, type = 'l')
-max.jd.aranquad = jd[aranquad.predict == max(aranquad.predict)]
-
-auch = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = 'AUCH', inputYear = '2015', inputSite = 117, plot = T, new = T, lwd = 2, main = 'AUCH')
-auchquad = lm(meanDensity ~ julianday + I(julianday^2), data = auch)
-R2.quad = summary(auchquad)$r.squared
-p.quad = summary(auchquad)$coefficients[2,4]
-p.quad2 = summary(auchquad)$coefficients[3,4]
-jd = c(min(auch$julianday):max(auch$julianday))
-auchquad.predict = auchquad$coefficients[1] + auchquad$coefficients[2]*jd + auchquad$coefficients[3]*jd^2
-points(jd, auchquad.predict, type = 'l')
-max.jd.auchquad = jd[auchquad.predict == max(auchquad.predict)]
-
-
-
-
-
 
 
 
