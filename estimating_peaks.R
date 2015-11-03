@@ -1,14 +1,14 @@
 # Script for estimating peaks based on varying surveying methods and varying
 # number of surveys a month.
-# Both quadratic and cubic fits.
 
-# Run summary_functions.r, data_cleaning.R, general_plotting.R
-source('summary_functions.r')
+# Run summary_functions.r and data_cleaning.R
+source('summary_functions.r') 
 source('data_cleaning.R')
 
 
-
-
+# Function for creating a dataframe that has the max julian day 
+# (experimental and quadratic fit) calculated based on # circles surveyed,
+# frequency of surveys, and start day.
 
 maxjdStat = function(alldata, arthropods, site, year) {
   
@@ -73,6 +73,7 @@ for (circleSample in 4:(length(unique(alldata$circle)))) {
 return(samp.dataframe)
 } # end function
 
+# For running for loop inside function
 circleSample = 12
 alldata = amsurvey.pr
 freq = 1
@@ -85,16 +86,18 @@ inputYear = 2015
 year = 2015
 
 
-
 # About the dataframe created:
 # circle: number of survey circles used for calculations
 # i: 
 # freq: inverse frequency (a freq of 6 is 1 survey for every 6 done maximally)
 # startval: integer denoting which julian day to start freq pattern
-# max.jd: maximum julian data based on raw data
-# max.jd.quad: 
+# max.jd: maximum julian day based on raw data
+# max.jd.quad: maximum julian day based on quadratic fit
 
 
+# Example plotting results from used of maxjdStat function
+
+# Prairie Ridge morning visual surveys
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 PRam.max = maxjdStat(amsurvey.pr, multorders, 117, 2015)
 write.table(PRam.max, file = "PR_am_survey_max_jd")
@@ -103,7 +106,7 @@ colfunc <- colorRampPalette(c('blue', 'green'))
 
 plot(PRam.max[PRam.max$circle == 4,]$freq, PRam.max[PRam.max$circle == 4,]$max.jd.quad, col = colfunc(1), pch = 16)
 points(PRam.max[PRam.max$circle == 5,]$freq, PRam.max[PRam.max$circle == 5,]$max.jd.quad, col = colfunc(2), pch = 16)
-points(PRam.max[PRam.max$circle == 6,]$freq, PRam.max[PRam.max$circle == 6,]$max.jd.quad, col = colfunc(3),, pch = 16)
+points(PRam.max[PRam.max$circle == 6,]$freq, PRam.max[PRam.max$circle == 6,]$max.jd.quad, col = colfunc(3), pch = 16)
 points(PRam.max[PRam.max$circle == 7,]$freq, PRam.max[PRam.max$circle == 7,]$max.jd.quad, col = colfunc(4), pch = 16)
 points(PRam.max[PRam.max$circle == 8,]$freq, PRam.max[PRam.max$circle == 8,]$max.jd.quad, col = colfunc(5), pch = 16)
 points(PRam.max[PRam.max$circle == 9,]$freq, PRam.max[PRam.max$circle == 9,]$max.jd.quad, col = colfunc(6), pch = 16)
@@ -111,15 +114,14 @@ points(PRam.max[PRam.max$circle == 10,]$freq, PRam.max[PRam.max$circle == 10,]$m
 points(PRam.max[PRam.max$circle == 11,]$freq, PRam.max[PRam.max$circle == 11,]$max.jd.quad, col = colfunc(8), pch = 16)
 points(PRam.max[PRam.max$circle == 12,]$freq, PRam.max[PRam.max$circle == 12,]$max.jd.quad, col = colfunc(9), pch = 16)
 
-
-
+# Prairie Ridge morning beat sheet surveys
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 PRbs.max = maxjdStat(beatsheet.pr, multorders, 117, 2015)
 colfunc <- colorRampPalette(c('blue', 'green'))
 
 plot(PRbs.max[PRbs.max$circle == 4,]$freq, PRbs.max[PRbs.max$circle == 4,]$max.jd.quad, col = colfunc(1), pch = 16)
 points(PRbs.max[PRbs.max$circle == 5,]$freq, PRbs.max[PRbs.max$circle == 5,]$max.jd.quad, col = colfunc(2), pch = 16)
-points(PRbs.max[PRbs.max$circle == 6,]$freq, PRbs.max[PRbs.max$circle == 6,]$max.jd.quad, col = colfunc(3),, pch = 16)
+points(PRbs.max[PRbs.max$circle == 6,]$freq, PRbs.max[PRbs.max$circle == 6,]$max.jd.quad, col = colfunc(3), pch = 16)
 points(PRbs.max[PRbs.max$circle == 7,]$freq, PRbs.max[PRbs.max$circle == 7,]$max.jd.quad, col = colfunc(4), pch = 16)
 points(PRbs.max[PRbs.max$circle == 8,]$freq, PRbs.max[PRbs.max$circle == 8,]$max.jd.quad, col = colfunc(5), pch = 16)
 points(PRbs.max[PRbs.max$circle == 9,]$freq, PRbs.max[PRbs.max$circle == 9,]$max.jd.quad, col = colfunc(6), pch = 16)
@@ -136,7 +138,7 @@ colfunc <- colorRampPalette(c('blue', 'green'))
 
 plot(PRbs.max[PRbs.max$circle == 4,]$freq, PRbs.max[PRbs.max$circle == 4,]$max.jd.quad, col = colfunc(1), pch = 16)
 points(PRbs.max[PRbs.max$circle == 5,]$freq, PRbs.max[PRbs.max$circle == 5,]$max.jd.quad, col = colfunc(2), pch = 16)
-points(PRbs.max[PRbs.max$circle == 6,]$freq, PRbs.max[PRbs.max$circle == 6,]$max.jd.quad, col = colfunc(3),, pch = 16)
+points(PRbs.max[PRbs.max$circle == 6,]$freq, PRbs.max[PRbs.max$circle == 6,]$max.jd.quad, col = colfunc(3), pch = 16)
 points(PRbs.max[PRbs.max$circle == 7,]$freq, PRbs.max[PRbs.max$circle == 7,]$max.jd.quad, col = colfunc(4), pch = 16)
 points(PRbs.max[PRbs.max$circle == 8,]$freq, PRbs.max[PRbs.max$circle == 8,]$max.jd.quad, col = colfunc(5), pch = 16)
 points(PRbs.max[PRbs.max$circle == 9,]$freq, PRbs.max[PRbs.max$circle == 9,]$max.jd.quad, col = colfunc(6), pch = 16)
@@ -149,7 +151,9 @@ points(PRbs.max[PRbs.max$circle == 12,]$freq, PRbs.max[PRbs.max$circle == 12,]$m
 
 # 'numCircles', 'aveMax', 'stanDev', 'aveMaxQuad', 'stanDevQuad'
 
-aveMaxPerCircleNum = data.frame(numCircles = integer(), aveMax = numeric(), ) #this function doesn't work
+# Function for calculating average max and standard deviation for each circle - INCOMPLETE
+aveMaxPerCircleNum = data.frame(numCircles = integer(), aveMax = numeric(), stanDev = numeric(), 
+                                aveMaxQuad = numeric(), stanDevQuad = numeric()) #this function doesn't work
 
 for (i in 4:(max(PRam.max$circle))) {
 
@@ -166,7 +170,7 @@ for (i in 4:(max(PRam.max$circle))) {
 aveMaxPerCircleNum = data.frame(aveMaxPerCircleNum$num)
 
 
-#at meeting
+# at meeting Oct. 23, 2015
 mean.maxjd.quad = aggregate(PRam.max$max.jd.quad, by = list(PRam.max$circle, PRam.max$freq), function(x) mean(x, na.rm = T))
 mean.maxjds = aggregate(PRam.max$max.jd, by = list(PRam.max$circle, PRam.max$freq), function(x) mean(x, na.rm = T))
 plot(mean.maxjd.quad$Group.2, mean.maxjd.quad$x, col = mean.maxjd.quad$Group.1, pch = 16)
@@ -182,6 +186,9 @@ points(spline(statdata$julianday, statdata$meanDensity, n = 8), type = 'l', col 
 points(spline(statdata$julianday, statdata$meanDensity, n = 12), type = 'l', col = 'red')
 points(spline(statdata$julianday, statdata$meanDensity, n = 34), type = 'l', col = 'blue')
 
+
+
+# Everything below this line is a long way of doing the maxjdStat function.
 #------------------------------------------------------------------------------------------------------------
 ### Quadratic Fit
 
