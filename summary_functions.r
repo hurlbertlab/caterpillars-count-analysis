@@ -75,7 +75,7 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
                        inputSite,
                        inputYear,
                        plot = F,
-                       plotVar = 'meanDensity', # 'meanDensity' or 'fracSurveys'
+                       plotVar = 'meanDensity', # 'meanDensity' or 'fracSurveys' or 'meanBiomass'
                        new = T,
                        color = 'black',
                        ...)                  
@@ -98,7 +98,8 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
     
   } else {
     temp2 = ddply(temp, .(site, julianday, year), summarize, 
-                  totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])))
+                  totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])), 
+                  totalBiomass = sum(biomass))
   }
   
   
@@ -116,6 +117,7 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
   temp3$totalCount[is.na(temp3$totalCount)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
   temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
+  temp3$meanBiomass = temp3$totalBiomass/temp3$numSurveys
   temp3$julianday = as.numeric(as.character(temp3$julianday))
   
   
