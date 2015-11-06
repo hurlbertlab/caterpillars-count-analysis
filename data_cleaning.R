@@ -86,20 +86,23 @@ cleandata <- cleandata[!(cleandata$arthCode == "LEPL" & cleandata$count > 10),]
 
 # Cleaning beat sheets (PR and BG) and isolating # leaves into a new column
 beatsheet = cleandata[grep("BEAT SHEET", cleandata$notes.x),]
-leavesNumTemp <- word(beatsheet$notes.x, -1, sep = "= ")
-leavesNumTemp1 <- word(leavesNumTemp, -1, sep = "BEAT SHEET; Leaves  ")
-leavesNumTemp2 <- word(leavesNumTemp1, -1, sep = "BEAT SHEET; Leaves=")
+leavesNumTemp0 <- word(beatsheet$notes.x, -1, sep = "BEAT SHEET; ")
+leavesNumTemp <- word(leavesNumTemp0, -1, sep = "= ")
+leavesNumTemp1 <- word(leavesNumTemp, -1, sep = "Leaves  ")
+leavesNumTemp2 <- word(leavesNumTemp1, -1, sep = "Leaves=")
 leavesNumTemp3 <- word(leavesNumTemp2, 1, sep = ";")
 leavesNumTemp4 <- word(leavesNumTemp3, 1, sep = ",")
 leavesNumTemp5 <- gsub(" ", "", leavesNumTemp4)
 leavesNumTemp6 <- gsub("\n", "", leavesNumTemp5)
-leavesNumTemp7 <- gsub("Unknown", "unknown", leavesNumTemp6)
+leavesNumTemp7 <- gsub("Unknown", NA, leavesNumTemp6)
+leavesNumTemp8 <- gsub("unknown", NA, leavesNumTemp7)
 beatsheet$leavesNum <- as.numeric(leavesNumTemp7)
 cleandata = merge(cleandata, beatsheet, by = c("surveyID", "userID", "site", "survey", "circle", "date",
                                    "julianday", "plantSp", "herbivory", "arthropod", "arthCode",
                                    "length", "count", "notes.y", "notes.x", "wetLeaves", "year"), all = T)
 
 # Not sure if beat sheet merging is appropriate
+# Fixed but may still want to check - "NAs introduced by coercion" error even though only numbers show up in table
 
 
 # Subsetting 2015 data for use in estimating_peaks.R, with a min length of 5 mm
