@@ -10,7 +10,12 @@ source('data_cleaning.R')
 # (experimental and quadratic fit) calculated based on # circles surveyed,
 # frequency of surveys, and start day.
 
-maxjdStat = function(alldata, arthropods, site, year) {
+maxjdStat = function(alldata,      # clean dataset
+                     arthropods,   # arthropod orders to include (use regorders object when finding max for biomass)
+                     site, 
+                     year, 
+                     inputVar = 'meanDensity') # 'meanDensity' or 'fracSurveys' or 'meanBiomass'
+  {
   
   samp.dataframe = data.frame(circle = integer(),
                               i = integer(),
@@ -31,17 +36,17 @@ for (circleSample in 4:(length(unique(alldata$circle)))) {
         uniqJDs = unique(sampledata$julianday)
         jdsToUse = uniqJDs[seq(startval, length(uniqJDs), freq)]
         subsampledata = subset(sampledata, julianday %in% jdsToUse)
-        statdata = meanDensityByDay(subsampledata, ordersToInclude = arthropods, plotVar = 'meanDensity', inputYear = year, inputSite = site)
+        statdata = meanDensityByDay(subsampledata, ordersToInclude = arthropods, inputYear = year, inputSite = site)
         
         # Max day without fit
-        max.jd = statdata$julianday[statdata$meanDensity == max(statdata$meanDensity)]
+        max.jd = statdata$julianday[statdata$inputVar == max(statdata$inputVar)]
         
         # For smooth fits:
         jd = c(min(statdata$julianday):max(statdata$julianday))
         
         # Run quadratic model
-        if (length(statdata$meanDensity[statdata$meanDensity > 0]) >= 4) {
-          quad = lm(meanDensity ~ julianday + I(julianday^2), data = statdata)
+        if (length(statdata$inputVar[statdata$inputVar > 0]) >= 4) {
+          quad = lm(inputVar ~ julianday + I(julianday^2), data = statdata)
           R2.quad = summary(quad)$r.squared
           p.quad = summary(quad)$coefficients[2,4]
           p.quad2 = summary(quad)$coefficients[3,4]
