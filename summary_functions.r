@@ -57,15 +57,8 @@ surveyCount = function(events, site, year) {
 }
 
 
-#effortByDay = function(surveyData)
-#{
-#  effortByDay = data.frame(table(unique(surveyData[, c('surveyID', 'julianday')])$julianday))
-#  names(effortByDay) = c('julianday', 'numSurveys')
-#  return(effortByDay)
-#}
-
-
-# Calculate mean density per survey per julian day
+# Function for calculating mean density, mean biomass, or fraction of surveys 
+# with a certain Order per Julian day
 
 meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders tables
                             effort = effortByDay, # dataframe with effort by day in data_cleaning.R
@@ -102,33 +95,39 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
                   totalBiomass = sum(biomass))
   }
   
-  
+  # When no data is available for parameters set:
   if(nrow(temp2) > 0) {
     temp3 = merge(effort[,c('site','numSurveys','julianday','year')], temp2, by = c('julianday', 'site', 'year'), all.y = T) 
   } else {
-    # Need to figure out a different way to get through function where there is no data
-    temp3 <- data.frame(julianday = 0, # can I do this
+    temp3 <- data.frame(julianday = 0,
     site = inputSite,
     year = inputYear,
-    numSurveys = 1, # (just to have a number that the zeroes are divided by)
+    numSurveys = 1, # to have a number that the zeroes are divided by
     totalCount = 0,
     numSurveysGTzero = 0)
   }
+  
+  # Calculations shown in dataframe output:
   temp3$totalCount[is.na(temp3$totalCount)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
   temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
   temp3$meanBiomass = temp3$totalBiomass/temp3$numSurveys
   temp3$julianday = as.numeric(as.character(temp3$julianday))
   
-  
+  # Plotting the chosen variable:
   if (plot & new) {
     plot(temp3$julianday, temp3[, plotVar], type = 'l', 
          col = color, xlab = "Julian day", ylab = plotVar, ...)
+  # Adding to an existing plot:
   } else if (plot & new==F) {
     points(temp3$julianday, temp3[, plotVar], type = 'l', col = color, ...)
   }
   return(temp3)
 }
+
+
+
+# ----------------------------------------------------------------------------------------
 
 
 # Calculate mean density per survey per week (to smooth data)

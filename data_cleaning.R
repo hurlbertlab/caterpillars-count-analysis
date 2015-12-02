@@ -16,6 +16,9 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
+# Set working directory
+# setwd('c:/git/caterpillars-count-analysis')
+
 # Read in data
 surveys = read.csv('data/tbl_surveys.csv', header=F)
 orders = read.csv('data/tbl_orders.csv', header=F)
@@ -30,7 +33,7 @@ names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
 surveys$survey = as.character(surveys$survey)
 
 # Create effortByDay dataframe for use in summary functions
-surveys$date = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d"))
+surveys$date = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%m/%d/%Y"))
 effortByDay = data.frame(table(surveys[, c('site', 'date')]))
 names(effortByDay) = c('site', 'date', 'numSurveys')
 effortByDay = effortByDay[effortByDay$numSurveys!=0, ]
@@ -42,7 +45,7 @@ effortByDay$year = tempyear
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', all.x = T)
 
-orders2$date = as.POSIXlt(word(orders2$dateStart, 1, sep = " "), format = "%Y-%m-%d")
+orders2$date = as.POSIXlt(word(orders2$dateStart, 1, sep = " "), format = "%m/%d/%Y")
 orders2$julianday = yday(orders2$date)
 
 orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
@@ -66,20 +69,20 @@ tempwet <- sort(c(grep("wet leaves", cleandata$notes.x), grep("Wet leaves", clea
 cleandata$wetLeaves = rep('no', nrow(cleandata))
 cleandata$wetLeaves[tempwet] = 'yes'
 
-# temp fix of date class
+# Fix date class
 cleandata$date = as.character(cleandata$date)
 
-# add a year column
+# Add a year column
 tempdate <- substring(cleandata$date, 1, 4)
 cleandata$year = tempdate
 
-# List of unique survey events
+# Create list of unique survey events
 events = unique(cleandata[, c("surveyID", "userID", "date", "year", "julianday", "site", "circle", "survey")])
 
 # Change arthCodes to 'NONE' that were previously NA
 cleandata$arthCode[is.na(cleandata$arthCode)] = "NONE"
 
-# Taking out large colonies completely:
+# Take out large caterpillar colonies
 cleandata <- cleandata[!(cleandata$arthCode == "LEPL" & cleandata$count > 10),]
 # or
 #cleandata$count[cleandata$arthCode == "LEPL" & cleandata$count > 5] = 5
@@ -101,15 +104,44 @@ cleandata = merge(cleandata, beatsheet, by = c("surveyID", "userID", "site", "su
                                    "julianday", "plantSp", "herbivory", "arthropod", "arthCode",
                                    "length", "count", "notes.y", "notes.x", "wetLeaves", "year"), all = T)
 
-# Not sure if beat sheet merging is appropriate
 # Fixed but may still want to check - "NAs introduced by coercion" error even though only numbers show up in table
 
 
-# Subsetting 2015 data for use in estimating_peaks.R, with a min length of 5 mm
 
+#-----------------------------------------------------------------------------------------------------------------
+
+## Calculating biomass and adding this as a column to the cleandata
+
+# Source summary_functions.r if have not already
+
+# Create empty biomass vector
+cleandata$biomass = NA
+
+# y = a(x)^b
+# Read in arthropod regression data with slope = b and intercept = log(a)
+reg.data.temp <- read.csv('arth_regression.csv', header = T, sep = ',')
+# Calculate a (the coefficient)
+reg.data.temp$coefficient <- 10^(reg.data.temp$intercept)
+
+# Create list of arthropod orders (by code)
+arthlist <- as.vector(arthcodes$ArthCode) # arthcodes from data_cleaning.R
+
+# Merge reg.data.temp and arthlist so NAs will be calculated
+reg.data <- merge(reg.data.temp, arthcodes, by.x = 'arthCode', by.y = 'ArthCode', all = T)
+
+# For loop for calculating biomass for each observation
+for (ord in arthlist) {
+  b = reg.data[reg.data$arthCode == ord,]$slope
+  a = reg.data[reg.data$arthCode == ord,]$coefficient
+  cleandata$biomass[cleandata$arthCode == ord] <- (a*(cleandata$length[cleandata$arthCode == ord])^(b))*(cleandata$count[cleandata$arthCode == ord])
+}
+
+# Orders with regression data:
+regorders <- as.vector(reg.data.temp$arthCode)
+
+# Subsetting cleandata now that it has the biomass column included
 cleandata.pr <- cleandata[cleandata$site == 117 & cleandata$year == 2015,]
 cleandata.bg <- cleandata[cleandata$site == 8892356 & cleandata$year == 2015,]
-# (Should I subset these later in estimating_peaks.R?)
 
 amsurvey.pr <- surveySubset(cleandata.pr, subset = "visual am", minLength = 5)
 pmsurvey.pr <- surveySubset(cleandata.pr, subset = "visual pm", minLength = 5)
@@ -119,6 +151,17 @@ volunteer.pr <- surveySubset(cleandata.pr, subset = "volunteer", minLength = 5)
 amsurvey.bg <- surveySubset(cleandata.bg, subset = "visual am", minLength = 5)
 beatsheet.bg <- surveySubset(cleandata.bg, subset = "beat sheet", minLength = 5)
 
+if(FALSE) {
+# Plotting biomass average per day
+meanDensityByDay(surveyData = amsurvey.pr, ordersToInclude = regorders, minLength = 5, 
+                 inputSite = 117, inputYear = 2015, plot = T, plotVar = 'meanBiomass')
+meanDensityByDay(surveyData = pmsurvey.pr, ordersToInclude = regorders, minLength = 5, 
+                 inputSite = 117, inputYear = 2015, plot = T, plotVar = 'meanBiomass')
+meanDensityByDay(surveyData = beatsheet.pr, ordersToInclude = regorders, minLength = 5, 
+                 inputSite = 117, inputYear = 2015, plot = T, plotVar = 'meanBiomass')
+meanDensityByDay(surveyData = volunteer.pr, ordersToInclude = regorders, minLength = 5, 
+                 inputSite = 117, inputYear = 2015, plot = T, plotVar = 'meanBiomass')
+}
 
 
 
