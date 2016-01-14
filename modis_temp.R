@@ -91,7 +91,10 @@ points(bgmean$julianday, predict(bglog)+min(bgmean$EVImean)-.01, col = 'blue', l
 legend("topleft", c('BG mean EVI', 'PR mean EVI'), lwd = c(3,3), lty = c(2,2), col = c('blue', 'red'))
 
 summary(prlog)
+prgreenup <- summary(prlog)$coefficients["xmid","Estimate"]
+
 summary(bglog)
+bggreenup <- summary(bglog)$coefficients["xmid","Estimate"]
 
 
 # Download and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
