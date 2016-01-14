@@ -129,6 +129,8 @@ abline(ORTHAUCHlm)
 
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
 
+if(FALSE){
+
 library(zoo)
 
 PRam = meanDensityByDay(labsurvey1, multorders, inputYear = 2015, inputSite = 117, plot = T, 
@@ -257,3 +259,4 @@ BG = meanDensityByDay(visualsurveybg, 'LEPL', inputYear = '2015', inputSite = 88
                       plot = T, new = T, color = 'black') 
 
 
+}
