@@ -15,10 +15,10 @@ source('data_cleaning.R')
 dev.off()
 
 # Caterpillars only, mean density
-PRam.lepl = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-PRbs.lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)s
-PRpm.lepl = meanDensityByDay(repsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
-PRvol.lepl = meanDensityByDay(volsurvey, "LEPL", inputYear = 2015, inputSite = 117, plot = F, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
+PRam.lepl = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
+PRbs.lepl = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+PRpm.lepl = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
+PRvol.lepl = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
@@ -267,3 +267,88 @@ names(PRall.mult)[5] = 'density_vol'
 # Botanical Garden
 BGall.mult = merge(BGam.mult[,c('julianday','meanDensity')], BGbs.mult[, c('julianday','meanDensity')], by='julianday', all = T)
 names(BGall.mult) = c('julianday','density_am','density_bs')
+
+
+
+
+
+#-----------------------------------------------------------------------------------------------------
+# Plotting for powerpoint for Chris Goforth
+
+# Mean density
+
+PRam.lepl = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2, 
+                             ylim = c(0,.15))
+PRbs.lepl = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
+PRpm.lepl = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
+PRvol.lepl = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
+
+PRam.all = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = 'All', inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2, 
+                             ylim = c(0.05,1.2))
+PRbs.all = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
+PRpm.all = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
+PRvol.all = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
+
+
+# Biomass
+
+PRam.leplbm = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
+                             ylim = c(0,.35))
+PRbs.leplbm = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'orange', minLength = 5, lwd = 2)
+PRpm.leplbm = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'red', minLength = 5, lwd = 2)
+PRvol.leplbm = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'green', minLength = 5, lwd = 2)
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
+
+PRam.allbm = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
+                            ylim = c(0,7))
+PRbs.allbm = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'orange', minLength = 5, lwd = 2)
+PRpm.allbm = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'red', minLength = 5, lwd = 2)
+PRvol.allbm = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'green', minLength = 5, lwd = 2)
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
+
+# Pie charts
+par(mfrow = c(2,2), mar = c(1,1,1,1))
+
+# Volunteers (need to fix NAs)
+slices <- c(sum(volunteer.pr$count[volunteer.pr$arthCode == 'ARAN']), sum(volunteer.pr$count[volunteer.pr$arthCode == 'AUCH']), 
+            sum(volunteer.pr$count[volunteer.pr$arthCode == 'COLE']), sum(volunteer.pr$count[volunteer.pr$arthCode == 'DIPT']),
+            sum(volunteer.pr$count[volunteer.pr$arthCode == 'LEPL']), sum(volunteer.pr$count[volunteer.pr$arthCode == 'OPIL']),
+            sum(volunteer.pr$count[volunteer.pr$arthCode == 'ORTH']))
+lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH")
+pie(slices, labels = lbls, main="Volunteer Counts", 
+    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4'))
+
+# Lab pm
+slices <- c(sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'ARAN']), sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'AUCH']), 
+            sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'COLE']), sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'DIPT']),
+            sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'LEPL']), sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'OPIL']),
+            sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'ORTH']))
+lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH")
+pie(slices, labels = lbls, main="Lab PM Counts",
+    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4'))
+
+# Lab am
+slices <- c(sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'ARAN']), sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'AUCH']), 
+            sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'COLE']), sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'DIPT']),
+            sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'LEPL']), sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'OPIL']),
+            sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'ORTH']))
+lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH")
+pie(slices, labels = lbls, main="Lab AM Counts",
+    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4'))
+
+# Beat Sheet
+slices <- c(sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'ARAN']), sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'AUCH']), 
+            sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'COLE']), sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'DIPT']),
+            sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'LEPL']), sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'OPIL']),
+            sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'ORTH']))
+lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH")
+pie(slices, labels = lbls, main="Beat Sheet Counts",
+    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4'))
+
+

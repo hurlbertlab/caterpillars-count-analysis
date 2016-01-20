@@ -139,6 +139,7 @@ for (ord in arthlist) {
 # Orders with regression data:
 regorders <- as.vector(reg.data.temp$arthCode)
 
+
 # Subsetting cleandata now that it has the biomass column included
 cleandata.pr <- cleandata[cleandata$site == 117 & cleandata$year == 2015,]
 cleandata.bg <- cleandata[cleandata$site == 8892356 & cleandata$year == 2015,]
@@ -150,6 +151,7 @@ volunteer.pr <- surveySubset(cleandata.pr, subset = "volunteer", minLength = 5)
 
 amsurvey.bg <- surveySubset(cleandata.bg, subset = "visual am", minLength = 5)
 beatsheet.bg <- surveySubset(cleandata.bg, subset = "beat sheet", minLength = 5)
+
 
 if(FALSE) {
 # Plotting biomass average per day
