@@ -99,7 +99,7 @@ leavesNumTemp5 <- gsub(" ", "", leavesNumTemp4)
 leavesNumTemp6 <- gsub("\n", "", leavesNumTemp5)
 leavesNumTemp7 <- gsub("Unknown", NA, leavesNumTemp6)
 leavesNumTemp8 <- gsub("unknown", NA, leavesNumTemp7)
-beatsheet$leavesNum <- as.numeric(leavesNumTemp7)
+beatsheet$leavesNum <- as.numeric(leavesNumTemp8)
 cleandata = merge(cleandata, beatsheet, by = c("surveyID", "userID", "site", "survey", "circle", "date",
                                    "julianday", "plantSp", "herbivory", "arthropod", "arthCode",
                                    "length", "count", "notes.y", "notes.x", "wetLeaves", "year"), all = T)
