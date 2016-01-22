@@ -21,9 +21,11 @@ library(rgdal)
 library(maptools)
 library(rgeos)
 
-# For loop for formatting data for each year: 
+# For loop for downloading/formatting data for each year: 
 # THIS ONLY NEED TO RUN ONCE
 multyears <- 2006:2015
+
+if (0) {
 
 for (year in 1:length(multyears)) {
 
@@ -40,18 +42,19 @@ for (year in 1:length(multyears)) {
   MODISSubsets(LoadDat = modis, Products = 'MOD13Q1', 
                Bands = c('250m_16_days_EVI', '250m_16_days_pixel_reliability'), 
                Size = c(1,1))
-}
+} # end of for loop for downloading/formatting data
 
-
+} # end if (0)
 
 
 # For loop for plotting EVI and calculating greenup for each year
 multyears <- 2006:2015
 
-samp.dataframe = data.frame(prgreenup = numeric(), prgreenup = numeric())
+samp.dataframe = data.frame(prgreenup.half = numeric(), bggreenup.half = numeric(),
+                            prgreenup.log = numeric(), bggreenup.log = numeric())
 
 # Set plot grid for EVI plots
-par(mfrow = c(5, 2), mar = c(1, 1, 1, 1))
+par(mfrow = c(5, 2), mar = c(2, 2, 1, 1))
 
 for (year in 1:length(multyears)) {
   
@@ -72,7 +75,7 @@ for (year in 1:length(multyears)) {
   bgmean1 <- apply(bgevi, 1, mean)
   bgmean2 <- bgmean1 / 10000
   bgmean <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
-  plot(bgmean$julianday[bgmean$julianday %in% 1:200], bgmean$EVImean[bgmean$julianday %in% 1:200], 
+  plot(bgmean$julianday, bgmean$EVImean, 
        xlab = "Julian Day", ylab = "Mean EVI", col = 'blue', type = 'l')
   # Prairie Ridge:
   tempprevi = prmodis[grep("EVI", prmodis$V6),]
@@ -80,29 +83,38 @@ for (year in 1:length(multyears)) {
   prmean1 <- apply(previ, 1, mean)
   prmean2 <- prmean1 / 10000
   prmean <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
-  points(prmean$julianday[prmean$julianday %in% 1:200], prmean$EVImean[prmean$julianday %in% 1:200], col = 'red', type = 'l')
+  points(prmean$julianday, prmean$EVImean, col = 'red', type = 'l')
 
   legend("topleft", c('BG mean EVI', 'PR mean EVI'), col = c('blue', 'red'))
+  
+  # Extract greenup by finding the day the EVI is half its maximum:
+  
+  bggreenup.half = 1 # bgmean$julianday[bgmean$EVImean == 0.5*max(bgmean$EVImean)]
+  prgreenup.half = 2 # prmean$julianday[prmean$EVImean == 0.5*max(bgmean$EVImean)]
+  
 
-  # Fitting a logistic curve to EVI data and using this to estimate greenup date:
-  if(0) {
-  # Prairie Ridge               
-  prmean$EVIdis = prmean$EVImean - min(prmean$EVImean)+.01
-  prlog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = prmean)
+  # Fitting a logistic curve to EVI data (first 200 days of each year) and 
+  # using this to estimate greenup date:
+  
+  # Prairie Ridge  
+  subprmean = prmean[prmean$julianday %in% 1:200,]
+  subprmean$EVIdis = subprmean$EVImean - min(subprmean$EVImean)+.01
+  prlog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = subprmean)
   #par(mar=c(5, 4, 4, 4) + 0.1)
   #plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
   #     col = 'red', type = 'l', lwd = 3)
-  prmean$prEVIlog = predict(prlog)+min(prmean$EVImean)-.01
+  subprmean$prEVIlog = predict(prlog)+min(subprmean$EVImean)-.01
   #points(prmean$julianday, prmean$prEVIlog, col = 'red', lwd = 3, 
   #       lty = 'dashed', type = 'l')
 
   # Botanical Garden
-  bgmean$EVIdis = bgmean$EVImean - min(bgmean$EVImean)+.01
-  bglog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = bgmean)
+  subbgmean = bgmean[bgmean$julianday %in% 1:200,]
+  subbgmean$EVIdis = subbgmean$EVImean - min(subbgmean$EVImean)+.01
+  bglog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = subbgmean)
   #par(mar=c(5, 4, 4, 4) + 0.1)
   #plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
   #     col = 'blue', type = 'l', lwd = 3)
-  bgmean$bgEVIlog = predict(bglog)+min(bgmean$EVImean)-.01
+  subbgmean$bgEVIlog = predict(bglog)+min(subbgmean$EVImean)-.01
   #points(bgmean$julianday, bgmean$bgEVIlog, col = 'blue', lwd = 3, 
   #       lty = 'dashed', type = 'l')
 
@@ -112,16 +124,18 @@ for (year in 1:length(multyears)) {
   #points(bgmean$julianday, predict(bglog)+min(bgmean$EVImean)-.01, col = 'blue', lwd = 3, 
   #       lty = 'dashed', type = 'l')
   #legend("topleft", c('BG mean EVI', 'PR mean EVI'), lwd = c(3,3), lty = c(2,2), col = c('blue', 'red'))
-
+  
+  # Extract greenup from logistic fit
+  
   #summary(prlog)
-  prgreenup <- summary(prlog)$coefficients["xmid","Estimate"]
+  prgreenup.log <- summary(prlog)$coefficients["xmid","Estimate"]
 
   #summary(bglog)
-  bggreenup <- summary(bglog)$coefficients["xmid","Estimate"]
+  bggreenup.log <- summary(bglog)$coefficients["xmid","Estimate"]
+  
 
-  temp.dataframe = data.frame(prgreenup, bggreenup)
+  temp.dataframe = data.frame(prgreenup.half, bggreenup.half, prgreenup.log, bggreenup.log)
 
   samp.dataframe = rbind(samp.dataframe, temp.dataframe)
-  } #end if(0)
 }
 
