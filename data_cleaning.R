@@ -104,7 +104,7 @@ cleandata = merge(cleandata, beatsheet, by = c("surveyID", "userID", "site", "su
                                    "julianday", "plantSp", "herbivory", "arthropod", "arthCode",
                                    "length", "count", "notes.y", "notes.x", "wetLeaves", "year"), all = T)
 
-# Fixed but may still want to check - "NAs introduced by coercion" error even though only numbers show up in table
+
 
 
 
