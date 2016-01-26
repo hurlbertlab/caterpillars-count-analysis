@@ -204,10 +204,10 @@ frassplot = function(site, frassdata, color = 'black', new = T) {
 
 
 # Prairie Ridge fraction of surveys with caterpillars plot
-pdf('plots/PR_LEPL_frac_by_week_wFrass.pdf', height = 6, width = 8)
+#pdf('plots/PR_LEPL_frac_by_week_wFrass.pdf', height = 6, width = 8)
 par(mgp = c(3, 1, 0), mar = c(3, 5, 1, 4), cex.lab = 1.5, cex.axis = 1.2)
-plot(c(20,35), c(0, 0.24), type = "n", xlab = "", xaxt = "n", ylab = "Fraction of surveys")
-PRam = meanDensityByWeek(amsurvey.pr, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'blue', lwd = 3)
+plot(c(20,35), c(0, 0.3), type = "n", xlab = "", xaxt = "n", ylab = "Fraction of surveys")
+PRam = meanDensityByWeek(amsurvey.pr, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = T, color = 'blue', lwd = 3)
 PRbs = meanDensityByWeek(beatsheet.pr, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'skyblue', lwd = 3)
 PRpm = meanDensityByWeek(pmsurvey.pr, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3)
 PRvol = meanDensityByWeek(volunteer.pr, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3, lty = 'dashed')
