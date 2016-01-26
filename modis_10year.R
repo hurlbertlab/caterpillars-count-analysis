@@ -85,11 +85,12 @@ for (year in 1:length(multyears)) {
   prmean <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
   points(prmean$julianday, prmean$EVImean, col = 'red', type = 'l')
 
-  legend("topleft", c('BG mean EVI', 'PR mean EVI'), col = c('blue', 'red'))
   
   # Extract greenup by finding the day the EVI is half its maximum:
   
-  bggreenup.half = 1 # bgmean$julianday[bgmean$EVImean == 0.5*max(bgmean$EVImean)]
+  bgconstant = approxfun(bgmean$julianday, bgmean$EVImean)
+  #curve(bgconstant, add = T)
+  bggreenup.half = bgconstant[bgconstant == 0.5*max(bgmean$EVImean)]
   prgreenup.half = 2 # prmean$julianday[prmean$EVImean == 0.5*max(bgmean$EVImean)]
   
 
@@ -138,4 +139,13 @@ for (year in 1:length(multyears)) {
 
   samp.dataframe = rbind(samp.dataframe, temp.dataframe)
 }
+
+greenup <- samp.dataframe
+greenup$year <- c(2006:2015)
+
+# Plotting
+par(oma = c(4,4,3,2), mfrow = c(1,1))
+plot(greenup$year, greenup$prgreenup.log, col = 'red', type = 'l', ylim = c(70,100),
+     xlab = 'Year', ylab = "Julian day of greenup", lwd = 2)
+points(greenup$year, greenup$bggreenup.log, col = 'blue', type = 'l', lwd = 2)
 
