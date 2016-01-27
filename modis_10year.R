@@ -86,13 +86,6 @@ for (year in 1:length(multyears)) {
   points(prmean$julianday, prmean$EVImean, col = 'red', type = 'l')
 
   
-  # Extract greenup by finding the day the EVI is half its maximum:
-  
-  bgconstant = approxfun(bgmean$julianday, bgmean$EVImean)
-  #curve(bgconstant, add = T)
-  bggreenup.half = bgconstant[bgconstant == 0.5*max(bgmean$EVImean)]
-  prgreenup.half = 2 # prmean$julianday[prmean$EVImean == 0.5*max(bgmean$EVImean)]
-  
 
   # Fitting a logistic curve to EVI data (first 200 days of each year) and 
   # using this to estimate greenup date:
@@ -134,6 +127,18 @@ for (year in 1:length(multyears)) {
   #summary(bglog)
   bggreenup.log <- summary(bglog)$coefficients["xmid","Estimate"]
   
+  
+  # Extract greenup by finding the day the EVI is half its maximum:
+  
+  bgconstant = approxfun(subbgmean$EVImean, subbgmean$julianday)
+  #curve(bgconstant, add = T)
+  bggreenup.half = bgconstant(0.5*(max(subbgmean$EVImean)-min(subbgmean$EVImean))+min(subbgmean$EVImean))
+  #make sure these calcs are right
+  
+  prconstant = approxfun(subprmean$EVImean, subprmean$julianday)
+  #curve(prconstant, add = T)
+  prgreenup.half = prconstant(0.5*(max(subprmean$EVImean)-min(subprmean$EVImean))+min(subprmean$EVImean))
+  #make sure these calcs are right
 
   temp.dataframe = data.frame(prgreenup.half, bggreenup.half, prgreenup.log, bggreenup.log)
 
@@ -144,8 +149,11 @@ greenup <- samp.dataframe
 greenup$year <- c(2006:2015)
 
 # Plotting
-par(oma = c(4,4,3,2), mfrow = c(1,1))
-plot(greenup$year, greenup$prgreenup.log, col = 'red', type = 'l', ylim = c(70,100),
+par(oma = c(2,2,3,2), mfrow = c(1,1))
+plot(greenup$year, greenup$prgreenup.log, col = 'red', type = 'l', ylim = c(75,158),
      xlab = 'Year', ylab = "Julian day of greenup", lwd = 2)
 points(greenup$year, greenup$bggreenup.log, col = 'blue', type = 'l', lwd = 2)
+points(greenup$year, greenup$prgreenup.half, col = 'red', type = 'l', lwd = 2, lty = 2)
+points(greenup$year, greenup$bggreenup.half, col = 'blue', type = 'l', lwd = 2, lty = 2)
+
 
