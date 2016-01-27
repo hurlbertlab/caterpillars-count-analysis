@@ -41,14 +41,14 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
 # Selected orders, mean density
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI') # based on Birds of North America online, fledgling diet preferences, and the Avian Diet Database
 PRam.mult = meanDensityByDay(amsurvey.pr, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                             plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, 
-                             xlim = c(135, 250), ylim = c(0.1, 1))
+                             plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, 
+                             xlim = c(135, 250), ylim = c(0, .8))
 PRbs.mult = meanDensityByDay(beatsheet.pr, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                             plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+                             plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
 PRpm.mult = meanDensityByDay(pmsurvey.pr, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                             plot = F, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
+                             plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5)
 PRvol.mult = meanDensityByDay(volunteer.pr, ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
-                              plot = F, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
+                              plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 
@@ -275,11 +275,11 @@ names(BGall.mult) = c('julianday','density_am','density_bs')
 #-----------------------------------------------------------------------------------------------------
 # Plotting for powerpoint for Chris Goforth
 
-par(mfrow = c(1,1), mar = c(4,4,3,2))
+par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(0,0,0,0))
 
 # Mean density
 
-PRam.lepl = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2, 
+PRam.lepl = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2,
                              ylim = c(0,.15))
 PRbs.lepl = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
 PRpm.lepl = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
@@ -288,8 +288,11 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
        col = c('blue', 'orange', 'red', 'green'))
 title(main = 'Caterpillars')
 
+# Temporary fix of caterpillar colony data classified as "OTHER":
+volunteer.pr <- volunteer.pr[!(volunteer.pr$arthCode == "NONE" & volunteer.pr$count > 10),]
+
 PRam.all = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = 'All', inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2, 
-                             ylim = c(0.05,6))
+                            ylim = c(0,.9))
 PRbs.all = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
 PRpm.all = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
 PRvol.all = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
