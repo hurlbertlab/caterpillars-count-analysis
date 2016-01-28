@@ -160,3 +160,17 @@ legend("topleft", c('PR logistic', 'BG logistic', 'PR half max', 'BG half max'),
 title('Greenup 2006-2015', line = 1)
 
 
+
+
+
+
+
+
+
+
+# Working out half greenup calcs
+subbgmean$inflectdiff = subbgmean$EVImean - (0.5*(max(subbgmean$EVImean)-min(subbgmean$EVImean)) + min(subbgmean$EVImean))
+#jd1 = subbgmean$julianday[sign(subbgmean$inflectdiff)==-1 & 
+jd1 = min(subbgmean$julianday[sign(subbgmean$inflectdiff)==-1])
+
+
