@@ -149,11 +149,14 @@ greenup <- samp.dataframe
 greenup$year <- c(2006:2015)
 
 # Plotting
-par(oma = c(2,2,3,2), mfrow = c(1,1))
-plot(greenup$year, greenup$prgreenup.log, col = 'red', type = 'l', ylim = c(75,158),
+par(mar = c(2,2,3,2), mfrow = c(1,1), oma = c(0,0,0,0))
+plot(greenup$year, greenup$prgreenup.log, col = 'red', type = 'l', ylim = c(75,160),
      xlab = 'Year', ylab = "Julian day of greenup", lwd = 2)
 points(greenup$year, greenup$bggreenup.log, col = 'blue', type = 'l', lwd = 2)
 points(greenup$year, greenup$prgreenup.half, col = 'red', type = 'l', lwd = 2, lty = 2)
 points(greenup$year, greenup$bggreenup.half, col = 'blue', type = 'l', lwd = 2, lty = 2)
+legend("topleft", c('PR logistic', 'BG logistic', 'PR half max', 'BG half max'), lwd = 2, 
+       lty = c(1,1,2,2), col = c('red', 'blue', 'red', 'blue'))
+title('Greenup 2006-2015', line = 1)
 
 
