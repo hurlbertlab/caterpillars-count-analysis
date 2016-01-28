@@ -156,7 +156,7 @@ points(greenup$year, greenup$bggreenup.log, col = 'blue', type = 'l', lwd = 2)
 points(greenup$year, greenup$prgreenup.half, col = 'red', type = 'l', lwd = 2, lty = 2)
 points(greenup$year, greenup$bggreenup.half, col = 'blue', type = 'l', lwd = 2, lty = 2)
 legend("topleft", c('PR logistic', 'BG logistic', 'PR half max', 'BG half max'), lwd = 2, 
-       lty = c(1,1,2,2), col = c('red', 'blue', 'red', 'blue'))
+       lty = c(1,1,2,2), col = c('red', 'blue', 'red', 'blue')) 
 title('Greenup 2006-2015', line = 1)
 
 
