@@ -18,23 +18,20 @@ library(gsheet)
 
 surveySubset = function(cleandata, subset = "visual am", minLength = 0) 
   
-  {tempdata = cleandata[cleandata$length >= minLength,]
+  {tempdata = cleandata[cleandata$length >= minLength | cleandata$arthCode == 'NONE',]
   
   if (subset == "visual am"){
     visualsurvey = tempdata[!grepl("BEAT SHEET", tempdata$notes.x),]
     amsurvey = visualsurvey[!grepl("REPEAT SURVEY", visualsurvey$notes.x),]
     labsurvey = amsurvey[amsurvey$userID %in% c(69, 130, 131, 132), ] # make more general
     data.out = labsurvey
-  }
-  if (subset == "beat sheet"){
+  } else if (subset == "beat sheet"){
     beatsheet = tempdata[grep("BEAT SHEET", tempdata$notes.x),]
     data.out = beatsheet
-  }
-  if (subset == "visual pm"){
+  } else if (subset == "visual pm"){
     repsurvey = tempdata[grep("REPEAT SURVEY", tempdata$notes.x),]
     data.out = repsurvey
-  }
-  if (subset == "volunteer"){
+  } else if (subset == "volunteer"){
     volsurvey = tempdata[tempdata$userID == 129,] # make more general
     data.out = volsurvey
   }
