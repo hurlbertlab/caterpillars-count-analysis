@@ -286,19 +286,19 @@ PRpm.lepl = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude 
 PRvol.lepl = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
-title(main = 'Caterpillars')
+title(main = 'Caterpillars - Mean Density')
 
 # Temporary fix of caterpillar colony data classified as "OTHER":
 volunteer.pr <- volunteer.pr[!(volunteer.pr$arthCode == "NONE" & volunteer.pr$count > 10),]
 
 PRam.all = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = 'All', inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2, 
-                            ylim = c(0,.9))
+                            ylim = c(0.05,.9))
 PRbs.all = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
 PRpm.all = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
 PRvol.all = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
-title(main = 'All Arthropods')
+title(main = 'All Arthropods - Mean Density')
 
 
 # Biomass
@@ -310,7 +310,7 @@ PRpm.leplbm = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclud
 PRvol.leplbm = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'green', minLength = 5, lwd = 2)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
-title(main = 'Caterpillars')
+title(main = 'Caterpillars - Biomass')
 
 PRam.allbm = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
                             ylim = c(0,16))
@@ -319,7 +319,7 @@ PRpm.allbm = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude
 PRvol.allbm = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'green', minLength = 5, lwd = 2)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
-title(main = 'Multiple Orders')
+title(main = 'Multiple Orders - Biomass')
 
 # Pie charts
 par(mfrow = c(2,2), mar = c(1,1,1,1))
@@ -328,36 +328,36 @@ par(mfrow = c(2,2), mar = c(1,1,1,1))
 slices <- c(sum(volunteer.pr$count[volunteer.pr$arthCode == 'ARAN'], na.rm = T), sum(volunteer.pr$count[volunteer.pr$arthCode == 'AUCH'], na.rm = T), 
             sum(volunteer.pr$count[volunteer.pr$arthCode == 'COLE'], na.rm = T), sum(volunteer.pr$count[volunteer.pr$arthCode == 'DIPT'], na.rm = T),
             sum(volunteer.pr$count[volunteer.pr$arthCode == 'LEPL'], na.rm = T), sum(volunteer.pr$count[volunteer.pr$arthCode == 'OPIL'], na.rm = T),
-            sum(volunteer.pr$count[volunteer.pr$arthCode == 'ORTH'], na.rm = T))
-lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH")
+            sum(volunteer.pr$count[volunteer.pr$arthCode == 'ORTH'], na.rm = T), sum(volunteer.pr$count[volunteer.pr$arthCode == 'HEMI'], na.rm = T))
+lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI")
 pie(slices, labels = lbls, main="Volunteer Counts", 
-    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4'))
+    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'))
 
 # Lab pm
 slices <- c(sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'ARAN']), sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'AUCH']), 
             sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'COLE']), sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'DIPT']),
             sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'LEPL']), sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'OPIL']),
-            sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'ORTH']))
-lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH")
+            sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'ORTH']), sum(pmsurvey.pr$count[pmsurvey.pr$arthCode == 'HEMI']))
+lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI")
 pie(slices, labels = lbls, main="Lab PM Counts",
-    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4'))
+    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'))
 
 # Lab am
 slices <- c(sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'ARAN']), sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'AUCH']), 
             sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'COLE']), sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'DIPT']),
             sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'LEPL']), sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'OPIL']),
-            sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'ORTH']))
-lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH")
+            sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'ORTH']), sum(amsurvey.pr$count[amsurvey.pr$arthCode == 'HEMI']))
+lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI")
 pie(slices, labels = lbls, main="Lab AM Counts",
-    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4'))
+    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'))
 
 # Beat Sheet
 slices <- c(sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'ARAN']), sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'AUCH']), 
             sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'COLE']), sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'DIPT']),
             sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'LEPL']), sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'OPIL']),
-            sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'ORTH']))
-lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH")
+            sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'ORTH']), sum(beatsheet.pr$count[beatsheet.pr$arthCode == 'HEMI']))
+lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI")
 pie(slices, labels = lbls, main="Beat Sheet Counts",
-    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4'))
+    col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'))
 
 
