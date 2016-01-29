@@ -130,15 +130,25 @@ for (year in 1:length(multyears)) {
   
   # Extract greenup by finding the day the EVI is half its maximum:
   
-  bgconstant = approxfun(subbgmean$EVImean, subbgmean$julianday)
-  #curve(bgconstant, add = T)
-  bggreenup.half = bgconstant(0.5*(max(subbgmean$EVImean)-min(subbgmean$EVImean))+min(subbgmean$EVImean))
-  #make sure these calcs are right
+  # Bot garden
+  subbgmean$inflectdiff = subbgmean$EVImean - (0.5*(max(subbgmean$EVImean)-min(subbgmean$EVImean)) + min(subbgmean$EVImean))
+  yhat = 0.5*(max(subbgmean$EVImean)-min(subbgmean$EVImean)) + min(subbgmean$EVImean)
+  y1 = subbgmean$EVImean[subbgmean$inflectdiff == tail(subbgmean$inflectdiff[subbgmean$inflectdiff <= 0], 1)]
+  y2 = subbgmean$EVImean[subbgmean$inflectdiff == head(subbgmean$inflectdiff[subbgmean$inflectdiff >= 0], 1)]
+  jd1 = subbgmean$julianday[subbgmean$inflectdiff == tail(subbgmean$inflectdiff[subbgmean$inflectdiff <= 0], 1)]
+  jd2 = subbgmean$julianday[subbgmean$inflectdiff == head(subbgmean$inflectdiff[subbgmean$inflectdiff >= 0], 1)]
+  bggreenup.half = jd1 + ((yhat-y1)/(y2-y1))*(jd2-jd1)
+  #figure out how to do this with regular bgmean? (got a really messed up number)
   
-  prconstant = approxfun(subprmean$EVImean, subprmean$julianday)
-  #curve(prconstant, add = T)
-  prgreenup.half = prconstant(0.5*(max(subprmean$EVImean)-min(subprmean$EVImean))+min(subprmean$EVImean))
-  #make sure these calcs are right
+  # Prairie Ridge
+  subprmean$inflectdiff = subprmean$EVImean - (0.5*(max(subprmean$EVImean)-min(subprmean$EVImean)) + min(subprmean$EVImean))
+  yhat = 0.5*(max(subprmean$EVImean)-min(subprmean$EVImean)) + min(subprmean$EVImean)
+  y1 = subprmean$EVImean[subprmean$inflectdiff == tail(subprmean$inflectdiff[subprmean$inflectdiff <= 0], 1)]
+  y2 = subprmean$EVImean[subprmean$inflectdiff == head(subprmean$inflectdiff[subprmean$inflectdiff >= 0], 1)]
+  jd1 = subprmean$julianday[subprmean$inflectdiff == tail(subprmean$inflectdiff[subprmean$inflectdiff <= 0], 1)]
+  jd2 = subprmean$julianday[subprmean$inflectdiff == head(subprmean$inflectdiff[subprmean$inflectdiff >= 0], 1)]
+  prgreenup.half = jd1 + ((yhat-y1)/(y2-y1))*(jd2-jd1)
+  #figure out how to do this with regular prmean?
 
   temp.dataframe = data.frame(prgreenup.half, bggreenup.half, prgreenup.log, bggreenup.log)
 
@@ -150,7 +160,7 @@ greenup$year <- c(2006:2015)
 
 # Plotting
 par(mar = c(2,2,3,2), mfrow = c(1,1), oma = c(0,0,0,0))
-plot(greenup$year, greenup$prgreenup.log, col = 'red', type = 'l', ylim = c(75,160),
+plot(greenup$year, greenup$prgreenup.log, col = 'red', type = 'l', ylim = c(75,120),
      xlab = 'Year', ylab = "Julian day of greenup", lwd = 2)
 points(greenup$year, greenup$bggreenup.log, col = 'blue', type = 'l', lwd = 2)
 points(greenup$year, greenup$prgreenup.half, col = 'red', type = 'l', lwd = 2, lty = 2)
@@ -159,18 +169,5 @@ legend("topleft", c('PR logistic', 'BG logistic', 'PR half max', 'BG half max'),
        lty = c(1,1,2,2), col = c('red', 'blue', 'red', 'blue')) 
 title('Greenup 2006-2015', line = 1)
 
-
-
-
-
-
-
-
-
-
-# Working out half greenup calcs
-subbgmean$inflectdiff = subbgmean$EVImean - (0.5*(max(subbgmean$EVImean)-min(subbgmean$EVImean)) + min(subbgmean$EVImean))
-#jd1 = subbgmean$julianday[sign(subbgmean$inflectdiff)==-1 & 
-jd1 = min(subbgmean$julianday[sign(subbgmean$inflectdiff)==-1])
 
 
