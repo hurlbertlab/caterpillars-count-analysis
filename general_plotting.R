@@ -172,9 +172,13 @@ legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid',
 # Working with frass data
 frass = frassData(open = T)
 
+# If does not open, read from git
+frass = read.csv('data/frass.csv', header=T)
+
 # Convert date class
 frass$Date.Set = as.Date(frass$Date.Set, format = "%m/%d/%Y")
 frass$Date.Collected = as.Date(frass$Date.Collected, format = "%m/%d/%Y")
+frass$Time.Set = as.character(frass$Time.Set)
 frass$jday.Set = julianDayTime(frass$Date.Set, frass$Time.Set)
 frass$jday.Collected = julianDayTime(frass$Date.Collected, frass$Time.Collected)
 
@@ -206,7 +210,7 @@ frassplot = function(site, frassdata, color = 'black', new = T) {
 # Prairie Ridge fraction of surveys with caterpillars plot
 #pdf('plots/PR_LEPL_frac_by_week_wFrass.pdf', height = 6, width = 8)
 par(mgp = c(3, 1, 0), mar = c(3, 5, 1, 4), cex.lab = 1.5, cex.axis = 1.2, mfrow = c(1,1))
-plot(c(20,35), c(0, 0.3), type = "n", xlab = "", xaxt = "n", ylab = "Fraction of surveys")
+plot(c(20,35), c(0, 0.25), type = "n", xlab = "", xaxt = "n", ylab = "Fraction of surveys")
 PRam = meanDensityByWeek(amsurvey.pr, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'blue', lwd = 3)
 PRbs = meanDensityByWeek(beatsheet.pr, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'skyblue', lwd = 3)
 PRpm = meanDensityByWeek(pmsurvey.pr, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3)
@@ -320,6 +324,19 @@ PRvol.allbm = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclu
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
 title(main = 'Multiple Orders - Biomass')
+
+
+
+# Ellipse chart, bivariates, correlation matrices
+
+jduse = PR
+everything = rbind(PRam.all$meanDensity, PRbs.all$meanDensity, PRpm.all$)
+
+
+
+
+
+
 
 # Pie charts
 par(mfrow = c(2,2), mar = c(1,1,1,1))
