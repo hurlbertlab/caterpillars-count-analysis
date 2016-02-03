@@ -329,10 +329,60 @@ title(main = 'Multiple Orders - Biomass')
 
 # Ellipse chart, bivariates, correlation matrices
 
-jduse = PR
-everything = rbind(PRam.all$meanDensity, PRbs.all$meanDensity, PRpm.all$)
+# Make a giant dataset with all mean densities and all biomasses 
+# (for standard julian days from core morning survey days)
+everything1 = merge(PRam.all[, c(1,8)], PRbs.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
+everything2 = merge(everything1, PRpm.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
+names(everything2) = c('julianday', 'am all density', 'bs all density', 'pm all density')
+everything3 = merge(everything2, PRvol.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
+everything4 = merge(everything3, PRam.lepl[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
+names(everything4) = c('julianday', 'am all density', 'bs all density', 'pm all density', 
+                       'vol all density', 'am lepl density')
+everything5 = merge(everything4, PRbs.lepl[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
+everything6 = merge(everything5, PRpm.lepl[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
+names(everything6) = c('julianday', 'am all density', 'bs all density', 'pm all density', 
+                       'vol all density', 'am lepl density', 'bs lepl density', 'pm lepl density')
+everything7 = merge(everything6, PRvol.lepl[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
+everything8 = merge(everything7, PRam.allbm[,c(1,10)], by = 'julianday', all.x = T, all.y = F)
+names(everything8) = c('julianday', 'am all density', 'bs all density', 'pm all density', 
+                       'vol all density', 'am lepl density', 'bs lepl density', 'pm lepl density',
+                       'vol lepl density', 'am selected bm')
+everything9 = merge(everything8, PRbs.allbm[,c(1,10)], by = 'julianday', all.x = T, all.y = F)
+everything10 = merge(everything9, PRpm.allbm[,c(1,10)], by = 'julianday', all.x = T, all.y = F)
+names(everything10) = c('julianday', 'am all density', 'bs all density', 'pm all density', 
+                       'vol all density', 'am lepl density', 'bs lepl density', 'pm lepl density',
+                       'vol lepl density', 'am selected bm', 'bs selected bm', 'pm selected bm')
+everything11 = merge(everything10, PRvol.allbm[,c(1,10)], by = 'julianday', all.x = T, all.y = F)
+everything12 = merge(everything11, PRam.leplbm[,c(1,10)], by = 'julianday', all.x = T, all.y = F)
+names(everything12) = c('julianday', 'am all density', 'bs all density', 'pm all density', 
+                        'vol all density', 'am lepl density', 'bs lepl density', 'pm lepl density',
+                        'vol lepl density', 'am selected bm', 'bs selected bm', 'pm selected bm',
+                        'vol selected bm', 'am lepl bm')
+everything13 = merge(everything12, PRbs.leplbm[,c(1,10)], by = 'julianday', all.x = T, all.y = F)
+everything14 = merge(everything13, PRpm.leplbm[,c(1,10)], by = 'julianday', all.x = T, all.y = F)
+names(everything14) = c('julianday', 'am all density', 'bs all density', 'pm all density', 
+                        'vol all density', 'am lepl density', 'bs lepl density', 'pm lepl density',
+                        'vol lepl density', 'am selected bm', 'bs selected bm', 'pm selected bm',
+                        'vol selected bm', 'am lepl bm', 'bs lepl bm', 'pm lepl bm')
+everything15 = merge(everything14, PRvol.leplbm[,c(1,10)], by = 'julianday', all.x = T, all.y = F)
+names(everything15) = c('julianday', 'am all density', 'bs all density', 'pm all density', 
+                        'vol all density', 'am lepl density', 'bs lepl density', 'pm lepl density',
+                        'vol lepl density', 'am selected bm', 'bs selected bm', 'pm selected bm',
+                        'vol selected bm', 'am lepl bm', 'bs lepl bm', 'pm lepl bm', 'vol lepl bm')
+corevery = everything15
 
+# Make a correlation chart
+round(cor(corevery[,c(2:17)], use = 'pairwise.complete.obs'),3) # is that use argument ok?
 
+# Smaller, more readable subsets of that correlation chart
+# Just all arthropods mean density
+round(cor(corevery[,c(2:5)], use = 'pairwise.complete.obs'),3)
+# Just caterpillar mean density
+round(cor(corevery[,c(6:9)], use = 'pairwise.complete.obs'),3)
+# Just selected arthropods biomass
+round(cor(corevery[,c(10:13)], use = 'pairwise.complete.obs'),3)
+# Just caterpillar biomass
+round(cor(corevery[,c(14:17)], use = 'pairwise.complete.obs'),3)
 
 
 
