@@ -329,7 +329,7 @@ title(main = 'Multiple Orders - Biomass')
 
 # Ellipse chart, bivariates, correlation matrices
 
-# Make a giant dataset with all mean densities and all biomasses 
+## Make a giant dataset with all mean densities and all biomasses 
 # (for standard julian days from core morning survey days)
 everything1 = merge(PRam.all[, c(1,8)], PRbs.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
 everything2 = merge(everything1, PRpm.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
@@ -371,18 +371,39 @@ names(everything15) = c('julianday', 'am all density', 'bs all density', 'pm all
                         'vol selected bm', 'am lepl bm', 'bs lepl bm', 'pm lepl bm', 'vol lepl bm')
 corevery = everything15
 
-# Make a correlation chart
+## Make a correlation chart
 round(cor(corevery[,c(2:17)], use = 'pairwise.complete.obs'),3) # is that use argument ok?
 
 # Smaller, more readable subsets of that correlation chart
 # Just all arthropods mean density
-round(cor(corevery[,c(2:5)], use = 'pairwise.complete.obs'),3)
+all.dens = round(cor(corevery[,c(2:5)], use = 'pairwise.complete.obs'),3)
+#write.csv(all.dens, 'all.dens.csv')
 # Just caterpillar mean density
-round(cor(corevery[,c(6:9)], use = 'pairwise.complete.obs'),3)
+lepl.dens = round(cor(corevery[,c(6:9)], use = 'pairwise.complete.obs'),3)
+#write.csv(lepl.dens, 'lepl.dens.csv')
 # Just selected arthropods biomass
-round(cor(corevery[,c(10:13)], use = 'pairwise.complete.obs'),3)
+arth.bm = round(cor(corevery[,c(10:13)], use = 'pairwise.complete.obs'),3)
+#write.csv(arth.bm, 'arth.bm.csv')
 # Just caterpillar biomass
-round(cor(corevery[,c(14:17)], use = 'pairwise.complete.obs'),3)
+lepl.bm = round(cor(corevery[,c(14:17)], use = 'pairwise.complete.obs'),3)
+#write.csv(lepl.bm, 'lepl.bm.csv')
+
+
+## Make an ellipse chart
+
+# Libraries
+library(ellipse)
+library(RColorBrewer)
+
+# Use of the mtcars data proposed by R
+ellipsedata=round(cor(corevery[,c(2:17)], use = 'pairwise.complete.obs'),3)
+
+# Build a Pannel of 100 colors with Rcolor Brewer
+my_colors <- brewer.pal(5, "PiYG")
+my_colors=colorRampPalette(my_colors)(220)
+
+# Plot ellipse chart
+plotcorr(ellipsedata, col=my_colors[ellipsedata*110+110] , mar=c(1,1,1,1), cex.lab = 0.75)
 
 
 
