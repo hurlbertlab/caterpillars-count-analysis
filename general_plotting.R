@@ -180,6 +180,7 @@ frass$Date.Set = as.Date(frass$Date.Set, format = "%m/%d/%Y")
 frass$Date.Collected = as.Date(frass$Date.Collected, format = "%m/%d/%Y")
 frass$Time.Set = as.character(frass$Time.Set)
 frass$jday.Set = julianDayTime(frass$Date.Set, frass$Time.Set)
+frass$Time.Collected = as.character(frass$Time.Collected)
 frass$jday.Collected = julianDayTime(frass$Date.Collected, frass$Time.Collected)
 
 frass$frass.mg.d = frass$Frass.mass..mg./(frass$jday.Collected - frass$jday.Set)
@@ -190,16 +191,18 @@ frass$week = floor(frass$jday/7) + 1
 meanFrassByDay = aggregate(frass$frass.mg.d, by = list(frass$Site, frass$jday), function(x) mean(x, na.rm=T))
 meanFrassByWeek = aggregate(frass$frass.mg.d, by = list(frass$Site, frass$week), function(x) mean(x, na.rm=T))
 names(meanFrassByWeek) = c('site', 'week', 'frass.mg.d')
+names(meanFrassByDay) = c('site', 'julianday', 'frass.mg.d')
 
-PRfrassW = subset(meanFrassByWeek, site == "Prairie Ridge")
+PRfrassD = subset(meanFrassByDay, site == 'Prairie Ridge')
+PRfrassW = subset(meanFrassByWeek, site == 'Prairie Ridge')
 
 frassplot = function(site, frassdata, color = 'black', new = T) {
-  temp = subset(frassdata, Group.1 == site)
+  temp = subset(frassdata, site == site)
   if (new) {
-    plot(temp$Group.2, temp$x, xlab = "Julian day", ylab = "Mean frass (mg / trap / day)",
-         type = 'b', col = color, ylim = range(frassdata$x), xlim = range(frassdata$Group.2))
+    plot(temp$julianday, temp$frass.mg.d, xlab = "Julian day", ylab = "Mean frass (mg / trap / day)",
+         type = 'b', col = color, ylim = range(frassdata$frass.mg.d), xlim = range(frassdata$julianday))
   } else {
-    points(temp$Group.2, temp$x, type = 'b', col = color)
+    points(temp$julianday, temp$frass.mg.d, type = 'b', col = color)
   }
 }
 
@@ -279,57 +282,69 @@ names(BGall.mult) = c('julianday','density_am','density_bs')
 #-----------------------------------------------------------------------------------------------------
 # Plotting for powerpoint for Chris Goforth
 
-par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(0,0,0,0))
+par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(1,1,0,0))
 
 # Mean density
 
 PRam.lepl = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2,
-                             ylim = c(0,.15))
+                             ylim = c(0,.15), xaxt='n', ann=FALSE)
 PRbs.lepl = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
 PRpm.lepl = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
 PRvol.lepl = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds, line = 1.5, cex = 1.5)
+mtext("Mean density", 2, line = 2.5, cex = 1.5)
 title(main = 'Caterpillars - Mean Density')
 
 # Temporary fix of caterpillar colony data classified as "OTHER":
 volunteer.pr <- volunteer.pr[!(volunteer.pr$arthCode == "NONE" & volunteer.pr$count > 10),]
 
 PRam.all = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = 'All', inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2, 
-                            ylim = c(0.05,.9))
+                            ylim = c(0.05,.9), xaxt='n', ann=FALSE)
 PRbs.all = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
 PRpm.all = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
 PRvol.all = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds, line = 1.5, cex = 1.5)
+mtext("Mean density", 2, line = 2.5, cex = 1.5)
 title(main = 'All Arthropods - Mean Density')
 
 
 # Biomass
 
 PRam.leplbm = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
-                             ylim = c(0,.6))
+                             ylim = c(0,.6), xaxt='n', ann=FALSE)
 PRbs.leplbm = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'orange', minLength = 5, lwd = 2)
 PRpm.leplbm = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'red', minLength = 5, lwd = 2)
 PRvol.leplbm = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'green', minLength = 5, lwd = 2)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
-title(main = 'Caterpillars - Biomass')
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds, line = 1.5, cex = 1.5)
+mtext("Mean biomass", 2, line = 2.5, cex = 1.5)
+title(main = 'Caterpillars - Mean Biomass')
 
 PRam.allbm = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
-                            ylim = c(0,16))
+                            ylim = c(0,16), xaxt='n', ann=FALSE)
 PRbs.allbm = meanDensityByDay(beatsheet.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'orange', minLength = 5, lwd = 2)
 PRpm.allbm = meanDensityByDay(pmsurvey.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'red', minLength = 5, lwd = 2)
 PRvol.allbm = meanDensityByDay(volunteer.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'green', minLength = 5, lwd = 2)
 legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange', 'red', 'green'))
-title(main = 'Multiple Orders - Biomass')
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds, line = 1.5, cex = 1.5)
+mtext("Mean biomass", 2, line = 2.5, cex = 1.5)
+title(main = 'Multiple Orders - Mean Biomass')
 
 
 
 # Ellipse chart, bivariates, correlation matrices
 
-## Make a giant dataset with all mean densities and all biomasses 
+## Make a giant dataset with all mean densities, biomasses, and frass
 # (for standard julian days from core morning survey days)
 everything1 = merge(PRam.all[, c(1,8)], PRbs.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
 everything2 = merge(everything1, PRpm.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
@@ -365,28 +380,30 @@ names(everything14) = c('julianday', 'am all density', 'bs all density', 'pm all
                         'vol lepl density', 'am selected bm', 'bs selected bm', 'pm selected bm',
                         'vol selected bm', 'am lepl bm', 'bs lepl bm', 'pm lepl bm')
 everything15 = merge(everything14, PRvol.leplbm[,c(1,10)], by = 'julianday', all.x = T, all.y = F)
-names(everything15) = c('julianday', 'am all density', 'bs all density', 'pm all density', 
+everything16 = merge(everything15, PRfrassD[,c(3,2)], by = 'julianday', all.x = T, all.y = F) 
+names(everything16) = c('julianday', 'am all density', 'bs all density', 'pm all density', 
                         'vol all density', 'am lepl density', 'bs lepl density', 'pm lepl density',
                         'vol lepl density', 'am selected bm', 'bs selected bm', 'pm selected bm',
-                        'vol selected bm', 'am lepl bm', 'bs lepl bm', 'pm lepl bm', 'vol lepl bm')
-corevery = everything15
+                        'vol selected bm', 'am lepl bm', 'bs lepl bm', 'pm lepl bm', 
+                        'vol lepl bm', 'frass')
+corevery = everything16
 
 ## Make a correlation chart
-round(cor(corevery[,c(2:17)], use = 'pairwise.complete.obs'),3) # is that use argument ok?
+round(cor(corevery[,c(2:18)], use = 'pairwise.complete.obs'),2) # is that use argument ok?
 
 # Smaller, more readable subsets of that correlation chart
 # Just all arthropods mean density
-all.dens = round(cor(corevery[,c(2:5)], use = 'pairwise.complete.obs'),3)
-#write.csv(all.dens, 'all.dens.csv')
+all.dens = round(cor(corevery[,c(2:5,18)], use = 'pairwise.complete.obs'),2)
+write.csv(all.dens, 'all.dens.csv')
 # Just caterpillar mean density
-lepl.dens = round(cor(corevery[,c(6:9)], use = 'pairwise.complete.obs'),3)
-#write.csv(lepl.dens, 'lepl.dens.csv')
+lepl.dens = round(cor(corevery[,c(6:9,18)], use = 'pairwise.complete.obs'),2)
+write.csv(lepl.dens, 'lepl.dens.csv')
 # Just selected arthropods biomass
-arth.bm = round(cor(corevery[,c(10:13)], use = 'pairwise.complete.obs'),3)
-#write.csv(arth.bm, 'arth.bm.csv')
+arth.bm = round(cor(corevery[,c(10:13,18)], use = 'pairwise.complete.obs'),2)
+write.csv(arth.bm, 'arth.bm.csv')
 # Just caterpillar biomass
-lepl.bm = round(cor(corevery[,c(14:17)], use = 'pairwise.complete.obs'),3)
-#write.csv(lepl.bm, 'lepl.bm.csv')
+lepl.bm = round(cor(corevery[,c(14:17,18)], use = 'pairwise.complete.obs'),2)
+write.csv(lepl.bm, 'lepl.bm.csv')
 
 
 ## Make an ellipse chart
@@ -396,15 +413,19 @@ library(ellipse)
 library(RColorBrewer)
 
 # Use of the mtcars data proposed by R
-ellipsedata=round(cor(corevery[,c(2:17)], use = 'pairwise.complete.obs'),3)
+ellipsedata=round(cor(corevery[,c(2:17)], use = 'pairwise.complete.obs'),2)
 
 # Build a Pannel of 100 colors with Rcolor Brewer
 my_colors <- brewer.pal(5, "PiYG")
-my_colors=colorRampPalette(my_colors)(220)
+my_colors=colorRampPalette(my_colors)(101)
 
 # Plot ellipse chart
-plotcorr(ellipsedata, col=my_colors[ellipsedata*110+110] , mar=c(1,1,1,1), cex.lab = 0.75)
+plotcorr(ellipsedata, col=my_colors[ellipsedata*50+51] , mar=c(1,1,1,1), cex.lab = 0.75)
 
+
+## Bivariate plots
+
+plot(corevery$`pm lepl density`, corevery$`vol lepl density`)
 
 
 
