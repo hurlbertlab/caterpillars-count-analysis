@@ -160,6 +160,7 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
   } else {
     temp2 = ddply(temp, .(site, week, year), summarize, 
                   totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])))
+                  #totalBiomass = sum(biomass))
   }
   
   temp3 = merge(effortByWeek, temp2[, c('week', 'totalCount', 'numSurveysGTzero')], 
@@ -167,6 +168,7 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
   temp3$totalCount[is.na(temp3$totalCount)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
   temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
+  #temp3$meanBiomass = temp3$totalBiomass/temp3$numSurveys
   temp3$week = as.numeric(as.character(temp3$week))
   if (plot & new) {
     plot(temp3$week, temp3[, plotVar], type = 'l', 
