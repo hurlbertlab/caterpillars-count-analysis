@@ -284,7 +284,7 @@ names(BGall.mult) = c('julianday','density_am','density_bs')
 
 par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(1,1,0,0))
 
-# Mean density
+# Mean density by day
 
 PRam.lepl = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2,
                              ylim = c(0,.15), xaxt='n', ann=FALSE)
@@ -314,7 +314,7 @@ mtext("Mean density", 2, line = 2.5, cex = 1.5)
 title(main = 'All Arthropods - Mean Density')
 
 
-# Biomass
+# Biomass by day
 
 PRam.leplbm = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
                              ylim = c(0,.6), xaxt='n', ann=FALSE)
@@ -469,4 +469,96 @@ lbls <- c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI")
 pie(slices, labels = lbls, main="Beat Sheet Counts",
     col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'))
 
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(1,1,0,0))
+
+# Mean density by week
+
+PRam.leplwk = meanDensityByWeek(amsurvey.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2,
+                             ylim = c(0,.3), xaxt='n', ann=FALSE)
+PRbs.leplwk = meanDensityByWeek(beatsheet.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
+PRpm.leplwk = meanDensityByWeek(pmsurvey.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
+PRvol.leplwk = meanDensityByWeek(volunteer.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1.5, cex = 1.5)
+mtext("Mean density", 2, line = 2.5, cex = 1.5)
+title(main = 'Caterpillars - Mean Density By Week')
+
+# Temporary fix of caterpillar colony data classified as "OTHER":
+volunteer.pr <- volunteer.pr[!(volunteer.pr$arthCode == "NONE" & volunteer.pr$count > 10),]
+
+PRam.allwk = meanDensityByWeek(amsurvey.pr, ordersToInclude = 'All', inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2, 
+                            ylim = c(0.5,2.3), xaxt='n', ann=FALSE)
+PRbs.allwk = meanDensityByWeek(beatsheet.pr, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
+PRpm.allwk = meanDensityByWeek(pmsurvey.pr, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
+PRvol.allwk = meanDensityByWeek(volunteer.pr, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1.5, cex = 1.5)
+mtext("Mean density", 2, line = 2.5, cex = 1.5)
+title(main = 'All Arthropods - Mean Density By Week')
+
+
+# Biomass by week
+
+PRam.leplbmwk = meanDensityByWeek(amsurvey.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
+                               ylim = c(0,.6), xaxt='n', ann=FALSE)
+PRbs.leplbmwk = meanDensityByWeek(beatsheet.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'orange', minLength = 5, lwd = 2)
+PRpm.leplbmwk = meanDensityByWeek(pmsurvey.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'red', minLength = 5, lwd = 2)
+PRvol.leplbmwk = meanDensityByWeek(volunteer.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'green', minLength = 5, lwd = 2)
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1.5, cex = 1.5)
+mtext("Mean biomass", 2, line = 2.5, cex = 1.5)
+title(main = 'Caterpillars - Mean Biomass By Week')
+
+PRam.allbmwk = meanDensityByWeek(amsurvey.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
+                              ylim = c(0,16), xaxt='n', ann=FALSE)
+PRbs.allbmwk = meanDensityByWeek(beatsheet.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'orange', minLength = 5, lwd = 2)
+PRpm.allbmwk = meanDensityByWeek(pmsurvey.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'red', minLength = 5, lwd = 2)
+PRvol.allbmwk = meanDensityByWeek(volunteer.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'green', minLength = 5, lwd = 2)
+legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volunteer surveys'),lwd = 2, lty = 'solid', 
+       col = c('blue', 'orange', 'red', 'green'))
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1.5, cex = 1.5)
+mtext("Mean biomass", 2, line = 2.5, cex = 1.5)
+title(main = 'Multiple Orders - Mean Biomass By Week')
+
+
+# Fraction of surveys by week with caterpillars, min length of 0 (Lunchbunch plot)
+
+amsurvey.pr0 <- surveySubset(cleandata.pr, subset = "visual am", minLength = 0)
+pmsurvey.pr0 <- surveySubset(cleandata.pr, subset = "visual pm", minLength = 0)
+beatsheet.pr0 <- surveySubset(cleandata.pr, subset = "beat sheet", minLength = 0)
+volunteer.pr0 <- surveySubset(cleandata.pr, subset = "volunteer", minLength = 0)
+
+amsurvey.bg0 <- surveySubset(cleandata.bg, subset = "visual am", minLength = 0)
+beatsheet.bg0 <- surveySubset(cleandata.bg, subset = "beat sheet", minLength = 0)
+
+
+par(mgp = c(3, 1, 0), mar = c(3, 5, 3, 4), cex.lab = 1.5, cex.axis = 1.2, mfrow = c(1,1))
+plot(c(20,35), c(0, 0.25), type = "n", xlab = "", xaxt = "n", ylab = "Fraction of surveys")
+PRam0 = meanDensityByWeek(amsurvey.pr0, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'blue', lwd = 3)
+PRbs0 = meanDensityByWeek(beatsheet.pr0, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'skyblue', lwd = 3)
+PRpm0 = meanDensityByWeek(pmsurvey.pr0, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3)
+PRvol0 = meanDensityByWeek(volunteer.pr0, "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'fracSurveys', new = F, color = 'red', lwd = 3, lty = 'dashed')
+
+par(new = T)
+plot(PRfrassW$week, PRfrassW$frass.mg.d, type = 'b', col = 'darkgreen', lwd = 1, xlim = c(20, 35), ylim = c(1,7),
+     xlab = "", xaxt = "n", ylab = "", yaxt = "n")
+axis(4, 1:7, cex.axis = 1.2)
+mtext("Frass (mg/d)", 4, line = 2.5, cex = 1.5)
+legend("topleft", c('am Visual', 'am Beat sheet', 'pm Visual', 'pm Volunteers', 'Frass'),
+       lwd = c(3, 3, 3, 3, 1), lty = c(rep('solid', 3), 'dashed', 'solid'),
+       col = c('blue', 'skyblue', 'red', 'red', 'darkgreen'))
+jds = c(140, 171, 201, 232)
+mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1, cex = 1.5)
+title("Fraction of Surveys with Caterpillars", line = 1.5)
 
