@@ -9,10 +9,10 @@ source('summary_functions.r')
 source('data_cleaning.R')
 
 #################
-# Prairie Ridge #
+#---- Prairie Ridge by day----
 #################
 
-dev.off()
+#dev.off()
 
 # Caterpillars only, mean density
 PRam.lepl = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
@@ -54,6 +54,7 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
 
 
 #----------------------------------------------------------------------------------------------
+#---- Prairie Ridge by week----
 # Plots as above but averaged per week instead of by day
 
 # Caterpillars only, mean density
@@ -97,7 +98,7 @@ legend("topleft", c('lab am surveys', 'lab beat sheet', 'lab pm surveys', 'volun
 
 
 ####################
-# Botanical Garden #
+#---- Botanical Garden by day ----
 ####################
 
 # Taking out julian day 259 for the botanical garden data (in visualsurveybg),
@@ -133,6 +134,7 @@ legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid',
        col = c('blue', 'orange'))
 
 #----------------------------------------------------------------------------------------------------------------------------
+#---- Botanical Garden by week----
 # Plots as above but averaged per week instead of by day
 
 # Plot our morning surveys and our beat sheet surveys for the botanical garden
@@ -165,9 +167,9 @@ legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid',
 
 #----------------------------------------------------------------------------------------------------------------------------
 
-#########
-# Frass #
-#########
+#################
+#---- Frass ----
+#################
 
 # Working with frass data
 frass = frassData(open = T)
@@ -207,7 +209,7 @@ frassplot = function(site, frassdata, color = 'black', new = T) {
 }
 
 
-
+#---- Prairie Ridge fraction of surveys LEPL----
 
 
 # Prairie Ridge fraction of surveys with caterpillars plot
@@ -249,7 +251,7 @@ dev.off()
 
 #-------------------------------------------------------------------------------------------------------
 
-## Merge mean densities into one dataframe
+#---- Merge mean densities into one dataframe ----
 
 # Just caterpillars:
 # Prairie Ridge
@@ -280,7 +282,7 @@ names(BGall.mult) = c('julianday','density_am','density_bs')
 
 
 #-----------------------------------------------------------------------------------------------------
-# Plotting for powerpoint for Chris Goforth
+#---- Plotting for powerpoint for Chris Goforth ----
 
 par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(1,1,0,0))
 
@@ -342,7 +344,7 @@ title(main = 'Multiple Orders - Mean Biomass')
 
 
 
-# Ellipse chart, bivariates, correlation matrices
+#---- Ellipse chart, bivariates, correlation matrices ----
 
 ## Make a giant dataset with all mean densities, biomasses, and frass
 # (for standard julian days from core morning survey days)
@@ -430,7 +432,7 @@ plot(corevery$`pm lepl density`, corevery$`vol lepl density`)
 
 
 
-# Pie charts
+#---- Pie charts ----
 par(mfrow = c(2,2), mar = c(1,1,1,1))
 
 # Volunteers (need to fix NAs)
@@ -475,7 +477,7 @@ pie(slices, labels = lbls, main="Beat Sheet Counts",
 
 par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(1,1,0,0))
 
-# Mean density by week
+#---- By week plotting, etc. for powerpoint ----
 
 PRam.leplwk = meanDensityByWeek(amsurvey.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2,
                              ylim = c(0,.3), xaxt='n', ann=FALSE)
@@ -506,7 +508,7 @@ title(main = 'All Arthropods - Mean Density By Week')
 
 
 # Biomass by week
-
+# need to fix
 PRam.leplbmwk = meanDensityByWeek(amsurvey.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
                                ylim = c(0,.6), xaxt='n', ann=FALSE)
 PRbs.leplbmwk = meanDensityByWeek(beatsheet.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'orange', minLength = 5, lwd = 2)
@@ -519,6 +521,7 @@ mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1.5, cex 
 mtext("Mean biomass", 2, line = 2.5, cex = 1.5)
 title(main = 'Caterpillars - Mean Biomass By Week')
 
+# need to fix
 PRam.allbmwk = meanDensityByWeek(amsurvey.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = T, color = 'blue', minLength = 5, lwd = 2, 
                               ylim = c(0,16), xaxt='n', ann=FALSE)
 PRbs.allbmwk = meanDensityByWeek(beatsheet.pr, effort = effortByDay, ordersToInclude = regorders, inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanBiomass', new = F, color = 'orange', minLength = 5, lwd = 2)
