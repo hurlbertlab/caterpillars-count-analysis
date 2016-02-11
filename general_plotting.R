@@ -346,7 +346,7 @@ title(main = 'Multiple Orders - Mean Biomass')
 
 #---- Ellipse chart, bivariates, correlation matrices ----
 
-## Make a giant dataset with all mean densities, biomasses, and frass
+## Make a giant dataset with all mean densities, biomasses, and frass for by day
 # (for standard julian days from core morning survey days)
 everything1 = merge(PRam.all[, c(1,8)], PRbs.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
 everything2 = merge(everything1, PRpm.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
@@ -391,21 +391,21 @@ names(everything16) = c('julianday', 'am all density', 'bs all density', 'pm all
 corevery = everything16
 
 ## Make a correlation chart
-round(cor(corevery[,c(2:18)], use = 'pairwise.complete.obs'),2) # is that use argument ok?
+round(cor(corevery[,c(2:18)], use = 'pairwise.complete.obs'),2)
 
 # Smaller, more readable subsets of that correlation chart
 # Just all arthropods mean density
-all.dens = round(cor(corevery[,c(2:5,18)], use = 'pairwise.complete.obs'),2)
-write.csv(all.dens, 'all.dens.csv')
+all.dens = round(cor(corevery[,c(2:5)], use = 'pairwise.complete.obs'),2)
+#write.csv(all.dens, 'all.dens.csv')
 # Just caterpillar mean density
 lepl.dens = round(cor(corevery[,c(6:9,18)], use = 'pairwise.complete.obs'),2)
-write.csv(lepl.dens, 'lepl.dens.csv')
+#write.csv(lepl.dens, 'lepl.dens.csv')
 # Just selected arthropods biomass
-arth.bm = round(cor(corevery[,c(10:13,18)], use = 'pairwise.complete.obs'),2)
-write.csv(arth.bm, 'arth.bm.csv')
+arth.bm = round(cor(corevery[,c(10:13)], use = 'pairwise.complete.obs'),2)
+#write.csv(arth.bm, 'arth.bm.csv')
 # Just caterpillar biomass
 lepl.bm = round(cor(corevery[,c(14:17,18)], use = 'pairwise.complete.obs'),2)
-write.csv(lepl.bm, 'lepl.bm.csv')
+#write.csv(lepl.bm, 'lepl.bm.csv')
 
 
 ## Make an ellipse chart
@@ -414,22 +414,64 @@ write.csv(lepl.bm, 'lepl.bm.csv')
 library(ellipse)
 library(RColorBrewer)
 
-# Use of the mtcars data proposed by R
 ellipsedata=round(cor(corevery[,c(2:17)], use = 'pairwise.complete.obs'),2)
+ellipsedataA=round(cor(corevery[,c(2:9,18)], use = 'pairwise.complete.obs'),2)
+ellipsedataB=round(cor(corevery[,c(10:18)], use = 'pairwise.complete.obs'),2)
 
 # Build a Pannel of 100 colors with Rcolor Brewer
-my_colors <- brewer.pal(5, "PiYG")
+my_colors <- brewer.pal(5, "BrBG")
 my_colors=colorRampPalette(my_colors)(101)
 
 # Plot ellipse chart
+par(mfrow = c(1,1), mar = c(1,3,3,1), oma = c(1,1,0,0))
 plotcorr(ellipsedata, col=my_colors[ellipsedata*50+51] , mar=c(1,1,1,1), cex.lab = 0.75)
+plotcorr(ellipsedataA, col=my_colors[ellipsedataA*50+51] , mar=c(1,1,1,1), cex.lab = 0.75)
+plotcorr(ellipsedataB, col=my_colors[ellipsedataB*50+51] , mar=c(1,1,1,1), cex.lab = 0.75)
 
 
 ## Bivariate plots
 
-plot(corevery$`pm lepl density`, corevery$`vol lepl density`)
+# Density
+par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(1,1,0,0))
+plot(corevery$`am all density`, corevery$`pm all density`, xlab = 'AM density', ylab = 'PM density', 
+     main = "PM vs. AM All Arthropod Density By Day")
+abline(0,1)
+plot(corevery$`am lepl density`, corevery$`pm lepl density`, xlab = 'AM density', ylab = 'PM density', 
+     main = "PM vs. AM Caterpillar Density By Day")
+abline(0,1)
+plot(corevery$`am all density`, corevery$`bs all density`, xlab = 'AM density', ylab = 'Beat sheet density', 
+     main = "Beat Sheet vs. AM All Arthropod Density By Day")
+abline(0,1)
+plot(corevery$`am lepl density`, corevery$`bs lepl density`, xlab = 'AM density', ylab = 'Beat sheet density', 
+     main = "Beat Sheet vs. AM Caterpillar Density By Day")
+abline(0,1)
+plot(corevery$`pm all density`, corevery$`vol all density`, xlab = 'PM density', ylab = 'Volunteer density', 
+     main = "Volunteer vs. PM All Arthropod Density By Day")
+abline(0,1)
+plot(corevery$`pm lepl density`, corevery$`vol lepl density`, xlab = 'PM density', ylab = 'Volunteer density', 
+     main = "Volunteer vs. PM Caterpillar Density By Day")
+abline(0,1)
 
-
+# Biomass
+par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(1,1,0,0))
+plot(corevery$`am selected bm`, corevery$`pm selected bm`, xlab = 'AM biomass', ylab = 'PM biomass', 
+     main = "PM vs. AM All Arthropod Biomass By Day")
+abline(0,1)
+plot(corevery$`am lepl bm`, corevery$`pm lepl bm`, xlab = 'AM biomass', ylab = 'PM biomass', 
+     main = "PM vs. AM Caterpillar Biomass By Day")
+abline(0,1)
+plot(corevery$`am selected bm`, corevery$`bs selected bm`, xlab = 'AM biomass', ylab = 'Beat sheet biomass', 
+     main = "Beat Sheet vs. AM All Arthropod Biomass By Day")
+abline(0,1)
+plot(corevery$`am lepl bm`, corevery$`bs lepl bm`, xlab = 'AM biomass', ylab = 'Beat sheet biomass', 
+     main = "Beat Sheet vs. AM Caterpillar Biomass By Day")
+abline(0,1)
+plot(corevery$`pm selected bm`, corevery$`vol selected bm`, xlab = 'PM biomass', ylab = 'Volunteer biomass', 
+     main = "Volunteer vs. PM All Arthropod Biomass By Day")
+abline(0,1)
+plot(corevery$`pm lepl bm`, corevery$`vol lepl bm`, xlab = 'PM biomass', ylab = 'Volunteer biomass', 
+     main = "Volunteer vs. PM Caterpillar Biomass By Day")
+abline(0,1)
 
 
 #---- Pie charts ----
@@ -533,6 +575,82 @@ jds = c(140, 171, 201, 232)
 mtext(c("May 20", "Jun 20", "Jul 20", "Aug 20"), 1, at = jds/7, line = 1.5, cex = 1.5)
 mtext("Mean biomass", 2, line = 2.5, cex = 1.5)
 title(main = 'Multiple Orders - Mean Biomass By Week')
+
+## Make a giant dataset with all mean densities, biomasses, and frass for by WEEK
+# (from core morning survey weeks)
+everyweek1 = merge(PRam.allwk[, c(1,5)], PRbs.allwk[,c(1,5)], by = 'week', all.x = T, all.y = F)
+everyweek2 = merge(everyweek1, PRpm.allwk[,c(1,5)], by = 'week', all.x = T, all.y = F)
+names(everyweek2) = c('week', 'am all density', 'bs all density', 'pm all density')
+everyweek3 = merge(everyweek2, PRvol.allwk[,c(1,5)], by = 'week', all.x = T, all.y = F)
+everyweek4 = merge(everyweek3, PRam.leplwk[,c(1,5)], by = 'week', all.x = T, all.y = F)
+names(everyweek4) = c('week', 'am all density', 'bs all density', 'pm all density', 
+                       'vol all density', 'am lepl density')
+everyweek5 = merge(everyweek4, PRbs.leplwk[,c(1,5)], by = 'week', all.x = T, all.y = F)
+everyweek6 = merge(everyweek5, PRpm.leplwk[,c(1,5)], by = 'week', all.x = T, all.y = F)
+names(everyweek6) = c('week', 'am all density', 'bs all density', 'pm all density', 
+                       'vol all density', 'am lepl density', 'bs lepl density', 'pm lepl density')
+everyweek7 = merge(everyweek6, PRvol.leplwk[,c(1,5)], by = 'week', all.x = T, all.y = F)
+everyweek8 = merge(everyweek7, PRfrassW[,c(2,3)], by = 'week', all.x = T, all.y = F)
+names(everyweek8) = c('week', 'am all density', 'bs all density', 'pm all density', 
+                       'vol all density', 'am lepl density', 'bs lepl density', 'pm lepl density',
+                       'vol lepl density', 'frass')
+
+
+corweek = everyweek8
+
+## Make a correlation chart
+round(cor(corweek[,c(2:10)], use = 'pairwise.complete.obs'),2)
+
+# Smaller, more readable subsets of that correlation chart
+# Just all arthropods mean density
+all.denswk = round(cor(corweek[,c(2:5)], use = 'pairwise.complete.obs'),2)
+#write.csv(all.denswk, 'all.denswk.csv')
+# Just caterpillar mean density
+lepl.denswk = round(cor(corweek[,c(6:9,10)], use = 'pairwise.complete.obs'),2)
+#write.csv(lepl.denswk, 'lepl.denswk.csv')
+
+# Just selected arthropods biomass
+#arth.bmwk = round(cor(corweek[,c(10:13,18)], use = 'pairwise.complete.obs'),2)
+#write.csv(arth.bmwk, 'arth.bmwk.csv')
+# Just caterpillar biomass
+#lepl.bmwk = round(cor(corweek[,c(14:17,18)], use = 'pairwise.complete.obs'),2)
+#write.csv(lepl.bmwk, 'lepl.bmwk.csv')
+
+
+## Make an ellipse chart
+
+ellipsedata2=round(cor(corweek[,c(2:10)], use = 'pairwise.complete.obs'),2)
+
+# Build a Pannel of 100 colors with Rcolor Brewer
+my_colors <- brewer.pal(5, "BrBG")
+my_colors=colorRampPalette(my_colors)(101)
+
+# Plot ellipse chart
+plotcorr(ellipsedata2, col=my_colors[ellipsedata2*50+51] , mar=c(1,1,1,1), cex.lab = 0.75)
+
+## Bivariate plots
+par(mfrow = c(1,1), mar = c(4,4,3,2), oma = c(1,1,0,0))
+plot(corweek$`am all density`, corweek$`pm all density`, xlab = 'AM density', ylab = 'PM density', 
+     main = "PM vs. AM All Arthropod Density By Week")
+#abline(lm(corweek$`pm all density`~corweek$`am all density`))
+abline(0,1)
+plot(corweek$`am lepl density`, corweek$`pm lepl density`, xlab = 'AM density', ylab = 'PM density', 
+     main = "PM vs. AM Caterpillar Density By Week")
+abline(0,1)
+plot(corweek$`am all density`, corweek$`bs all density`, xlab = 'AM density', ylab = 'Beat sheet density', 
+     main = "Beat Sheet vs. AM All Arthropod Density By Week")
+abline(0,1)
+plot(corweek$`am lepl density`, corweek$`bs lepl density`, xlab = 'AM density', ylab = 'Beat sheet density', 
+     main = "Beat Sheet vs. AM Caterpillar Density By Week")
+abline(0,1)
+plot(corweek$`pm all density`, corweek$`vol all density`, xlab = 'PM density', ylab = 'Volunteer density', 
+     main = "Volunteer vs. PM All Arthropod Density By Week")
+abline(0,1)
+plot(corweek$`pm lepl density`, corweek$`vol lepl density`, xlab = 'PM density', ylab = 'Volunteer density', 
+     main = "Volunteer vs. PM Caterpillar Density By Week")
+abline(0,1)
+
+
 
 
 # Fraction of surveys by week with caterpillars, min length of 0 (Lunchbunch plot)
