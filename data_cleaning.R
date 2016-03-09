@@ -20,20 +20,24 @@ library(stringr)
 # setwd('c:/git/caterpillars-count-analysis')
 
 # Read in data
-surveys = read.csv('data/tbl_surveys.csv', header=F)
+tempsurveys = read.csv('data/tbl_surveys.csv', header=F)
 orders = read.csv('data/tbl_orders.csv', header=F)
 
-names(surveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
+names(tempsurveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
                    'dateSubmit', 'tempMin', 'tempMax', 'notes', 'plantSp',
-                   'herbivory', 'photo', 'isValid')
+                   'herbivory', 'photo', 'isValid', 'status', 'surveyType',
+                   'leafCount', 'source')
 names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
                   'count', 'photo', 'time', 'isValid')
+
+# Only include valid entires in surveys
+surveys = tempsurveys[tempsurveys$isValid == 1,]
 
 # Convert 'survey' field to character from factor
 surveys$survey = as.character(surveys$survey)
 
 # Create effortByDay dataframe for use in summary functions
-surveys$date = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%m/%d/%Y"))
+surveys$date = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d"))
 effortByDay = data.frame(table(surveys[, c('site', 'date')]))
 names(effortByDay) = c('site', 'date', 'numSurveys')
 effortByDay = effortByDay[effortByDay$numSurveys!=0, ]
@@ -45,7 +49,7 @@ effortByDay$year = tempyear
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', all.x = T)
 
-orders2$date = as.POSIXlt(word(orders2$dateStart, 1, sep = " "), format = "%m/%d/%Y")
+orders2$date = as.POSIXlt(word(orders2$dateStart, 1, sep = " "), format = "%Y-%m-%d")
 orders2$julianday = yday(orders2$date)
 
 orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
