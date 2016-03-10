@@ -536,8 +536,11 @@ title(main = 'Caterpillars - Mean Density By Week')
 # Temporary fix of caterpillar colony data classified as "OTHER":
 volunteer.pr <- volunteer.pr[!(volunteer.pr$arthCode == "NONE" & volunteer.pr$count > 10),]
 
+# More editing to do with volunteer data (all eggs and caterpillars)
+#volunteer.pr[(volunteer.pr$arthCode == "NONE" & volunteer.pr$count > 10),]
+
 PRam.allwk = meanDensityByWeek(amsurvey.pr, ordersToInclude = 'All', inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5, lwd = 2, 
-                            ylim = c(0.5,2.3), xaxt='n', ann=FALSE)
+                            ylim = c(0.7,2.3), xaxt='n', ann=FALSE)
 PRbs.allwk = meanDensityByWeek(beatsheet.pr, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5, lwd = 2)
 PRpm.allwk = meanDensityByWeek(pmsurvey.pr, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
 PRvol.allwk = meanDensityByWeek(volunteer.pr, ordersToInclude = "All", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'green', minLength = 5, lwd = 2)
