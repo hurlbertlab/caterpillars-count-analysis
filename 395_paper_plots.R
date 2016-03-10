@@ -153,7 +153,7 @@ mtext('Mean biomass', side = 4, outer = TRUE, line = 1, cex.lab = 2)
 #----Figure 4b----
 
 #pdf('figure_4b.pdf', width = 8, height = 4)
-par(mfrow = c(1, 2), mar = c(2, 2.5, 2, 2.5), oma = c(2, 2, 2, 2))
+#par(mfrow = c(1, 2), mar = c(2, 2.5, 2, 2.5), oma = c(2, 2, 2, 2))
 
 # ORTH visual survey
 
@@ -194,7 +194,7 @@ mtext('Mean biomass', side = 4, outer = TRUE, line = 1, cex.lab = 2)
 #----Figure 4c----
 
 #pdf('figure_4c.pdf', width = 8, height = 4)
-par(mfrow = c(1, 2), mar = c(2, 2.5, 2, 2.5), oma = c(2, 2, 2, 2))
+#par(mfrow = c(1, 2), mar = c(2, 2.5, 2, 2.5), oma = c(2, 2, 2, 2))
 
 # ARAN visual survey
 
