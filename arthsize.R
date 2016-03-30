@@ -228,9 +228,9 @@ mtext('Julian day', side = 1, outer = TRUE, line = 1.5)
 # Grouped plots
 
 # Visual Survey
-
-par(mar = c(4,4,4,2), mfrow = c(1,1), oma = c(0,0,0,0))
-plot(5,5, type = 'n', ylim = c(0,20), xlim = c(135,204), ylab = "Average Length (mm)", xlab = "Julian day")
+par(xpd = FALSE)
+par(mar = c(4,4,4,8), mfrow = c(1,1), oma = c(0,0,0,0))
+plot(5,5, type = 'n', ylim = c(0,15), xlim = c(135,204), ylab = "Average Length (mm)", xlab = "Julian day")
 title('Prairie Ridge Visual Survey Average Length')
 
 abline(ARANlm.pr, col = 'cadetblue', lwd = 2)
@@ -242,6 +242,12 @@ abline(OPILlm.pr, col = 'royalblue', lwd = 2)
 abline(ORTHlm.pr, col = 'magenta4', lwd = 2)
 abline(HEMIlm.pr, col = 'yellow', lwd = 2)
 
+par(xpd=TRUE)
+legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"), 
+       col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), 
+       lwd = 2)
+
+par(xpd = FALSE)
 #legend()
 
 # Beat sheets
