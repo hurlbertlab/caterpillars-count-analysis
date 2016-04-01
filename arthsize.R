@@ -248,10 +248,12 @@ legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"),
        lwd = 2)
 
 par(xpd = FALSE)
-#legend()
+
 
 # Beat sheets
 
+par(xpd = FALSE)
+par(mar = c(4,4,4,8), mfrow = c(1,1), oma = c(0,0,0,0))
 plot(5,5, type = 'n', ylim = c(0,20), xlim = c(135,204), ylab = "Average Length (mm)", xlab = "Julian day")
 title('Prairie Ridge Beat Sheet Average Length')
 
@@ -264,6 +266,12 @@ abline(OPILbslm.pr, col = 'royalblue', lwd = 2)
 abline(ORTHbslm.pr, col = 'magenta4', lwd = 2)
 abline(HEMIbslm.pr, col = 'yellow', lwd = 2)
 
+par(xpd=TRUE)
+legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"), 
+       col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), 
+       lwd = 2)
+
+par(xpd = FALSE)
 
 
 
@@ -486,7 +494,8 @@ mtext('Julian day', side = 1, outer = TRUE, line = 1.5)
 
 # Visual Survey
 
-par(mar = c(4,4,4,2), mfrow = c(1,1), oma = c(0,0,0,0))
+par(xpd = FALSE)
+par(mar = c(4,4,4,8), mfrow = c(1,1), oma = c(0,0,0,0))
 plot(5,5, type = 'n', ylim = c(0,20), xlim = c(135,204), ylab = "Average Length (mm)", xlab = "Julian day")
 title('Botanical Garden Visual Survey Average Length')
 
@@ -499,10 +508,17 @@ abline(OPILlm.bg, col = 'royalblue', lwd = 2)
 abline(ORTHlm.bg, col = 'magenta4', lwd = 2)
 abline(HEMIlm.bg, col = 'yellow', lwd = 2)
 
-#legend()
+par(xpd=TRUE)
+legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"), 
+       col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), 
+       lwd = 2)
+
+par(xpd = FALSE)
 
 # Beat sheets
 
+par(xpd = FALSE)
+par(mar = c(4,4,4,8), mfrow = c(1,1), oma = c(0,0,0,0))
 plot(5,5, type = 'n', ylim = c(0,20), xlim = c(135,204), ylab = "Average Length (mm)", xlab = "Julian day")
 title('Botanical Garden Beat Sheet Average Length')
 
@@ -515,7 +531,12 @@ abline(OPILbslm.bg, col = 'royalblue', lwd = 2)
 abline(ORTHbslm.bg, col = 'magenta4', lwd = 2)
 abline(HEMIbslm.bg, col = 'yellow', lwd = 2)
 
+par(xpd=TRUE)
+legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"), 
+       col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), 
+       lwd = 2)
 
+par(xpd = FALSE)
 
 
 

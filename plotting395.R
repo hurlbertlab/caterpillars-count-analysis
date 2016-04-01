@@ -218,23 +218,22 @@ dev.off()
 
 
 #---- BOT GARDEN ----
-#---- PROBLEMS ---- 
 
-#pdf('pr_density_biomass.pdf', width = 7, height = 9)
+pdf('bg_density_biomass.pdf', width = 7, height = 9)
 par(mfrow = c(3, 2), mar = c(3, 2.5, 3, 2.5), oma = c(4, 4, 3, 4))
 
 #----Visual Surveys----
 
 # Get mean density and mean biomass data from function
 compam.bg <- meanDensityByDay(surveyData = amsurvey.bg, ordersToInclude = regorders, 
-                              minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                              minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compam.bg$julianday, compam.bg$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0.15, 0.7))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.8))
 par(new = T)
 plot(compam.bg$julianday, compam.bg$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(1.0, 4.6))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 3.7))
 axis(side=4)
 legend("topleft", c('Mean density', 'Mean biomass'),
        lwd = c(2,2), lty = c(1,1), col = c('darkorange2', 'darkslategray3'))
@@ -245,14 +244,14 @@ title("Visual Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compbs.bg <- meanDensityByDay(surveyData = beatsheet.bg, ordersToInclude = regorders, 
-                              minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                              minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compbs.bg$julianday, compbs.bg$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.64))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.5))
 par(new = T)
 plot(compbs.bg$julianday, compbs.bg$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 4.3))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 3))
 axis(side=4)
 title("Beat Sheet Surveys", line = 1)
 
@@ -261,14 +260,14 @@ title("Beat Sheet Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compam.bglepl <- meanDensityByDay(surveyData = amsurvey.bg, ordersToInclude = 'LEPL', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compam.bglepl$julianday, compam.bglepl$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.125))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.33))
 par(new = T)
 plot(compam.bglepl$julianday, compam.bglepl$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.4))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.5))
 axis(side=4)
 title("LEPL Visual Surveys", line = 1)
 
@@ -277,14 +276,14 @@ title("LEPL Visual Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compbs.bglepl <- meanDensityByDay(surveyData = beatsheet.bg, ordersToInclude = 'LEPL', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compbs.bglepl$julianday, compbs.bglepl$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.16))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.1))
 par(new = T)
 plot(compbs.bglepl$julianday, compbs.bglepl$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.7))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.3))
 axis(side=4)
 title("LEPL Beat Sheet Surveys", line = 1)
 
@@ -293,14 +292,14 @@ title("LEPL Beat Sheet Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compam.bgorth <- meanDensityByDay(surveyData = amsurvey.bg, ordersToInclude = 'ORTH', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compam.bgorth$julianday, compam.bgorth$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
      xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.105))
 par(new = T)
 plot(compam.bgorth$julianday, compam.bgorth$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.7))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.4))
 axis(side=4)
 title("ORTH Visual Surveys", line = 1)
 
@@ -309,21 +308,21 @@ title("ORTH Visual Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compbs.bgorth <- meanDensityByDay(surveyData = beatsheet.bg, ordersToInclude = 'ORTH', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compbs.bgorth$julianday, compbs.bgorth$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.16))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.1))
 par(new = T)
 plot(compbs.bgorth$julianday, compbs.bgorth$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 1.35))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.3))
 axis(side=4)
 title("ORTH Beat Sheet Surveys", line = 1)
 
 mtext('Julian day', side = 1, outer = TRUE, line = 1, cex.lab = 2)
 mtext('Mean density', side = 2, outer = TRUE, line = 1, cex.lab = 2)
 mtext('Mean biomass', side = 4, outer = TRUE, line = 1, cex.lab = 2)
-mtext('Prairie Ridge', outer = TRUE, side = 3, line = 1, cex.lab = 2)
+mtext('Botanical Garden', outer = TRUE, side = 3, line = 1, cex.lab = 2)
 
 # 2nd pages of pdf
 
@@ -331,14 +330,14 @@ mtext('Prairie Ridge', outer = TRUE, side = 3, line = 1, cex.lab = 2)
 
 # Get mean density and mean biomass data from function
 compam.bgauch <- meanDensityByDay(surveyData = amsurvey.bg, ordersToInclude = 'AUCH', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compam.bgauch$julianday, compam.bgauch$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.35))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.15))
 par(new = T)
 plot(compam.bgauch$julianday, compam.bgauch$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 2.5))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 1))
 axis(side=4)
 legend("topleft", c('Mean density', 'Mean biomass'),
        lwd = c(2,2), lty = c(1,1), col = c('darkorange2', 'darkslategray3'))
@@ -349,14 +348,14 @@ title("AUCH Visual Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compbs.bgauch <- meanDensityByDay(surveyData = beatsheet.bg, ordersToInclude = 'AUCH', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compbs.bgauch$julianday, compbs.bgauch$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.28))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.15))
 par(new = T)
 plot(compbs.bgauch$julianday, compbs.bgauch$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 1.8))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 1))
 axis(side=4)
 title("AUCH Beat Sheet Surveys", line = 1)
 
@@ -365,14 +364,14 @@ title("AUCH Beat Sheet Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compam.bgaran <- meanDensityByDay(surveyData = amsurvey.bg, ordersToInclude = 'ARAN', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compam.bgaran$julianday, compam.bgaran$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.09))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.23))
 par(new = T)
 plot(compam.bgaran$julianday, compam.bgaran$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.6))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 1.3))
 axis(side=4)
 title("ARAN Visual Surveys", line = 1)
 
@@ -381,14 +380,14 @@ title("ARAN Visual Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compbs.bgaran <- meanDensityByDay(surveyData = beatsheet.bg, ordersToInclude = 'ARAN', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compbs.bgaran$julianday, compbs.bgaran$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.06))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.15))
 par(new = T)
 plot(compbs.bgaran$julianday, compbs.bgaran$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.45))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, .7))
 axis(side=4)
 title("ARAN Beat Sheet Surveys", line = 1)
 
@@ -397,14 +396,14 @@ title("ARAN Beat Sheet Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compam.bgcole <- meanDensityByDay(surveyData = amsurvey.bg, ordersToInclude = 'COLE', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compam.bgcole$julianday, compam.bgcole$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.22))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.15))
 par(new = T)
 plot(compam.bgcole$julianday, compam.bgcole$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 1.9))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 1))
 axis(side=4)
 title("COLE Visual Surveys", line = 1)
 
@@ -413,14 +412,14 @@ title("COLE Visual Surveys", line = 1)
 
 # Get mean density and mean biomass data from function
 compbs.bgcole <- meanDensityByDay(surveyData = beatsheet.bg, ordersToInclude = 'COLE', 
-                                  minLength = 5, inputSite = 117, inputYear = 2015, plot = F)
+                                  minLength = 5, inputSite = 8892356, inputYear = 2015, plot = F)
 
 # Plot mean density and mean biomass on same plot
 plot(compbs.bgcole$julianday, compbs.bgcole$meanDensity, type = 'l', lwd = 2, col = 'darkorange2',
-     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.25))
+     xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.23))
 par(new = T)
 plot(compbs.bgcole$julianday, compbs.bgcole$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 1.6))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 1.5))
 axis(side=4)
 title("COLE Beat Sheet Surveys", line = 1)
 
@@ -428,6 +427,6 @@ title("COLE Beat Sheet Surveys", line = 1)
 mtext('Julian day', side = 1, outer = TRUE, line = 1, cex.lab = 2)
 mtext('Mean density', side = 2, outer = TRUE, line = 1, cex.lab = 2)
 mtext('Mean biomass', side = 4, outer = TRUE, line = 1, cex.lab = 2)
-mtext('Prairie Ridge', outer = TRUE, side = 3, line = 1, cex.lab = 2)
+mtext('Botanical Garden', outer = TRUE, side = 3, line = 1, cex.lab = 2)
 
 dev.off()
