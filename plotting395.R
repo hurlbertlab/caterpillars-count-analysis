@@ -3,7 +3,7 @@
 # Tracie Hayes
 
 
-#pdf('pr_density_biomass.pdf', width = 7, height = 9)
+pdf('plots/pr_density_biomass.pdf', width = 7, height = 9)
 par(mfrow = c(3, 2), mar = c(3, 2.5, 3, 2.5), oma = c(4, 4, 3, 4))
 
 #----Visual Surveys----
@@ -67,7 +67,7 @@ plot(compbs.prlepl$julianday, compbs.prlepl$meanDensity, type = 'l', lwd = 2, co
      xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.16))
 par(new = T)
 plot(compbs.prlepl$julianday, compbs.prlepl$meanBiomass, type = 'l', lwd = 2, col = 'darkslategray3', axes = FALSE, 
-     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.7))
+     bty = "n", xlab = "", ylab = "", xlim = c(134, 204), ylim = c(0, 0.9))
 axis(side=4)
 title("LEPL Beat Sheet Surveys", line = 1)
 
@@ -219,7 +219,7 @@ dev.off()
 
 #---- BOT GARDEN ----
 
-pdf('bg_density_biomass.pdf', width = 7, height = 9)
+pdf('plots/bg_density_biomass.pdf', width = 7, height = 9)
 par(mfrow = c(3, 2), mar = c(3, 2.5, 3, 2.5), oma = c(4, 4, 3, 4))
 
 #----Visual Surveys----
