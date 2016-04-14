@@ -115,6 +115,7 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
   if (plot & new) {
     plot(temp3$julianday, temp3[, plotVar], type = 'l', 
          col = color, xlab = "Julian day", ylab = plotVar, ...)
+    
   # Adding to an existing plot:
   } else if (plot & new==F) {
     points(temp3$julianday, temp3[, plotVar], type = 'l', col = color, ...)
@@ -128,6 +129,7 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
 
 
 # Calculate mean density per survey per week (to smooth data)
+# Need to include biomass
 
 meanDensityByWeek = function(surveyData,            # merged dataframe of surveys and orders tables
                             ordersToInclude = 'All',       # which arthropod orders to calculate density for (codes)
