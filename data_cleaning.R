@@ -156,21 +156,3 @@ volunteer.pr <- surveySubset(cleandata.pr, subset = "volunteer", minLength = 5)
 amsurvey.bg <- surveySubset(cleandata.bg, subset = "visual am", minLength = 5)
 beatsheet.bg <- surveySubset(cleandata.bg, subset = "beat sheet", minLength = 5)
 
-
-if(FALSE) {
-# Plotting biomass average per day
-meanDensityByDay(surveyData = amsurvey.pr, ordersToInclude = regorders, minLength = 5, 
-                 inputSite = 117, inputYear = 2015, plot = T, plotVar = 'meanBiomass')
-meanDensityByDay(surveyData = pmsurvey.pr, ordersToInclude = regorders, minLength = 5, 
-                 inputSite = 117, inputYear = 2015, plot = T, plotVar = 'meanBiomass')
-meanDensityByDay(surveyData = beatsheet.pr, ordersToInclude = regorders, minLength = 5, 
-                 inputSite = 117, inputYear = 2015, plot = T, plotVar = 'meanBiomass')
-meanDensityByDay(surveyData = volunteer.pr, ordersToInclude = regorders, minLength = 5, 
-                 inputSite = 117, inputYear = 2015, plot = T, plotVar = 'meanBiomass')
-}
-
-
-
-
-
-
