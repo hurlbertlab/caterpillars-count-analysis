@@ -544,10 +544,55 @@ par(xpd = FALSE)
 
 #----Stacked Bar----
 
+# For PR beat sheet
 prebar <- aggregate(beatsheet.pr$count, by = list(jd = beatsheet.pr$julianday, arth = beatsheet.pr$arthCode), 
                   FUN = sum)
 bar <- prebar[prebar$arth == "ARAN" | prebar$arth == "AUCH" | prebar$arth == "COLE" | prebar$arth == "DIPT" |
-                prebar$arth == "LEPL" | prebar$arth == "OPIL" | prebar$arth == "ORTH" | prebar$arth == "HEMI",]
-counts <- table(bar$arth, bar$jd)
+                prebar$arth == "LEPL" | prebar$arth == "OPIL" | prebar$arth == "ORTH" | prebar$arth == "HETE",]
+widebar <- reshape(bar,
+                v.names = "x",
+                timevar = "arth",
+                idvar = "jd",
+                direction = "wide")
+# need to figure out why HETE row is not showing up
+
+widebar <- widebar[order(widebar$jd),]
+
+
+# For PR visual survey
+prebar1 <- aggregate(amsurvey.pr$count, by = list(jd = amsurvey.pr$julianday, arth = amsurvey.pr$arthCode), 
+                    FUN = sum)
+bar1 <- prebar1[prebar1$arth == "ARAN" | prebar1$arth == "AUCH" | prebar1$arth == "COLE" | prebar1$arth == "DIPT" |
+                prebar1$arth == "LEPL" | prebar1$arth == "OPIL" | prebar1$arth == "ORTH" | prebar1$arth == "HETE",]
+widebar1 <- reshape(bar1,
+                   v.names = "x",
+                   timevar = "arth",
+                   idvar = "jd",
+                   direction = "wide")
+# need to figure out why HETE row is not showing up
+
+widebar1 <- widebar1[order(widebar1$jd),]
+
+
+library(RColorBrewer)
+#sequential <- brewer.pal(6, "BuGn")
+
+barplot(t(widebar1[,2:8]),
+        names.arg = widebar1$jd, # x-axis labels
+        cex.names = 0.7, # makes x-axis labels small enough to show all
+        col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'),
+        #col = sequential, # colors
+        xlab = "Julian day",
+        ylab = "Count",
+        ylim = c(0,90),
+        main = "Arthropod assemblages - PR Visual")
+        #xlim = c(135,215), # these two lines allow space for the legend
+        #width = 1) # these two lines allow space for the legend
+legend("bottomright", 
+       legend = c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"),
+       #col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), #in order from top to bottom
+       fill = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow')) # 6:1 reorders so legend order matches graph
+       
+
 barplot(counts, main = "Arthropod Assemblages Over the Season", xlab = 'Julian Day', 
         col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'))
