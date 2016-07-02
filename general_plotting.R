@@ -107,8 +107,12 @@ visualsurveybg = visualsurveybg[visualsurveybg$julianday != 259,]
 
 # Plot our morning surveys and our beat sheet surveys for the botanical garden
 # Caterpillars only, mean density
-BGam.lepl = meanDensityByDay(visualsurveybg, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = T, color = 'blue', minLength = 5)
-BGbs.lepl = meanDensityByDay(beatsheet, "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, plotVar = 'meanDensity', new = F, color = 'orange', minLength = 5)
+BGam.lepl = meanDensityByDay(visualsurveybg, effort = effortByDay, "LEPL", inputYear = 2015,
+                             inputSite = 8892356, plot = TRUE, plotVar = 'meanDensity', 
+                             new = T, color = 'blue', minLength = 5)
+BGbs.lepl = meanDensityByDay(beatsheet, effort = effortByDay, "LEPL", inputYear = 2015,
+                             inputSite = 8892356, plot = TRUE, plotVar = 'meanDensity', 
+                             new = F, color = 'orange', minLength = 5)
 legend("topleft", c('lab am surveys', 'lab beat sheet'),lwd = 2, lty = 'solid', 
        col = c('blue', 'orange'))
 
