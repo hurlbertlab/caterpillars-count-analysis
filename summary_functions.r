@@ -81,28 +81,26 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
                 site == inputSite &
                 year == inputYear)
   
-  
-  if (byTreeSpecies) {
-    temp2 = ddply(temp, .(site, julianday, year, plantSp), summarize, 
-                  totalCount = sum(count))
-    
-  } else {
+  # When no data is available for parameters set:
+  if(nrow(temp) == 0 & !byTreeSpecies) {
+    temp3 = effort
+    temp3$totalCount = 0
+    temp3$numSurveysGTzero = 0
+    temp3$totalBiomass = 0
+
+  } else if (nrow(temp) > 0 & !byTreeSpecies) {
     temp2 = ddply(temp, .(site, julianday, year), summarize, 
                   totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])), 
                   totalBiomass = sum(biomass))
-  }
-  
-  # When no data is available for parameters set:
-  if(nrow(temp2) > 0) {
-    temp3 = merge(effort[,c('site','numSurveys','julianday','year')], temp2, by = c('julianday', 'site', 'year'), all.y = T) 
-  } else {
-    temp3 <- data.frame(julianday = 0,
-    site = inputSite,
-    year = inputYear,
-    numSurveys = 1, # to have a number that the zeroes are divided by
-    totalCount = 0,
-    numSurveysGTzero = 0)
-  }
+    temp3 = merge(effort[,c('site','numSurveys','julianday','year')], temp2, 
+                  by = c('julianday', 'site', 'year'), all.x = T) 
+
+  } else if (nrow(temp) > 0 & byTreeSpecies) {
+    temp2 = ddply(temp, .(site, julianday, year, plantSp), summarize, 
+                  totalCount = sum(count))
+    temp3 = merge(effort[,c('site','numSurveys','julianday','year')], temp2, 
+                  by = c('julianday', 'site', 'year'), all.x = T)
+  }  
   
   # Calculations shown in dataframe output:
   temp3$totalCount[is.na(temp3$totalCount)] = 0
