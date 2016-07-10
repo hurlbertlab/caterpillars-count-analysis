@@ -97,7 +97,7 @@ divergecol = function(values, bins, neg_col, pos_col) {
 pos_col = 'blue'
 neg_col = 'red'
 colRamp = colorRampPalette(c(neg_col, 'white', pos_col))
-colfunc = colorRampPalette(c(col1, col2))
+colfunc = colorRampPalette(c(neg_col, pos_col))
 
 # Function for plotting matrix of raw values
 sampPlot = function(sampMatrix, col1, col2, title) {
@@ -121,18 +121,24 @@ sampPlot2 = function(sampMatrix, colRamp, bins, title) {
   max_absolute_value = max(abs(sampMatrix), na.rm = TRUE)
   color_sequence=seq(-max_absolute_value,max_absolute_value, length.out=bins+1)
   
+  n_in_class=hist(sampMatrix, breaks=color_sequence, plot=F)$counts>0
+  col_to_include=min(which(n_in_class==T)):max(which(n_in_class==T))
+  breaks_to_include=min(which(n_in_class==T)):(max(which(n_in_class==T))+1)
+    
   par(mgp = c(1.5, 0.3, 0), mar = c(3, 3, 2, 2))
   layout(matrix(1:2,ncol=2), width = c(2,1),height = c(1,1))
   image(sampMatrix, ylab = "Sampling frequency (#/month)", 
         xlab = "Number of surveys", main = title, 
-        xaxt = "n", yaxt = "n", col = colRamp(bins))
+        xaxt = "n", yaxt = "n", col = colRamp(bins)[col_to_include],
+        breaks=color_sequence[breaks_to_include])
   axis(2, seq(0, 1, length.out = 6), labels = round(8/(6:1), 1), tck = -.01)
   axis(1, seq(0, 1, length.out = 8), labels = 5*(1:8), tck = -.01, las = 1)
   
-  legend_image <- as.raster(matrix(colRamp(bins), ncol=1))
+  legend_image <- as.raster(matrix(colRamp(bins)[rev(col_to_include)], ncol=1))
   plot(c(0,2),c(0,1),type = 'n', axes = F,xlab = '', ylab = '')
-  mtext(seq(round(max(sampMatrix)), round(min(sampMatrix)), length.out=3), 4, 
-        at = seq(0,1,l=3), las = 1, line = -1)
+  mtext(c(round(min(sampMatrix)), 0, round(max(sampMatrix))), 4, 
+        at = c(0, -min(sampMatrix)/(max(sampMatrix) - min(sampMatrix)), 1), 
+        las = 1, line = -1)
   rasterImage(legend_image, 0, 0, 1, 1)
 }
 
