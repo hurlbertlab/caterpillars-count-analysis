@@ -112,7 +112,7 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
   # Plotting the chosen variable:
   if (plot & new) {
     plot(temp3$julianday, temp3[, plotVar], type = 'l', 
-         col = color, xlab = "Julian day", ylab = plotVar, ...)
+         col = color, xlab = "Julian day", ...)
     
   # Adding to an existing plot:
   } else if (plot & new==F) {
