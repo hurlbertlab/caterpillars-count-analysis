@@ -72,6 +72,7 @@ for (cir in 1:8) { # survey circle effort loop
 
 foo = output %>% group_by(circles, sampFreq) %>% 
   summarize(maxJD = mean(maxJD, na.rm = T), JDmean = mean(JDmean, na.rm = T))
+write.csv(foo, 'BG_sampling_effort_stats.csv', row.names = F)
 
 maxJDmat = matrix(foo$maxJD, nrow = length(unique(foo$circles)), 
                   ncol = length(unique(foo$sampFreq)),
@@ -98,8 +99,25 @@ neg_col = 'red'
 colRamp = colorRampPalette(c(neg_col, 'white', pos_col))
 colfunc = colorRampPalette(c(col1, col2))
 
+# Function for plotting matrix of raw values
+sampPlot = function(sampMatrix, col1, col2, title) {
+  par(mgp = c(1.5, 0.3, 0), mar = c(3, 3, 2, 2))
+  layout(matrix(1:2,ncol=2), width = c(2,1),height = c(1,1))
+  image(sampMatrix, ylab = "Sampling frequency (#/month)", 
+        xlab = "Number of surveys", main = title, 
+        xaxt = "n", yaxt = "n", col = colfunc(20))
+  axis(2, seq(0, 1, length.out = 6), labels = round(8/(6:1), 1), tck = -.01)
+  axis(1, seq(0, 1, length.out = 8), labels = 5*(1:8), tck = -.01, las = 1)
+  
+  legend_image <- as.raster(matrix(colfunc(20), ncol=1))
+  plot(c(0,2),c(0,1),type = 'n', axes = F,xlab = '', ylab = '')
+  mtext(seq(round(max(sampMatrix)), round(min(sampMatrix)), length.out=3), 4, 
+        at = seq(0,1,l=3), las = 1, line = -1)
+  rasterImage(legend_image, 0, 0, 1, 1)
+}
 
-sampPlot = function(sampMatrix, colRamp, bins, title) {
+# Function for plotting matrix of deviations, with divergent color ramp from 0
+sampPlot2 = function(sampMatrix, colRamp, bins, title) {
   max_absolute_value = max(abs(sampMatrix), na.rm = TRUE)
   color_sequence=seq(-max_absolute_value,max_absolute_value, length.out=bins+1)
   
