@@ -15,6 +15,7 @@ tempyear <- substring(visEffortByDay$date, 1, 4)
 visEffortByDay$year = tempyear 
 
 BGeffortByDay = subset(visEffortByDay, site == 8892356 & year == 2015)
+PReffortByDay = subset(visEffortByDay, site == 117 & year == 2015)
 
 amsurvey.BG = amsurvey.bg[-grep("BEAT SHEET", amsurvey.bg$notes.y),]
 
@@ -35,43 +36,56 @@ dataSubset = function(surveyData, numCircles, circles = NA) {
 # BG subsampling
 BGvisleps = subset(amsurvey.BG, arthCode == 'LEPL')
 
-output = data.frame(circles = NULL, rep = NULL, sampFreq = NULL, 
-                    sampFreqRep = NULL, maxJD = NULL, JDmean = NULL)
-for (cir in 1:8) { # survey circle effort loop
-  circCombs = combn(max(amsurvey.bg$circle), cir)
-  for (d in 1:6) { # sampling frequency loop
-    for (e in 1:(d-1)) { # alternative starting date for a given freq loop
-      # Starting on the 2nd sample date since the 1st one 
-      # during training only has 10 surveys
-      dateseq = seq(e+1, nrow(BGeffortByDay), by = d)
-      sampledates = as.character(BGeffortByDay$date[dateseq])
-            
-      effort = BGeffortByDay[BGeffortByDay$date %in% sampledates, ]
-      
-      for (i in 1:ncol(circCombs)) {
-        circles = circCombs[,i]
-        tmp = dataSubset(amsurvey.bg, cir, circles = circles)
-        tmp2 = tmp[tmp$date %in% sampledates, ]
-        meanByDay = meanDensityByDay(tmp2, effort = effort, minLength = 5,
-                                     ordersToInclude = 'LEPL', inputSite = 8892356,
-                                     inputYear = 2015)
-        maxJD = meanByDay$julianday[meanByDay$meanDensity == max(meanByDay$meanDensity)]
-        JDmean = sum(meanByDay$julianday * meanByDay$meanDensity) / sum(meanByDay$meanDensity)
-        tmpout = data.frame(circles = cir, 
-                            rep = i, 
-                            sampFreq = d, 
-                            sampFreqRep = e,
-                            maxJD = maxJD, 
-                            JDmean = JDmean)
-        output = rbind(output, tmpout)
+# Function for subsetting survey data to specified levels of effort
+# (both number of surveys, and frequency of sampling).
+# It is assumed that surveyData and effortByDay have already been subsetted down to the 
+# desired site and year.
+effortSampling = function(surveyData, effortByDay, arthOrder, maxCircles, maxFreq) {
+  
+  output = data.frame(circles = NULL, rep = NULL, sampFreq = NULL, 
+                      sampFreqRep = NULL, maxJD = NULL, JDmean = NULL)
+  
+  for (cir in 1:maxCircles) { # survey circle effort loop
+    circCombs = combn(max(surveyData$circle), cir)
+
+    for (d in 1:maxFreq) { # sampling frequency loop
+
+      for (e in 1:(d-1)) { # alternative starting date for a given freq loop
+        # Starting on the 2nd sample date since the 1st one at NCBG
+        # during training only has 10 surveys
+        dateseq = seq(e+1, nrow(effortByDay), by = d)
+        sampledates = as.character(effortByDay$date[dateseq])
+        
+        effort = effortByDay[effortByDay$date %in% sampledates, ]
+        
+        for (i in 1:ncol(circCombs)) {
+          circles = circCombs[,i]
+          tmp = subset(surveyData, circles %in% circles)
+          tmp2 = tmp[tmp$date %in% sampledates, ]
+          meanByDay = meanDensityByDay(tmp2, effort = effort, minLength = 5,
+                                       ordersToInclude = arthOrder, 
+                                       inputSite = surveyData$site[1],
+                                       inputYear = surveyData$year[1])
+          maxJD = meanByDay$julianday[meanByDay$meanDensity == max(meanByDay$meanDensity)]
+          JDmean = sum(meanByDay$julianday * meanByDay$meanDensity) / sum(meanByDay$meanDensity)
+          tmpout = data.frame(circles = cir, 
+                              rep = i, 
+                              sampFreq = d, 
+                              sampFreqRep = e,
+                              maxJD = maxJD, 
+                              JDmean = JDmean)
+          output = rbind(output, tmpout)
+        }  
       }  
-    }  
     }
     
+  }
+  
+  foo = output %>% group_by(circles, sampFreq) %>% 
+    summarize(maxJD = mean(maxJD, na.rm = T), JDmean = mean(JDmean, na.rm = T))
+  return(foo)
 }
 
-foo = output %>% group_by(circles, sampFreq) %>% 
-  summarize(maxJD = mean(maxJD, na.rm = T), JDmean = mean(JDmean, na.rm = T))
 write.csv(foo, 'BG_sampling_effort_stats.csv', row.names = F)
 
 maxJDmat = matrix(foo$maxJD, nrow = length(unique(foo$circles)), 
@@ -117,7 +131,7 @@ sampPlot = function(sampMatrix, col1, col2, title) {
 }
 
 # Function for plotting matrix of deviations, with divergent color ramp from 0
-sampPlot2 = function(sampMatrix, colRamp, bins, title) {
+sampPlot2 = function(sampMatrix, colRamp, bins, title, ...) {
   max_absolute_value = max(abs(sampMatrix), na.rm = TRUE)
   color_sequence=seq(-max_absolute_value,max_absolute_value, length.out=bins+1)
   
@@ -125,7 +139,7 @@ sampPlot2 = function(sampMatrix, colRamp, bins, title) {
   col_to_include=min(which(n_in_class==T)):max(which(n_in_class==T))
   breaks_to_include=min(which(n_in_class==T)):(max(which(n_in_class==T))+1)
     
-  par(mgp = c(1.5, 0.3, 0), mar = c(3, 3, 2, 2))
+  par(mgp = c(2, 0.3, 0), mar = c(4, 4, 2, 2), ...)
   layout(matrix(1:2,ncol=2), width = c(2,1),height = c(1,1))
   image(sampMatrix, ylab = "Sampling frequency (#/month)", 
         xlab = "Number of surveys", main = title, 
@@ -136,8 +150,15 @@ sampPlot2 = function(sampMatrix, colRamp, bins, title) {
   
   legend_image <- as.raster(matrix(colRamp(bins)[rev(col_to_include)], ncol=1))
   plot(c(0,2),c(0,1),type = 'n', axes = F,xlab = '', ylab = '')
-  mtext(c(round(min(sampMatrix)), 0, round(max(sampMatrix))), 4, 
-        at = c(0, -min(sampMatrix)/(max(sampMatrix) - min(sampMatrix)), 1), 
+  
+  if (max(sampMatrix) - min(sampMatrix) <= 6) {
+    labels = round(min(sampMatrix)):round(max(sampMatrix))
+  } else {
+    labels = seq(round(min(sampMatrix)), round(max(sampMatrix)), by = 2)
+  }
+  mtext(labels, 4, 
+        at = (labels - round(min(sampMatrix)))/
+                (round(max(sampMatrix)) - round(min(sampMatrix))),
         las = 1, line = -1)
   rasterImage(legend_image, 0, 0, 1, 1)
 }
@@ -151,8 +172,8 @@ dev.off()
 
 pdf('sampling_effort_deviations.pdf', height = 5, width = 8)
 par(mfrow = c(2,1))
-sampPlot(JDmeanmat1, col1, col2, "Abundance centroid deviation")
-sampPlot(maxJDmat1, col1, col2, "Max abundance date deviation")
+sampPlot2(JDmeanmat1, colRamp, 30, "Abundance centroid deviation", cex.axis = 1.25, cex.lab = 2)
+sampPlot2(maxJDmat1, colRamp, 30, "Max abundance date deviation", cex.axis = 1.25, cex.lab = 2)
 dev.off()
 
 

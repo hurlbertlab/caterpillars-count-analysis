@@ -352,7 +352,7 @@ title(main = 'Multiple Orders - Mean Biomass')
 
 ## Make a giant dataset with all mean densities, biomasses, and frass for by day
 # (for standard julian days from core morning survey days)
-everything1 = merge(PRam.all[, c(1,8)], PRbs.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
+everything1 = merge(PRam.all[, c(1,8)], PRbs.all[,c(1,8)], by = 'julianday', all.x = T)
 everything2 = merge(everything1, PRpm.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
 names(everything2) = c('julianday', 'am all density', 'bs all density', 'pm all density')
 everything3 = merge(everything2, PRvol.all[,c(1,8)], by = 'julianday', all.x = T, all.y = F)
