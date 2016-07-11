@@ -75,15 +75,17 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
     ordersToInclude = unique(surveyData$arthCode)
   }
   
-  temp = filter(surveyData,
+  temp = subset(surveyData,
                 length >= minLength & 
                 arthCode %in% ordersToInclude & 
                 site == inputSite &
                 year == inputYear)
   
+  temp_effort = subset(effort, site == inputSite & year == inputYear)
+  
   # When no data is available for parameters set:
   if(nrow(temp) == 0 & !byTreeSpecies) {
-    temp3 = effort
+    temp3 = temp_effort
     temp3$totalCount = 0
     temp3$numSurveysGTzero = 0
     temp3$totalBiomass = 0
@@ -92,13 +94,13 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
     temp2 = ddply(temp, .(site, julianday, year), summarize, 
                   totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])), 
                   totalBiomass = sum(biomass))
-    temp3 = merge(effort[,c('site','numSurveys','julianday','year')], temp2, 
+    temp3 = merge(temp_effort[,c('site','numSurveys','julianday','year')], temp2, 
                   by = c('julianday', 'site', 'year'), all.x = T) 
 
   } else if (nrow(temp) > 0 & byTreeSpecies) {
     temp2 = ddply(temp, .(site, julianday, year, plantSp), summarize, 
                   totalCount = sum(count))
-    temp3 = merge(effort[,c('site','numSurveys','julianday','year')], temp2, 
+    temp3 = merge(temp_effort[,c('site','numSurveys','julianday','year')], temp2, 
                   by = c('julianday', 'site', 'year'), all.x = T)
   }  
   
