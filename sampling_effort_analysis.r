@@ -159,7 +159,7 @@ sampPlot2 = function(sampMatrix, colRamp, bins, title, ...) {
   mtext(labels, 4, 
         at = (labels - round(min(sampMatrix)))/
                 (round(max(sampMatrix)) - round(min(sampMatrix))),
-        las = 1, line = -1)
+        las = 1, line = -1, cex = 1.5)
   rasterImage(legend_image, 0, 0, 1, 1)
 }
 
