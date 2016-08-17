@@ -20,8 +20,8 @@ library(stringr)
 # setwd('c:/git/caterpillars-count-analysis')
 
 # Read in data
-tempsurveys = read.csv('data/tbl_surveys.csv', header=F)
-orders = read.csv('data/tbl_orders.csv', header=F)
+tempsurveys = read.csv('data/tbl_surveys.csv', header=F, stringsAsFactors = F)
+orders = read.csv('data/tbl_orders.csv', header=F, stringsAsFactors = F)
 
 names(tempsurveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
                    'dateSubmit', 'tempMin', 'tempMax', 'notes', 'plantSp',
@@ -30,7 +30,7 @@ names(tempsurveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateSt
 names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
                   'count', 'photo', 'time', 'isValid')
 
-# Only include valid entires in surveys
+# Only include valid entries in surveys
 surveys = tempsurveys[tempsurveys$isValid == 1,]
 
 # Convert 'survey' field to character from factor
@@ -47,23 +47,39 @@ tempyear <- substring(effortByDay$date, 1, 4)
 effortByDay$year = tempyear 
 
 # Merge orders and surveys table
-orders2 = merge(surveys, orders, by = 'surveyID', all.x = T)
+orders2 = merge(surveys, orders, by = 'surveyID', sort = FALSE)
 
 orders2$date = as.POSIXlt(word(orders2$dateStart, 1, sep = " "), format = "%Y-%m-%d")
 orders2$julianday = yday(orders2$date)
 
 orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
                       'plantSp','herbivory','arthropod','length',
-                      'count','notes.y','notes.x')]
+                      'count','notes.y','notes.x', 'surveyType', 'leafCount')]
 
-# Add column with arthopod order code
+# Clean arthropod names and then add column with arthopod order code
+orders3$arthropod = gsub("Bees and Wasps (Hymenoptera excluding ants)",
+                         "Bees and Wasps (Hymenoptera, excluding ants)", orders3$arthropod)
+orders3$arthropod = gsub("Leaf Hoppers and Cicadas (Auchenorrhyncha)",
+                         "Leaf hoppers and Cicadas (Auchenorrhyncha)", orders3$arthropod)
+orders3$arthropod = gsub("Butterflies and Moths (Lepidoptera adult)",
+                         "Moths, Butterflies (Lepidoptera)", orders3$arthropod)
+orders3$arthropod = gsub("Other (describe in Notes)",
+                         "OTHER (describe in Notes)", orders3$arthropod)
+orders3$arthropod = gsub("Butterflies and Moths (Lepidoptera adult)",
+                         "Moths, Butterflies (Lepidoptera)", orders3$arthropod)
+orders3$arthropod = gsub("Unidentified",
+                         "UNIDENTIFIED (describe in Notes)", orders3$arthropod)
+
+# These aren't working for some reason...
+
+
 arthcodes = read.csv('arth_codes.csv', header=T)
 arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
 names(arthcodes1) = c('arthCode', 'arthropod')
-cleandata <- merge(orders3, arthcodes1, all.x = TRUE, sort = FALSE)
+cleandata <- merge(orders3, arthcodes1, by = 'arthropod', all.x = TRUE, sort = FALSE)
 cleandata <- cleandata[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
                        'plantSp','herbivory','arthropod','arthCode','length',
-                       'count','notes.y','notes.x')]
+                       'count','notes.y','notes.x', 'surveyType', 'leafCount')]
 cleandata <- cleandata[order(cleandata$date),]
 
 # Add a column indicating if the leaves were wet
@@ -77,8 +93,7 @@ cleandata$wetLeaves[tempwet] = 'yes'
 cleandata$date = as.character(cleandata$date)
 
 # Add a year column
-tempdate <- substring(cleandata$date, 1, 4)
-cleandata$year = tempdate
+cleandata$year = substring(cleandata$date, 1, 4)
 
 # Create list of unique survey events
 events = unique(cleandata[, c("surveyID", "userID", "date", "year", "julianday", "site", "circle", "survey")])
@@ -87,13 +102,24 @@ events = unique(cleandata[, c("surveyID", "userID", "date", "year", "julianday",
 cleandata$arthCode[is.na(cleandata$arthCode)] = "NONE"
 
 # Take out large caterpillar colonies
-cleandata <- cleandata[!(cleandata$arthCode == "LEPL" & cleandata$count > 10),]
+#cleandata <- cleandata[!(cleandata$arthCode == "LEPL" & cleandata$count > 10),]
 # or
 #cleandata$count[cleandata$arthCode == "LEPL" & cleandata$count > 5] = 5
 
 # Cleaning beat sheets (PR and BG) and isolating # leaves into a new column
-beatsheet = cleandata[grep("BEAT SHEET", cleandata$notes.x),]
-leavesNumTemp0 <- word(beatsheet$notes.x, -1, sep = "BEAT SHEET; ")
+
+# Beat sheet designation was in notes field prior to 2016
+beatsheet_pre2016 <- cleandata[grep("BEAT SHEET", cleandata$notes.x), ] 
+
+# In 2016, surveyType was not getting recorded when entered from website, so 
+# beat sheet is designated by either the surveyType field when entered by app or
+# by a leaf count that differed from the 50 expected of a visual survey.
+# (Participants were told to record 49 or 51 if the number of leaves in a beat
+# sheet survey truly was 50.)
+beatsheet_post2016 <- cleandata[((cleandata$leafCount != "50") & (cleandata$year>= "2016")) | (cleandata$surveyType=="Beat_Sheet"),] 
+
+# Pull out the leafCount from the notes
+leavesNumTemp0 <- word(beatsheet_pre2016$notes.x, -1, sep = "BEAT SHEET; ")
 leavesNumTemp <- word(leavesNumTemp0, -1, sep = "= ")
 leavesNumTemp1 <- word(leavesNumTemp, -1, sep = "Leaves  ")
 leavesNumTemp2 <- word(leavesNumTemp1, -1, sep = "Leaves=")
@@ -103,11 +129,12 @@ leavesNumTemp5 <- gsub(" ", "", leavesNumTemp4)
 leavesNumTemp6 <- gsub("\n", "", leavesNumTemp5)
 leavesNumTemp7 <- gsub("Unknown", NA, leavesNumTemp6)
 leavesNumTemp8 <- gsub("unknown", NA, leavesNumTemp7)
-beatsheet$leavesNum <- as.numeric(leavesNumTemp8)
-cleandata = merge(cleandata, beatsheet, by = c("surveyID", "userID", "site", "survey", "circle", "date",
-                                   "julianday", "plantSp", "herbivory", "arthropod", "arthCode",
-                                   "length", "count", "notes.y", "notes.x", "wetLeaves", "year"), all = T)
-
+beatsheet_pre2016$leafCount <- as.numeric(leavesNumTemp8)
+beatsheet<-rbind(beatsheet_pre2016, beatsheet_post2016)
+beatsheet$surveyType <- "Beat_Sheet"
+cleandata2 <- cleandata[!cleandata$surveyID %in% beatsheet$surveyID, ]
+cleandata <- rbind(cleandata2, beatsheet)
+cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 
 
 
@@ -118,9 +145,6 @@ cleandata = merge(cleandata, beatsheet, by = c("surveyID", "userID", "site", "su
 
 # Source summary_functions.r if have not already
 
-# Create empty biomass vector
-cleandata$biomass = NA
-
 # y = a(x)^b
 # Read in arthropod regression data with slope = b and intercept = log(a)
 reg.data.temp <- read.csv('arth_regression.csv', header = T, sep = ',')
@@ -128,21 +152,27 @@ reg.data.temp <- read.csv('arth_regression.csv', header = T, sep = ',')
 reg.data.temp$coefficient <- 10^(reg.data.temp$intercept)
 
 # Create list of arthropod orders (by code)
-arthlist <- as.vector(arthcodes$ArthCode) # arthcodes from data_cleaning.R
+arthlist <- arthcodes$ArthCode[arthcodes$ArthCode %in% reg.data.temp$arthCode]) # arthcodes from data_cleaning.R
 
 # Merge reg.data.temp and arthlist so NAs will be calculated
 reg.data <- merge(reg.data.temp, arthcodes, by.x = 'arthCode', by.y = 'ArthCode', all = T)
 
+# Create empty biomass vector
+cleandata$biomass = NA
+
 # For loop for calculating biomass for each observation
 for (ord in arthlist) {
-  b = reg.data[reg.data$arthCode == ord,]$slope
-  a = reg.data[reg.data$arthCode == ord,]$coefficient
-  cleandata$biomass[cleandata$arthCode == ord] <- (a*(cleandata$length[cleandata$arthCode == ord])^(b))*(cleandata$count[cleandata$arthCode == ord])
+  b = reg.data$slope[reg.data$arthCode == ord]
+  a = reg.data$coefficient[reg.data$arthCode == ord]
+  biomass = (a*(cleandata$length[cleandata$arthCode == ord])^b)*(cleandata$count[cleandata$arthCode == ord])
+  cleandata$biomass[cleandata$arthCode == ord] <- biomass
 }
 
 # Orders with regression data:
 regorders <- as.vector(reg.data.temp$arthCode)
 
+#Removing exclosure trees (only 2016)    
+cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
 
 # Subsetting cleandata now that it has the biomass column included
 cleandata.pr <- cleandata[cleandata$site == 117 & cleandata$year == 2015,]
