@@ -36,8 +36,13 @@ surveys = tempsurveys[tempsurveys$isValid == 1,]
 # Convert 'survey' field to character from factor
 surveys$survey = as.character(surveys$survey)
 
-# Create effortByDay dataframe for use in summary functions
+# Fix a few missing dates (based on checking old MS Access database)
 surveys$date = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d"))
+surveys$date[surveys$surveyID %in% c(6497, 6499, 6501, 6502, 6503, 6504, 6507)] = "2011-06-05"
+surveys$date[surveys$surveyID == 9992] = "2011-06-01"
+surveys$date[surveys$site == 8892351 & surveys$dateStart == "0000-00-00 00:00:00"] = "2016-06-10"
+
+# Create effortByDay dataframe for use in summary functions
 effortByDay = data.frame(table(surveys[, c('site', 'date')]))
 names(effortByDay) = c('site', 'date', 'numSurveys')
 effortByDay = effortByDay[effortByDay$numSurveys!=0, ]
@@ -48,8 +53,6 @@ effortByDay$year = tempyear
 
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', sort = FALSE)
-
-orders2$date = as.POSIXlt(word(orders2$dateStart, 1, sep = " "), format = "%Y-%m-%d")
 orders2$julianday = yday(orders2$date)
 
 orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
@@ -57,21 +60,23 @@ orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','j
                       'count','notes.y','notes.x', 'surveyType', 'leafCount')]
 
 # Clean arthropod names and then add column with arthopod order code
-orders3$arthropod = gsub("Bees and Wasps (Hymenoptera excluding ants)",
-                         "Bees and Wasps (Hymenoptera, excluding ants)", orders3$arthropod)
-orders3$arthropod = gsub("Leaf Hoppers and Cicadas (Auchenorrhyncha)",
-                         "Leaf hoppers and Cicadas (Auchenorrhyncha)", orders3$arthropod)
-orders3$arthropod = gsub("Butterflies and Moths (Lepidoptera adult)",
-                         "Moths, Butterflies (Lepidoptera)", orders3$arthropod)
-orders3$arthropod = gsub("Other (describe in Notes)",
-                         "OTHER (describe in Notes)", orders3$arthropod)
-orders3$arthropod = gsub("Butterflies and Moths (Lepidoptera adult)",
-                         "Moths, Butterflies (Lepidoptera)", orders3$arthropod)
-orders3$arthropod = gsub("Unidentified",
-                         "UNIDENTIFIED (describe in Notes)", orders3$arthropod)
+orders3$arthropod[orders3$arthropod == "Bees and Wasps (Hymenoptera excluding ants)"] = 
+  "Bees and Wasps (Hymenoptera, excluding ants)"
+orders3$arthropod[orders3$arthropod == "Leaf Hoppers and Cicadas (Auchenorrhyncha)"] = 
+  "Leaf hoppers and Cicadas (Auchenorrhyncha)"
+orders3$arthropod[orders3$arthropod == "Butterflies and Moths (Lepidoptera adult)"] = 
+  "Moths, Butterflies (Lepidoptera)"
+orders3$arthropod[orders3$arthropod == "OTHER (describe in Notes)"] = 
+  "Other (describe in Notes)"
+orders3$arthropod[orders3$arthropod == "Unidentified"] = 
+  "UNIDENTIFIED (describe in Notes)"
 
-# These aren't working for some reason...
+# Change records of termites to "Other"; users did not correctly identify
+orders3$arthropod[orders3$arthropod == "Termites (Isoptera)"] = 
+  "Other (describe in Notes)"
 
+# Remove all records where the Order is "Leaf Roll"
+orders3 = orders3[orders3$arthropod != "Leaf Roll",]
 
 arthcodes = read.csv('arth_codes.csv', header=T)
 arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
@@ -83,23 +88,16 @@ cleandata <- cleandata[, c('surveyID', 'userID','site', 'survey', 'circle', 'dat
 cleandata <- cleandata[order(cleandata$date),]
 
 # Add a column indicating if the leaves were wet
-cleandata$wetLeaves = c()
 tempwet <- sort(c(grep("wet leaves", cleandata$notes.x), grep("Wet leaves", cleandata$notes.x), 
                   grep("very dewy", cleandata$notes.x), grep("Wet Leaves", cleandata$notes.x)))
 cleandata$wetLeaves = rep('no', nrow(cleandata))
 cleandata$wetLeaves[tempwet] = 'yes'
 
-# Fix date class
-cleandata$date = as.character(cleandata$date)
-
 # Add a year column
 cleandata$year = substring(cleandata$date, 1, 4)
 
-# Create list of unique survey events
-events = unique(cleandata[, c("surveyID", "userID", "date", "year", "julianday", "site", "circle", "survey")])
-
-# Change arthCodes to 'NONE' that were previously NA
-cleandata$arthCode[is.na(cleandata$arthCode)] = "NONE"
+# Change arthCodes to class character
+cleandata$arthCode = as.character(cleandata$arthCode)
 
 # Take out large caterpillar colonies
 #cleandata <- cleandata[!(cleandata$arthCode == "LEPL" & cleandata$count > 10),]
@@ -136,10 +134,7 @@ cleandata2 <- cleandata[!cleandata$surveyID %in% beatsheet$surveyID, ]
 cleandata <- rbind(cleandata2, beatsheet)
 cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 
-
-
-
-#-----------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
 
 ## Calculating biomass and adding this as a column to the cleandata
 
@@ -152,7 +147,7 @@ reg.data.temp <- read.csv('arth_regression.csv', header = T, sep = ',')
 reg.data.temp$coefficient <- 10^(reg.data.temp$intercept)
 
 # Create list of arthropod orders (by code)
-arthlist <- arthcodes$ArthCode[arthcodes$ArthCode %in% reg.data.temp$arthCode]) # arthcodes from data_cleaning.R
+arthlist <- arthcodes$ArthCode[arthcodes$ArthCode %in% reg.data.temp$arthCode] # arthcodes from data_cleaning.R
 
 # Merge reg.data.temp and arthlist so NAs will be calculated
 reg.data <- merge(reg.data.temp, arthcodes, by.x = 'arthCode', by.y = 'ArthCode', all = T)

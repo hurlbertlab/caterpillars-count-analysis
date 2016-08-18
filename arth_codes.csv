@@ -17,7 +17,7 @@ Hemiptera,HETE,True bugs,True Bugs (Heteroptera)
 Homoptera,HOMO,"Leafhoppers, aphids",
 Hymenoptera,HYME,Bees and wasps,"Bees and Wasps (Hymenoptera, excluding ants)"
 Isopoda,ISOP,"Pillbugs, roly-polies",
-Isoptera,ISOT,Termites,
+Isoptera,ISOT,Termites,Termites (Isoptera)
 Lepidoptera-adults,LEPA,Moths and butterflies,"Moths, Butterflies (Lepidoptera)"
 Lepidoptera-larvae,LEPL,Caterpillars,Caterpillars (Lepidoptera larvae)
 Mantodea,MANT,Mantises (subfamily of ORTH),Mantodea (Mantids)
