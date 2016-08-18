@@ -78,10 +78,10 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
   temp = subset(surveyData,
                 length >= minLength & 
                 arthCode %in% ordersToInclude & 
-                site == inputSite &
-                year == inputYear)
+                site %in% inputSite &
+                year %in% inputYear)
   
-  temp_effort = subset(effort, site == inputSite & year == inputYear)
+  temp_effort = subset(effort, site %in% inputSite & year %in% inputYear)
   
   # When no data is available for parameters set:
   if(nrow(temp) == 0 & !byTreeSpecies) {

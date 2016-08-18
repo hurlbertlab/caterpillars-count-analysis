@@ -169,6 +169,9 @@ regorders <- as.vector(reg.data.temp$arthCode)
 #Removing exclosure trees (only 2016)    
 cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
 
+# Data collected by the Hurlbert Lab group in the Triangle
+labdata = filter(cleandata, userID %in% c(69, 130, 131, 132, 136, 158, 159, 189, 191))
+
 # Subsetting cleandata now that it has the biomass column included
 cleandata.pr <- cleandata[cleandata$site == 117 & cleandata$year == 2015,]
 cleandata.bg <- cleandata[cleandata$site == 8892356 & cleandata$year == 2015,]
