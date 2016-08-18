@@ -16,6 +16,10 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
+# UserIDs of Hurlbert Lab data collectors
+labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191)
+
+
 # Set working directory
 # setwd('c:/git/caterpillars-count-analysis')
 
@@ -170,11 +174,11 @@ regorders <- as.vector(reg.data.temp$arthCode)
 cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
 
 # Data collected by the Hurlbert Lab group in the Triangle
-labdata = filter(cleandata, userID %in% c(69, 130, 131, 132, 136, 158, 159, 189, 191))
+labdata = filter(cleandata, userID %in% labgroupusers)
 
 # Subsetting cleandata now that it has the biomass column included
-cleandata.pr <- cleandata[cleandata$site == 117 & cleandata$year == 2015,]
-cleandata.bg <- cleandata[cleandata$site == 8892356 & cleandata$year == 2015,]
+cleandata.pr <- cleandata[cleandata$site == 117,]
+cleandata.bg <- cleandata[cleandata$site == 8892356,]
 
 amsurvey.pr <- surveySubset(cleandata.pr, subset = "visual am", minLength = 5)
 pmsurvey.pr <- surveySubset(cleandata.pr, subset = "visual pm", minLength = 5)
