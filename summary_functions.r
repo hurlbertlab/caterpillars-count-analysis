@@ -10,6 +10,8 @@ library(lubridate)
 library(stringr)
 library(gsheet)
 
+labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191)
+
 #--------------------------------------------------------------------------------------------------
 # FUNCTIONS
 
@@ -23,7 +25,7 @@ surveySubset = function(cleandata, subset = "visual am", minLength = 0)
   if (subset == "visual am"){
     visualsurvey = tempdata[!grepl("BEAT SHEET", tempdata$notes.x),]
     amsurvey = visualsurvey[!grepl("REPEAT SURVEY", visualsurvey$notes.x),]
-    labsurvey = amsurvey[amsurvey$userID %in% c(69, 130, 131, 132), ] # make more general
+    labsurvey = amsurvey[amsurvey$userID %in% labgroupusers, ] # make more general
     data.out = labsurvey
   } else if (subset == "beat sheet"){
     beatsheet = tempdata[grep("BEAT SHEET", tempdata$notes.x),]
@@ -144,7 +146,8 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
                             ...)                  
   
 {
-  dataYearSite = surveyData[surveyData$year == inputYear & surveyData$site == inputSite, ]
+  dataYearSite = surveyData[surveyData$year %in% inputYear & 
+                              surveyData$site %in% inputSite, ]
   dataYearSite$week = floor(dataYearSite$julianday/7) + 1
   effortByWeek = data.frame(table(unique(dataYearSite[, c('surveyID', 'week')])$week))
   names(effortByWeek) = c('week', 'numSurveys')
@@ -156,11 +159,11 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
   temp = subset(dataYearSite, length >= minLength & arthCode %in% ordersToInclude)
 
   if (byTreeSpecies) {
-    temp2 = ddply(temp, .(site, week, year, plantSp), summarize, 
+    temp2 = ddply(temp, .(week, plantSp), summarize, 
                   totalCount = sum(count))
     
   } else {
-    temp2 = ddply(temp, .(site, week, year), summarize, 
+    temp2 = ddply(temp, .(week), summarize, 
                   totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])))
                   #totalBiomass = sum(biomass))
   }
@@ -174,7 +177,7 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
   temp3$week = as.numeric(as.character(temp3$week))
   if (plot & new) {
     plot(temp3$week, temp3[, plotVar], type = 'l', 
-         col = color, xlab = "Week", ylab = plotVar, ...)
+         col = color, xlab = "Week", ...)
   } else if (plot & new==F) {
     points(temp3$week, temp3[, plotVar], type = 'l', col = color, ...)
   }
