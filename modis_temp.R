@@ -5,7 +5,7 @@
 # See http://onlinelibrary.wiley.com/doi/10.1002/ece3.1273/full for information about MODIS data
 # (Table 2 under Method)
 
-# setwd('C:/git/caterpillars-count-analysis/modis-and-temp')
+setwd('C:/git/caterpillars-count-analysis/modis-and-temp')
 
 # Load required libraries
 library(MODISTools)
@@ -18,42 +18,73 @@ library(maptools)
 library(rgeos)
 
 # Format MODIS data
-modis = data.frame(lat = c(35.898645, 35.809674), long = c(-79.031469, -78.716546))
-modis$start.date = rep(2015, nrow(modis)) #not sure if these dates are formatted correctly
-modis$end.date = rep(2015, nrow(modis))
-modis$ID = c(1,2)
+# 2015
+modis15 = data.frame(lat = c(35.898645, 35.809674), long = c(-79.031469, -78.716546))
+modis15$start.date = rep(2015, nrow(modis15)) #not sure if these dates are formatted correctly
+modis15$end.date = rep(2015, nrow(modis15))
+modis15$ID = c(1,2)
+# 2016
+modis16 = data.frame(lat = c(35.898645, 35.809674), long = c(-79.031469, -78.716546))
+modis16$start.date = rep(2016, nrow(modis16)) #not sure if these dates are formatted correctly
+modis16$end.date = rep(2016, nrow(modis16))
+modis16$ID = c(1,2)
 
 # Download MODIS data
-MODISSubsets(LoadDat = modis, Products = 'MOD13Q1', 
+# 2015
+MODISSubsets(LoadDat = modis15, Products = 'MOD13Q1', 
              Bands = c('250m_16_days_EVI', '250m_16_days_pixel_reliability'), 
              Size = c(1,1))
-bgmodis <- read.csv(list.files(pattern = ".asc")[1], header = FALSE, as.is = TRUE)
-prmodis <- read.csv(list.files(pattern = ".asc")[2], header = FALSE, as.is = TRUE)
-bgmodis$julianday <- as.numeric(substring(bgmodis$V8, 6,8))
-#bgmodis$date <- strptime(bgmodis$julianday, "%m/%d/%Y")
-prmodis$julianday <- as.numeric(substring(prmodis$V8, 6,8))
+bgmodis15 <- read.csv(list.files(pattern = ".asc")[1], header = FALSE, as.is = TRUE)
+prmodis15 <- read.csv(list.files(pattern = ".asc")[2], header = FALSE, as.is = TRUE)
+bgmodis15$julianday <- as.numeric(substring(bgmodis15$V8, 6,8))
+prmodis15$julianday <- as.numeric(substring(prmodis15$V8, 6,8))
+# 2016
+# needs edits since files were not created
+MODISSubsets(LoadDat = modis16, Products = 'MOD13Q1', 
+             Bands = c('250m_16_days_EVI', '250m_16_days_pixel_reliability'), 
+             Size = c(1,1))
+bgmodis16 <- read.csv(list.files(pattern = ".asc")[1], header = FALSE, as.is = TRUE)
+prmodis16 <- read.csv(list.files(pattern = ".asc")[2], header = FALSE, as.is = TRUE)
+bgmodis16$julianday <- as.numeric(substring(bgmodis16$V8, 6,8))
+prmodis16$julianday <- as.numeric(substring(prmodis16$V8, 6,8))
 
 # Calculating average EVI across area (not taking into account pixel reliability)
-# Botanical Garden:
-tempbgevi = bgmodis[grep("EVI", bgmodis$V6),]
+# Botanical Garden 2015:
+tempbgevi = bgmodis15[grep("EVI", bgmodis15$V6),]
 bgevi <- tempbgevi[11:91]
 bgmean1 <- apply(bgevi, 1, mean)
 bgmean2 <- bgmean1 / 10000
-bgmean <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
-plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+bgmean15 <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
+plot(bgmean15$julianday, bgmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l')
-# Prairie Ridge:
-tempprevi = prmodis[grep("EVI", prmodis$V6),]
+# Prairie Ridge 2015:
+tempprevi = prmodis15[grep("EVI", prmodis15$V6),]
 previ <- tempprevi[11:91]
 prmean1 <- apply(previ, 1, mean)
 prmean2 <- prmean1 / 10000
-prmean <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
-plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+prmean15 <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
+plot(prmean15$julianday, prmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+     col = 'red', type = 'l')
+# Botanical Garden 2016:
+tempbgevi = bgmodis16[grep("EVI", bgmodis16$V6),]
+bgevi <- tempbgevi[11:91]
+bgmean1 <- apply(bgevi, 1, mean)
+bgmean2 <- bgmean1 / 10000
+bgmean16 <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
+plot(bgmean16$julianday, bgmean16$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+     col = 'blue', type = 'l')
+# Prairie Ridge 2016:
+tempprevi = prmodis16[grep("EVI", prmodis16$V6),]
+previ <- tempprevi[11:91]
+prmean1 <- apply(previ, 1, mean)
+prmean2 <- prmean1 / 10000
+prmean16 <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
+plot(prmean16$julianday, prmean16$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'red', type = 'l')
 
 # Taking into account pixel reliability?
 # Botanical Garden:
-tempbgpix = bgmodis[grep("reliability", bgmodis$V6),]
+tempbgpix = bgmodis15[grep("reliability", bgmodis15$V6),]
 # All data is either 0 (Use with confidence) or 1 (Useful, but look at other QA info)
 # 1s present on rows 19, 25-30 
 
@@ -63,30 +94,30 @@ tempbgpix = bgmodis[grep("reliability", bgmodis$V6),]
 library(stats)
 # Fitting a logistic curve to EVI data and using this to estimate greenup date:
 
-# Prairie Ridge               
-prmean$EVIdis = prmean$EVImean - min(prmean$EVImean)+.01
-prlog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = prmean)
+# Prairie Ridge 2015               
+prmean15$EVIdis = prmean15$EVImean - min(prmean15$EVImean)+.01
+prlog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = prmean15)
 par(mar=c(5, 4, 4, 4) + 0.1)
-plot(prmean$julianday, prmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
-                             col = 'red', type = 'l', lwd = 3)
-prmean$prEVIlog = predict(prlog)+min(prmean$EVImean)-.01
-points(prmean$julianday, prmean$prEVIlog, col = 'red', lwd = 3, 
+plot(prmean15$julianday, prmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+     col = 'red', type = 'l', lwd = 3)
+prmean15$prEVIlog = predict(prlog)+min(prmean15$EVImean)-.01
+points(prmean15$julianday, prmean15$prEVIlog, col = 'red', lwd = 3, 
        lty = 'dashed', type = 'l')
 
-# Botanical Garden
-bgmean$EVIdis = bgmean$EVImean - min(bgmean$EVImean)+.01
-bglog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = bgmean)
+# Botanical Garden 2015
+bgmean15$EVIdis = bgmean15$EVImean - min(bgmean15$EVImean)+.01
+bglog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = bgmean15)
 par(mar=c(5, 4, 4, 4) + 0.1)
-plot(bgmean$julianday, bgmean$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+plot(bgmean15$julianday, bgmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l', lwd = 3)
-bgmean$bgEVIlog = predict(bglog)+min(bgmean$EVImean)-.01
-points(bgmean$julianday, bgmean$bgEVIlog, col = 'blue', lwd = 3, 
+bgmean15$bgEVIlog = predict(bglog)+min(bgmean15$EVImean)-.01
+points(bgmean15$julianday, bgmean15$bgEVIlog, col = 'blue', lwd = 3, 
        lty = 'dashed', type = 'l')
 
 
-plot(prmean$julianday, predict(prlog)+min(prmean$EVImean)-.01, col = 'red', lwd = 3, 
+plot(prmean15$julianday, predict(prlog)+min(prmean15$EVImean)-.01, col = 'red', lwd = 3, 
        lty = 'dashed', type = 'l', ylim = c(0.15, 0.53), xlab = "Julian Day", ylab = "Mean EVI")
-points(bgmean$julianday, predict(bglog)+min(bgmean$EVImean)-.01, col = 'blue', lwd = 3, 
+points(bgmean15$julianday, predict(bglog)+min(bgmean15$EVImean)-.01, col = 'blue', lwd = 3, 
        lty = 'dashed', type = 'l')
 legend("topleft", c('BG mean EVI', 'PR mean EVI'), lwd = c(3,3), lty = c(2,2), col = c('blue', 'red'))
 
