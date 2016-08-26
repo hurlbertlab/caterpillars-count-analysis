@@ -39,7 +39,7 @@ prmodis15 <- read.csv(list.files(pattern = ".asc")[2], header = FALSE, as.is = T
 bgmodis15$julianday <- as.numeric(substring(bgmodis15$V8, 6,8))
 prmodis15$julianday <- as.numeric(substring(prmodis15$V8, 6,8))
 # 2016
-# needs edits since files were not created
+#needs edits since files were not created
 MODISSubsets(LoadDat = modis16, Products = 'MOD13Q1', 
              Bands = c('250m_16_days_EVI', '250m_16_days_pixel_reliability'), 
              Size = c(1,1))
@@ -55,6 +55,7 @@ bgevi <- tempbgevi[11:91]
 bgmean1 <- apply(bgevi, 1, mean)
 bgmean2 <- bgmean1 / 10000
 bgmean15 <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
+bgmean15 <- bgmean15[bgmean15$julianday < 210,]
 plot(bgmean15$julianday, bgmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l')
 # Prairie Ridge 2015:
@@ -63,6 +64,7 @@ previ <- tempprevi[11:91]
 prmean1 <- apply(previ, 1, mean)
 prmean2 <- prmean1 / 10000
 prmean15 <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
+prmean15 <- prmean15[prmean15$julianday < 210,]
 plot(prmean15$julianday, prmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'red', type = 'l')
 # Botanical Garden 2016:
@@ -71,6 +73,7 @@ bgevi <- tempbgevi[11:91]
 bgmean1 <- apply(bgevi, 1, mean)
 bgmean2 <- bgmean1 / 10000
 bgmean16 <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
+bgmean16 <- bgmean16[bgmean16$julianday < 210,]
 plot(bgmean16$julianday, bgmean16$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l')
 # Prairie Ridge 2016:
@@ -79,6 +82,7 @@ previ <- tempprevi[11:91]
 prmean1 <- apply(previ, 1, mean)
 prmean2 <- prmean1 / 10000
 prmean16 <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
+prmean16 <- prmean16[prmean16$julianday < 210,]
 plot(prmean16$julianday, prmean16$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'red', type = 'l')
 
@@ -96,36 +100,73 @@ library(stats)
 
 # Prairie Ridge 2015               
 prmean15$EVIdis = prmean15$EVImean - min(prmean15$EVImean)+.01
-prlog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = prmean15)
+prlog15 = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = prmean15)
 par(mar=c(5, 4, 4, 4) + 0.1)
 plot(prmean15$julianday, prmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'red', type = 'l', lwd = 3)
-prmean15$prEVIlog = predict(prlog)+min(prmean15$EVImean)-.01
+prmean15$prEVIlog = predict(prlog15)+min(prmean15$EVImean)-.01
 points(prmean15$julianday, prmean15$prEVIlog, col = 'red', lwd = 3, 
        lty = 'dashed', type = 'l')
 
 # Botanical Garden 2015
 bgmean15$EVIdis = bgmean15$EVImean - min(bgmean15$EVImean)+.01
-bglog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = bgmean15)
+bglog15 = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = bgmean15)
 par(mar=c(5, 4, 4, 4) + 0.1)
 plot(bgmean15$julianday, bgmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
      col = 'blue', type = 'l', lwd = 3)
-bgmean15$bgEVIlog = predict(bglog)+min(bgmean15$EVImean)-.01
+bgmean15$bgEVIlog = predict(bglog15)+min(bgmean15$EVImean)-.01
 points(bgmean15$julianday, bgmean15$bgEVIlog, col = 'blue', lwd = 3, 
        lty = 'dashed', type = 'l')
 
+summary(prlog15)
+prgreenup15 <- summary(prlog15)$coefficients["xmid","Estimate"]
 
-plot(prmean15$julianday, predict(prlog)+min(prmean15$EVImean)-.01, col = 'red', lwd = 3, 
-       lty = 'dashed', type = 'l', ylim = c(0.15, 0.53), xlab = "Julian Day", ylab = "Mean EVI")
-points(bgmean15$julianday, predict(bglog)+min(bgmean15$EVImean)-.01, col = 'blue', lwd = 3, 
+summary(bglog15)
+bggreenup15 <- summary(bglog15)$coefficients["xmid","Estimate"]
+
+# Prairie Ridge 2016               
+prmean16$EVIdis = prmean16$EVImean - min(prmean16$EVImean)+.01
+prlog16 = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = prmean16)
+par(mar=c(5, 4, 4, 4) + 0.1)
+plot(prmean16$julianday, prmean16$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+     col = 'red', type = 'l', lwd = 3)
+prmean16$prEVIlog = predict(prlog16)+min(prmean16$EVImean)-.01
+points(prmean16$julianday, prmean16$prEVIlog, col = 'red', lwd = 3, 
        lty = 'dashed', type = 'l')
-legend("topleft", c('BG mean EVI', 'PR mean EVI'), lwd = c(3,3), lty = c(2,2), col = c('blue', 'red'))
 
-summary(prlog)
-prgreenup <- summary(prlog)$coefficients["xmid","Estimate"]
+# Botanical Garden 2016
+bgmean16$EVIdis = bgmean16$EVImean - min(bgmean16$EVImean)+.01
+bglog16 = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = bgmean16)
+par(mar=c(5, 4, 4, 4) + 0.1)
+plot(bgmean16$julianday, bgmean16$EVImean, xlab = "Julian Day", ylab = "Mean EVI",
+     col = 'blue', type = 'l', lwd = 3)
+bgmean16$bgEVIlog = predict(bglog16)+min(bgmean16$EVImean)-.01
+points(bgmean16$julianday, bgmean16$bgEVIlog, col = 'blue', lwd = 3, 
+       lty = 'dashed', type = 'l')
 
-summary(bglog)
-bggreenup <- summary(bglog)$coefficients["xmid","Estimate"]
+summary(prlog16)
+prgreenup16 <- summary(prlog16)$coefficients["xmid","Estimate"]
+
+summary(bglog16)
+bggreenup16 <- summary(bglog16)$coefficients["xmid","Estimate"]
+
+# Plot all greenup curves
+plot(prmean15$julianday, predict(prlog15)+min(prmean15$EVImean)-.01, col = 'red', lwd = 3, 
+       lty = 'dashed', type = 'l', ylim = c(0.15, 0.53), xlab = "Julian Day", ylab = "Mean EVI")
+points(bgmean15$julianday, predict(bglog15)+min(bgmean15$EVImean)-.01, col = 'blue', lwd = 3, 
+       lty = 'dashed', type = 'l')
+points(prmean16$julianday, predict(prlog16)+min(prmean16$EVImean)-.01, col = 'red', lwd = 3, 
+       lty = 3, type = 'l')
+points(bgmean16$julianday, predict(bglog16)+min(bgmean16$EVImean)-.01, col = 'blue', lwd = 3, 
+       lty = 3, type = 'l')
+legend("topleft", c('BG 2015', 'PR 2015', 'BG 2016', 'PR 2016'), lwd = c(3,3,3,3), lty = c(2,2,3,3), 
+       col = c('blue', 'red', 'blue', 'red'))
+
+# View greenup dates
+prgreenup15
+bggreenup15
+prgreenup16
+bggreenup16
 
 
 # Download and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
