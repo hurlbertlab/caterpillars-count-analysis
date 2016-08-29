@@ -16,6 +16,9 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
+#Source summary_functions.r
+source("summary_functions.r")
+
 # UserIDs of Hurlbert Lab data collectors
 labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191)
 
@@ -141,8 +144,6 @@ cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 #--------------------------------------------------------------------------------
 
 ## Calculating biomass and adding this as a column to the cleandata
-
-# Source summary_functions.r if have not already
 
 # y = a(x)^b
 # Read in arthropod regression data with slope = b and intercept = log(a)
