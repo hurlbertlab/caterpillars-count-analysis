@@ -10,7 +10,7 @@ library(lubridate)
 library(stringr)
 library(gsheet)
 
-labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191)
+labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191) #needs to be edited as new lab members conduct surveys
 
 #--------------------------------------------------------------------------------------------------
 # FUNCTIONS
@@ -23,12 +23,12 @@ surveySubset = function(cleandata, subset = "visual am", minLength = 0)
   {tempdata = cleandata[cleandata$length >= minLength | cleandata$arthCode == 'NONE',]
   
   if (subset == "visual am"){
-    visualsurvey = tempdata[!grepl("BEAT SHEET", tempdata$notes.x),]
+    visualsurvey = tempdata[tempdata$surveyType=="Visual",]
     amsurvey = visualsurvey[!grepl("REPEAT SURVEY", visualsurvey$notes.x),]
     labsurvey = amsurvey[amsurvey$userID %in% labgroupusers, ] # make more general
     data.out = labsurvey
   } else if (subset == "beat sheet"){
-    beatsheet = tempdata[grep("BEAT SHEET", tempdata$notes.x),]
+    beatsheet = tempdata[tempdata$surveyType=="Beat_Sheet",]
     data.out = beatsheet
   } else if (subset == "visual pm"){
     repsurvey = tempdata[grep("REPEAT SURVEY", tempdata$notes.x),]
