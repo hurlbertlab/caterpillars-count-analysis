@@ -6,10 +6,10 @@ library(stringr)
 library(coin)
 library(lattice)
 # Read in data
-setwd("~/Desktop/insect-exclosure/caterpillars-count-analysis/2016")
-all_surveys <- read.csv('tbl_surveys.csv', header=F)
-all_orders <- read.csv('tbl_orders.csv', header=F)
-all_surveyTrees <- read.csv("tbl_surveyTrees.csv", header=T)
+setwd("~/Desktop/caterpillars-count-analysis")
+all_surveys <- read.csv('data/tbl_surveys.csv', header=F)
+all_orders <- read.csv('data/tbl_orders.csv', header=F)
+all_surveyTrees <- read.csv("data/tbl_surveyTrees.csv", header=T)
 
 # Rename columns and remove unecessary ones
 names(all_surveys) = c("surveyID", "siteID", "userID", 
