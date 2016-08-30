@@ -178,6 +178,9 @@ cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
 labdata = filter(cleandata, userID %in% labgroupusers)
 
 # Subsetting cleandata now that it has the biomass column included
+labdata.pr <- labdata[labdata$site == 117,]
+labdata.bg <- labdata[labdata$site == 8892356,]
+
 cleandata.pr <- cleandata[cleandata$site == 117,]
 cleandata.bg <- cleandata[cleandata$site == 8892356,]
 
