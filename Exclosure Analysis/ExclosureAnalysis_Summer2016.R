@@ -1,12 +1,16 @@
 #Analysis of Exclosure Data Summer 2016
 #Open necessary packages
+source("summary_functions.r")
 library(dplyr)
 library(tidyr)
 library(stringr)
 library(coin)
 library(lattice)
-# Read in data
+
+# Set working directory
 setwd("~/Desktop/caterpillars-count-analysis")
+
+# Read in data
 all_surveys <- read.csv('data/tbl_surveys.csv', header=F)
 all_orders <- read.csv('data/tbl_orders.csv', header=F)
 all_surveyTrees <- read.csv("data/tbl_surveyTrees.csv", header=T)
@@ -180,20 +184,21 @@ caterpillar_abundance1<- select(caterpillar_abundance, -Freq, -TrapType.y, -site
 names(caterpillar_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumber", "total_caterpillar")
 caterpillar_abundance1["total_caterpillar"][is.na(caterpillar_abundance1["total_caterpillar"])] <- 0
 
-#Remove outliers
-#food_time <-filter(food_abundance1, -total_food > 6)
-#caterpillar_time <- filter(caterpillar_abundance1, -total_caterpillar > 6)
+#Remove outliers (observations were more than 5 arthropods were seen on a survey)
+all_abundance2 <- filter(all_abundance1, total_abundance <6)
+food_abundance2 <-filter(food_abundance1, total_food < 6)
+caterpillar_abundance2 <- filter(caterpillar_abundance1, total_caterpillar < 6)
 
 #Spread Visit 1 and Visit 3 for 3 Food Type Datasets and Create Difference Column to Format for Wilcox Test
-all_time <- spread(all_abundance1, VisitNumber, total_all)
+all_time <- spread(all_abundance2, VisitNumber, total_all)
 names(all_time) = c('TrapType','siteID', "circle", "survey", "Visit1", "Visit2", "Visit3")
 all_time$visit_dif<-all_time$Visit3-all_time$Visit2
 
-food_time <- spread(food_abundance1, VisitNumber, total_food)
+food_time <- spread(food_abundance2, VisitNumber, total_food)
 names(food_time) = c('TrapType','siteID', "circle", "survey", "Visit1", "Visit2", "Visit3")
 food_time$visit_dif<-food_time$Visit3-food_time$Visit2
 
-caterpillar_time <- spread(caterpillar_abundance1, VisitNumber, total_caterpillar)
+caterpillar_time <- spread(caterpillar_abundance2, VisitNumber, total_caterpillar)
 names(caterpillar_time) = c('TrapType','siteID', "circle", "survey", "Visit1", "Visit2", "Visit3")
 caterpillar_time$visit_dif<-caterpillar_time$Visit3-caterpillar_time$Visit2
 
@@ -265,11 +270,21 @@ visual_surveys_clean <-filter(visual_surveys_clean, grepl("2016", date))
 grouped_site <- visual_surveys_clean %>% group_by(siteID, date)
 mean_site_herb <- (summarise(grouped_site, mean(percent_herb)))
 mean_site_herb<-data.frame(mean_site_herb)
+mean_site_herb$julianday = yday(mean_site_herb$date)
+mean_site_PR <- filter(mean_site_herb, siteID=="117")
+mean_site_BG <- filter(mean_site_herb, siteID=="8892356")
 
 #Summarise observations for 2016 herbivory by date, site, and tree species
 grouped_species <- visual_surveys_clean %>% group_by(siteID, date, surveyTrees)
-mean_species_herb <- (summarise(grouped_species, mean(percent_herb)))
-mean_species_herb <- data.frame(mean_species_herb)
+#mean_species_herb <- data.frame(mean_species_herb) #something has started to be problematic here
+#mean_species_herb$julianday = yday(mean_species_herb$date)
+#mean_Spicebush <- filter(mean_species_herb, surveyTrees=="Spicebush")
+#mean_Redmaple <- filter(mean_species_herb, surveyTrees=="Red maple")
+#mean_Sugarmaple <- filter(mean_species_herb, surveyTrees=="Sugar maple")
+#mean_Americanbeech <- filter(mean_species_herb, surveyTrees=="American beech")
+#mean_Boxelder <- filter(mean_species_herb, surveyTrees=="Box elder")
+#mean_Sweetgum<- filter(mean_species_herb, surveyTrees=="Sweet gum")
+#mean_Commonpersimmon<- filter(mean_species_herb, surveyTrees=="Common persimmon")
 
 #Histogram of Total Arth Density on 3rd Visit & Herbivory
 par(mfcol=c(2, 2))
@@ -284,6 +299,7 @@ histogram(unique_herbivory_V3$VFX, main="Herbivory on Exclosure Trees", type="co
 
 
 #Visualizing Herbivory
-plot.default(mean_site_herb$mean.percent_herb., mean_site_herb$date)
-plot.default(mean_species_herb$mean.percent_herb., mean_species_herb$date)
+plot(mean_site_PR$julianday, mean_site_PR$mean.percent_herb.)
+plot.default(mean_site_BG$julianday, mean_site_BG$mean.percent_herb.)
+#plot.default(mean_species_herb$julianday, mean_species_herb$mean.percent_herb., ylab=="Mean Percent Herbivory", xlab=="Julian Day")
 
