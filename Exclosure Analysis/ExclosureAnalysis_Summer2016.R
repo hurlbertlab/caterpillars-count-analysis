@@ -185,7 +185,7 @@ names(caterpillar_abundance1) <- c("TrapType","siteID", "circle", "survey", "Vis
 caterpillar_abundance1["total_caterpillar"][is.na(caterpillar_abundance1["total_caterpillar"])] <- 0
 
 #Remove outliers (observations were more than 5 arthropods were seen on a survey)
-all_abundance2 <- filter(all_abundance1, total_abundance <6)
+all_abundance2 <- filter(all_abundance1, total_all <6)
 food_abundance2 <-filter(food_abundance1, total_food < 6)
 caterpillar_abundance2 <- filter(caterpillar_abundance1, total_caterpillar < 6)
 
