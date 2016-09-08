@@ -59,8 +59,8 @@ surveyCount = function(events, site, year) {
 # Function for calculating mean density, mean biomass, or fraction of surveys 
 # with a certain Order per Julian day
 
+# Make sure datasets placed into function do not have minLength already subsetted out (?) need to check on this
 meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders tables
-                            effort = effortByDay, # dataframe with effort by day in data_cleaning.R
                        ordersToInclude = 'All',       # which arthropod orders to calculate density for (codes)
                        byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
                        minLength = 0,         # minimum arthropod size to include 
@@ -83,7 +83,22 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
                 site %in% inputSite &
                 year %in% inputYear)
   
-  temp_effort = subset(effort, site %in% inputSite & year %in% inputYear)
+  # Create subset of data to use for calculating effort by day
+  pre_temp_foreffort = subset(surveyData,
+                              site %in% inputSite &
+                                year %in% inputYear)
+  temp_foreffort <- unique(pre_temp_foreffort[,c('survey', 'circle', 'date', 'site')])
+  
+  # Create effort by day within function
+  effortByDay = data.frame(table(temp_foreffort[, c('site', 'date')]))
+  names(effortByDay) = c('site', 'date', 'numSurveys')
+  effortByDay = effortByDay[effortByDay$numSurveys!=0, ]
+  effortByDay$date = as.POSIXlt(effortByDay$date, format = "%Y-%m-%d")
+  effortByDay$julianday = yday(effortByDay$date)
+  tempyear <- substring(effortByDay$date, 1, 4)
+  effortByDay$year = tempyear
+  
+  temp_effort = effortByDay
   
   # When no data is available for parameters set:
   if(nrow(temp) == 0 & !byTreeSpecies) {
