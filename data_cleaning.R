@@ -184,11 +184,11 @@ labdata.bg <- labdata[labdata$site == 8892356,]
 cleandata.pr <- cleandata[cleandata$site == 117,]
 cleandata.bg <- cleandata[cleandata$site == 8892356,]
 
-amsurvey.pr <- surveySubset(labdata.pr, subset = "visual am", minLength = 5)
-pmsurvey.pr <- surveySubset(labdata.pr, subset = "visual pm", minLength = 5)
-beatsheet.pr <- surveySubset(labdata.pr, subset = "beat sheet", minLength = 5)
-volunteer.pr <- surveySubset(cleandata.pr, subset = "volunteer", minLength = 5)
+amsurvey.pr <- surveySubset(labdata.pr, subset = "visual am")
+pmsurvey.pr <- surveySubset(labdata.pr, subset = "visual pm")
+beatsheet.pr <- surveySubset(labdata.pr, subset = "beat sheet")
+volunteer.pr <- surveySubset(cleandata.pr, subset = "volunteer")
 
-amsurvey.bg <- surveySubset(labdata.bg, subset = "visual am", minLength = 5)
-beatsheet.bg <- surveySubset(labdata.bg, subset = "beat sheet", minLength = 5)
+amsurvey.bg <- surveySubset(labdata.bg, subset = "visual am")
+beatsheet.bg <- surveySubset(labdata.bg, subset = "beat sheet")
 
