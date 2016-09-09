@@ -2,6 +2,7 @@
 library(car)
 library(MASS)
 library(ggplot2)
+library(lme4)
 source(ExclosureAnalysis_Summer2016.R)
 #Figure out which probability distribution fits data -None of the following are very good (all for normal distributions)
 food_time$Visit3.1 <- food_time$Visit3 + .1
@@ -21,5 +22,7 @@ food = merge(food, all_surveyTrees, by.x="identifier", by.y= "identifier")
 food = select(food, -siteID.y, -circle.y, -survey.y)
 names(food)= c("identifier", "TrapType", "siteID", "survey", "circle", "food_sum", "surveyTrees")
 
-lmer(arth_sum ~ TrapType, + ())
+mix_mod = lmer(food_sum ~ TrapType + (1 | surveyTrees) + (1 | siteID), food)
+anova(mix_mod)
+mix_gmod = glmer(food_sum ~ TrapType + (1 | surveyTrees), food)
 
