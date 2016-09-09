@@ -168,6 +168,15 @@ bggreenup15
 prgreenup16
 bggreenup16
 
+# Plot greenups to visualize
+greenups <- data.frame(cbind(c(2015,2016), c(prgreenup15, prgreenup16), c(bggreenup15, bggreenup16)))
+colnames(greenups) <- c('year', 'PR','BG')
+plot(greenups$year, greenups$PR, type = 'l', col = 'red', xlab = "Year", ylab = "Julian day",
+     ylim = c(83,97), xaxt = 'n', xlim = c(2014.8,2016.2))
+axis(side = 1, at = c(2015,2016))
+points(greenups$year, greenups$BG, type = 'l', col = 'blue')
+legend("topleft", c('PR', 'BG'), lwd = c(1,1), lty = c(1,1), 
+       col = c('red', 'blue'))
 
 # Download and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
 prtemp1 = read.csv('pr_temp.csv') # Data retrieved from the past 180 days on Sept. 1, 2015, does not include Sept. 1 
