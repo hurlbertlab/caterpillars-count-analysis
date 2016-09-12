@@ -2,7 +2,7 @@
 library(ggplot2)
 library(lme4)
 source("Exclosure Analysis/ExclosureAnalysis_Summer2016.R")
-
+source("~/Desktop/insect-exclosure/data_analysis.R")
 
 #data shaping
 food = food_time1
@@ -22,8 +22,13 @@ names(caterpillar)= c("identifier", "TrapType", "siteID", "survey", "circle", "c
 mix_mod_food = lmer(food_sum ~ TrapType + (1 | surveyTrees), food)
 mix_mod_caterpillar = lmer(caterpillar_sum ~ TrapType + (1 | surveyTrees), caterpillar)
 
+#data shaping for 2012
+food_2012 = food_time
+surveyTrees_A = select(topdown3, StateRouteStop, Station, TrapType, TreeSpecies)
+
+
+#mixed models for 2012
 
 
 
-#mix_gmod = glmer(food_sum ~ TrapType + (1 | surveyTrees), food)
 
