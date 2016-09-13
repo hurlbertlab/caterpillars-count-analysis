@@ -7,9 +7,6 @@ library(stringr)
 library(coin)
 library(lattice)
 
-# Set working directory
-setwd("~/Desktop/caterpillars-count-analysis")
-
 # Read in data
 all_surveys <- read.csv('data/tbl_surveys.csv', header=F)
 all_orders <- read.csv('data/tbl_orders.csv', header=F)
