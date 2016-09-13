@@ -23,7 +23,7 @@ library(rgeos)
 
 # For loop for downloading/formatting data for each year: 
 # THIS ONLY NEED TO RUN ONCE
-multyears <- 2006:2015
+multyears <- 2007:2016
 
 if (0) {
 
@@ -36,7 +36,7 @@ for (year in 1:length(multyears)) {
   modis$ID = c(1,2)
 
   # Set working directory to year file the data will be downloaded in
-  setwd(file.path('C:','git','caterpillars-count-analysis','modis-and-temp',multyears[[year]]))
+  setwd(file.path('C:','git','caterpillars-count-analysis','modis-and-temp',multyears[[year]], sep = '/'))
 
   # Download MODIS data
   MODISSubsets(LoadDat = modis, Products = 'MOD13Q1', 
@@ -48,7 +48,7 @@ for (year in 1:length(multyears)) {
 
 
 # For loop for plotting EVI and calculating greenup for each year
-multyears <- 2006:2015
+multyears <- 2007:2016
 
 samp.dataframe = data.frame(prgreenup.half = numeric(), bggreenup.half = numeric(),
                             prgreenup.log = numeric(), bggreenup.log = numeric())
@@ -153,7 +153,7 @@ for (year in 1:length(multyears)) {
   temp.dataframe = data.frame(prgreenup.half, bggreenup.half, prgreenup.log, bggreenup.log)
 
   samp.dataframe = rbind(samp.dataframe, temp.dataframe)
-}
+} # end for loop
 
 greenup <- samp.dataframe
 greenup$year <- c(2006:2015)
