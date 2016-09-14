@@ -13,6 +13,7 @@ names(food)= c("identifier", "TrapType", "siteID", "survey", "circle", "food_sum
 
 #data shaping
 caterpillar = caterpillar_time1
+caterpillar <-dplyr::filter(caterpillar, Visit3 < 6)
 caterpillar$identifier = paste0(caterpillar$siteID, caterpillar$circle, caterpillar$survey)
 caterpillar = merge(caterpillar, all_surveyTrees, by.x="identifier", by.y= "identifier")
 caterpillar = select(caterpillar, -siteID.y, -circle.y, -survey.y)
