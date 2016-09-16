@@ -3,7 +3,7 @@ library(car)
 library(MASS)
 library(ggplot2)
 library(lme4)
-source(ExclosureAnalysis_Summer2016.R)
+source('Exclosure Analysis/ExclosureAnalysis_Summer2016.R')
 
 #Figure out which probability distribution fits data -None of the following are very good (all for normal distributions)
 #food_time$Visit3.1 <- food_time$Visit3 + .1
