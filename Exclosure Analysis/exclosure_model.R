@@ -5,6 +5,11 @@ library(lme4)
 source("Exclosure Analysis/ExclosureAnalysis_Summer2016.R")
 source("~/Desktop/insect-exclosure/data_analysis.R")
 
+#Figure out which probability distribution fits data -None of the following are very good (all for normal distributions)
+#food_time$Visit3.1 <- food_time$Visit3 + .1
+#qqp(food_time$Visit3.1, "norm")
+#qqp(food_time$Visit3.1, "lnorm")
+
 #data shaping
 food = food_time1
 food$identifier = paste0(food$siteID, food$circle, food$survey)
