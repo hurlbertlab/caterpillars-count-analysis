@@ -268,3 +268,11 @@ write.csv(temp_EVI_GDD, file = "temp_EVI_GDD.csv")
 bands$bandingDate <- as.Date(bands$bandingDate, '%m/%d/%Y')
 
 CRS("+proj=laea +lat_0=40 +lon_0=-100") # lambert azimuthal equal area
+
+
+
+#----Temperature 2016----
+setwd('c:/users/hayeste/my documents/495/tmean')
+tmean <- getData("worldclim", var = "tmean", res = 10)
+files<-paste('c:/users/hayeste/my documents/495/tmean/wc10/tmean',1:12,'.bil',sep='')
+tmeans<-stack(files)
