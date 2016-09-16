@@ -1,8 +1,8 @@
 #Analysis of Exclosure Data Summer 2016
 #Open necessary packages
 source("summary_functions.r")
-library(dplyr)
 library(tidyr)
+library(dplyr)
 library(stringr)
 library(coin)
 library(lattice)
@@ -117,27 +117,27 @@ ex_pairs2$VisitNumber <- ifelse(ex_pairs2$date=="2016-05-11", "1",
 #Summarise observations for 3 food types (start 2012 reshaping analysis code)
 #Summarise Observations for All Arthropods (Arthropods greater than 2 mm)
 grouped_all <- ex_pairs2 %>% group_by(TrapType, siteID, circle, survey, VisitNumber)
-total_all <- (summarise(grouped_all, sum(orderCount)))
+total_all <- dplyr::summarise(grouped_all, sum(orderCount)) 
 total_all$surveyID<- paste0(total_all$siteID, total_all$VisitNumber,
                             total_all$circle, total_all$survey, total_all$TrapType)
 
 
-#Summarise Observations for Relevant Orders great than 5 mm ("Bird food Arthropods") 
-food_arthropods <- filter(ex_pairs2, orderLength > "4", orderArthropod %in% c("Caterpillars (Lepidoptera larvae)", 
+#Summarise Observations for Relevant Orders great than or equal to 5 mm ("Bird food Arthropods") 
+food_arthropods <- filter(ex_pairs2, orderLength > "4" & orderArthropod %in% c("Caterpillars (Lepidoptera larvae)", #not sure this line of code is working.. missing 26 caterpillars obvs from 11B
                                                        "Beetles (Coleoptera)", 
                                                        "Spiders (Araneae; NOT daddy longlegs!)", 
                                                        "True Bugs (Heteroptera)", 
                                                        "Grasshoppers, Crickets (Orthoptera)", 
                                                        "Leaf hoppers and Cicadas (Auchenorrhyncha)"))
 grouped_food <- food_arthropods %>% group_by(TrapType, siteID, circle, survey, VisitNumber)
-total_food <- (summarise(grouped_food, sum(orderCount)))
+total_food <- dplyr::summarise(grouped_food, sum(orderCount))
 total_food$surveyID<- paste0(total_food$siteID, total_food$VisitNumber,
                                 total_food$circle, total_food$survey,total_food$TrapType)
 
 #Summarise Observations for Caterpillars
 caterpillar <-filter(ex_pairs2, orderArthropod == "Caterpillars (Lepidoptera larvae)")
 grouped_caterpillar <- caterpillar %>% group_by(TrapType, siteID, circle, survey, VisitNumber)
-total_caterpillar <- (summarise(grouped_caterpillar, sum(orderCount)))
+total_caterpillar <- dplyr::summarise(grouped_caterpillar, sum(orderCount))
 total_caterpillar$surveyID<- paste0(total_caterpillar$siteID, total_caterpillar$VisitNumber,
                                 total_caterpillar$circle, total_caterpillar$survey,total_caterpillar$TrapType)
 
@@ -181,21 +181,16 @@ caterpillar_abundance1<- select(caterpillar_abundance, -Freq, -TrapType.y, -site
 names(caterpillar_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumber", "total_caterpillar")
 caterpillar_abundance1["total_caterpillar"][is.na(caterpillar_abundance1["total_caterpillar"])] <- 0
 
-#Remove outliers (observations were more than 5 arthropods were seen on a survey)
-all_abundance2 <- filter(all_abundance1, total_all <6)
-food_abundance2 <-filter(food_abundance1, total_food < 6)
-caterpillar_abundance2 <- filter(caterpillar_abundance1, total_caterpillar < 6)
-
 #Spread Visit 1 and Visit 3 for 3 Food Type Datasets and Create Difference Column to Format for Wilcox Test
-all_time <- spread(all_abundance2, VisitNumber, total_all)
+all_time <- spread(all_abundance1, VisitNumber, total_all)
 names(all_time) = c('TrapType','siteID', "circle", "survey", "Visit1", "Visit2", "Visit3")
 all_time$visit_dif<-all_time$Visit3-all_time$Visit2
 
-food_time <- spread(food_abundance2, VisitNumber, total_food)
+food_time <- spread(food_abundance1, VisitNumber, total_food)
 names(food_time) = c('TrapType','siteID', "circle", "survey", "Visit1", "Visit2", "Visit3")
 food_time$visit_dif<-food_time$Visit3-food_time$Visit2
 
-caterpillar_time <- spread(caterpillar_abundance2, VisitNumber, total_caterpillar)
+caterpillar_time <- spread(caterpillar_abundance1, VisitNumber, total_caterpillar)
 names(caterpillar_time) = c('TrapType','siteID', "circle", "survey", "Visit1", "Visit2", "Visit3")
 caterpillar_time$visit_dif<-caterpillar_time$Visit3-caterpillar_time$Visit2
 
@@ -235,7 +230,7 @@ boxplot(food_final$Visit3Dif ~food_final$siteID, main="Arth Density for Relevant
         ylab="FinalVisit Difference in Arth Density (treatment-control)", new=T)
 boxplot(caterpillar_final$Visit3Dif ~caterpillar_final$siteID, main="Caterpillar Density by Site", ylab="FinalVisit Difference in Arth Density (treatment-control)", new=T)
 
-#Boxplot of difference in final arth densities by plant species
+#Boxplot of difference in final arth densities by tree species
 boxplot(food_final$Visit3Dif ~food_final$treeSp, main="Arth Density for Relevant Orders by Tree Species", 
         ylab="FinalVisit Difference in Arth Density (treatment-control)", new=T)
 boxplot(caterpillar_final$Visit3Dif ~caterpillar_final$treeSp, main="Caterpillar Density by Tree Species", 
@@ -244,6 +239,22 @@ boxplot(caterpillar_final$Visit3Dif ~caterpillar_final$treeSp, main="Caterpillar
 #Boxplot of average arth densities for exclosures and controls
 boxplot(food_final$Visit3VF, main="selected Arthropod Density by Treatment")
 boxplot(food_final$Visit3VFX, new=F)
+
+#Remove outliers (observations were more than 5 arthropods were seen on a survey)
+#food_no_outliers <-filter(food_final, Visit3VF < 6 & Visit3VFX <6)
+caterpillar_no_outliers <- filter(caterpillar_final, Visit3VF < 6 & Visit3VFX < 6)
+
+#Boxplot of average bird food and caterpillar dnesity by tree species for exclosures vs controls (outliers removed)
+par(mfrow = c(2,2))
+boxplot(food_final$Visit3VFX ~ food_final$treeSp, main = "Bird Food, Exclosure", 
+        ylab = "# arthropods per survey", cex.axis = .4)
+boxplot(food_final$Visit3VF ~ food_final$treeSp, main = "Bird Food, Control", 
+        ylab = "# arthropods per survey", cex.axis = .4)
+boxplot(caterpillar_no_outliers$Visit3VFX ~ caterpillar_no_outliers$treeSp, main = "Caterpillars, Exclosure", 
+        ylab = "# arthropods per survey", cex.axis = .4)
+boxplot(caterpillar_final$Visit3VF ~ caterpillar_final$treeSp, main = "Caterpillars, Control", 
+        ylab = "# arthropods per survey", cex.axis = .4, ylim=c(0,2.0))
+
 
 
 #****************Analyze change in herbivory**********
