@@ -141,6 +141,15 @@ total_caterpillar <- dplyr::summarise(grouped_caterpillar, sum(orderCount))
 total_caterpillar$surveyID<- paste0(total_caterpillar$siteID, total_caterpillar$VisitNumber,
                                 total_caterpillar$circle, total_caterpillar$survey,total_caterpillar$TrapType)
 
+#Summarise Observations for Orders not of Interest to Birds or individuals < 5 mm
+notfood <- filter(ex_pairs2, (orderArthropod %in% c("Ants (Formicidae)", "Bees and Wasps (Hymenoptera, excluding ants)", 
+                                                    "Daddy longlegs (Opiliones)", "Flies (Diptera)", "Moths, Butterflies (Lepidoptera)") 
+                                                    | orderLength < 5))
+grouped_notfood <- notfood %>% group_by(TrapType, siteID, circle, survey, VisitNumber)
+total_notfood <- dplyr::summarise(grouped_notfood, sum(orderCount))
+total_notfood$surveyID<- paste0(total_notfood$siteID, total_notfood$VisitNumber,
+                                total_notfood$circle, total_notfood$survey,total_notfood$TrapType)
+
 #Create Unique Surveys Dataframe
 unique_surveys<-unique(ex_pairs2[, c("TrapType", "siteID", "circle", "survey", "VisitNumber")])
 unique_surveys$surveyID<- paste0(unique_surveys$siteID, unique_surveys$VisitNumber, 
@@ -150,9 +159,13 @@ unique_surveys_count <- data.frame(table(unique_surveys[, c("TrapType", "siteID"
                                                                "VisitNumber", "surveyID")]))
 unique_surveys_count = unique_surveys_count[unique_surveys_count$Freq> 0,]
 
+#Remove 3 surveys from NCBG 1A/1B where exclosure location was moved after Visit1 (prior to exclosure being put on)
+unique_corrected = dplyr::filter(unique_surveys_count, surveyID !="889235611BVF", surveyID!="889235621BVF" & surveyID!="889235631BVF")
+
+
 #Create 3 New Dataframes Merging List of Unique Surveys with Summary Observations 
 #for Each Unique Survey for Each of the 3 Food Types
-all_abundance <- merge(unique_surveys_count, total_all,
+all_abundance <- merge(unique_corrected, total_all,
                        by.x="surveyID",
                        by.y = "surveyID", 
                        all.x = TRUE)
@@ -162,7 +175,7 @@ names(all_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumber
 all_abundance1["total_all"][is.na(all_abundance1["total_all"])] <- 0
 
 
-food_abundance <- merge(unique_surveys_count, total_food,
+food_abundance <- merge(unique_corrected, total_food,
                        by.x="surveyID",
                        by.y = "surveyID", 
                        all.x = TRUE)
@@ -172,7 +185,7 @@ names(food_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumbe
 food_abundance1["total_food"][is.na(food_abundance1["total_food"])] <- 0
 
 
-caterpillar_abundance <- merge(unique_surveys_count, total_caterpillar,
+caterpillar_abundance <- merge(unique_corrected, total_caterpillar,
                         by.x="surveyID",
                         by.y = "surveyID", 
                         all.x = TRUE)
@@ -180,6 +193,15 @@ caterpillar_abundance1<- select(caterpillar_abundance, -Freq, -TrapType.y, -site
                          -circle.y,  -survey.y, -VisitNumber.y, -surveyID)
 names(caterpillar_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumber", "total_caterpillar")
 caterpillar_abundance1["total_caterpillar"][is.na(caterpillar_abundance1["total_caterpillar"])] <- 0
+
+notfood_abundance <- merge(unique_corrected, total_notfood,
+                               by.x="surveyID",
+                               by.y = "surveyID", 
+                               all.x = TRUE)
+notfood_abundance1<- select(notfood_abundance, -Freq, -TrapType.y, -siteID.y, 
+                                -circle.y,  -survey.y, -VisitNumber.y, -surveyID)
+names(notfood_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumber", "total_notfood")
+notfood_abundance1["total_notfood"][is.na(notfood_abundance1["total_notfood"])] <- 0
 
 #Spread Visit 1 and Visit 3 for 3 Food Type Datasets and Create Difference Column to Format for Wilcox Test
 all_time <- spread(all_abundance1, VisitNumber, total_all)
@@ -194,12 +216,15 @@ caterpillar_time <- spread(caterpillar_abundance1, VisitNumber, total_caterpilla
 names(caterpillar_time) = c('TrapType','siteID', "circle", "survey", "Visit1", "Visit2", "Visit3")
 caterpillar_time$visit_dif<-caterpillar_time$Visit3-caterpillar_time$Visit2
 
-
+notfood_time <- spread(notfood_abundance1, VisitNumber, total_notfood)
+names(notfood_time) = c('TrapType','siteID', "circle", "survey", "Visit1", "Visit2", "Visit3")
+notfood_time$visit_dif<-notfood_time$Visit3-notfood_time$Visit2
 
 #Run wilcox_test (Difference of Difference, parallel to 2012 Comparison)
 wilcox_test(visit_dif ~ TrapType, data=all_time)
 wilcox_test(visit_dif ~ TrapType, data=food_time)
-wilcox_test(visit_dif ~ TrapType, data=caterpillar_time) 
+wilcox_test(visit_dif ~ TrapType, data=caterpillar_time)
+wilcox_test(visit_dif ~ TrapType, data=notfood_time) 
 
 #Run analyses on dif between end arth density b/w treatment and control (independent of 2012 comparison)
 wilcox_test(Visit3~ TrapType, data=food_time)
