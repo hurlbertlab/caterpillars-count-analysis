@@ -16,10 +16,10 @@ BGcol = 'limegreen'
 linewidth = 5
 
 # Plotting by day
-PRlepl16 = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'cornflowerblue', minLength = 5, lty = 'dashed', lwd = 3, ylim = c(0, 0.25), ylab = 'Caterpillar density')
-PRlepl15 = meanDensityByDay(amsurvey.pr, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'cornflowerblue', minLength = 5, lwd = 3)
-BGlepl15 = meanDensityByDay(amsurvey.bg, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'limegreen', minLength = 5, lwd = 3)
-BGlepl16 = meanDensityByDay(amsurvey.bg, effort = effortByDay, ordersToInclude = "LEPL", inputYear = 2016, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'limegreen', minLength = 5, lwd = 3, lty = 'dashed')
+PRlepl16 = meanDensityByDay(amsurvey.pr, ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, plotVar = 'meanDensity', new = T, color = 'cornflowerblue', minLength = 5, lty = 'dashed', lwd = 3, ylim = c(0, 0.5), ylab = 'Caterpillar density')
+PRlepl15 = meanDensityByDay(amsurvey.pr, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, plotVar = 'meanDensity', new = F, color = 'cornflowerblue', minLength = 5, lwd = 3)
+BGlepl15 = meanDensityByDay(amsurvey.bg, ordersToInclude = "LEPL", inputYear = 2015, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'limegreen', minLength = 5, lwd = 3)
+BGlepl16 = meanDensityByDay(amsurvey.bg, ordersToInclude = "LEPL", inputYear = 2016, inputSite = 8892356, plot = T, plotVar = 'meanDensity', new = F, color = 'limegreen', minLength = 5, lwd = 3, lty = 'dashed')
 
 
 # Plotting by week
