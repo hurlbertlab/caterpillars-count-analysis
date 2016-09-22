@@ -8,9 +8,8 @@ setwd('c:/users/hayeste/my documents/495/prism')
 # Set path and download data
 # This took ~1.5 hours on my computer
 options(prism.path = "c:/users/hayeste/my documents/495/prism")
-get_prism_dailys(type = 'tmean', minDate = "2007-01-01", maxDate = "2016-08-31",
+get_prism_dailys(type = 'tmean', minDate = "2013-09-19", maxDate = "2016-08-31",
                  keepZip = FALSE)
-# I think some of the last part got cut off???
 
 # Longitude and latitude of 3 locations
 longlat = data.frame(location = c("Botanical Garden", "Prairie Ridge", "Hubbard Brook"), 
@@ -25,8 +24,8 @@ ls_prism_data()[1:10,]
 foo = extract(tmeans, longlat[,3:2])
 
 # See a point location
-# prism_slice(location, prismfile)
-# Assumes no other prism files in ls
+# Assumes no other prism files in ls, need lat first and then long
+# Provides a ggplot
 bg <- prism_slice(c(longlat[1,3],longlat[1,2]),ls_prism_data()[1:80,1])
 pr <- prism_slice(c(longlat[2,2],longlat[2,3]),ls_prism_data()[,1])
 hb <- prism_slice(c(longlat[3,2],longlat[3,3]),ls_prism_data()[,1])
