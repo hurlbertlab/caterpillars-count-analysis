@@ -5,11 +5,6 @@ library(lme4)
 source("Exclosure Analysis/ExclosureAnalysis_Summer2016.R")
 source("~/Desktop/insect-exclosure/data_analysis.R")
 
-#Figure out which probability distribution fits data -None of the following are very good (all for normal distributions)
-food_time$Visit3.1 <- food_time$Visit3 + .1
-qqp(food_time$Visit3.1, "norm")
-qqp(food_time$Visit3.1, "lnorm")
-
 #data shaping
 food = food_time1
 food$identifier = paste0(food$siteID, food$circle, food$survey)
@@ -45,6 +40,7 @@ names(food_2012) = c("StateRouteStop", "Station", "TrapType", "Visit3", "TreeSpe
 #mixed models for 2012
 mix_2012 = lmer(Visit3 ~ TrapType + (1 | TreeSpecies) + (1 | StateRouteStop), food_2012)
 mix_2012_2 = lmer(Visit3 ~ TrapType + (1 | TreeSpecies) + ) #StateRouteStop is really a stand in for elevation, precipitation, temperature- get these?
+
 
 
 
