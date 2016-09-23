@@ -45,12 +45,13 @@ food_2012_1 = merge(food_2012, uniqObserverV3, by.x= "identifier", by.y="identif
 food_2012_2 = food_2012_1[,c("StateRouteStop.x", "Station.x", "TrapType.x", "Visit3", "TreeSpecies", "Observer")]
 names(food_2012_2) = c("StateRouteStop", "Station", "TrapType", "Visit3", "TreeSpecies", "Observer")
 
-#mixed models for 2012 #none of these are very good
+#mixed models for 2012 #none of these are very good, just doesn't seem to be an effect
 spec_2012 = lmer(Visit3 ~ TrapType + (1 | TreeSpecies), food_2012_2)
 obvs_2012 = lmer(Visit3 ~ TrapType + (1 | Observer), food_2012_2)
 srs_2012 = lmer(Visit3 ~ TrapType + (1 | StateRouteStop), food_2012_2)
-all_2012 = lmer(Visit3 ~ TrapType + (1 | TreeSpecies) + (1 | StateRouteStop), food_2012_2)
+all_2012 = lmer(Visit3 ~ TrapType + (1 | TreeSpecies) + (1 | Observer), food_2012_2)
 
+#counts = food_2012_2 %>% group_by(StateRouteStop, Station) %>% tally() %>% filter(n != 2)
 
 
 

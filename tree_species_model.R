@@ -18,7 +18,7 @@ vis_count$identifier = paste0(vis_count$site, vis_count$circle, vis_count$survey
 names(vis_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
 vis_biomass = dplyr::summarise(vis_grouped, sum(biomass))
 vis_biomass$identifier = paste0(vis_biomass$site, vis_biomass$circle, vis_biomass$survey, vis_biomass$date)
-names(vis_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
+names(vis_biomass) = c("site", "circle", "survey", "date", "sum_biomass", "identifier")
 
 #merge to add tree species data to summary data
 vis_plants = unique(vis[, c("identifier", "plantSp")]) #there are 16 observations that have multiple plant species for the same surveys- need to go through and find these and correct
@@ -26,7 +26,6 @@ vis_plants = unique(vis[, c("identifier", "plantSp")]) #there are 16 observation
 #vis_plants2 = vis_plants1[vis_plants1$Freq> 0,]
 vis_count_final= merge(vis_count, vis_plants, by.x = "identifier", by.y = "identifier", all.x = T) #this has larger dimensions than vis_count because of extra plant species
 vis_biomass_final= merge(vis_biomass, vis_plants, by.x = "identifier", by.y = "identifier", all.x = T)
-
 
 #create list of unique surveys
 #uniq_surv = unique(labdata.triangle[, c("site", "circle", "survey", "date")])
