@@ -1,6 +1,9 @@
 #Tree species model
 source("data_cleaning.R")
 
+#load packages
+library(agricolae)
+
 #read in data
 all_surveyTrees <- read.csv("data/tbl_surveyTrees.csv", header=T)
 
@@ -19,7 +22,7 @@ vis_grouped = vis %>% group_by(site, circle, survey, date)
 vis_count = dplyr::summarise(vis_grouped, sum(count))
 vis_count$identifier = paste0(vis_count$site, vis_count$circle, vis_count$survey, vis_count$date)
 names(vis_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
-vis_biomass = dplyr::summarise(vis_grouped, sum(biomass))
+vis_biomass = dplyr::summarise(vis_grouped, sum(biomass)) #biomass estimates only exist for ~ half of unique surveys. could populate fields w/zero count w/ zeros, but what about others
 vis_biomass$identifier = paste0(vis_biomass$site, vis_biomass$circle, vis_biomass$survey, vis_biomass$date)
 names(vis_biomass) = c("site", "circle", "survey", "date", "sum_biomass", "identifier")
 
@@ -47,14 +50,51 @@ trees_2015$plantSpecies = as.factor(trees_2015$plantSpecies)
 trees_2014 = trees_2015
 trees_2014$year = "2014"
 
-#create one dataframe with tree species for 2015 & 2016
-trees_both = rbind(trees_2015, trees_2016)
+#create one dataframe with tree species for 2014, 2015 & 2016
+trees_all = rbind(trees_2014, trees_2015, trees_2016)
+trees_all$loc_ID = paste0(trees_all$site, trees_all$circle, trees_all$survey, trees_all$year)
 
 #merge to add tree species data to summary data
-vis_count1$loc_ID = paste0("site", "circle", "survey", "year")
-vis_count_final = merge(vis_count1, trees_both, by.x = "identifier", by.y = "identifier", all.x = T) #have to create identifier that works for both of these dfs 
-vis_biomass_final = merge(vis_biomass1, trees_both, by.x = "identifier", by.y = "identifier", all.x = T)
+vis_count1$loc_ID = paste0(vis_count1$site, vis_count1$circle, vis_count1$survey, vis_count1$year)
+vis_biomass1$loc_ID = paste0(vis_biomass1$site, vis_biomass1$circle, vis_biomass1$survey, vis_biomass1$year)
 
-#Modeling
-lm.count = lm(sum_count ~ plantSp, data=vis_count_final) #so many different capitalizations of plant species, need to merge with plant species master lists for PR and NCBG
+
+count_merged = merge(vis_count1, trees_all, by.x = "loc_ID", by.y = "loc_ID", all.x = T) #have to create identifier that works for both of these dfs 
+biomass_merged = merge(vis_biomass1, trees_all, by.x = "loc_ID", by.y = "loc_ID", all.x = T)
+
+count_merged1 = dplyr::select(count_merged, site, circle.x, survey.x, year.x, sum_count, plantSpecies)
+names(count_merged1) = c("site", "circle", "survey", "year", "sum_count", "plantSpecies")
+
+biomass_merged1 = dplyr::select(biomass_merged, site, circle.x, survey.x, year.x, sum_biomass, plantSpecies)
+names(biomass_merged1) = c("site", "circle", "survey", "year", "sum_biomass", "plantSpecies")
+
+#Find 10 most common tree species to use in analysis 
+trees = select(count_merged1, plantSpecies )
+trees_freq = data.frame(table(trees))
+trees_ordered= trees_freq[order(trees_freq$Freq, decreasing = T),] 
+common_trees = trees_ordered[1:10,]
+
+#Only use surveys conducted on 10 most common tree species
+count_common = dplyr::filter(count_merged1, plantSpecies %in% common_trees$trees)
+biomass_common = dplyr::filter(biomass_merged1, plantSpecies %in% common_trees$trees)
+
+#Calculate mean arthropod density for each tree species
+count_grouped_sp = count_common %>% group_by(plantSpecies)
+count_means = dplyr::summarise(count_grouped_sp, mean(sum_count)) #check one of these to confirm that the mean is divided by the number of occurrences
+names(count_means) = c("plantSpecies", "mean_dens")
+
+biomass_grouped_sp = biomass_common %>% group_by(plantSpecies)
+biomass_means = dplyr::summarise(biomass_grouped_sp, mean(sum_biomass))
+names(biomass_means) = c("plantSpecies", "mean_biomass")
+
+#AOV models
+count_means$plantSpecies= as.character(count_means$plantSpecies)
+aov.count = aov(mean_dens ~ plantSpecies, data=count_means) 
+
+aov.biomass = aov(mean_biomass ~ plantSpecies, data=biomass_means) #getting error, not sure what it means
+
+c = TukeyHSD(aov.count) # returns 3 columns with all "NaN" values-- what does this mean? -> 0/0, no lower and upper confidence interval, no adjusted p-value
+
+#try running aov on regular density values, not means, and see if it works
+
 
