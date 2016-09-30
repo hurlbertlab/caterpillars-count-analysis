@@ -79,22 +79,27 @@ count_common = dplyr::filter(count_merged1, plantSpecies %in% common_trees$trees
 biomass_common = dplyr::filter(biomass_merged1, plantSpecies %in% common_trees$trees)
 
 #Calculate mean arthropod density for each tree species
-count_grouped_sp = count_common %>% group_by(plantSpecies)
-count_means = dplyr::summarise(count_grouped_sp, mean(sum_count)) #check one of these to confirm that the mean is divided by the number of occurrences
-names(count_means) = c("plantSpecies", "mean_dens")
+#count_grouped_sp = count_common %>% group_by(plantSpecies)
+#count_means = dplyr::summarise(count_grouped_sp, mean(sum_count)) #check one of these to confirm that the mean is divided by the number of occurrences
+#names(count_means) = c("plantSpecies", "mean_dens")
 
-biomass_grouped_sp = biomass_common %>% group_by(plantSpecies)
-biomass_means = dplyr::summarise(biomass_grouped_sp, mean(sum_biomass))
-names(biomass_means) = c("plantSpecies", "mean_biomass")
+#biomass_grouped_sp = biomass_common %>% group_by(plantSpecies)
+#biomass_means = dplyr::summarise(biomass_grouped_sp, mean(sum_biomass))
+#names(biomass_means) = c("plantSpecies", "mean_biomass")
 
 #AOV models
-count_means$plantSpecies= as.character(count_means$plantSpecies)
-aov.count = aov(mean_dens ~ plantSpecies, data=count_means) 
+#count_means$plantSpecies= as.character(count_means$plantSpecies)
+#aov.count = aov(mean_dens ~ plantSpecies, data=count_means) 
+#aov.biomass = aov(mean_biomass ~ plantSpecies, data=biomass_means) #getting error, not sure what it means
 
-aov.biomass = aov(mean_biomass ~ plantSpecies, data=biomass_means) #getting error, not sure what it means
+aov.raw = aov(sum_count ~ plantSpecies, data=count_common) #I think this is how I'm supposed to do it
+lm.raw = lm(sum_count ~ plantSpecies, data=count_common)
 
-c = TukeyHSD(aov.count) # returns 3 columns with all "NaN" values-- what does this mean? -> 0/0, no lower and upper confidence interval, no adjusted p-value
+TukeyHSD(aov.raw)
+HSD.test(lm.raw, "plantSpecies")
 
-#try running aov on regular density values, not means, and see if it works
+
+
+#have outliers been taken out of this dataset?
 
 
