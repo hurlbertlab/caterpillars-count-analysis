@@ -3,6 +3,7 @@ source("data_cleaning.R")
 
 #load packages
 library(agricolae)
+library(ggplot2)
 
 #read in data
 all_surveyTrees <- read.csv("data/tbl_surveyTrees.csv", header=T)
@@ -96,10 +97,24 @@ aov.raw = aov(sum_count ~ plantSpecies, data=count_common) #I think this is how 
 lm.raw = lm(sum_count ~ plantSpecies, data=count_common)
 
 TukeyHSD(aov.raw)
-HSD.test(lm.raw, "plantSpecies")
+HSD_raw<- HSD.test(lm.raw, "plantSpecies")
 
+#Create dataframe with results of HSD test
+groups.df = data.frame(HSD_raw$groups)
+means.df = data.frame(HSD_raw$means)
+means.ordered = means.df[order(means.df$sum_count, decreasing = T),]
+plotting = cbind(groups.df, means.ordered)
+plotting = dplyr::select(plotting, -sum_count)
+names(plotting)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
 
+#Plot HSD results
+barplot(plotting$means, names.arg=plotting$tree_sp, las=2, ylab="mean arth density", 
+        main = "Mean Arth Density by Tree Species", ylim = c(0,5), cex.names=.55, 
+        cex.axis = .75, 
+        col = c("red", "red", "purple", "purple", "purple", "purple", "purple", "purple", "blue", "blue"))
+        
+#outliers have not been removed- should they be?
 
-#have outliers been taken out of this dataset?
+    
 
 
