@@ -108,13 +108,14 @@ plotting = dplyr::select(plotting, -sum_count)
 names(plotting)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
 
 #Plot HSD results
+par(mar=c(6,4,4,4))
 barplot(plotting$means, names.arg=plotting$tree_sp, las=2, ylab="mean arth density", 
-        main = "Mean Arth Density by Tree Species", ylim = c(0,5), cex.names=.55, 
+        main = "Mean Arth Density by Tree Species", ylim = c(0,5), cex.names=.65, 
         cex.axis = .75, 
         col = c("red", "red", "purple", "purple", "purple", "purple", "purple", "purple", "blue", "blue"))
-        
+geom_errorbar()
 #outliers have not been removed- should they be?
-
+#should I have error bars?
     
 
 
