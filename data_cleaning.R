@@ -106,9 +106,9 @@ cleandata$year = substring(cleandata$date, 1, 4)
 # Change arthCodes to class character
 cleandata$arthCode = as.character(cleandata$arthCode)
 
-# Take out large caterpillar colonies
+ #Take out large caterpillar colonies
 #cleandata <- cleandata[!(cleandata$arthCode == "LEPL" & cleandata$count > 10),]
-# or
+ #or
 #cleandata$count[cleandata$arthCode == "LEPL" & cleandata$count > 5] = 5
 
 # Cleaning beat sheets (PR and BG) and isolating # leaves into a new column

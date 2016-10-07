@@ -14,6 +14,9 @@ lab.triangle = rbind(labdata.pr, labdata.bg)
 #add unique identifier column for surveys
 lab.triangle$identifier = paste0(lab.triangle$site, lab.triangle$circle, lab.triangle$survey, lab.triangle$date)
 
+#Remove large arth abservations (to do or not to do?)
+lab.triangle <- lab.triangle[!(lab.triangle$count > 10),]
+
 #subset into beatsheets and visual surveys
 bs = lab.triangle[lab.triangle$surveyType == "Beat_Sheet", ]
 vis = lab.triangle[lab.triangle$surveyType == "Visual", ]
@@ -88,15 +91,15 @@ biomass_common = dplyr::filter(biomass_merged1, plantSpecies %in% common_trees$t
 #biomass_means = dplyr::summarise(biomass_grouped_sp, mean(sum_biomass))
 #names(biomass_means) = c("plantSpecies", "mean_biomass")
 
+
 #AOV models
 #count_means$plantSpecies= as.character(count_means$plantSpecies)
 #aov.count = aov(mean_dens ~ plantSpecies, data=count_means) 
 #aov.biomass = aov(mean_biomass ~ plantSpecies, data=biomass_means) #getting error, not sure what it means
 
-aov.raw = aov(sum_count ~ plantSpecies, data=count_common) #I think this is how I'm supposed to do it
+aov.raw = aov(sum_count ~ plantSpecies, data=count_common) 
 lm.raw = lm(sum_count ~ plantSpecies, data=count_common)
 
-TukeyHSD(aov.raw)
 HSD_raw<- HSD.test(lm.raw, "plantSpecies")
 
 #Create dataframe with results of HSD test
@@ -113,12 +116,14 @@ barplot(plotting$means, names.arg=plotting$tree_sp, las=2, ylab="mean arth densi
         main = "Mean Arth Density by Tree Species", ylim = c(0,5), cex.names=.65, 
         cex.axis = .75, 
         col = c("red", "red", "purple", "purple", "purple", "purple", "purple", "purple", "blue", "blue"))
-text(x=1:10, y=3, plotting$M)
-#legend(x=, legend=c(a, ab, b))
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=4, plotting$M)
+
+
 
 #Huge standard deviation: bar.err(HSD_raw$means, variation="SD") 
-#outliers have not been removed- should they be?
-#should I have error bars?
-    
+
+lotsabugs=dplyr::filter(lab.triangle, count > 10)
+lotsabugs1= select(lotsabugs, count, plantSp)
+   
 
 
