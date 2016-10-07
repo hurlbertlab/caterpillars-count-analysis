@@ -20,6 +20,8 @@ longlat = data.frame(location = c("Botanical Garden", "Prairie Ridge", "Hubbard 
 
 ### SKIP SECTION BELOW IF ALREADY HAVE TEMP DATA ORGANIZED ###
 
+if (0) {
+
 # Might need to change HUbbard Brook longlat
 
 list <- ls_prism_data()[,1]
@@ -39,6 +41,8 @@ temp$jday = yday(temp$date)
 temp$year = as.numeric(substr(as.character(temp$date), 1, 4))
 temp.order <- temp[with(temp, order(year, jday)), ]
 write.csv(temp.order, file = "c:/git/caterpillars-count-analysis/data/prism_temp.csv")
+
+} # end if (0)
 
 ### END OF SKIP SECTION ###
 
@@ -89,39 +93,18 @@ for (year in 2007:2016) {
 
 par(mfrow = c(1,1))
 gddyear <- data.frame(gddyear) # Error is ok, I wanted that to happen
-names(gddyear) <- c('PR','BG','HB')
+names(gddyear) <- c('pr.gdd','bg.gdd','hb.gdd')
 gddyear$year = c(2007:2016)
-plot(gddyear$year, gddyear$PR, col = 'red', type = 'l', lwd = 2, ylim = c(145,250))
-points(gddyear$year, gddyear$BG, col = 'blue', type = 'l', lwd = 2)
-points(gddyear$year, gddyear$HB, col = 'green', type = 'l', lwd = 2)
+plot(gddyear$year, gddyear$pr.gdd, col = 'red', type = 'l', lwd = 2, ylim = c(145,250))
+points(gddyear$year, gddyear$bg.gdd, col = 'blue', type = 'l', lwd = 2)
+points(gddyear$year, gddyear$hb.gdd, col = 'green3', type = 'l', lwd = 2)
 
 # See a point location
 # Assumes no other prism files in ls, need lat first and then long
 # Provides a ggplot [not really that useful]
-bg <- prism_slice(c(longlat[1,3],longlat[1,2]),ls_prism_data()[1:80,1])
-pr <- prism_slice(c(longlat[2,2],longlat[2,3]),ls_prism_data()[,1])
-hb <- prism_slice(c(longlat[3,2],longlat[3,3]),ls_prism_data()[,1])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#bg <- prism_slice(c(longlat[1,3],longlat[1,2]),ls_prism_data()[1:80,1])
+#pr <- prism_slice(c(longlat[2,2],longlat[2,3]),ls_prism_data()[,1])
+#hb <- prism_slice(c(longlat[3,2],longlat[3,3]),ls_prism_data()[,1])
 
 
 
