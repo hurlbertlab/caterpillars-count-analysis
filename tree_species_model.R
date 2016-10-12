@@ -3,10 +3,10 @@ source("data_cleaning.R")
 
 #load packages
 library(agricolae)
-library(ggplot2)
 
 #read in data
 all_surveyTrees <- read.csv("data/tbl_surveyTrees.csv", header=T)
+
 
 #Create 1 dataset with all data from PR/NCBG 2015 & 2016
 lab.triangle = rbind(labdata.pr, labdata.bg)
@@ -71,6 +71,10 @@ names(count_merged1) = c("site", "circle", "survey", "year", "sum_count", "plant
 
 biomass_merged1 = dplyr::select(biomass_merged, site, circle.x, survey.x, year.x, sum_biomass, plantSpecies)
 names(biomass_merged1) = c("site", "circle", "survey", "year", "sum_biomass", "plantSpecies")
+
+#Merge with tree species codes (several different files for this, Tara created new one)-- need to be cleaned, probz in data cleaning document. Try merging with all_surveyTrees
+
+cleandata.app
 
 #Find 10 most common tree species to use in analysis 
 trees = select(count_merged1, plantSpecies )
