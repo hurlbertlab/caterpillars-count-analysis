@@ -181,6 +181,8 @@ labdata = filter(cleandata, userID %in% labgroupusers)
 labdata.pr <- labdata[labdata$site == 117,]
 labdata.bg <- labdata[labdata$site == 8892356,]
 
+cleandata.app <-cleandata[cleandata$year %in% c(2010,2011,2012),]
+
 cleandata.pr <- cleandata[cleandata$site == 117,]
 cleandata.bg <- cleandata[cleandata$site == 8892356,]
 
