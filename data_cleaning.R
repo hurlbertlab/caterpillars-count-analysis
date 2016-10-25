@@ -59,7 +59,7 @@ tempyear <- substring(effortByDay$date, 1, 4)
 effortByDay$year = tempyear 
 
 # Merge orders and surveys table
-orders2 = merge(surveys, orders, by = 'surveyID', sort = FALSE)
+orders2 = merge(surveys, orders, by = 'surveyID', sort = FALSE, all.x = TRUE)
 orders2$julianday = yday(orders2$date)
 
 orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
