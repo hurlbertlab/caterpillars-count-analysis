@@ -82,13 +82,17 @@ orders3$arthropod[orders3$arthropod == "Unidentified"] =
 orders3$arthropod[orders3$arthropod == "Termites (Isoptera)"] = 
   "Other (describe in Notes)"
 
+#Change NAs in counts to 0s, and NAs in arthropods to none- mobile phone submissions don't recognize "nones"
+orders3["arthropod"][is.na(orders3["arthropod"])] <- "NONE"
+orders3["count"][is.na(orders3["count"])] <- 0
+
 # Remove all records where the Order is "Leaf Roll"
-orders3 = orders3[orders3$arthropod != "Leaf Roll",]
+orders4 = orders3[orders3$arthropod != "Leaf Roll",]
 
 arthcodes = read.csv('arth_codes.csv', header=T)
 arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
 names(arthcodes1) = c('arthCode', 'arthropod')
-cleandata <- merge(orders3, arthcodes1, by = 'arthropod', all.x = TRUE, sort = FALSE)
+cleandata <- merge(orders4, arthcodes1, by = 'arthropod', all.x = TRUE, sort = FALSE)
 cleandata <- cleandata[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
                        'plantSp','herbivory','arthropod','arthCode','length',
                        'count','notes.y','notes.x', 'surveyType', 'leafCount')]
@@ -207,7 +211,7 @@ cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "su
     ifelse (cleandata$plantSp %in% c("maple-leaved viburnum", "mapleleaf viburnum", "mapleleaf viburnum ", "mapleleaf-viburnum", "maple-leaf viburnum "), "Mapleleaf viburnum",
     ifelse (cleandata$plantSp %in% c("mountain laurel"), "Mountain laurel",
     ifelse (cleandata$plantSp %in% c("mucslewood", "muscewood", "muscle wood ", "musclewood"), "Mucslewood",
-    ifelse (cleandata$plantSp %in% c("mulberry", "white mulberry"), "Mulberry", 
+    ifelse (cleandata$plantSp %in% c("mulberry", "white mulberry"), "White mulberry", 
     ifelse (cleandata$plantSp %in% c("paw paw", "paw-paw", "pawpaw"), "Pawpaw", 
     ifelse (cleandata$plantSp %in% c("pin oak"), "Pin oak", 
     ifelse (cleandata$plantSp %in% c("red maple", "red maple "), "Red maple", 
