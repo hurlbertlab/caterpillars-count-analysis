@@ -9,7 +9,7 @@ setwd('c:/users/hayeste/my documents/495/prism')
 # Set path and download data
 # This took ~1.5 hours on my computer
 options(prism.path = "c:/users/hayeste/my documents/495/prism")
-get_prism_dailys(type = 'tmean', minDate = "2014-11-11", maxDate = "2014-11-11",
+get_prism_dailys(type = 'tmean', minDate = "2000-1-1", maxDate = "2006-12-31",
                  keepZip = FALSE)
 
 
@@ -22,7 +22,7 @@ longlat = data.frame(location = c("Botanical Garden", "Prairie Ridge", "Hubbard 
 
 if (0) {
 
-# Might need to change HUbbard Brook longlat
+# Might need to change Hubbard Brook longlat
 
 list <- ls_prism_data()[,1]
 files<-paste('c:/users/hayeste/my documents/495/prism/',list,'/',list,'.bil',sep='')
