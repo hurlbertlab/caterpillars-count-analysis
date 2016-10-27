@@ -23,7 +23,7 @@ library(rgeos)
 
 # For loop for downloading/formatting data for each year: 
 # THIS ONLY NEED TO RUN ONCE
-multyears <- 2007:2016
+multyears <- 2000:2016
 
 if (0) {
 
@@ -48,7 +48,7 @@ for (year in 1:length(multyears)) {
 
 
 # For loop for plotting EVI and calculating greenup for each year
-multyears <- 2007:2016
+multyears <- 2000:2016
 
 samp.dataframe = data.frame(prgreenup.half = numeric(), bggreenup.half = numeric(),
                             hbgreenup.half = numeric(), prgreenup.log = numeric(), 
@@ -184,11 +184,11 @@ for (year in 1:length(multyears)) {
 } # end for loop
 
 greenup <- samp.dataframe
-greenup$year <- c(2007:2016)
+greenup$year <- c(2000:2016)
 
 # Plotting
 par(mar = c(2,2,3,2), mfrow = c(1,1), oma = c(2,2,2,2))
-plot(greenup$year, greenup$prgreenup.log, col = 'red', type = 'l', ylim = c(75,160),
+plot(greenup$year, greenup$prgreenup.log, col = 'red', type = 'l', ylim = c(70,180),
      xlab = 'Year', ylab = "Julian day of greenup", lwd = 2)
 points(greenup$year, greenup$bggreenup.log, col = 'blue', type = 'l', lwd = 2)
 points(greenup$year, greenup$hbgreenup.log, col = 'green3', type = 'l', lwd = 2)
@@ -197,7 +197,7 @@ points(greenup$year, greenup$bggreenup.half, col = 'blue', type = 'l', lwd = 2, 
 points(greenup$year, greenup$hbgreenup.half, col = 'green3', type = 'l', lwd = 2, lty = 2)
 legend("topleft", c('PR logistic', 'BG logistic', 'HB logistic', 'PR half max', 'BG half max', 'HB half max'), lwd = 2, 
        lty = c(1,1,1,2,2,2), col = c('red', 'blue', 'green3', 'red', 'blue', 'green3')) 
-title('Greenup 2007-2016', line = 1)
+title('Greenup 2000-2016', line = 1)
 
 
 
