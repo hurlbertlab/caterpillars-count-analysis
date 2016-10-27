@@ -8,6 +8,8 @@ library(lubridate)
 
 setwd('c:/users/hayeste/my documents/495/eBird/NC')
 
+# ---- Read in files and clean ----
+
 nc_ebird <- read.table(file = 'nc_ebird.txt', header = TRUE, sep = '\t', fill = TRUE, quote = '')
 nc_ebird_sub <- nc_ebird[,c(3,4,5,8,10,14,20,23,24,25,26)]
 names(nc_ebird_sub) <- c('category', 'common_name', 'scientific_name', 'count', 'age_sex', 
@@ -35,6 +37,7 @@ names(migraguild) <- c('migclass', 'migclass_gen', 'scientific_name')
 nc_ebird_migra <- merge(nc_ebird_sub, migraguild, by = 'scientific_name', all.x = T, all.y = F)
 nh_ebird_migra <- merge(nh_ebird_sub, migraguild, by = 'scientific_name', all.x = T, all.y = F)
 
+# ---- longlatquad function ----
 # Making a dataframe of the longitude and latitude quadrants for each site with a given
 # starting point in longlat (function)
 
@@ -59,12 +62,14 @@ longlatquad = function(longpoint,   # starting longitude (center of location)
   return(longlatdataframe)
   } # end function
   
-PRquad = longlatquad(latpoint = 35.809674, longpoint = -78.716546, res_km = 4)
-BGquad = longlatquad(latpoint = 35.898645, longpoint = -79.031469, res_km = 4)
-HBquad = longlatquad(latpoint = 43.942407, longpoint = -71.710066, res_km = 4)
+PRquad = longlatquad(latpoint = 35.809674, longpoint = -78.716546, res_km = 8)
+BGquad = longlatquad(latpoint = 35.898645, longpoint = -79.031469, res_km = 8)
+HBquad = longlatquad(latpoint = 43.942407, longpoint = -71.710066, res_km = 8)
 
 nc_ebird_migra <- nc_ebird_migra[!is.na(nc_ebird_migra$long),] # if no longitude, no latitude either
 nh_ebird_migra <- nh_ebird_migra[!is.na(nh_ebird_migra$long),]
+
+# ---- Site-specific subsets ----
 
 # Pull out site-specific subsets
 pr_ebird = subset(nc_ebird_migra, lat >= PRquad[4,2] & lat <= PRquad[2,2] & 
@@ -106,6 +111,7 @@ points(hb_entries$year, hb_entries$num_entries, col = 'green3', type = 'l', lwd 
 
 legend('topleft', c('PR', 'BG', 'HB'), lwd = 2, col = c('red', 'blue', 'green3'))
 
+# ---- focalbird function ----
 # Function for plotting abundances of some of the possible focal species per year for each site
 
 focalbird = function(species, # species common name to plot for
@@ -141,7 +147,7 @@ focalbird = function(species, # species common name to plot for
   points(hb_entries$year, hb_entries$num_entries, col = 'green3', type = 'l', lwd = 2)
   
   legend('topleft', c('PR', 'BG', 'HB'), lwd = 2, col = c('red', 'blue', 'green3'))
-}
+} # end function
 
 # Plotting
 par(mfrow = c(3,2), mar = c(4,4,2,2), oma = c(1,1,1,1))
@@ -150,10 +156,87 @@ focalbird('House Wren', c(0,275))
 focalbird('Common Yellowthroat', c(0,275))
 focalbird('Indigo Bunting', c(0,275))
 focalbird('Blue-gray Gnatcatcher', c(0,275))
-focalbird('Summer Tanager', c(0,275))
+focalbird('Summer Tanager', c(0,275)) # error because no HB data for summer tanager
+
+# ---- focalabun function ----
+# Plotting one species' changing abundance throughout spring/summer season of one year (by week) at each site
+
+focalabun = function(species, # species common name to plot for
+                     chooseyear, # choose year
+                     adjusty = c(0,20), # adjust ylim
+                     adjustx = c(10,40), # adjust xlim
+                     prdata = pr_ebird, bgdata = bg_ebird, hbdata = hb_ebird)
+  
+{ # start function
+  pr_entries <- subset(prdata, year == chooseyear & common_name == species)
+  pr_entries$week = floor(pr_entries$jday/7) + 1
+  pr_weekly <- data.frame(table(pr_entries$week))
+  names(pr_weekly) <- c('week', 'abunpr')
+  pr_weekly$week <- as.numeric(as.character(pr_weekly$week))
+  pr_weekly$abunpr <- as.numeric(as.character(pr_weekly$abunpr))
+  plot(pr_weekly$week, pr_weekly$abunpr, col = 'red', type = 'l', lwd = 2,
+       xlab = 'Week', ylab = 'Number of entries', ylim = adjusty, xlim = adjustx, main = species)
+  
+  bg_entries <- subset(bgdata, year == chooseyear & common_name == species)
+  bg_entries$week = floor(bg_entries$jday/7) + 1
+  bg_weekly <- data.frame(table(bg_entries$week))
+  names(bg_weekly) <- c('week', 'abunbg')
+  bg_weekly$week <- as.numeric(as.character(bg_weekly$week))
+  bg_weekly$abunbg <- as.numeric(as.character(bg_weekly$abunbg))
+  points(bg_weekly$week, bg_weekly$abunbg, col = 'blue', type = 'l', lwd = 2)
+  
+  hb_entries <- subset(hbdata, year == chooseyear & common_name == species)
+  hb_entries$week = floor(hb_entries$jday/7) + 1
+  hb_weekly <- data.frame(table(hb_entries$week))
+  names(hb_weekly) <- c('week', 'abunhb')
+  hb_weekly$week <- as.numeric(as.character(hb_weekly$week))
+  hb_weekly$abunhb <- as.numeric(as.character(hb_weekly$abunhb))
+  points(hb_weekly$week, hb_weekly$abunhb, col = 'green3', type = 'l', lwd = 2)
+  
+  legend('topleft', c('PR', 'BG', 'HB'), lwd = 2, col = c('red', 'blue', 'green3'))  
+  
+  prbg <- merge(pr_weekly, bg_weekly, by = 'week', all = TRUE)
+  all <- merge(prbg, hb_weekly, by = 'week', all = TRUE)
+  
+  return(all)
+} # end function
+  
+# Plotting
+par(mfrow = c(3,2), mar = c(4,4,2,2), oma = c(1,1,1,1))
+revi11 <- focalabun('Red-eyed Vireo', 2011)
+revi12 <- focalabun('Red-eyed Vireo', 2012)
+revi13 <- focalabun('Red-eyed Vireo', 2013)
+revi14 <- focalabun('Red-eyed Vireo', 2014)
+revi15 <- focalabun('Red-eyed Vireo', 2015)
+revi16 <- focalabun('Red-eyed Vireo', 2016)
+
+inbu11 <- focalabun('Indigo Bunting', 2011)
+inbu12 <- focalabun('Indigo Bunting', 2012)
+inbu13 <- focalabun('Indigo Bunting', 2013)
+inbu14 <- focalabun('Indigo Bunting', 2014)
+inbu15 <- focalabun('Indigo Bunting', 2015)
+inbu16 <- focalabun('Indigo Bunting', 2016)
+
+revi16 <- focalabun('Red-eyed Vireo', 2016)
+howr16 <- focalabun('House Wren', 2016)
+coye16 <- focalabun('Common Yellowthroat', 2016)
+inbu16 <- focalabun('Indigo Bunting', 2016)
+bggn16 <- focalabun('Blue-gray Gnatcatcher', 2016)
+suta16 <- focalabun('Summer Tanager', 2016)
 
 
+# Still need to edit for loop below
+revimaxweek <- data.frame(year = c(), prmaxweek = c(), bgmaxweek = c())
 
+for (year in c(2007:2016)) {
+  data <- focalabun('Red-eyed Vireo', year)
+  prmax <- max(data$abunpr[data$week %in% c(10:25)], na.rm = TRUE)
+  prmaxweek <- data$week[data$abunpr == prmax][1]
+  bgmax <- max(data$abunbg[data$week %in% c(10:25)], na.rm = TRUE)
+  bgmaxweek <- data$week[data$abunbg == bgmax][1]
+  line <- c(year, prmaxweek, bgmaxweek)
+  revimaxweek <- rbind(revimaxweek, line)
+}
 
 
 
