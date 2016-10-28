@@ -8,6 +8,42 @@ amsurvey.bg <- amsurvey.bg[!(amsurvey.bg$arthCode == "LEPL" & amsurvey.bg$count 
 labdata.pr <- labdata.pr[!(labdata.pr$arthCode == "LEPL" & labdata.pr$count > 10),]
 labdata.bg <- labdata.bg[!(labdata.bg$arthCode == "LEPL" & labdata.bg$count > 10),]
 
+#----Prairie Ridge: Create mean density datasets for cats and bird food, both years, both methods, both sites----
+# Don't have volunteer beat sheet data yet
+multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
+
+PR.LEPL15 = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
+                             ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = F, 
+                             minLength = 5)
+PR.LEPL16 = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Visual',],  
+                             ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = F, 
+                             minLength = 5)
+
+PR.BIRD15 = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
+                             ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = F, 
+                             minLength = 5)
+PR.BIRD16 = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Visual',],  
+                             ordersToInclude = multorders, inputYear = 2016, inputSite = 117, plot = F, 
+                             minLength = 5)
+
+BG.LEPL15 = meanDensityByDay(amsurvey.bg[amsurvey.bg$surveyType == 'Visual',], 
+                             ordersToInclude = "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, 
+                             minLength = 5)
+BG.LEPL16 = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Visual',],  
+                             ordersToInclude = "LEPL", inputYear = 2016, inputSite = 8892356, plot = F, 
+                             minLength = 5)
+
+BG.BIRD15 = meanDensityByDay(amsurvey.bg[amsurvey.bg$surveyType == 'Visual',], 
+                             ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, plot = F, 
+                             minLength = 5)
+BG.BIRD16 = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Visual',],  
+                             ordersToInclude = multorders, inputYear = 2016, inputSite = 8892356, plot = F, 
+                             minLength = 5)
+# does not include beat sheet yet
+
+
+if (0) {
+
 #----Prairie Ridge By Year Plot Comparisons----
 
 #pdf(file = "year_comp_PR.pdf", 12, 8)
@@ -153,6 +189,8 @@ BG.DIPT16 = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Visual',],
                              plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
 legend("topleft", c('2015', '2016'), lwd = 2, col = c('blue', 'red'))
 
+} # end if (0)
+
 #----addchangevec function----
 # Function that returns the mean of change between days for a 
 # dataset created with the meanDensityByDay function
@@ -193,6 +231,8 @@ BG_2016 <- c(addchangevec(BG.LEPL16), addchangevec(BG.ORTH16), addchangevec(BG.C
 changeByDay <- data.frame(rbind(PR_2015, PR_2016, BG_2015, BG_2016))
 names(changeByDay) <- c('LEPL', 'ORTH', 'COLE', 'ARAN', 'AUCH', 'DIPT', 'HETE')
 
+if (0) {
+
 par(mfrow = c(1,1), oma = c(1,1,1,1), mar = c(4,4,2,2))
 colors <- c('red', 'red3', 'blue', 'blue4')
 barplot(as.matrix(changeByDay), ylab = "Average change in density between surveys", 
@@ -202,6 +242,7 @@ legend('topright',
        legend = c("PR 2015", "PR 2016", "BG 2015", "BG 2016"), 
        fill = c('red', 'red3', 'blue', 'blue4'), border = NA)
 
+} # end if (0) #2
 
 
 
