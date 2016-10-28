@@ -240,6 +240,9 @@ cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "su
 #Removing exclosure trees (only 2016)    
 cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
 
+# Taking out caterpillar colonies
+#cleandata <- cleandata[!(cleandata$arthCode == "LEPL" & cleandata$count > 10),]
+
 # Data collected by the Hurlbert Lab group in the Triangle
 labdata = filter(cleandata, userID %in% labgroupusers)
 
