@@ -8,6 +8,7 @@ library(agricolae)
 all_surveyTrees = read.csv("data/tbl_surveyTrees.csv", header=T)
 leaf_app = read.table("data/LeafAreaDatabase_20131126.txt", header=T, sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE)
 leaf_tri = read.table("data/LeafPhotoAreaDatabase_CC.txt", header=T, sep= '\t', quote="\"", fill = T)     #this is only a small subset of leaf area for the triangle for the most common trees
+plant_codes = read.csv("USA&AppalachianTrees_2016.csv", header=T)
 
 #Create 1 dataset with all data from PR/NCBG 2015 & 2016
 lab.triangle = rbind(labdata.pr, labdata.bg)
@@ -105,26 +106,48 @@ trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),]
 trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
 common_trees = trees_ordered1[1:10,]
 
-#merge most common trees with avg leaf area
+#get avg leaf area for each species
 leaf_app$LeafArea_pixels = as.numeric(leaf_app$LeafArea_pixels)
 leaf_app$RefArea_pixels = as.numeric(leaf_app$RefArea_pixels)
 leaf_app$RefArea_cm2 = as.numeric(leaf_app$RefArea_cm2)
+leaf_app$TreeSpecies = as.factor(leaf_app$TreeSpecies)
 leaf_app$leaf_area_cm2 = (leaf_app$LeafArea_pixels/leaf_app$RefArea_pixels)*(leaf_app$RefArea_cm2)
-leaf_app_avg = leaf_app %>% group_by(TreeSpecies) #still working
-                        %>% summarize(avg_leaf_area_cm2 = mean(leaf_area_cm2))
+leaf_app_clean = leaf_app[leaf_app$leaf_area_cm2 != is.na(leaf_app$leaf_area_cm2), ]
+
+#merge leaf areas from appalachians to subset of triangle
+leaf_app_clean1 = dplyr::select(leaf_app_clean, TreeSpecies, leaf_area_cm2)
+names(leaf_app_clean1) = c("TreeCodes", "leaf_area_cm2")
+leaf_tri1 = dplyr::select(leaf_tri, TreeCode, Leaf.Area..cm.2.)
+names(leaf_tri1) = c("TreeCodes", "leaf_area_cm2")
+all_leaves = rbind(leaf_app_clean1, leaf_tri1)
+  
+leaves_grouped =  group_by(all_leaves, TreeCodes) 
+leaves_sp = summarize(leaves_grouped, avg_leaf_area_cm2 = mean(leaf_area_cm2)) 
+
+#merge avg leaf area app/species with common names 
+leaves_sp1 = merge(leaves_sp, plant_codes, by.x = "TreeCodes", by.y = "TreeCode", all.x=T)
+leaves_sp1 = as.data.frame(leaves_sp1)
+leaves_sp1 = dplyr::select(leaves_sp1, -TreeCodes, -TreeSciName, -Notes)
+
+
+#are the NA TreeSpecies typos or missing? (appear to be typos, will leave b/c just need leaf approximation)
+missingnames = c("ACPU", "ACRV", "ACSU","ARSP", "ASCA", "ASH", "CADRE","CAKYA", "CALA","CARYA"
+                 ,"COPL","ELUM","FLAV","GUAR","GUSP","HALA","ILAM","LIAM","LIST","MAER", "NYSA", 
+                 "NYSS", "OYAR", "POPS", "PRUNIS", "PUMO", "QUAO","QUMI", "RASPBERRY", "RH MA", "RHAR",
+                 "SAAB","SYOR","TICO","TORA")
+for (code in missingnames) {
+  print(sum(leaf_app$TreeSpecies == code))}
+
+#merge avg leaf area with arth density data
+count_merged2 = merge(count_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
+count_merged2 = dplyr::select(count_merged2, plantSpecies, site, circle, survey, year, sum_count, avg_leaf_area_cm2)
+
+biomass_merged2 = merge(biomass_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
+biomass_merged2 = dplyr::select(biomass_merged2, plantSpecies, site, circle, survey, year, sum_biomass, avg_leaf_area_cm2)
 
 #Only use surveys conducted on 10 most common tree species
-count_common = dplyr::filter(count_merged1, plantSpecies %in% common_trees$trees)
-biomass_common = dplyr::filter(biomass_merged1, plantSpecies %in% common_trees$trees)
-
-#Calculate mean arthropod density for each tree species
-#count_grouped_sp = count_common %>% group_by(plantSpecies)
-#count_means = dplyr::summarise(count_grouped_sp, mean(sum_count)) #check one of these to confirm that the mean is divided by the number of occurrences
-#names(count_means) = c("plantSpecies", "mean_dens")
-
-#biomass_grouped_sp = biomass_common %>% group_by(plantSpecies)
-#biomass_means = dplyr::summarise(biomass_grouped_sp, mean(sum_biomass))
-#names(biomass_means) = c("plantSpecies", "mean_biomass")
+count_common = dplyr::filter(count_merged2, plantSpecies %in% common_trees$trees)
+biomass_common = dplyr::filter(biomass_merged2, plantSpecies %in% common_trees$trees)
 
 
 #AOV models
