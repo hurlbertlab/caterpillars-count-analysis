@@ -5,8 +5,9 @@ source("data_cleaning.R")
 library(agricolae)
 
 #read in data
-all_surveyTrees <- read.csv("data/tbl_surveyTrees.csv", header=T)
-
+all_surveyTrees = read.csv("data/tbl_surveyTrees.csv", header=T)
+leaf_app = read.table("data/LeafAreaDatabase_20131126.txt", header=T, sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE)
+leaf_tri = read.table("data/LeafPhotoAreaDatabase_CC.txt", header=T, sep= '\t', quote="\"", fill = T)     #this is only a small subset of leaf area for the triangle for the most common trees
 
 #Create 1 dataset with all data from PR/NCBG 2015 & 2016
 lab.triangle = rbind(labdata.pr, labdata.bg)
@@ -100,8 +101,17 @@ names(biomass_merged1) = c("site", "circle", "survey", "year", "sum_biomass", "p
 #Find 10 most common tree species to use in analysis 
 trees = select(count_merged1, plantSpecies )
 trees_freq = data.frame(table(trees))
-trees_ordered= trees_freq[order(trees_freq$Freq, decreasing = T),] 
-common_trees = trees_ordered[1:10,]
+trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),] 
+trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
+common_trees = trees_ordered1[1:10,]
+
+#merge most common trees with avg leaf area
+leaf_app$LeafArea_pixels = as.numeric(leaf_app$LeafArea_pixels)
+leaf_app$RefArea_pixels = as.numeric(leaf_app$RefArea_pixels)
+leaf_app$RefArea_cm2 = as.numeric(leaf_app$RefArea_cm2)
+leaf_app$leaf_area_cm2 = (leaf_app$LeafArea_pixels/leaf_app$RefArea_pixels)*(leaf_app$RefArea_cm2)
+leaf_app_avg = leaf_app %>% group_by(TreeSpecies) #still working
+                        %>% summarize(avg_leaf_area_cm2 = mean(leaf_area_cm2))
 
 #Only use surveys conducted on 10 most common tree species
 count_common = dplyr::filter(count_merged1, plantSpecies %in% common_trees$trees)
