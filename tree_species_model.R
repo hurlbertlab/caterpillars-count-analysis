@@ -3,6 +3,8 @@ source("data_cleaning.R")
 
 #load packages
 library(agricolae)
+library(tidyr)
+library(dplyr)
 
 #read in data
 all_surveyTrees = read.csv("data/tbl_surveyTrees.csv", header=T)
@@ -100,7 +102,7 @@ biomass_merged1 = dplyr::select(biomass_merged, site, circle, survey, year, sum_
 names(biomass_merged1) = c("site", "circle", "survey", "year", "sum_biomass", "plantSpecies")
 
 #Find 10 most common tree species to use in analysis 
-trees = select(count_merged1, plantSpecies )
+trees = select(count_merged1, plantSpecies)
 trees_freq = data.frame(table(trees))
 trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),] 
 trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
@@ -150,8 +152,8 @@ count_merged2$count_norm = (count_merged2$sum_count/count_merged2$avg_leaf_area_
 biomass_merged2$count_norm = (biomass_merged2$sum_biomass/biomass_merged2$avg_leaf_area_cm2)*mean(biomass_merged2$avg_leaf_area_cm2, na.rm=TRUE)
 
 #log transform 
-count_merged2$count_log10 = log10(count_merged2$count_norm+.01) #can I add this number like this?
-biomass_merged2$biomass_log10 = log10(biomass_merged2$biomass_norm+.01) #can I add this number like this?
+count_merged2$count_log10 = log10(count_merged2$count_norm+.01) 
+biomass_merged2$biomass_log10 = log10(biomass_merged2$biomass_norm+.01) 
 
 #Only use surveys conducted on 10 most common tree species
 count_common = dplyr::filter(count_merged2, plantSpecies %in% common_trees$trees)
@@ -192,20 +194,40 @@ names(plotting.log)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
 
 #Plot HSD results
 par(mar=c(6,4,4,4))
-barplot(plotting.log$means, names.arg=plotting$tree_sp, las=2, ylab="log mean arth density", 
+barplot(plotting.log$means, names.arg=plotting.log$tree_sp, las=2, ylab="log mean arth density", 
         main = "Mean Arth Density by Tree Species", ylim = c(-.5,.5), cex.names=.65, 
         cex.axis = .75, 
         col = c("darkgreen", "seagreen", "seagreen", "seagreen4", "seagreen3", "seagreen2", "seagreen2", "seagreen2", "seagreen2", "seagreen1"))
-text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.3, plotting$M)
-
-#test for how often you see an arthropod density at least this extreme
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log$M)
+#-----------------------------------------------------------------------test for how often you see an arthropod density at least this extreme-----------------------
+#create columns with Y/N data for certain arth density thresholds
 count_merged3 = count_merged2
-count_merged3$percent.40 = ifelse(count_merged3$count_norm > 40, "Yes", "No")
-count_merged3$percent.10 = ifelse(count_merged3$count_norm > 10, "Yes", "No")
-count_merged3$percent.5 = ifelse(count_merged3$count_norm > 5, "Yes", "No")
-count_merged3$percent.1 = ifelse((count_merged3$count_norm > 1), "Yes", "No")
+count_merged3$percent40 = ifelse(count_merged3$sum_count >= 40, "Yes", "No")
+count_merged3$percent10 = ifelse(count_merged3$sum_count >= 10, "Yes", "No")
+count_merged3$percent5 = ifelse(count_merged3$sum_count >= 5, "Yes", "No")
+count_merged3$percent1 = ifelse(count_merged3$sum_count >= 1, "Yes", "No")
 
-#Conduct chi-squared test of proportions
+#get percentage of each tree species that meet the density criteria for each threshold
+percent40 = count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(perc40 = sum(percent40=="Yes")/length(percent40))
+percent40 = data.frame(percent40)
+percent40$not40 = 1-percent40$perc40
 
+percent10 = count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(perc10=sum(percent10=="Yes")/length(percent10))
+percent10 = data.frame(percent10)
+percent10$not10 = 1-percent10$perc10
 
+percent5 = count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(perc5 = sum(percent5=="Yes")/length(percent5))
+percent5 = data.frame(percent5)
+percent5$not5 = 1-percent5$perc5
 
+percent1 = count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(perc1 = sum(percent1=="Yes")/length(percent1))
+percent1 = data.frame(percent1)
+percent1$not1 = 1-percent1$perc1
+
+#create df with all threshold percentages for all species #figure out chi squared from this
+percent40.10 = merge(percent40, percent10, by="plantSpecies")
+percent40.10.5 = merge(percent40.10, percent5, by = "plantSpecies")
+extremes_bysp = merge(percent40.10.5, percent1, by = "plantSpecies")
+names(extremes_bysp) = c("plantSpecies", "perc40", "perc10", "perc5", "perc1")
+
+spread40 = spread(percent40, plantSpecies, perc40)
