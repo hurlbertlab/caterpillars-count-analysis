@@ -145,18 +145,20 @@ count_merged2 = dplyr::select(count_merged2, plantSpecies, site, circle, survey,
 biomass_merged2 = merge(biomass_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
 biomass_merged2 = dplyr::select(biomass_merged2, plantSpecies, site, circle, survey, year, sum_biomass, avg_leaf_area_cm2)
 
+#normalize arth density by avg area
+count_merged2$count_norm = (count_merged2$sum_count/count_merged2$avg_leaf_area_cm2)*mean(count_merged2$avg_leaf_area_cm2, na.rm=TRUE)
+biomass_merged2$count_norm = (biomass_merged2$sum_biomass/biomass_merged2$avg_leaf_area_cm2)*mean(biomass_merged2$avg_leaf_area_cm2, na.rm=TRUE)
+
+#log transform 
+count_merged2$count_log10 = log10(count_merged2$count_norm+.01) #can I add this number like this?
+biomass_merged2$biomass_log10 = log10(biomass_merged2$biomass_norm+.01) #can I add this number like this?
+
 #Only use surveys conducted on 10 most common tree species
 count_common = dplyr::filter(count_merged2, plantSpecies %in% common_trees$trees)
 biomass_common = dplyr::filter(biomass_merged2, plantSpecies %in% common_trees$trees)
 
-
-#AOV models
-#count_means$plantSpecies= as.character(count_means$plantSpecies)
-#aov.count = aov(mean_dens ~ plantSpecies, data=count_means) 
-#aov.biomass = aov(mean_biomass ~ plantSpecies, data=biomass_means) #getting error, not sure what it means
-
-aov.raw = aov(sum_count ~ plantSpecies, data=count_common) 
-lm.raw = lm(sum_count ~ plantSpecies, data=count_common)
+#HSD model- raw data
+lm.raw = lm(count_norm ~ plantSpecies, data=count_common)
 
 HSD_raw<- HSD.test(lm.raw, "plantSpecies")
 
@@ -176,11 +178,34 @@ barplot(plotting$means, names.arg=plotting$tree_sp, las=2, ylab="mean arth densi
         col = c("red", "red", "purple", "purple", "purple", "purple", "purple", "purple", "blue", "blue"))
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=4, plotting$M)
 
+#Do HSD model- log transformed data
+lm.log = lm(count_log10 ~ plantSpecies, data=count_common)
+HSD_log<- HSD.test(lm.log, "plantSpecies")
+
+#Create dataframe with results of HSD test
+groups.log.df = data.frame(HSD_log$groups)
+means.log.df = data.frame(HSD_log$means)
+means.log.ordered = means.log.df[order(means.log.df$count_log10, decreasing = T),]
+plotting.log = cbind(groups.log.df, means.log.ordered)
+plotting.log = dplyr::select(plotting.log, -count_log10)
+names(plotting.log)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
+
+#Plot HSD results
+par(mar=c(6,4,4,4))
+barplot(plotting.log$means, names.arg=plotting$tree_sp, las=2, ylab="log mean arth density", 
+        main = "Mean Arth Density by Tree Species", ylim = c(-.5,.5), cex.names=.65, 
+        cex.axis = .75, 
+        col = c("darkgreen", "seagreen", "seagreen", "seagreen4", "seagreen3", "seagreen2", "seagreen2", "seagreen2", "seagreen2", "seagreen1"))
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.3, plotting$M)
+
+#test for how often you see an arthropod density at least this extreme
+count_merged3 = count_merged2
+count_merged3$percent.40 = ifelse(count_merged3$count_norm > 40, "Yes", "No")
+count_merged3$percent.10 = ifelse(count_merged3$count_norm > 10, "Yes", "No")
+count_merged3$percent.5 = ifelse(count_merged3$count_norm > 5, "Yes", "No")
+count_merged3$percent.1 = ifelse((count_merged3$count_norm > 1), "Yes", "No")
+
+#Conduct chi-squared test of proportions
 
 
-#Huge standard deviation: bar.err(HSD_raw$means, variation="SD") 
-
-lotsabugs=dplyr::filter(lab.triangle, count > 10)
-lotsabugs1= select(lotsabugs, count, plantSp)
-   
 
