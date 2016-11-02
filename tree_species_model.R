@@ -167,9 +167,9 @@ HSD_raw<- HSD.test(lm.raw, "plantSpecies")
 #Create dataframe with results of HSD test
 groups.df = data.frame(HSD_raw$groups)
 means.df = data.frame(HSD_raw$means)
-means.ordered = means.df[order(means.df$sum_count, decreasing = T),]
+means.ordered = means.df[order(means.df$count_norm, decreasing = T),]
 plotting = cbind(groups.df, means.ordered)
-plotting = dplyr::select(plotting, -sum_count)
+plotting = dplyr::select(plotting, -count_norm)
 names(plotting)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
 
 #Plot HSD results
@@ -207,7 +207,7 @@ count_merged3$percent10 = ifelse(count_merged3$sum_count >= 10, "Yes", "No")
 count_merged3$percent5 = ifelse(count_merged3$sum_count >= 5, "Yes", "No")
 count_merged3$percent1 = ifelse(count_merged3$sum_count >= 1, "Yes", "No")
 
-#get percentage of each tree species that meet the density criteria for each threshold
+#get percentage of each tree species that meet the density criteria for each threshold 
 percent40 = count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(perc40 = sum(percent40=="Yes")/length(percent40))
 percent40 = data.frame(percent40)
 percent40$not40 = 1-percent40$perc40
@@ -224,10 +224,32 @@ percent1 = count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(perc1 =
 percent1 = data.frame(percent1)
 percent1$not1 = 1-percent1$perc1
 
-#create df with all threshold percentages for all species #figure out chi squared from this
+#create df with all threshold percentages for all species
 percent40.10 = merge(percent40, percent10, by="plantSpecies")
 percent40.10.5 = merge(percent40.10, percent5, by = "plantSpecies")
 extremes_bysp = merge(percent40.10.5, percent1, by = "plantSpecies")
-names(extremes_bysp) = c("plantSpecies", "perc40", "perc10", "perc5", "perc1")
 
-spread40 = spread(percent40, plantSpecies, perc40)
+#merge threshold percentages with avg leaf areas per species
+extremes_bysp1 = merge(extremes_bysp, leaves_sp1, by.x = "plantSpecies", by.y= "ComName") #decrease in trees here- 
+
+#plot relationship between likelihood of seeing an extreme arth dens and leaf area
+plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc40)
+plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc10)
+plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc5)
+plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc1)
+
+#chi squared data reshaping
+
+total1 = count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(sum1 = sum(percent1=="Yes"))
+total1 = data.frame(total1)
+totalnot1= count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(sumnot1 = sum(percent1=="No"))
+totalnot1=data.frame(totalnot1)
+threshold1=merge(total1, totalnot1, by = "plantSpecies")
+threshold1$sum1= as.numeric(threshold1$sum1)
+threshold1$sumnot1= as.numeric(threshold1$sumnot1)
+
+chisq.test(threshold1) #error, unsure why
+
+
+
+
