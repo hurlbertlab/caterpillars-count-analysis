@@ -15,19 +15,11 @@ plant_codes = read.csv("USA&AppalachianTrees_2016.csv", header=T)
 #Create 1 dataset with all data from PR/NCBG 2015 & 2016
 lab.triangle = rbind(labdata.pr, labdata.bg)
 
-#Remove large arth abservations (to do or not to do?)
-lab.triangle <- lab.triangle[!(lab.triangle$count > 10),]
-
 #subset for  visual surveys
 vis_tri = lab.triangle[lab.triangle$surveyType == "Visual", ]
 
-#merge triangle visual surveys with list of accurate triangle plant species
+#add loc_ID column to specify unique trees for each year
 vis_tri$loc_ID = paste0(vis_tri$site, vis_tri$circle, vis_tri$survey, vis_tri$year)
-vis_tri1 = merge(vis_tri, trees_tri, by.x= "loc_ID", by.y= "loc_ID", all.x=TRUE)
-vis_tri2 = dplyr::select(vis_tri1, -clean_plantSp, -circle.y, -survey.y, -year.y, -notes.y)
-names(vis_tri2) = c("loc_ID", "surveyID", "userID", "site", "survey", "circle", "date", "julianday", "plantSp", "herbivory", 
-               "arthropod", "arthCode", "length", "count", "notes", "surveyType", "leafCount", "wetLeaves", "year", 
-               "biomass", "siteID", "clean_plantSp")
 
 #Get list of tree species for each year for NCBG & PR
 all_surveyTrees_triangle = all_surveyTrees[all_surveyTrees$siteID %in% c("117", "8892356"),]
@@ -124,12 +116,13 @@ names(leaf_tri1) = c("TreeCodes", "leaf_area_cm2")
 all_leaves = rbind(leaf_app_clean1, leaf_tri1)
   
 leaves_grouped =  group_by(all_leaves, TreeCodes) 
-leaves_sp = summarize(leaves_grouped, avg_leaf_area_cm2 = mean(leaf_area_cm2)) 
+leaves_sp = dplyr::summarize(leaves_grouped, (avg_leaf_area_cm2 = mean(leaf_area_cm2)))
 
 #merge avg leaf area app/species with common names 
 leaves_sp1 = merge(leaves_sp, plant_codes, by.x = "TreeCodes", by.y = "TreeCode", all.x=T)
 leaves_sp1 = as.data.frame(leaves_sp1)
 leaves_sp1 = dplyr::select(leaves_sp1, -TreeCodes, -TreeSciName, -Notes)
+names(leaves_sp1) = c("avg_leaf_area_cm2", "ComName")
 
 
 #are the NA TreeSpecies typos or missing? (appear to be typos, will leave b/c just need leaf approximation)
@@ -232,23 +225,37 @@ extremes_bysp = merge(percent40.10.5, percent1, by = "plantSpecies")
 #merge threshold percentages with avg leaf areas per species
 extremes_bysp1 = merge(extremes_bysp, leaves_sp1, by.x = "plantSpecies", by.y= "ComName") #decrease in trees here- 
 
-#plot relationship between likelihood of seeing an extreme arth dens and leaf area
-plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc40)
-plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc10)
-plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc5)
-plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc1)
+#plot relationship between likelihood of seeing an extreme arth dens and leaf area 
+#(tree species above and below the curve tell us which species are good quality, whcih species are poorer quality)
+par(mfrow = c(2, 2), mar = c(5, 5, 1, 1))
+lm.40 =lm(extremes_bysp1$perc40 ~ extremes_bysp1$avg_leaf_area_cm2)
+plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc40, ylim=c(0,1))
+abline(lm.40)
+
+plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc10, ylim=c(0,1))
+lm.10 =lm(extremes_bysp1$perc10 ~ extremes_bysp1$avg_leaf_area_cm2)
+abline(lm.10)
+
+plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc5, ylim=c(0,1))
+lm.5 =lm(extremes_bysp1$perc5 ~ extremes_bysp1$avg_leaf_area_cm2)
+abline(lm.5)
+
+plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc1, ylim=c(0,1))
+lm.1 =lm(extremes_bysp1$perc1 ~ extremes_bysp1$avg_leaf_area_cm2)
+abline(lm.1)
 
 #chi squared data reshaping
+table40 = table(count_merged3$percent40, count_merged3$plantSpecies)
+table10 = table(count_merged3$percent10, count_merged3$plantSpecies)
+table5 = table(count_merged3$percent5, count_merged3$plantSpecies)
+table1 = table(count_merged3$percent1, count_merged3$plantSpecies)
+chisq.test(table40)
+chisq.test(table10)
+chisq.test(table5)
+chisq.test(table1)
+#so the above results tell me that the number of arthropods seen at each threshold is dependent on 
+#tree species (is this true for all tree species)?
 
-total1 = count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(sum1 = sum(percent1=="Yes"))
-total1 = data.frame(total1)
-totalnot1= count_merged3 %>% group_by(plantSpecies) %>% dplyr::summarise(sumnot1 = sum(percent1=="No"))
-totalnot1=data.frame(totalnot1)
-threshold1=merge(total1, totalnot1, by = "plantSpecies")
-threshold1$sum1= as.numeric(threshold1$sum1)
-threshold1$sumnot1= as.numeric(threshold1$sumnot1)
-
-chisq.test(threshold1) #error, unsure why
 
 
 
