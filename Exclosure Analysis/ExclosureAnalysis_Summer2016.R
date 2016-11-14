@@ -24,8 +24,8 @@ names(all_orders) = c("orderID", "surveyID", "orderArthropod",
                       "insectPhoto", "timeStamp", "isValid")
 names(all_surveyTrees) = c("siteID", "circle", "survey", "surveyTrees")
 
-all_surveys1= select(all_surveys, -timeSubmit, -Status, -leavePhoto, -source)
-all_orders1 = select(all_orders, -insectPhoto, -timeStamp, -isValid)
+all_surveys1= dplyr::select(all_surveys, -timeSubmit, -Status, -leavePhoto, -source)
+all_orders1 = dplyr::select(all_orders, -insectPhoto, -timeStamp, -isValid)
 
 #Change surveyTrees to Character 
 all_surveyTrees$surveyTrees<-as.character(all_surveyTrees$surveyTrees)
@@ -44,7 +44,7 @@ all_surveyTrees$identifier <- paste0(all_surveyTrees$siteID,
 all_data1 <- merge(all_data, all_surveyTrees, 
                    by.x = "identifier", 
                    by.y= "identifier", all.x= TRUE)
-all_data2 <- select(all_data1, -siteID.y, -circle.y, -survey.y, -plantSpecies) 
+all_data2 <- dplyr::select(all_data1, -siteID.y, -circle.y, -survey.y, -plantSpecies) 
 names(all_data2) <- c("identifier", "surveyID", "siteID", "userID", 
                       "circle", "survey","timeStart","temperatureMin", 
                       "temperatureMax","siteNotes","herbivory","isValid",
@@ -89,7 +89,7 @@ ex_pairs <-filter(ex_pairs_allvisuals, grepl("2016-05-11", timeStart) |
 ex_pairs1 <- merge(ex_pairs, exclosures, by.x = "orderID", 
                                          by.y= "orderID",
                                          all.x = TRUE)
-ex_pairs2 <- select(ex_pairs1, -date.y, -identifier.y, -surveyID.y, -siteID.y, -userID.y, 
+ex_pairs2 <- dplyr::select(ex_pairs1, -date.y, -identifier.y, -surveyID.y, -siteID.y, -userID.y, 
                     -circle.y, -survey.y, -timeStart.y, -temperatureMin.y,
                     -temperatureMax.y, -siteNotes.y, -herbivory.y, -isValid.y, 
                     -surveyType.y, -leafCount.y, -orderArthropod.y, -orderLength.y, 
@@ -169,7 +169,7 @@ all_abundance <- merge(unique_corrected, total_all,
                        by.x="surveyID",
                        by.y = "surveyID", 
                        all.x = TRUE)
-all_abundance1<- select(all_abundance, -Freq, -TrapType.y, -siteID.y, -circle.y,
+all_abundance1<- dplyr::select(all_abundance, -Freq, -TrapType.y, -siteID.y, -circle.y,
                         -survey.y, -VisitNumber.y, -surveyID)
 names(all_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumber", "total_all")
 all_abundance1["total_all"][is.na(all_abundance1["total_all"])] <- 0
@@ -179,7 +179,7 @@ food_abundance <- merge(unique_corrected, total_food,
                        by.x="surveyID",
                        by.y = "surveyID", 
                        all.x = TRUE)
-food_abundance1<- select(food_abundance, -Freq, -TrapType.y, -siteID.y, -circle.y,
+food_abundance1<- dplyr::select(food_abundance, -Freq, -TrapType.y, -siteID.y, -circle.y,
                          -survey.y, -VisitNumber.y, -surveyID)
 names(food_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumber", "total_food")
 food_abundance1["total_food"][is.na(food_abundance1["total_food"])] <- 0
@@ -189,7 +189,7 @@ caterpillar_abundance <- merge(unique_corrected, total_caterpillar,
                         by.x="surveyID",
                         by.y = "surveyID", 
                         all.x = TRUE)
-caterpillar_abundance1<- select(caterpillar_abundance, -Freq, -TrapType.y, -siteID.y, 
+caterpillar_abundance1<- dplyr::select(caterpillar_abundance, -Freq, -TrapType.y, -siteID.y, 
                          -circle.y,  -survey.y, -VisitNumber.y, -surveyID)
 names(caterpillar_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumber", "total_caterpillar")
 caterpillar_abundance1["total_caterpillar"][is.na(caterpillar_abundance1["total_caterpillar"])] <- 0
@@ -198,7 +198,7 @@ notfood_abundance <- merge(unique_corrected, total_notfood,
                                by.x="surveyID",
                                by.y = "surveyID", 
                                all.x = TRUE)
-notfood_abundance1<- select(notfood_abundance, -Freq, -TrapType.y, -siteID.y, 
+notfood_abundance1<- dplyr::select(notfood_abundance, -Freq, -TrapType.y, -siteID.y, 
                                 -circle.y,  -survey.y, -VisitNumber.y, -surveyID)
 names(notfood_abundance1) <- c("TrapType","siteID", "circle", "survey", "VisitNumber", "total_notfood")
 notfood_abundance1["total_notfood"][is.na(notfood_abundance1["total_notfood"])] <- 0
@@ -231,22 +231,22 @@ wilcox_test(Visit3~ TrapType, data=food_time)
 wilcox_test(Visit3~ TrapType, data=caterpillar_time)
 
 ##Reshape dataframe for visualization
-food_time1 <- select(food_time, -Visit1, -Visit2, -visit_dif)
+food_time1 <- dplyr::select(food_time, -Visit1, -Visit2, -visit_dif)
 food_Visit3<- spread(food_time1, TrapType, Visit3)
 names(food_Visit3) <- c("siteID", "circle", "survey", "Visit3VF", "Visit3VFX")
 food_Visit3$Visit3Dif <- (food_Visit3$Visit3VFX - food_Visit3$Visit3VF)
 food_Visit3$identifier <- paste0(food_Visit3$siteID, food_Visit3$circle, food_Visit3$survey)
 food_final<-merge(food_Visit3, all_surveyTrees, by.x = "identifier", by.y="identifier")
-food_final <- select(food_final, -siteID.y, -circle.y, -survey.y)
+food_final <- dplyr::select(food_final, -siteID.y, -circle.y, -survey.y)
 names(food_final)<- c("identifier", "siteID", "circle", "survey", "Visit3VF", "Visit3VFX", "Visit3Dif", "treeSp")
 
-caterpillar_time1 <- select(caterpillar_time, -Visit1, -Visit2, -visit_dif)
+caterpillar_time1 <- dplyr::select(caterpillar_time, -Visit1, -Visit2, -visit_dif)
 caterpillar_Visit3<- spread(caterpillar_time1, TrapType, Visit3)
 names(caterpillar_Visit3) <- c("siteID", "circle", "survey", "Visit3VF", "Visit3VFX")
 caterpillar_Visit3$Visit3Dif <- caterpillar_Visit3$Visit3VFX - caterpillar_Visit3$Visit3VF
 caterpillar_Visit3$identifier <- paste0(caterpillar_Visit3$siteID, caterpillar_Visit3$circle, caterpillar_Visit3$survey)
 caterpillar_final<-merge(caterpillar_Visit3, all_surveyTrees, by.x = "identifier", by.y="identifier")
-caterpillar_final <- select(caterpillar_final, -siteID.y, -circle.y, -survey.y)
+caterpillar_final <- dplyr::select(caterpillar_final, -siteID.y, -circle.y, -survey.y)
 names(caterpillar_final)<- c("identifier", "siteID", "circle", "survey", "Visit3VF", "Visit3VFX", "Visit3Dif", "treeSp")
 
 ##Visualize exclosure data vs. control data
@@ -321,13 +321,14 @@ grouped_species <- visual_surveys_clean %>% group_by(siteID, date, surveyTrees)
 
 #Histogram of Total Arth Density on 3rd Visit & Herbivory
 par(mfcol=c(2, 2))
-histogram(food_final$Visit3VF, main="Arthropod Density on Control Trees", type="count",
+par(mfrow = c(2, 2), mar=c(6,4,4,4))
+histogram(food_final$Visit3VF, type="count",
           ylab="Number of Surveys", ylim=c(0,25), xlab="Arthropod density (# of arthropods)", col="slate blue2")
-histogram(food_final$Visit3VFX, main="Arthropod Density on Exclosure Trees", type="count",
+histogram(food_final$Visit3VFX, type="count",
           ylab="Number of Surveys", ylim=c(0,25), xlab="Arthropod density (# of arthropods)", col="slate blue2")
-histogram(unique_herbivory_V3$VF, main="Herbivory on Control Trees", type="count",
+histogram(unique_herbivory_V3$VF, type="count",
           ylab="Number of Surveys", ylim=c(0,15), xlab="Percent Herbivory", col="green2")
-histogram(unique_herbivory_V3$VFX, main="Herbivory on Exclosure Trees", type="count",
+histogram(unique_herbivory_V3$VFX, type="count",
           ylab="Number of Surveys", ylim=c(0,15), xlab="Percent Herbivory", col="green2")
 
 
