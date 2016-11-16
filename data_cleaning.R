@@ -86,6 +86,7 @@ orders3$arthropod[orders3$arthropod == "Termites (Isoptera)"] =
 orders3["arthropod"][is.na(orders3["arthropod"])] <- "NONE"
 orders3["count"][is.na(orders3["count"])] <- 0
 
+
 # Remove all records where the Order is "Leaf Roll"
 orders4 = orders3[orders3$arthropod != "Leaf Roll",]
 
@@ -126,6 +127,7 @@ beatsheet_pre2016 <- cleandata[grep("BEAT SHEET", cleandata$notes.x), ]
 # (Participants were told to record 49 or 51 if the number of leaves in a beat
 # sheet survey truly was 50.)
 beatsheet_post2016 <- cleandata[((cleandata$leafCount != "50") & (cleandata$year>= "2016")) | (cleandata$surveyType=="Beat_Sheet"),] 
+beatsheet_post2016 <- beatsheet_post2016[!is.na(beatsheet_post2016$surveyID),]
 
 # Pull out the leafCount from the notes
 leavesNumTemp0 <- word(beatsheet_pre2016$notes.x, -1, sep = "BEAT SHEET; ")
