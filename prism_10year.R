@@ -4,13 +4,23 @@
 library(prism)
 library(raster)
 
-setwd('c:/users/hayeste/my documents/495/prism')
+setwd('c:/users/hayeste/my documents/495/prism') 
+# Currently only have this data on my personal computer (not in git)
+# A csv is written and placed in the repo, but if any years are added will need to rerun skip section
+
+options(prism.path = "c:/users/hayeste/my documents/495/prism")
+
+### SKIP SECTION BELOW IF ALREADY HAVE DATA DOWNLOADED ###
+
+
+if (0) {
 
 # Set path and download data
-# This took ~1.5 hours on my computer
-options(prism.path = "c:/users/hayeste/my documents/495/prism")
+# This takes many hours
 get_prism_dailys(type = 'tmean', minDate = "2000-1-1", maxDate = "2006-12-31",
                  keepZip = FALSE)
+
+} # end if (0)
 
 
 # Longitude and latitude of 3 locations
