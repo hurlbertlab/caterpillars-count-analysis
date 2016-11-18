@@ -12,34 +12,65 @@ labdata.bg <- labdata.bg[!(labdata.bg$arthCode == "LEPL" & labdata.bg$count > 10
 # Don't have volunteer beat sheet data yet
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 
-PR.LEPL15 = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
+PR.LEPL15vis = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
                              ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = F, 
                              minLength = 5)
-PR.LEPL16 = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Visual',],  
+PR.LEPL16vis = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Visual',],  
                              ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = F, 
                              minLength = 5)
 
-PR.BIRD15 = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
+PR.BIRD15vis = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
                              ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = F, 
                              minLength = 5)
-PR.BIRD16 = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Visual',],  
+PR.BIRD16vis = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Visual',],  
                              ordersToInclude = multorders, inputYear = 2016, inputSite = 117, plot = F, 
                              minLength = 5)
 
-BG.LEPL15 = meanDensityByDay(amsurvey.bg[amsurvey.bg$surveyType == 'Visual',], 
+# Botanical Garden
+BG.LEPL15vis = meanDensityByDay(amsurvey.bg[amsurvey.bg$surveyType == 'Visual',], 
                              ordersToInclude = "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, 
                              minLength = 5)
-BG.LEPL16 = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Visual',],  
+BG.LEPL16vis = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Visual',],  
                              ordersToInclude = "LEPL", inputYear = 2016, inputSite = 8892356, plot = F, 
                              minLength = 5)
 
-BG.BIRD15 = meanDensityByDay(amsurvey.bg[amsurvey.bg$surveyType == 'Visual',], 
+BG.BIRD15vis = meanDensityByDay(amsurvey.bg[amsurvey.bg$surveyType == 'Visual',], 
                              ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, plot = F, 
                              minLength = 5)
-BG.BIRD16 = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Visual',],  
+BG.BIRD16vis = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Visual',],  
                              ordersToInclude = multorders, inputYear = 2016, inputSite = 8892356, plot = F, 
                              minLength = 5)
-# does not include beat sheet yet
+
+# Beat sheet
+# Prairie Ridge
+PR.LEPL15bts = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Beat_Sheet',], 
+                                ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = F, 
+                                minLength = 5)
+PR.LEPL16bts = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Beat_Sheet',],  
+                                ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = F, 
+                                minLength = 5)
+
+PR.BIRD15bts = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Beat_Sheet',], 
+                                ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = F, 
+                                minLength = 5)
+PR.BIRD16bts = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Beat_Sheet',],  
+                                ordersToInclude = multorders, inputYear = 2016, inputSite = 117, plot = F, 
+                                minLength = 5)
+
+# Botanical Garden
+BG.LEPL15bts = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Beat_Sheet',], 
+                                ordersToInclude = "LEPL", inputYear = 2015, inputSite = 8892356, plot = F, 
+                                minLength = 5)
+BG.LEPL16bts = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Beat_Sheet',],  
+                                ordersToInclude = "LEPL", inputYear = 2016, inputSite = 8892356, plot = F, 
+                                minLength = 5)
+
+BG.BIRD15bts = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Beat_Sheet',], 
+                                ordersToInclude = multorders, inputYear = 2015, inputSite = 8892356, plot = F, 
+                                minLength = 5)
+BG.BIRD16bts = meanDensityByDay(labdata.bg[labdata.bg$surveyType == 'Beat_Sheet',],  
+                                ordersToInclude = multorders, inputYear = 2016, inputSite = 8892356, plot = F, 
+                                minLength = 5)
 
 
 if (0) {
@@ -55,7 +86,7 @@ PR.LEPL15 = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',],
                              xlim = c(130,208), ylim = c(0,.31), ylab = "Mean density", main = 'PR LEPL')
 PR.LEPL16 = meanDensityByDay(labdata.pr[labdata.pr$surveyType == 'Visual',],  
                              ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, 
-                             plotVar = 'meanDensity', new = F, color = 'red', minLength = 5, lwd = 2)
+                             plotVar = 'meanDensity', new = T, color = 'red', minLength = 5, lwd = 2, ylim = c(0,.3))
 legend("topleft", c('2015', '2016'), lwd = 2, col = c('blue', 'red'))
 
 
@@ -215,6 +246,9 @@ mean(abschange)
 
 } # end function
 
+if (0) {
+  
+# Have to create these first:
 # Make dataset of average change between days values
 PR_2015 <- c(addchangevec(PR.LEPL15), addchangevec(PR.ORTH15), addchangevec(PR.COLE15), 
              addchangevec(PR.ARAN15), addchangevec(PR.AUCH15), 
@@ -231,7 +265,7 @@ BG_2016 <- c(addchangevec(BG.LEPL16), addchangevec(BG.ORTH16), addchangevec(BG.C
 changeByDay <- data.frame(rbind(PR_2015, PR_2016, BG_2015, BG_2016))
 names(changeByDay) <- c('LEPL', 'ORTH', 'COLE', 'ARAN', 'AUCH', 'DIPT', 'HETE')
 
-if (0) {
+
 
 par(mfrow = c(1,1), oma = c(1,1,1,1), mar = c(4,4,2,2))
 colors <- c('red', 'red3', 'blue', 'blue4')
