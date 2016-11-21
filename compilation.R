@@ -19,21 +19,28 @@ greenupgdd$bg.gdd.dev <- greenupgdd$bg.gdd - mean(greenupgdd$bg.gdd)
 greenupgdd$prgreenup.dev <- greenupgdd$prgreenup.log - mean(greenupgdd$prgreenup.log)
 greenupgdd$bggreenup.dev <- greenupgdd$bggreenup.log - mean(greenupgdd$bggreenup.log)
 
+
 #---- GDD and greenup (deviation from mean) ----
-par(mar = c(4,4,2,2))
+par(mar = c(4,4,2,2), mfrow = c(3,2))
 plot(greenupgdd$pr.gdd.dev, greenupgdd$prgreenup.dev, col = 'white',
      xlab = 'GDD JD deviation from mean', ylab = 'Greenup JD deviation from mean',
-     xlim = c(-11,11), ylim = c(-10,10))
+     xlim = c(-11,11), ylim = c(-10,10), main = 'Greenup JD vs. GDD JD')
 #abline(1,0)
 abline(h = 0, lty = 2)
 abline(v = 0, lty = 2)
 text(greenupgdd$pr.gdd.dev, greenupgdd$prgreenup.dev, greenupgdd$year, col = 'red')
 text(greenupgdd$bg.gdd.dev, greenupgdd$bggreenup.dev, greenupgdd$year, col = 'blue')
 
+# Blank plot for pdf
+plot.new()
+legend('bottomleft', c('2015 cat','2015 mult', '2016 cat', '2016 mult'), pch = c(21, 22, 16, 15), cex = 1.2)
+legend('topleft', c('Prairie Ridge', 'Botanical Garden'), pch = 16, col = c('red', 'blue'), cex = 1.2)
+
 #---- Arths and greenup - visual surveys----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', ylim = c(160,185), xlim = c(85, 95))
+plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', ylim = c(160,185), xlim = c(85, 95),
+     main = 'Visual Surveys: Arth JD vs. Greenup JD')
 maxden1 <- max(PR.LEPL15vis[PR.LEPL15vis$julianday %in% c(80:185),]$meanDensity)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
        PR.LEPL15vis$julianday[PR.LEPL15vis$meanDensity == maxden1 & PR.LEPL15vis$julianday %in% c(80:185)], 
@@ -87,12 +94,13 @@ segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015],
          x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
          y1 = BG.BIRD16vis$julianday[BG.BIRD16vis$meanDensity == maxden8 & BG.BIRD16vis$julianday %in% c(80:185)], 
          col = 'blue')
-legend('topright', c('2015 cat','2015 mult', '2016 cat', '2016 mult'), pch = c(21, 22, 16, 15))
+#legend('topright', c('2015 cat','2015 mult', '2016 cat', '2016 mult'), pch = c(21, 22, 16, 15))
 
 #---- Arths and GDD - visual surveys----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', ylim = c(160,185), xlim = c(155, 165))
+plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', ylim = c(160,185), xlim = c(155, 165), 
+main = 'Visual Surveys: Arth JD vs. GDD JD')
 maxden1 <- max(PR.LEPL15vis[PR.LEPL15vis$julianday %in% c(80:185),]$meanDensity)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
        PR.LEPL15vis$julianday[PR.LEPL15vis$meanDensity == maxden1 & PR.LEPL15vis$julianday %in% c(80:185)], 
@@ -146,12 +154,13 @@ segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015],
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
          y1 = BG.BIRD16vis$julianday[BG.BIRD16vis$meanDensity == maxden8 & BG.BIRD16vis$julianday %in% c(80:185)], 
          col = 'blue')
-legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
+#legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
 
 #---- Arths and greenup - beat sheets----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', ylim = c(125,185), xlim = c(85, 95))
+plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', ylim = c(125,185), xlim = c(85, 95), 
+     main = 'Beat sheets: Arth JD vs. Greenup JD')
 maxden1 <- max(PR.LEPL15bts[PR.LEPL15bts$julianday %in% c(80:185),]$meanDensity)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
        PR.LEPL15bts$julianday[PR.LEPL15bts$meanDensity == maxden1 & PR.LEPL15bts$julianday %in% c(80:185)], 
@@ -205,12 +214,13 @@ segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015],
          x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
          y1 = BG.BIRD16bts$julianday[BG.BIRD16bts$meanDensity == maxden8 & BG.BIRD16bts$julianday %in% c(80:185)], 
          col = 'blue')
-legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
+#legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
 
 #---- Arths and GDD - beatsheets----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', ylim = c(125,185), xlim = c(155, 165))
+plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', ylim = c(125,185), xlim = c(155, 165), 
+     main = 'Beat sheets: Arth JD vs. GDD JD')
 maxden1 <- max(PR.LEPL15bts[PR.LEPL15bts$julianday %in% c(80:185),]$meanDensity)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
        PR.LEPL15bts$julianday[PR.LEPL15bts$meanDensity == maxden1 & PR.LEPL15bts$julianday %in% c(80:185)], 
@@ -264,7 +274,7 @@ segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015],
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
          y1 = BG.BIRD16bts$julianday[BG.BIRD16bts$meanDensity == maxden8 & BG.BIRD16bts$julianday %in% c(80:185)], 
          col = 'blue')
-legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
+#legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
 
 
 # Birds and greenup
