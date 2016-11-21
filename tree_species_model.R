@@ -55,6 +55,8 @@ names(vis_tri2) = c("surveyID", "userID", "site", "survey", "circle", "date", "j
 vis_app = cleandata.app[cleandata.app$surveyType=="Visual",]
 vis = rbind(vis_tri2,vis_app)
 
+
+
 #add unique identifier column for surveys
 vis$identifier = paste0(vis$site, vis$circle, vis$survey, vis$date)
 vis$loc_ID = paste0(vis$site, vis$circle, vis$survey, vis$year)
@@ -100,6 +102,13 @@ trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),]
 trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
 common_trees = trees_ordered1[1:10,]
 
+#find 24 most common tree species to use in graphing extremes (these each have at least 100 surveys)
+trees = select(count_merged1, plantSpecies)
+trees_freq = data.frame(table(trees))
+trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),] 
+trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
+common_24 = trees_ordered1[1:24,]
+
 #get avg leaf area for each species
 leaf_app$LeafArea_pixels = as.numeric(leaf_app$LeafArea_pixels)
 leaf_app$RefArea_pixels = as.numeric(leaf_app$RefArea_pixels)
@@ -139,6 +148,7 @@ count_merged2 = dplyr::select(count_merged2, plantSpecies, site, circle, survey,
 
 biomass_merged2 = merge(biomass_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
 biomass_merged2 = dplyr::select(biomass_merged2, plantSpecies, site, circle, survey, year, sum_biomass, avg_leaf_area_cm2)
+
 
 #normalize arth density by avg area
 count_merged2$count_norm = (count_merged2$sum_count/count_merged2$avg_leaf_area_cm2)*mean(count_merged2$avg_leaf_area_cm2, na.rm=TRUE)
@@ -186,11 +196,10 @@ plotting.log = dplyr::select(plotting.log, -count_log10)
 names(plotting.log)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
 
 #Plot HSD results
-par(mar=c(6,4,4,4))
+par(mfrow = c(1, 1), mar=c(7,4,3,3))
 barplot(plotting.log$means, names.arg=plotting.log$tree_sp, las=2, ylab="log mean arth density", 
-        main = "Mean Arth Density by Tree Species", ylim = c(-.5,.5), cex.names=.65, 
-        cex.axis = .75, 
-        col = c("darkgreen", "seagreen", "seagreen", "seagreen4", "seagreen3", "seagreen2", "seagreen2", "seagreen2", "seagreen2", "seagreen1"))
+        main = "Mean Arth Density by Tree Species", ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log$M)
 #-----------------------------------------------------------------------test for how often you see an arthropod density at least this extreme-----------------------
 #create columns with Y/N data for certain arth density thresholds
@@ -223,25 +232,33 @@ percent40.10.5 = merge(percent40.10, percent5, by = "plantSpecies")
 extremes_bysp = merge(percent40.10.5, percent1, by = "plantSpecies")
 
 #merge threshold percentages with avg leaf areas per species
-extremes_bysp1 = merge(extremes_bysp, leaves_sp1, by.x = "plantSpecies", by.y= "ComName") #decrease in trees here- 
+extremes_bysp1 = merge(extremes_bysp, leaves_sp1, by.x = "plantSpecies", by.y= "ComName") #decrease in trees here- why???? 29 out of 52 possible -> ones we don't have leaf areas for?
+extremes_24 = dplyr::filter(extremes_bysp1, plantSpecies %in% common_24$trees) #missing two of these-> why?
 
+#merge plant codes back in for plotting purposes
+extremes_241=merge(extremes_24, plant_codes, by.x = "plantSpecies", by.y = "ComName", all.x = TRUE)
+extremes_241 = dplyr::select(extremes_241, -TreeSciName, -Notes)
 #plot relationship between likelihood of seeing an extreme arth dens and leaf area 
 #(tree species above and below the curve tell us which species are good quality, whcih species are poorer quality)
+
 par(mfrow = c(2, 2), mar = c(5, 5, 1, 1))
-lm.40 =lm(extremes_bysp1$perc40 ~ extremes_bysp1$avg_leaf_area_cm2)
-plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc40, ylim=c(0,1))
+lm.40 =lm(extremes_241$perc40 ~ extremes_241$avg_leaf_area_cm2)
+p40=plot(extremes_241$avg_leaf_area_cm2, extremes_241$perc40, ylim=c(0,1), xlab = "Mean Leaf Area (cm2)", ylab = "Percent of Surveys >=40 Arth", cex.axis = .6)
 abline(lm.40)
 
-plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc10, ylim=c(0,1))
-lm.10 =lm(extremes_bysp1$perc10 ~ extremes_bysp1$avg_leaf_area_cm2)
+plot(extremes_241$avg_leaf_area_cm2, extremes_241$perc10, ylim=c(0,1), xlab = "Mean Leaf Area (cm2)", ylab = "Percent of Surveys >=10 Arth")
+lm.10 =lm(extremes_241$perc10 ~ extremes_241$avg_leaf_area_cm2)
 abline(lm.10)
 
-plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc5, ylim=c(0,1))
-lm.5 =lm(extremes_bysp1$perc5 ~ extremes_bysp1$avg_leaf_area_cm2)
+par(mfrow = c(1, 1), mar = c(5, 5, 1, 1))
+plot5=plot(extremes_241$avg_leaf_area_cm2, extremes_241$perc5, ylim=c(0,.6), xlab = "Mean Leaf Area (cm2)", ylab = "Proportion of Surveys >=5 Arth", col = "aquamarine", pch=16)
+lm.5 =lm(extremes_241$perc5 ~ extremes_241$avg_leaf_area_cm2)
 abline(lm.5)
+text(extremes_241$avg_leaf_area_cm2, extremes_241$perc5, labels = extremes_241$TreeCode, cex = .7)
 
-plot(extremes_bysp1$avg_leaf_area_cm2, extremes_bysp1$perc1, ylim=c(0,1))
-lm.1 =lm(extremes_bysp1$perc1 ~ extremes_bysp1$avg_leaf_area_cm2)
+
+plot(extremes_241$avg_leaf_area_cm2, extremes_241$perc1, ylim=c(0,1), xlab = "Mean Leaf Area (cm2)", ylab = "Percent of Surveys >=1 Arth")
+lm.1 =lm(extremes_241$perc1 ~ extremes_241$avg_leaf_area_cm2)
 abline(lm.1)
 
 #chi squared data reshaping
@@ -253,6 +270,7 @@ chisq.test(table40)
 chisq.test(table10)
 chisq.test(table5)
 chisq.test(table1)
+
 #so the above results tell me that the number of arthropods seen at each threshold is dependent on 
 #tree species (is this true for all tree species)?
 
