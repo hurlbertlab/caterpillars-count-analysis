@@ -1,9 +1,7 @@
 #Mixed Effects Model for Arth Density
-library(ggplot2)
 library(lme4)
 
 source("Exclosure Analysis/ExclosureAnalysis_Summer2016.R")
-source("~/Desktop/insect-exclosure/data_analysis.R")
 
 #data shaping food 2016 data
 food = food_time1
@@ -20,9 +18,11 @@ caterpillar = merge(caterpillar, all_surveyTrees, by.x="identifier", by.y= "iden
 caterpillar = select(caterpillar, -siteID.y, -circle.y, -survey.y)
 names(caterpillar)= c("identifier", "TrapType", "siteID", "survey", "circle", "caterpillar_sum", "surveyTrees")
 
-#mixed models for 2016 
+#mixed models for 2016 with tree species as a random effect)
 mix_mod_food = lmer(food_sum ~ TrapType + (1 | surveyTrees), food)
 mix_mod_caterpillar = lmer(caterpillar_sum ~ TrapType + (1 | surveyTrees), caterpillar)
+
+source("~/Desktop/insect-exclosure/data_analysis.R")
 
 #data shaping for 2012
 food_new = food_time_12
