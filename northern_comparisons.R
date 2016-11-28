@@ -50,5 +50,10 @@ singer_ranks = singer_means[order(singer_means$mean_cat_dens, decreasing = T),]
 vis$cats_count = ifelse(vis$arthCode == "LEPL", vis$count, 0)
 
 #group by unique surveys and summarize by caterpillar density
-uniq_app = vis %>% group_by(site, circle, survey, date) %>% dplyr::summarize(sum_cats_count = sum(cats_count))
+vis_norm = filter(vis, cats_count <= 5)
+south_means = vis_norm %>% group_by(clean_plantSp) %>% dplyr::summarize(mean_cat_dens = mean(cats_count))
+south_ranks = south_means[order(south_means$mean_cat_dens, decreasing = T),]
+south_relevant = filter(south_ranks, clean_plantSp %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple", "Striped maple"))
+
+
 
