@@ -4,13 +4,13 @@
 
 
 # Function for plotting the mean density over julian days for six arthropod orders 
-# (LEPL, ORTH, COLE, HEMI, ARAN, AUCH) as a multiplot
+# (LEPL, ORTH, COLE, HETE, ARAN, AUCH) as a multiplot
 
-arthplot = function(cleandata, ebd = effortByDay, site, year) {
+arthplot = function(cleandata, site, year) {
 
 par(mfrow = c(3, 2), mar = c(2, 1, 3, 3), oma = c(4, 4, 3, 1))
 
-lepl = meanDensityByDay(cleandata, effort = ebd, ordersToInclude = 'LEPL', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'LEPL')
+lepl = meanDensityByDay(cleandata, ordersToInclude = 'LEPL', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'LEPL')
 leplquad = lm(meanDensity ~ julianday + I(julianday^2), data = lepl)
 R2.quad = summary(leplquad)$r.squared
 p.quad = summary(leplquad)$coefficients[2,4]
@@ -22,7 +22,7 @@ leplquad.predict = leplquad$coefficients[1] + leplquad$coefficients[2]*jd + lepl
 points(jd, leplquad.predict, type = 'l')
 max.jd.leplquad = jd[leplquad.predict == max(leplquad.predict)]
 
-orth = meanDensityByDay(cleandata, effort = ebd, ordersToInclude = 'ORTH', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'ORTH')
+orth = meanDensityByDay(cleandata, ordersToInclude = 'ORTH', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'ORTH')
 orthquad = lm(meanDensity ~ julianday + I(julianday^2), data = orth)
 R2.quad = summary(orthquad)$r.squared
 p.quad = summary(orthquad)$coefficients[2,4]
@@ -32,7 +32,7 @@ orthquad.predict = orthquad$coefficients[1] + orthquad$coefficients[2]*jd + orth
 points(jd, orthquad.predict, type = 'l')
 max.jd.orthquad = jd[orthquad.predict == max(orthquad.predict)]
 
-cole = meanDensityByDay(cleandata, effort = ebd, ordersToInclude = 'COLE', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'COLE')
+cole = meanDensityByDay(cleandata, ordersToInclude = 'COLE', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'COLE')
 colequad = lm(meanDensity ~ julianday + I(julianday^2), data = cole)
 R2.quad = summary(colequad)$r.squared
 p.quad = summary(colequad)$coefficients[2,4]
@@ -42,17 +42,17 @@ colequad.predict = colequad$coefficients[1] + colequad$coefficients[2]*jd + cole
 points(jd, colequad.predict, type = 'l')
 max.jd.colequad = jd[colequad.predict == max(colequad.predict)]
 
-hemi = meanDensityByDay(cleandata, effort = ebd, ordersToInclude = 'HEMI', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'HEMI')
-hemiquad = lm(meanDensity ~ julianday + I(julianday^2), data = hemi)
-R2.quad = summary(hemiquad)$r.squared
-p.quad = summary(hemiquad)$coefficients[2,4]
-p.quad2 = summary(hemiquad)$coefficients[3,4]
-jd = c(min(hemi$julianday):max(hemi$julianday))
-hemiquad.predict = hemiquad$coefficients[1] + hemiquad$coefficients[2]*jd + hemiquad$coefficients[3]*jd^2
-points(jd, hemiquad.predict, type = 'l')
-max.jd.hemiquad = jd[hemiquad.predict == max(hemiquad.predict)]
+hete = meanDensityByDay(cleandata, ordersToInclude = 'HETE', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'HETE')
+hetequad = lm(meanDensity ~ julianday + I(julianday^2), data = hete)
+R2.quad = summary(hetequad)$r.squared
+p.quad = summary(hetequad)$coefficients[2,4]
+p.quad2 = summary(hetequad)$coefficients[3,4]
+jd = c(min(hete$julianday):max(hete$julianday))
+hetequad.predict = hetequad$coefficients[1] + hetequad$coefficients[2]*jd + hetequad$coefficients[3]*jd^2
+points(jd, hetequad.predict, type = 'l')
+max.jd.hetequad = jd[hetequad.predict == max(hetequad.predict)]
 
-aran = meanDensityByDay(cleandata, effort = ebd, ordersToInclude = 'ARAN', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'ARAN')
+aran = meanDensityByDay(cleandata, ordersToInclude = 'ARAN', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'ARAN')
 aranquad = lm(meanDensity ~ julianday + I(julianday^2), data = aran)
 R2.quad = summary(aranquad)$r.squared
 p.quad = summary(aranquad)$coefficients[2,4]
@@ -62,7 +62,7 @@ aranquad.predict = aranquad$coefficients[1] + aranquad$coefficients[2]*jd + aran
 points(jd, aranquad.predict, type = 'l')
 max.jd.aranquad = jd[aranquad.predict == max(aranquad.predict)]
 
-auch = meanDensityByDay(cleandata, effort = ebd, ordersToInclude = 'AUCH', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'AUCH')
+auch = meanDensityByDay(cleandata, ordersToInclude = 'AUCH', inputYear = year, inputSite = site, plot = T, new = T, lwd = 2, main = 'AUCH')
 auchquad = lm(meanDensity ~ julianday + I(julianday^2), data = auch)
 R2.quad = summary(auchquad)$r.squared
 p.quad = summary(auchquad)$coefficients[2,4]
@@ -78,22 +78,48 @@ title(xlab = "Julian day",
 
 }
 
-# Create 4-page pdf of the multiplots for visual PR, beat sheet PR, visual BG, beat sheet BG
-pdf('arth_density_multiplots.pdf', width = 7, height = 9)
+# Taking out large colonies...
+amsurvey.pr <- amsurvey.pr[!(amsurvey.pr$arthCode == "LEPL" & amsurvey.pr$count > 10),]
+amsurvey.bg <- amsurvey.bg[!(amsurvey.bg$arthCode == "LEPL" & amsurvey.bg$count > 10),]
+labdata.pr <- labdata.pr[!(labdata.pr$arthCode == "LEPL" & labdata.pr$count > 10),]
+labdata.bg <- labdata.bg[!(labdata.bg$arthCode == "LEPL" & labdata.bg$count > 10),]
+
+# Create 4-page pdf of the multiplots for visual PR, beat sheet PR, visual BG, beat sheet BG in 2015
+pdf('plots/arth_density_multiplots_2015.pdf', width = 7, height = 9)
 
 arthplot(amsurvey.pr, site = 117, year = 2015)
-title(main = 'Prairie Ridge am survey', outer = T, cex.main = 2)
+title(main = 'PR Visual 2015', outer = T, cex.main = 2)
 
 arthplot(beatsheet.pr, site = 117, year = 2015)
-title(main = 'Prairie Ridge beat sheet', outer = T, cex.main = 2)
+title(main = 'PR Beat Sheet 2015', outer = T, cex.main = 2)
 
 arthplot(amsurvey.bg, site = 8892356, year = 2015)
-title(main = 'NCBG am survey', outer = T, cex.main = 2)
+title(main = 'BG Visual 2015', outer = T, cex.main = 2)
 
 arthplot(beatsheet.bg, site = 8892356, year = 2015)
-title(main = 'NCBG beat sheet', outer = T, cex.main = 2)
+title(main = 'BG Beat Sheet 2015', outer = T, cex.main = 2)
 
 dev.off()
+
+# Create 4-page pdf of the multiplots for visual PR, beat sheet PR, visual BG, beat sheet BG in 2016
+pdf('plots/arth_density_multiplots_2016.pdf', width = 7, height = 9)
+
+arthplot(labdata.pr[labdata.pr$surveyType == 'Visual',], site = 117, year = 2016)
+title(main = 'PR Visual 2016', outer = T, cex.main = 2)
+
+arthplot(labdata.pr[labdata.pr$surveyType == 'Beat_Sheet',], site = 117, year = 2016)
+title(main = 'PR Beat Sheet 2016', outer = T, cex.main = 2)
+
+arthplot(labdata.bg[labdata.bg$surveyType == 'Visual',], site = 8892356, year = 2016)
+title(main = 'BG Visual 2016', outer = T, cex.main = 2)
+
+arthplot(labdata.bg[labdata.bg$surveyType == 'Beat_Sheet',], site = 8892356, year = 2016)
+title(main = 'BG Beat Sheet 2016', outer = T, cex.main = 2)
+
+dev.off()
+
+
+
 #-----------------------------------------------------------------------------------------
 
 
