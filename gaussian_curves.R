@@ -1,16 +1,3 @@
-
-
-# Make a fake Gaussian to test (?)
-set.seed(3000)
-xseq<-seq(-4,4,.01)
-densities<-dnorm(xseq, 0,1)
-cumulative<-pnorm(xseq, 0, 1)
-randomdeviates<-rnorm(100,0,1)
-
-par(mar=c(3,4,4,2), mfrow = c(1,1))
-
-plot(xseq, densities, col="darkgreen",xlab="", ylab="Density", type="l",lwd=2, cex=2, main="Standard Normal", cex.axis=.8)
-
 #####################################################################
 # Fitting Gaussians
 
@@ -29,7 +16,7 @@ fitG = function(x, y, mu, sig, scale, ...){
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 
 
-#----Test 1----
+#----Test 1: LEPL 2015 by week----
 
 # Make plot/data of what you will fit normal curve to
 prlepl15.weekly = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
@@ -48,7 +35,7 @@ totalDensity = sum(prlepl15.weekly$meanDensity)
 lines(18:32, p[3]*dnorm(18:32, p[1], p[2]), col = 'blue') # make sure it appears on the right plot
 
 
-#----Test 2----
+#----Test 2: LEPL 2015 by day----
 
 # Make plot/data of what you will fit normal curve to
 prlepl15.daily = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
@@ -66,7 +53,7 @@ r2.2 = cor(prlepl15.daily$julianday, p2[3]*dnorm(prlepl15.daily$julianday, p2[1]
 totalDensity = sum(prlepl15.daily$meanDensity)
 lines(130:210, p2[3]*dnorm(130:210, p2[1], p2[2]), col = 'blue') # make sure it appears on the right plot
 
-#----Test 3----
+#----Test 3: Bird food by week----
 
 # Make plot/data of what you will fit normal curve to
 prmult15.weekly = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
