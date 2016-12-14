@@ -12,6 +12,7 @@ dat = read.csv('HubbardBrookData/Copy of leps.csv', header=T, stringsAsFactors =
 singer = read.csv("SingerData/SingerData.csv", stringsAsFactors = F)
 
 #source data
+setwd("~/Desktop/caterpillars-count-analysis")
 source("tree_species_model.R")
 
 
@@ -31,7 +32,7 @@ dat1 = dplyr::filter(dat, year!="1994")
 #same number of beech and sugar maple
 sumbysp = dat1 %>% group_by(tree.name) %>% 
   dplyr::summarize(sum_count = sum(number.lep), biomass = sum(lepbio.mass.mg.)) 
-
+hubbard_ranks = sumbysp[order(sumbysp$sum_count, decreasing = T),]
 #subset dataset to only include 96/97 data to see if there is effect on beech and sugar maple amounts
 sumbysp_67 = dat1 %>% filter(year %in% c("1996", "1997") & plot =="1") %>% group_by(tree.name) %>% 
   dplyr::summarize(total_count = sum(number.lep), biomass = sum(lepbio.mass.mg.)) 
