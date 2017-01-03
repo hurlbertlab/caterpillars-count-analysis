@@ -16,7 +16,11 @@ plant_codes = read.csv("USA&AppalachianTrees_2016.csv", header=T)
 lab.triangle = rbind(labdata.pr, labdata.bg)
 
 #subset for  visual surveys
-vis_tri = lab.triangle[lab.triangle$surveyType == "Visual", ]
+vis_tri1 = lab.triangle[lab.triangle$surveyType == "Visual", ]
+
+#subset to bird food
+birdfood = c('ARAN', 'AUCH', 'COLE', 'DIPT', 'HETE', 'LEPL', 'ORTH')
+vis_tri = filter(vis_tri1, arthCode %in% birdfood)
 
 #add loc_ID column to specify unique trees for each year
 vis_tri$loc_ID = paste0(vis_tri$site, vis_tri$circle, vis_tri$survey, vis_tri$year)
@@ -171,11 +175,16 @@ means.ordered = means.df[order(means.df$count_norm, decreasing = T),]
 plotting = cbind(groups.df, means.ordered)
 plotting = dplyr::select(plotting, -count_norm)
 names(plotting)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
+write.csv(plotting, 'data/tree_sp_mean_density.csv', row.names = F)
 
 #Plot HSD results
+
+# NOTE!!! should merge color info in based on 'M' designation rather than
+# specifying it manually as done below. If the data/analysis changes,
+# you might forget to change the colors appropriately!
 par(mar=c(6,4,4,4))
 barplot(plotting$means, names.arg=plotting$tree_sp, las=2, ylab="mean arth density", 
-        main = "Mean Arth Density by Tree Species", ylim = c(0,5), cex.names=.65, 
+        main = "Mean Arthropod Density by Tree Species", ylim = c(0,10), cex.names=.65, 
         cex.axis = .75, 
         col = c("red", "red", "purple", "purple", "purple", "purple", "purple", "purple", "blue", "blue"))
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=4, plotting$M)
