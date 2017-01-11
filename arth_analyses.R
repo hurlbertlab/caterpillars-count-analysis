@@ -79,10 +79,10 @@ title(xlab = "Julian day",
 }
 
 # Taking out large colonies...
-amsurvey.pr <- amsurvey.pr[!(amsurvey.pr$arthCode == "LEPL" & amsurvey.pr$count > 10),]
-amsurvey.bg <- amsurvey.bg[!(amsurvey.bg$arthCode == "LEPL" & amsurvey.bg$count > 10),]
-labdata.pr <- labdata.pr[!(labdata.pr$arthCode == "LEPL" & labdata.pr$count > 10),]
-labdata.bg <- labdata.bg[!(labdata.bg$arthCode == "LEPL" & labdata.bg$count > 10),]
+#amsurvey.pr <- amsurvey.pr[!(amsurvey.pr$arthCode == "LEPL" & amsurvey.pr$count > 10),]
+#amsurvey.bg <- amsurvey.bg[!(amsurvey.bg$arthCode == "LEPL" & amsurvey.bg$count > 10),]
+#labdata.pr <- labdata.pr[!(labdata.pr$arthCode == "LEPL" & labdata.pr$count > 10),]
+#labdata.bg <- labdata.bg[!(labdata.bg$arthCode == "LEPL" & labdata.bg$count > 10),]
 
 # Create 4-page pdf of the multiplots for visual PR, beat sheet PR, visual BG, beat sheet BG in 2015
 pdf('plots/arth_density_multiplots_2015.pdf', width = 7, height = 9)
@@ -110,7 +110,7 @@ title(main = 'PR Visual 2016', outer = T, cex.main = 2)
 arthplot(labdata.pr[labdata.pr$surveyType == 'Beat_Sheet',], site = 117, year = 2016)
 title(main = 'PR Beat Sheet 2016', outer = T, cex.main = 2)
 
-arthplot(labdata.bg[labdata.bg$surveyType == 'Visual',], site = 8892356, year = 2016)
+arthplot(labdata.bg[labdata.bg$surveyType == 'Visual' & labdata.bg$julianday %in% c(125:204),], site = 8892356, year = 2016)
 title(main = 'BG Visual 2016', outer = T, cex.main = 2)
 
 arthplot(labdata.bg[labdata.bg$surveyType == 'Beat_Sheet',], site = 8892356, year = 2016)
