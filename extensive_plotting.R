@@ -2,14 +2,7 @@
 
 # Run summary_functions.R and data_cleaning.R first
 
-# Taking out caterpillar colonies
-amsurvey.pr <- amsurvey.pr[!(amsurvey.pr$arthCode == "LEPL" & amsurvey.pr$count > 10),]
-amsurvey.bg <- amsurvey.bg[!(amsurvey.bg$arthCode == "LEPL" & amsurvey.bg$count > 10),]
-labdata.pr <- labdata.pr[!(labdata.pr$arthCode == "LEPL" & labdata.pr$count > 10),]
-labdata.bg <- labdata.bg[!(labdata.bg$arthCode == "LEPL" & labdata.bg$count > 10),]
-
 #----Prairie Ridge: Create mean density datasets for cats and bird food, both years, both methods, both sites----
-# Don't have volunteer beat sheet data yet
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 
 PR.LEPL15vis = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual',], 
