@@ -115,8 +115,9 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
                   by = c('julianday', 'site', 'year'), all.x = T) 
 
   } else if (nrow(temp) > 0 & byTreeSpecies) {
-    temp2 = ddply(temp, .(site, julianday, year, plantSp), summarize, 
-                  totalCount = sum(count, na.rm = T))
+    temp2 = ddply(temp, .(site, julianday, year, clean_plantSp), summarize, 
+                  totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])), 
+                  totalBiomass = sum(biomass))
     temp3 = merge(temp_effort[,c('site','numSurveys','julianday','year')], temp2, 
                   by = c('julianday', 'site', 'year'), all.x = T)
   }  

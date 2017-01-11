@@ -16,7 +16,11 @@ plant_codes = read.csv("USA&AppalachianTrees_2016.csv", header=T)
 lab.triangle = rbind(labdata.pr, labdata.bg)
 
 #subset for  visual surveys
-vis_tri = lab.triangle[lab.triangle$surveyType == "Visual", ]
+vis_tri1 = lab.triangle[lab.triangle$surveyType == "Visual", ]
+
+#subset to bird food
+birdfood = c('ARAN', 'AUCH', 'COLE', 'DIPT', 'HETE', 'LEPL', 'ORTH')
+vis_tri = filter(vis_tri1, arthCode %in% birdfood)
 
 #add loc_ID column to specify unique trees for each year
 vis_tri$loc_ID = paste0(vis_tri$site, vis_tri$circle, vis_tri$survey, vis_tri$year)
@@ -55,15 +59,12 @@ names(vis_tri2) = c("surveyID", "userID", "site", "survey", "circle", "date", "j
 vis_app = cleandata.app[cleandata.app$surveyType=="Visual",]
 vis = rbind(vis_tri2,vis_app)
 
-
-
 #add unique identifier column for surveys
 vis$identifier = paste0(vis$site, vis$circle, vis$survey, vis$date)
 vis$loc_ID = paste0(vis$site, vis$circle, vis$survey, vis$year)
 
 #create unique tree-locations list for all trees, 2010-2016, app and triangle
 trees_all = unique(vis[,c("clean_plantSp", "loc_ID")])
-
 
 #group by unique surveys and summarize arthropod density
 vis_grouped = vis %>% group_by(site, circle, survey, date)
@@ -72,19 +73,19 @@ vis_count$identifier = paste0(vis_count$site, vis_count$circle, vis_count$survey
 names(vis_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
 vis_count = data.frame(vis_count)
 
-vis_biomass = dplyr::summarise(vis_grouped, sum(biomass)) #biomass estimates only exist for ~ half of unique surveys. could populate fields w/zero count w/ zeros, but what about others
-vis_biomass$identifier = paste0(vis_biomass$site, vis_biomass$circle, vis_biomass$survey, vis_biomass$date)
+#vis_biomass = dplyr::summarise(vis_grouped, sum(biomass)) #biomass estimates only exist for ~ half of unique surveys. could populate fields w/zero count w/ zeros, but what about others
+#vis_biomass$identifier = paste0(vis_biomass$site, vis_biomass$circle, vis_biomass$survey, vis_biomass$date)
 names(vis_biomass) = c("site", "circle", "survey", "date", "sum_biomass", "identifier")
-vis_biomass = data.frame(vis_biomass)
+#vis_biomass = data.frame(vis_biomass)
 
 #add year column to summarized arth densities
 vis_year = unique(vis[, c("identifier", "year")])
 vis_count1 = merge(vis_count, vis_year, by.x = "identifier", by.y = "identifier")
-vis_biomass1 = merge(vis_biomass, vis_year, by.x="identifier", by.y="identifier")
+#vis_biomass1 = merge(vis_biomass, vis_year, by.x="identifier", by.y="identifier")
 
 #merge to add tree species data to summary data
 vis_count1$loc_ID = paste0(vis_count1$site, vis_count1$circle, vis_count1$survey, vis_count1$year)
-vis_biomass1$loc_ID = paste0(vis_biomass1$site, vis_biomass1$circle, vis_biomass1$survey, vis_biomass1$year)
+#vis_biomass1$loc_ID = paste0(vis_biomass1$site, vis_biomass1$circle, vis_biomass1$survey, vis_biomass1$year)
 
 count_merged = merge(vis_count1, trees_all, by.x = "loc_ID", by.y = "loc_ID", all.x = T) 
 biomass_merged = merge(vis_biomass1, trees_all, by.x = "loc_ID", by.y = "loc_ID", all.x = T)
@@ -92,7 +93,7 @@ biomass_merged = merge(vis_biomass1, trees_all, by.x = "loc_ID", by.y = "loc_ID"
 count_merged1 = dplyr::select(count_merged, site, circle, survey, year, sum_count, clean_plantSp)
 names(count_merged1) = c("site", "circle", "survey", "year", "sum_count", "plantSpecies")
 
-biomass_merged1 = dplyr::select(biomass_merged, site, circle, survey, year, sum_biomass, clean_plantSp)
+#biomass_merged1 = dplyr::select(biomass_merged, site, circle, survey, year, sum_biomass, clean_plantSp)
 names(biomass_merged1) = c("site", "circle", "survey", "year", "sum_biomass", "plantSpecies")
 
 #Find 10 most common tree species to use in analysis 
@@ -146,21 +147,21 @@ for (code in missingnames) {
 count_merged2 = merge(count_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
 count_merged2 = dplyr::select(count_merged2, plantSpecies, site, circle, survey, year, sum_count, avg_leaf_area_cm2)
 
-biomass_merged2 = merge(biomass_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
-biomass_merged2 = dplyr::select(biomass_merged2, plantSpecies, site, circle, survey, year, sum_biomass, avg_leaf_area_cm2)
+#biomass_merged2 = merge(biomass_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
+#biomass_merged2 = dplyr::select(biomass_merged2, plantSpecies, site, circle, survey, year, sum_biomass, avg_leaf_area_cm2)
 
 
 #normalize arth density by avg area
 count_merged2$count_norm = (count_merged2$sum_count/count_merged2$avg_leaf_area_cm2)*mean(count_merged2$avg_leaf_area_cm2, na.rm=TRUE)
-biomass_merged2$count_norm = (biomass_merged2$sum_biomass/biomass_merged2$avg_leaf_area_cm2)*mean(biomass_merged2$avg_leaf_area_cm2, na.rm=TRUE)
+#biomass_merged2$count_norm = (biomass_merged2$sum_biomass/biomass_merged2$avg_leaf_area_cm2)*mean(biomass_merged2$avg_leaf_area_cm2, na.rm=TRUE)
 
 #log transform 
 count_merged2$count_log10 = log10(count_merged2$count_norm+.01) 
-biomass_merged2$biomass_log10 = log10(biomass_merged2$biomass_norm+.01) 
+#biomass_merged2$biomass_log10 = log10(biomass_merged2$biomass_norm+.01) 
 
 #Only use surveys conducted on 10 most common tree species
 count_common = dplyr::filter(count_merged2, plantSpecies %in% common_trees$trees)
-biomass_common = dplyr::filter(biomass_merged2, plantSpecies %in% common_trees$trees)
+#biomass_common = dplyr::filter(biomass_merged2, plantSpecies %in% common_trees$trees)
 
 #HSD model- raw data
 lm.raw = lm(count_norm ~ plantSpecies, data=count_common)
@@ -174,11 +175,16 @@ means.ordered = means.df[order(means.df$count_norm, decreasing = T),]
 plotting = cbind(groups.df, means.ordered)
 plotting = dplyr::select(plotting, -count_norm)
 names(plotting)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
+write.csv(plotting, 'data/tree_sp_mean_density.csv', row.names = F)
 
 #Plot HSD results
+
+# NOTE!!! should merge color info in based on 'M' designation rather than
+# specifying it manually as done below. If the data/analysis changes,
+# you might forget to change the colors appropriately!
 par(mar=c(6,4,4,4))
 barplot(plotting$means, names.arg=plotting$tree_sp, las=2, ylab="mean arth density", 
-        main = "Mean Arth Density by Tree Species", ylim = c(0,5), cex.names=.65, 
+        main = "Mean Arthropod Density by Tree Species", ylim = c(0,10), cex.names=.65, 
         cex.axis = .75, 
         col = c("red", "red", "purple", "purple", "purple", "purple", "purple", "purple", "blue", "blue"))
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=4, plotting$M)
