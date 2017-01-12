@@ -65,20 +65,23 @@ uniq_lab15 = data.frame(table(lab15_sub$julianday, lab15_sub$circle, lab15_sub$s
 surv_lab15 = length(uniq_lab15$Freq)
 uniq_lab16_bs = data.frame(table(lab16_bs_sub$julianday, lab16_bs_sub$circle, lab16_bs_sub$survey)) %>% filter(Freq > 0) 
 surv_lab16_bs = length(uniq_lab16_bs$Freq)
+uniq_lab16_vis = data.frame(table(lab16_vis_sub$julianday, lab16_vis_sub$circle, lab16_vis_sub$survey)) %>% filter(Freq > 0) 
+surv_lab16_vis = length(uniq_lab16_vis$Freq)
 
 #calculate mean number of each type of arthropods seen for each year/surveyor type
 vol15_means= vol15_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_vol15))
 vol16_means= vol16_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_vol16))
 lab15_means= lab15_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab15))
 lab16_bs_means= lab16_bs_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_bs))
+lab16_vis_means= lab16_vis_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_vis))
 
 #merge all means into one dataframe
 join = left_join(vol15_means, vol16_means, by = "arthCode")
 names(join) = c("arthCode", "mean_vol15", "mean_vol16")
 join1 = left_join(join, lab15_means, by = "arthCode")
 names(join1) =c("arthCode", "mean_vol15", "mean_vol16", "mean_lab15")
-arth_means = left_join(join1, lab16_bs_means, by = "arthCode")
-names(arth_means) = c("arthCode", "mean_vol15", "mean_vol16", "mean_lab15", "mean_lab16_bs")
+arth_means = data.frame(left_join(join1, lab16_bs_means, by = "arthCode"))
+names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #change names to reflect visual and bs (2015 is vis, 2016 is bs)
 
 #plot relative and mean arth frequencies
 ## Example code:
@@ -87,13 +90,30 @@ names(arth_means) = c("arthCode", "mean_vol15", "mean_vol16", "mean_lab15", "mea
 # legend = rownames(counts), beside=TRUE) 
 par(mfrow = c(1, 1), mar = c(5, 5, 2, 2))
 
+#figure 2
 lab_selected1 = as.matrix(lab_selected) #create matrix w/o arth code?
 barplot(lab_selected1, legend = lab_selected$arthCode, las = 2, cex.names = .7, 
         ylab = "Proportion of Arthopods Seen") #this needs to be cleaned up
 
-arth_means_m = as.matrix(arth_means) #create matrix w/o arth code?
-barplot(arth_means_m, legend = arth_means$arthCode, las = 2, cex.names = .7, 
-        ylab = "Mean Arths Observed per Survey")
+#figure 3 (BS vs VIS) (here we're comparing different years)
+plot(arth_means$vol_vis, arth_means$vol_bs, las = 2, xlab = "Mean Arths per VIS",
+        ylab = "Mean Arths per BS", col = "purple", pch = 20)
+volunteer =lm(vol_bs ~ vol_vis, data = arth_means)
+abline(volunteer, col = "purple", cex = 2)
+points(arth_means$lab_vis, arth_means$lab_bs, las = 2, col = "blue", pch = 15)
+laboratory = lm(lab_bs ~ lab_vis, data = arth_means)
+abline(laboratory, col = "blue", cex = 2)
+#legend
+
+#figure 4 (volunteers vs lab)
+plot(arth_means$lab_vis, arth_means$vol_vis, xlab = "Mean Arths per vol. survey ",
+     ylab = "Mean Arths per lab survey", col = "pink", pch = 20) 
+visual =lm(vol_vis ~ lab_vis, data = arth_means)
+abline(visual, col = "pink", cex = 2)
+points(arth_means$lab_bs, arth_means$vol_bs, las = 2, col = "red", pch = 15)
+beat = lm(vol_bs ~ lab_bs, data = arth_means)
+abline(beat, col = "red", cex = 2)
+abline(0,1)
 
 
 #----------------
