@@ -1,6 +1,9 @@
 #Plots for CC paper: Absolute arth densities and relative arth densities 
 source("data_cleaning.R")
 
+#load libraries
+library(tidyr)
+
 #subset lab data to the the circles regularly surveyed by volunteers
 lab = filter(labdata.pr, circle %in% c("1", "2", "3", "4", "5", "6", "7", "8"))
 
@@ -39,7 +42,10 @@ vis_arth_rank = lab16_vis_rel[order(lab16_vis_rel$proportion, decreasing = T),] 
 #merge lab vis and bs data for comparison of survey types within the lab, group arths not chosen for display into "other"
 lab_rel = data.frame(left_join(bs_arth_rank, vis_arth_rank, by = "arthCode"))
 names(lab_rel) = c("arthCode", "bs", "vis")
-#group less common arthropods together for plotting #
+
+#group less common arthropods together for plotting 
+#decided on these because AUCH, DIPT, and COLE were in the top 5 most dense for beat sheets and visual, and also in "bird food", LEPL obviously necessary
+
 lab_rel$arthCode = ifelse(lab_rel$arthCode == "LEPL", "LEPL",
                           ifelse(lab_rel$arthCode == "COLE", "COLE",
                                  ifelse(lab_rel$arthCode == "AUCH", "AUCH",
@@ -75,6 +81,23 @@ lab15_means= lab15_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = 
 lab16_bs_means= lab16_bs_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_bs))
 lab16_vis_means= lab16_vis_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_vis))
 
+#calculate mean number of each type of arthropods seen for visual surveys in the lab in 2016 by tree type (for figure 2)
+lab16_vis_trees = lab16_vis_sub %>% group_by(clean_plantSp, arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_vis))
+
+#change less common arthropods into one "other" group for the tree species groups
+lab16_vis_trees$arthCode = ifelse(lab16_vis_trees$arthCode == "LEPL", "LEPL",
+                          ifelse(lab16_vis_trees$arthCode == "COLE", "COLE",
+                                 ifelse(lab16_vis_trees$arthCode == "AUCH", "AUCH",
+                                        ifelse(lab16_vis_trees$arthCode == "DIPT", "DIPT", "OTHR"))))
+lab16_vis_trees = data.frame(lab16_vis_trees)
+#calculate mean number of each type of arthropods seen by tree sp 
+trees_oth = lab16_vis_trees %>% group_by(clean_plantSp, arthCode) %>% summarize(vis = sum(mean_count))
+
+#only use 4 most common tree sp at PR (within 1-8) #sweet gum, common persimmon, box elder, chalk maple
+common_trees = trees_oth %>% filter(clean_plantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple")) 
+common_trees1 = data.frame(spread(common_trees, clean_plantSp, vis))
+names(common_trees1) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Sweet gum")
+
 #merge all means into one dataframe
 join = left_join(vol15_means, vol16_means, by = "arthCode")
 names(join) = c("arthCode", "mean_vol15", "mean_vol16")
@@ -83,6 +106,8 @@ names(join1) =c("arthCode", "mean_vol15", "mean_vol16", "mean_lab15")
 arth_means = data.frame(left_join(join1, lab16_bs_means, by = "arthCode"))
 names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #change names to reflect visual and bs (2015 is vis, 2016 is bs)
 
+#---------plotting for figures------------------
+
 #plot relative and mean arth frequencies
 ## Example code:
 # barplot(counts, main="Car Distribution by Gears and VS",
@@ -90,9 +115,19 @@ names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #cha
 # legend = rownames(counts), beside=TRUE) 
 par(mfrow = c(1, 1), mar = c(5, 5, 2, 2))
 
-#figure 2
-lab_selected1 = as.matrix(lab_selected) #create matrix w/o arth code?
+#figure 1
+lab_selected1 <- lab_selected[,-1]
+rownames(lab_selected1) <- lab_selected[,1]
+lab_selected1 = as.matrix(lab_selected1) #create matrix w/o arth code?
 barplot(lab_selected1, legend = lab_selected$arthCode, las = 2, cex.names = .7, 
+        ylab = "Proportion of Arthopods Seen") #this needs to be cleaned up
+
+#figure 2 
+par(mfrow = c(1, 1), mar = c(6, 6, 2, 2))
+common_trees2 <- common_trees1[,-1]
+rownames(common_trees2) <- common_trees1[,1]
+common_trees2 = as.matrix(common_trees2)
+barplot(common_trees2, legend = common_trees1$arthCode, las = 2, cex.names = .6, 
         ylab = "Proportion of Arthopods Seen") #this needs to be cleaned up
 
 #figure 3 (BS vs VIS) (here we're comparing different years)
