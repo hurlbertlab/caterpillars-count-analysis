@@ -189,6 +189,8 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
   temp3 = merge(effortByWeek, temp2[, c('week', 'totalCount', 'numSurveysGTzero')], 
                 by = 'week', all = T)
   temp3$totalCount[is.na(temp3$totalCount)] = 0
+  temp3$numSurveysGTzero[is.na(temp3$numSurveysGTzero)] = 0
+  #temp3$totalBiomass[is.na(temp3$totalBiomass)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
   temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
   #temp3$meanBiomass = temp3$totalBiomass/temp3$numSurveys
