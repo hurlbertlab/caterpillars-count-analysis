@@ -166,7 +166,7 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
 {
   dataYearSite = surveyData[surveyData$year %in% inputYear & 
                               surveyData$site %in% inputSite, ]
-  dataYearSite$week = floor(dataYearSite$julianday/7) + 1
+  dataYearSite$week = floor((dataYearSite$julianday-1)/7) + 1
   effortByWeek = data.frame(table(unique(dataYearSite[, c('surveyID', 'week')])$week))
   names(effortByWeek) = c('week', 'numSurveys')
   
