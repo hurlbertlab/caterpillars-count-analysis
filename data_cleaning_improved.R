@@ -27,7 +27,7 @@ labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191)
 # setwd('c:/git/caterpillars-count-analysis')
 
 # Read in data
-tempsurveys = read.csv('data/tbl_surveys.csv', header=F, stringsAsFactors = F)
+surveys = read.csv('data/tbl_surveys.csv', header=F, stringsAsFactors = F)
 orders = read.csv('data/tbl_orders.csv', header=F, stringsAsFactors = F)
 
 names(tempsurveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
@@ -49,7 +49,8 @@ surveys$date[surveys$surveyID %in% c(6497, 6499, 6501, 6502, 6503, 6504, 6507)] 
 surveys$date[surveys$surveyID == 9992] = "2011-06-01"
 surveys$date[surveys$site == 8892351 & surveys$dateStart == "0000-00-00 00:00:00"] = "2016-06-10"
 
-# Create effortByDay dataframe for use in summary functions
+# Create effortByDay dataframe
+# Not used in summary functions script anymore
 effortByDay = data.frame(table(surveys[, c('site', 'date')]))
 names(effortByDay) = c('site', 'date', 'numSurveys')
 effortByDay = effortByDay[effortByDay$numSurveys!=0, ]
