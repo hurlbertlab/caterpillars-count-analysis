@@ -44,22 +44,13 @@ surveys = tempsurveys[tempsurveys$isValid == 1,]
 surveys$survey = as.character(surveys$survey)
 
 # Fix a few missing dates (based on checking old MS Access database)
-surveys$date = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d"))
+surveys$date = as.character(as.POSIXlt(surveys$dateStart, format = "%Y-%m-%d %H:%M:%S"))
 surveys$date[surveys$surveyID %in% c(6497, 6499, 6501, 6502, 6503, 6504, 6507)] = "2011-06-05"
 surveys$date[surveys$surveyID == 9992] = "2011-06-01"
 surveys$date[surveys$site == 8892351 & surveys$dateStart == "0000-00-00 00:00:00"] = "2016-06-10"
 
 #convert survey letters to upper case to avoid duplicates
 surveys$survey = toupper(surveys$survey)
-
-# Create effortByDay dataframe for use in summary functions
-effortByDay = data.frame(table(surveys[, c('site', 'date')]))
-names(effortByDay) = c('site', 'date', 'numSurveys')
-effortByDay = effortByDay[effortByDay$numSurveys!=0, ]
-effortByDay$date = as.POSIXlt(effortByDay$date, format = "%Y-%m-%d")
-effortByDay$julianday = yday(effortByDay$date)
-tempyear <- substring(effortByDay$date, 1, 4)
-effortByDay$year = tempyear 
 
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', sort = FALSE, all.x = TRUE)
