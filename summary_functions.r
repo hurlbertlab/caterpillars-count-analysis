@@ -164,18 +164,32 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
                             ...)                  
   
 {
-  dataYearSite = surveyData[surveyData$year %in% inputYear & 
-                              surveyData$site %in% inputSite, ]
-  dataYearSite$week = floor((dataYearSite$julianday-1)/7) + 1
-  effortByWeek = data.frame(table(unique(dataYearSite[, c('surveyID', 'week')])$week))
-  names(effortByWeek) = c('week', 'numSurveys')
+  # Create subset of data to use for calculating effort by day
+  pre_temp_foreffort = subset(surveyData,
+                              site %in% inputSite &
+                                year %in% inputYear)
+  pre_temp_foreffort$week = floor(pre_temp_foreffort$julianday/7) + 1
+  temp_foreffort <- unique(pre_temp_foreffort[,c('survey', 'circle', 'week', 'site', 'julianday')])
+  
+  # Create effort by week within function
+  effortByWeek = data.frame(table(temp_foreffort[, c('site', 'week')]))
+  names(effortByWeek) = c('site', 'week', 'numSurveys')
+  effortByWeek = effortByWeek[effortByWeek$numSurveys!=0, ]
+  effortByWeek = effortByWeek[, c('week', 'numSurveys')]
+  
+  temp_effort = effortByWeek
   
   if(length(ordersToInclude)==1 & ordersToInclude[1]=='All') {
     ordersToInclude = unique(surveyData$arthCode)
   }
   
-  temp = subset(dataYearSite, length >= minLength & arthCode %in% ordersToInclude)
-
+  temp = subset(surveyData,
+                length >= minLength & 
+                  arthCode %in% ordersToInclude & 
+                  site %in% inputSite &
+                  year %in% inputYear)
+  temp$week = floor(temp$julianday/7) + 1
+  
   if (byTreeSpecies) {
     temp2 = ddply(temp, .(week, plantSp), summarize, 
                   totalCount = sum(count))
