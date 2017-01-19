@@ -45,7 +45,6 @@ names(lab_rel) = c("arthCode", "bs", "vis")
 
 #group less common arthropods together for plotting 
 #decided on these because AUCH, DIPT, and COLE were in the top 5 most dense for beat sheets and visual, and also in "bird food", LEPL obviously necessary
-
 lab_rel$arthCode = ifelse(lab_rel$arthCode == "LEPL", "LEPL",
                           ifelse(lab_rel$arthCode == "COLE", "COLE",
                                  ifelse(lab_rel$arthCode == "AUCH", "AUCH",
@@ -128,7 +127,7 @@ common_trees2 <- common_trees1[,-1]
 rownames(common_trees2) <- common_trees1[,1]
 common_trees2 = as.matrix(common_trees2)
 barplot(common_trees2, legend = common_trees1$arthCode, las = 2, cex.names = .6, 
-        ylab = "Proportion of Arthopods Seen") #this needs to be cleaned up
+        ylab = "Arthropods per Survey") #this needs to be cleaned up
 
 #figure 3 (BS vs VIS) (here we're comparing different years)
 plot(arth_means$vol_vis, arth_means$vol_bs, las = 2, xlab = "Mean Arths per VIS",
@@ -149,7 +148,6 @@ points(arth_means$lab_bs, arth_means$vol_bs, las = 2, col = "red", pch = 15)
 beat = lm(vol_bs ~ lab_bs, data = arth_means)
 abline(beat, col = "red", cex = 2)
 abline(0,1)
-
 
 #----------------
 #find distribution of surveys of survey type of interest by date in each year
