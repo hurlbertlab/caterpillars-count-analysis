@@ -170,16 +170,16 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
                               site %in% inputSite &
                                 year %in% inputYear)
   pre_temp_foreffort$week = floor(pre_temp_foreffort$julianday/7) + 1
-  temp_foreffort <- unique(pre_temp_foreffort[,c('survey', 'circle', 'week', 'site')])
+  temp_foreffort <- unique(pre_temp_foreffort[,c('survey', 'circle', 'week', 'site', 'julianday')])
   
   # Create effort by week within function
   effortByWeek = data.frame(table(temp_foreffort[, c('site', 'week')]))
   names(effortByWeek) = c('site', 'week', 'numSurveys')
   effortByWeek = effortByWeek[effortByWeek$numSurveys!=0, ]
-  names(effortByWeek) = c('week', 'numSurveys')
+  effortByWeek = effortByWeek[, c('week', 'numSurveys')]
   
   temp_effort = effortByWeek
-  ##################################
+  ##################################v
   
   if(length(ordersToInclude)==1 & ordersToInclude[1]=='All') {
     ordersToInclude = unique(surveyData$arthCode)
@@ -190,6 +190,7 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
                   arthCode %in% ordersToInclude & 
                   site %in% inputSite &
                   year %in% inputYear)
+  temp$week = floor(temp$julianday/7) + 1
 
   if (byTreeSpecies) {
     temp2 = ddply(temp, .(week, plantSp), summarize, 
@@ -204,6 +205,7 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
   temp3 = merge(effortByWeek, temp2[, c('week', 'totalCount', 'numSurveysGTzero')], 
                 by = 'week', all = T)
   temp3$totalCount[is.na(temp3$totalCount)] = 0
+  temp3$numSurveysGTzero[is.na(temp3$numSurveysGTzero)] = 0
   temp3$meanDensity = temp3$totalCount/temp3$numSurveys
   temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
   #temp3$meanBiomass = temp3$totalBiomass/temp3$numSurveys
