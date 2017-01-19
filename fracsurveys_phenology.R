@@ -363,7 +363,7 @@ segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015],
 par(mfrow = c(3,2), mar = c(3,4,3,2))
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 
-#----FIGURE 3 PHENOLOGY PLOT----
+#----FIGURE 3 PHENOLOGY PLOT by week----
 
 # First panel
 PR.LEPL15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
