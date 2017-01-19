@@ -15,7 +15,7 @@ singer = read.csv("SingerData/SingerData.csv", stringsAsFactors = F)
 setwd("~/Desktop/caterpillars-count-analysis")
 source("tree_species_model.R")
 
-
+#improve format/put tree species names into common names
 dat$date = as.character(as.POSIXlt(dat$date, format = '%m/%d/%y'))
 dat$year = as.numeric(substr(dat$date, 1, 4))
 dat$week = floor(dat$yearday/7)+1
@@ -23,7 +23,9 @@ dat$tree.name = ifelse(dat$tree.spec == 1, "American beech",
                 ifelse(dat$tree.spec == 2, "Sugar maple",
                 ifelse(dat$tree.spec == 3, "Striped maple",
                 ifelse(dat$tree.spec == 4, "Viburnum", NA))))
-
+singer1 = gsub("Hammamelis virginiana", singer$hostplantspecies, "Hamamelis virginiana") #incorrect spelling
+plant_codes1 = rename(plant_codes, hostplantspecies = TreeSciName)
+singer2 = singer1 %>% left_join(plant_codes1, by = "hostplantspecies") %>% select(-TreeCode, -Notes)
 
 #remove data from 1994 because it had far more caterpillars than any other year
 dat1 = dplyr::filter(dat, year!="1994")
@@ -33,6 +35,7 @@ dat1 = dplyr::filter(dat, year!="1994")
 sumbysp = dat1 %>% group_by(tree.name) %>% 
   dplyr::summarize(sum_count = sum(number.lep), biomass = sum(lepbio.mass.mg.)) 
 hubbard_ranks = sumbysp[order(sumbysp$sum_count, decreasing = T),]
+
 #subset dataset to only include 96/97 data to see if there is effect on beech and sugar maple amounts
 sumbysp_67 = dat1 %>% filter(year %in% c("1996", "1997") & plot =="1") %>% group_by(tree.name) %>% 
   dplyr::summarize(total_count = sum(number.lep), biomass = sum(lepbio.mass.mg.)) 
@@ -43,7 +46,7 @@ surveysct = data.frame(table(surveys)) %>% filter(Freq>0)
 
 #Find patterns in Singer Data 
 #include only trees without a treatment
-singer_means = singer %>% filter(treatment == "unbagged") %>% group_by(hostplantspecies) %>% summarize(mean_cat_dens = mean(generalist.density.m2)) 
+singer_means = singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName) %>% summarize(mean_cat_dens = mean(generalist.density.m2)) 
 singer_ranks = singer_means[order(singer_means$mean_cat_dens, decreasing = T),]
 
 #CC & Appalachian data
@@ -56,5 +59,7 @@ south_means = vis_norm %>% group_by(clean_plantSp) %>% dplyr::summarize(mean_cat
 south_ranks = south_means[order(south_means$mean_cat_dens, decreasing = T),]
 south_relevant = filter(south_ranks, clean_plantSp %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple", "Striped maple"))
 
-
+# Visualize rankings #double check rankings for hubbard brook
+# convert rownames (#) to a column (y-axis of figure)
+# merge together the 3 data sets by tree species
 
