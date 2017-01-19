@@ -45,14 +45,12 @@ names(lab_rel) = c("arthCode", "bs", "vis")
 
 #group less common arthropods together for plotting 
 #decided on these because AUCH, DIPT, and COLE were in the top 5 most dense for beat sheets and visual, and also in "bird food", LEPL obviously necessary
-
 lab_rel$arthCode = ifelse(lab_rel$arthCode == "LEPL", "LEPL",
                           ifelse(lab_rel$arthCode == "COLE", "COLE",
                                  ifelse(lab_rel$arthCode == "AUCH", "AUCH",
                                         ifelse(lab_rel$arthCode == "DIPT", "DIPT", "OTHR"))))
-vis_oth = data.frame(lab_rel %>% select(arthCode, vis) %>% group_by(arthCode) %>% summarize(vis = sum(vis)))
-bs_oth = data.frame(lab_rel %>% select(arthCode, bs) %>% group_by(arthCode) %>% summarize(bs = sum(bs)))
-lab_selected = left_join(vis_oth, bs_oth, by = "arthCode")
+
+lab_selected = lab_rel %>% group_by(arthCode) %>% summarize(vis = sum(vis), bs = sum(bs)) %>% data.frame()
 
 #merge relative arth numbers into one dataframe (for volunteer/lab comparison)
 rel = left_join(vol15_rel, vol16_rel, by = "arthCode")
@@ -113,22 +111,27 @@ names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #cha
 # barplot(counts, main="Car Distribution by Gears and VS",
 # xlab="Number of Gears", col=c("darkblue","red"),
 # legend = rownames(counts), beside=TRUE) 
-par(mfrow = c(1, 1), mar = c(5, 5, 2, 2))
+
+pdf('plots/Figure1_arthropods.pdf', height = 8, width = 11)
+
+
+par(mfrow = c(2, 3), mar = c(5, 5, 2, 2))
 
 #figure 1
 lab_selected1 <- lab_selected[,-1]
 rownames(lab_selected1) <- lab_selected[,1]
 lab_selected1 = as.matrix(lab_selected1) #create matrix w/o arth code?
+
 barplot(lab_selected1, legend = lab_selected$arthCode, las = 2, cex.names = .7, 
         ylab = "Proportion of Arthopods Seen") #this needs to be cleaned up
 
 #figure 2 
-par(mfrow = c(1, 1), mar = c(6, 6, 2, 2))
+par(mar = c(6, 6, 2, 2))
 common_trees2 <- common_trees1[,-1]
 rownames(common_trees2) <- common_trees1[,1]
 common_trees2 = as.matrix(common_trees2)
 barplot(common_trees2, legend = common_trees1$arthCode, las = 2, cex.names = .6, 
-        ylab = "Proportion of Arthopods Seen") #this needs to be cleaned up
+        ylab = "Arthropods per Survey") #this needs to be cleaned up
 
 #figure 3 (BS vs VIS) (here we're comparing different years)
 plot(arth_means$vol_vis, arth_means$vol_bs, las = 2, xlab = "Mean Arths per VIS",
@@ -150,6 +153,7 @@ beat = lm(vol_bs ~ lab_bs, data = arth_means)
 abline(beat, col = "red", cex = 2)
 abline(0,1)
 
+dev.off()
 
 #----------------
 #find distribution of surveys of survey type of interest by date in each year
