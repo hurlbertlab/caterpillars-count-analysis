@@ -79,7 +79,31 @@ cordat <- data.frame(year = rep(c(2015,2016), times = 3),
                      cor = c(LEPL15r, LEPL16r, ORTH15r, ORTH16r, BIRD15r, BIRD16r))
 
 
-# Checking 
+# Histograms of the times surveys were done
+
+vol15 = volunteer.pr[volunteer.pr$year == 2015,]
+hist(as.numeric(substr(vol15$date, 12, 13)))
+
+vol16 = volunteer.pr[volunteer.pr$year == 2016,]
+hist(as.numeric(substr(vol16$date, 12, 13)))
+
+labvs15 = amsurvey.pr[amsurvey.pr$year == 2015,]
+hist(as.numeric(substr(labvs15$date, 12, 13)))
+
+labbs15 = beatsheet.pr[beatsheet.pr$year == 2015,]
+hist(as.numeric(substr(labbs15$date, 12, 13)))
+
+labpm15 = pmsurvey.pr[pmsurvey.pr$year == 2015,]
+hist(as.numeric(substr(labpm15$date, 12, 13)))
+
+labvs16 = labdata.pr[labdata.pr$year == 2016 & labdata.pr$surveyType == 'Visual',]
+hist(as.numeric(substr(labvs16$date, 12, 13)))
+
+labbs16 = beatsheet.pr[beatsheet.pr$year == 2016,]
+hist(as.numeric(substr(labbs16$date, 12, 13)))
+
+
+# Checking how similar pm lab is to am lab (2015)
 par(mfrow=c(1,1), mar = c(4,4,2,2), oma = c(1,1,1,1))
 amlab <- meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
                  ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
