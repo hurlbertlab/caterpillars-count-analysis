@@ -14,7 +14,8 @@ vol15 = filter(volunteer.pr, year == 2015 & surveyType == "Visual")
 vol16 = filter(volunteer.pr, year == 2016 & surveyType == "Beat_Sheet") 
 lab15 = lab %>% filter(year == 2015, surveyType == "Visual")
 lab16_bs = lab %>% filter(year == 2016, surveyType == "Beat_Sheet") 
-lab16_vis = lab %>% filter(year == 2016, surveyType == "Visual") 
+lab16_vis = lab %>% filter(year == 2016, surveyType == "Visual")
+    
 
 #subset volunteer and lab data for same range of dates for each year
 #2015 is visual surveys, 2016 is beat sheet surveys
@@ -24,12 +25,19 @@ lab15_sub = filter(lab15, julianday <= 193 & julianday >= 147)
 lab16_bs_sub = filter(lab16_bs, julianday <= 193 & julianday >= 147)
 lab16_vis_sub = filter(lab16_vis, julianday <= 193 & julianday >= 147)
 
-#calculate relative number of arthropods in each set of surveys
-vol15_rel= vol15_sub %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(vol15_sub$count)))
-vol16_rel= vol16_sub %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(vol16_sub$count)))
-lab15_rel= lab15_sub %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab15_sub$count)))
-lab16_bs_rel= lab16_bs_sub %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab16_bs_sub$count)))
-lab16_vis_rel = lab16_vis_sub %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab16_vis_sub$count)))
+#remove arthropods not in the "bird food" category for relative arthropod barplots
+vol15_sub_bird = vol15_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
+vol16_sub_bird = vol16_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
+lab15_sub_bird = lab15_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
+lab16_vis_sub_bird = lab16_bs_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
+lab16_vis_sub_bird = lab16_vis_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
+
+#calculate relative number of arthropods in each set of surveys #check that this is the right way to do this
+vol15_rel= vol15_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(vol15_sub_bird$count)))
+vol16_rel= vol16_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(vol16_sub_bird$count)))
+lab15_rel= lab15_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab15_sub_bird$count)))
+lab16_bs_rel= lab16_bs_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab16_bs_sub_bird$count)))
+lab16_vis_rel = lab16_vis_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab16_vis_sub_bird$count)))
 
 #decide which arthropods to include in figures based on which are on 
 #the highest proportion of leaves in both visual and lab surveys
@@ -43,22 +51,38 @@ vis_arth_rank = lab16_vis_rel[order(lab16_vis_rel$proportion, decreasing = T),] 
 lab_rel = data.frame(left_join(bs_arth_rank, vis_arth_rank, by = "arthCode"))
 names(lab_rel) = c("arthCode", "bs", "vis")
 
-#group less common arthropods together for plotting 
-#decided on these because AUCH, DIPT, and COLE were in the top 5 most dense for beat sheets and visual, and also in "bird food", LEPL obviously necessary
-lab_rel$arthCode = ifelse(lab_rel$arthCode == "LEPL", "LEPL",
-                          ifelse(lab_rel$arthCode == "COLE", "COLE",
-                                 ifelse(lab_rel$arthCode == "AUCH", "AUCH",
-                                        ifelse(lab_rel$arthCode == "DIPT", "DIPT", "OTHR"))))
-
-lab_selected = lab_rel %>% group_by(arthCode) %>% summarize(vis = sum(vis), bs = sum(bs)) %>% data.frame()
-
 #merge relative arth numbers into one dataframe (for volunteer/lab comparison)
 rel = left_join(vol15_rel, vol16_rel, by = "arthCode")
 names(rel) = c("arthCode", "mean_vol15", "mean_vol16")
 rel1 = left_join(rel, lab15_rel, by = "arthCode")
 names(rel1) = c("arthCode", "mean_vol15", "mean_vol16", "mean_lab15")
-arth_rel = left_join(rel1, lab16_bs_rel, by = "arthCode")
+arth_rel = data.frame(left_join(rel1, lab16_bs_rel, by = "arthCode"))
 names(arth_rel) = c("arthCode", "mean_vol15", "mean_vol16", "mean_lab15", "mean_lab16_bs")
+
+#group less common "bird food" arthropods together for plotting 
+#decided on these because AUCH, DIPT, and COLE were in the top 5 most dense for beat sheets and visual, and also in "bird food", LEPL obviously necessary
+lab_rel$arthCode = ifelse(lab_rel$arthCode == "LEPL", "LEPL",
+                          ifelse(lab_rel$arthCode == "COLE", "COLE",
+                                 ifelse(lab_rel$arthCode == "AUCH", "AUCH",
+                                        ifelse(lab_rel$arthCode == "ARAN", "ARAN",
+                                               ifelse(lab_rel$arthCode == "ORTH", "ORTH",
+                                                   ifelse(lab_rel$arthCode == "DIPT", "DIPT", "OTHR"))))))
+
+lab_selected = lab_rel %>% group_by(arthCode) %>% summarize(vis = sum(vis), bs = sum(bs)) %>% data.frame()
+
+arth_rel$arthCode = ifelse(arth_rel$arthCode == "LEPL", "LEPL",
+                           ifelse(arth_rel$arthCode == "COLE", "COLE",
+                                  ifelse(arth_rel$arthCode == "AUCH", "AUCH",
+                                         ifelse(arth_rel$arthCode == "ARAN", "ARAN",
+                                                ifelse(arth_rel$arthCode == "ORTH", "ORTH",
+                                                  ifelse(arth_rel$arthCode == "DIPT", "DIPT", "OTHR"))))))
+arth_selected = arth_rel %>% group_by(arthCode) %>% summarize(vis_vol = sum(mean_vol15), vis_lab = sum(mean_lab15), bs_vol = sum(mean_vol16), bs_lab = sum(mean_lab16_bs)) %>% data.frame()
+arth_selected1 = arth_selected [,-1]
+rownames(arth_selected1) = arth_selected[,1]
+arth_selected_vis = select(arth_selected1, vis_vol, vis_lab)
+arth_selected_bs = select(arth_selected1, bs_vol, bs_lab)
+
+
 
 #find (# of surveys per day for each year/surveyor type)
 uniq_vol15 = data.frame(table(vol15_sub$julianday, vol15_sub$circle, vol15_sub$survey)) %>% filter(Freq > 0) 
@@ -80,14 +104,17 @@ lab16_bs_means= lab16_bs_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_co
 lab16_vis_means= lab16_vis_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_vis))
 
 #calculate mean number of each type of arthropods seen for visual surveys in the lab in 2016 by tree type (for figure 2)
-lab16_vis_trees = lab16_vis_sub %>% group_by(clean_plantSp, arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_vis))
+lab16_vis_trees = lab16_vis_sub_bird %>% group_by(clean_plantSp, arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_vis))
 
 #change less common arthropods into one "other" group for the tree species groups
 lab16_vis_trees$arthCode = ifelse(lab16_vis_trees$arthCode == "LEPL", "LEPL",
                           ifelse(lab16_vis_trees$arthCode == "COLE", "COLE",
                                  ifelse(lab16_vis_trees$arthCode == "AUCH", "AUCH",
-                                        ifelse(lab16_vis_trees$arthCode == "DIPT", "DIPT", "OTHR"))))
+                                        ifelse(lab16_vis_trees$arthCode == "ARAN", "ARAN",
+                                               ifelse(lab16_vis_trees$arthCode == "ORTH", "ORTH",
+                                        ifelse(lab16_vis_trees$arthCode == "DIPT", "DIPT", "OTHR"))))))
 lab16_vis_trees = data.frame(lab16_vis_trees)
+
 #calculate mean number of each type of arthropods seen by tree sp 
 trees_oth = lab16_vis_trees %>% group_by(clean_plantSp, arthCode) %>% summarize(vis = sum(mean_count))
 
@@ -114,23 +141,31 @@ names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #cha
 
 pdf('plots/Figure1_arthropods.pdf', height = 8, width = 11)
 
+arth_selected_bs1 = as.matrix(arth_selected_bs)
+arth_selected_vis1 = as.matrix(arth_selected_vis)
+
+par(mfrow = c(1, 1), mar = c(5, 5, 2, 2))
+barplot(arth_selected_bs1, legend = arth_selected$arthCode, las = 2, cex.names = .7, xlim = c(0,3.2),
+                 ylab = "Proportion Arthopods Seen")
+barplot(arth_selected_vis1, legend = arth_selected$arthCode, las = 2, cex.names = .7, xlim = c(0,3.2), 
+        ylab = "Proportion of Arthopods Seen")
 
 par(mfrow = c(2, 3), mar = c(5, 5, 2, 2))
 
 #figure 1
-lab_selected1 <- lab_selected[,-1]
-rownames(lab_selected1) <- lab_selected[,1]
+lab_selected1 = lab_selected[,-1]
+rownames(lab_selected1) = lab_selected[,1]
 lab_selected1 = as.matrix(lab_selected1) #create matrix w/o arth code?
 
-barplot(lab_selected1, legend = lab_selected$arthCode, las = 2, cex.names = .7, 
+barplot(lab_selected1, legend = lab_selected$arthCode, las = 2, cex.names = .7, xlim = c(0, 3.2),
         ylab = "Proportion of Arthopods Seen") #this needs to be cleaned up
 
 #figure 2 
 par(mar = c(6, 6, 2, 2))
-common_trees2 <- common_trees1[,-1]
-rownames(common_trees2) <- common_trees1[,1]
+common_trees2 = common_trees1[,-1]
+rownames(common_trees2) = common_trees1[,1]
 common_trees2 = as.matrix(common_trees2)
-barplot(common_trees2, legend = common_trees1$arthCode, las = 2, cex.names = .6, 
+barplot(common_trees2, legend = common_trees1$arthCode, las = 2, cex.names = .6, xlim = c(0, 6),
         ylab = "Arthropods per Survey") #this needs to be cleaned up
 
 #figure 3 (BS vs VIS) (here we're comparing different years)
