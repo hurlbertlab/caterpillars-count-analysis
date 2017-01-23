@@ -87,15 +87,15 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
   pre_temp_foreffort = subset(surveyData,
                               site %in% inputSite &
                                 year %in% inputYear)
-  temp_foreffort <- unique(pre_temp_foreffort[,c('survey', 'circle', 'date', 'site')])
+  temp_foreffort <- unique(pre_temp_foreffort[,c('survey', 'circle', 'date2', 'site')])
   
   # Create effort by day within function
-  effortByDay = data.frame(table(temp_foreffort[, c('site', 'date')]))
-  names(effortByDay) = c('site', 'date', 'numSurveys')
+  effortByDay = data.frame(table(temp_foreffort[, c('site', 'date2')]))
+  names(effortByDay) = c('site', 'date2', 'numSurveys')
   effortByDay = effortByDay[effortByDay$numSurveys!=0, ]
-  effortByDay$date = as.POSIXlt(effortByDay$date, format = "%Y-%m-%d")
-  effortByDay$julianday = yday(effortByDay$date)
-  tempyear <- substring(effortByDay$date, 1, 4)
+  effortByDay$date2 = as.POSIXlt(effortByDay$date2, format = "%Y-%m-%d")
+  effortByDay$julianday = yday(effortByDay$date2)
+  tempyear <- substring(effortByDay$date2, 1, 4)
   effortByDay$year = tempyear
   
   temp_effort = effortByDay
