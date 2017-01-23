@@ -45,6 +45,7 @@ surveys$survey = as.character(surveys$survey)
 
 # Fix a few missing dates (based on checking old MS Access database)
 surveys$date = as.character(as.POSIXlt(surveys$dateStart, format = "%Y-%m-%d %H:%M:%S"))
+surveys$date2 = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d"))
 surveys$date[surveys$surveyID %in% c(6497, 6499, 6501, 6502, 6503, 6504, 6507)] = "2011-06-05"
 surveys$date[surveys$surveyID == 9992] = "2011-06-01"
 surveys$date[surveys$site == 8892351 & surveys$dateStart == "0000-00-00 00:00:00"] = "2016-06-10"
@@ -56,7 +57,7 @@ surveys$survey = toupper(surveys$survey)
 orders2 = merge(surveys, orders, by = 'surveyID', sort = FALSE, all.x = TRUE)
 orders2$julianday = yday(orders2$date)
 
-orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
+orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date', 'date2', 'julianday',
                       'plantSp','herbivory','arthropod','length',
                       'count','notes.y','notes.x', 'surveyType', 'leafCount')]
 
@@ -88,7 +89,7 @@ arthcodes = read.csv('arth_codes.csv', header=T)
 arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
 names(arthcodes1) = c('arthCode', 'arthropod')
 cleandata <- merge(orders4, arthcodes1, by = 'arthropod', all.x = TRUE, sort = FALSE)
-cleandata <- cleandata[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','julianday',
+cleandata <- cleandata[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','date2', 'julianday',
                        'plantSp','herbivory','arthropod','arthCode','length',
                        'count','notes.y','notes.x', 'surveyType', 'leafCount')]
 cleandata <- cleandata[order(cleandata$date),]
