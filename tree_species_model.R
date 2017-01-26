@@ -50,13 +50,13 @@ trees_tri$plantSpecies = as.factor(trees_tri$plantSpecies)
 
 #merge tree sp with corrections with vis_tri
 vis_tri1 = merge(vis_tri, trees_tri, by.x= "loc_ID", by.y= "loc_ID", all.x=TRUE)
-vis_tri2 = dplyr::select(vis_tri1, -loc_ID, -clean_plantSp, -circle.y, -survey.y, -year.y, -siteID)
+vis_tri2 = dplyr::select(vis_tri1, -loc_ID, -clean_plantSp, -circle.y, -survey.y, -year.y, -siteID, -date)
 names(vis_tri2) = c("surveyID", "userID", "site", "survey", "circle", "date", "julianday", "plantSp", "herbivory", 
                     "arthropod", "arthCode", "length", "count", "notes.y", "notes.x", "surveyType", "leafCount", "wetLeaves", "year", 
                     "biomass", "clean_plantSp")
 
 #merge triangle surveys and appalachian surveys
-vis_app = cleandata.app[cleandata.app$surveyType=="Visual",]
+vis_app = cleandata.app %>% dplyr::filter(surveyType =="Visual") %>% dplyr::select(-date) %>% dplyr::rename(date = date2)
 vis = rbind(vis_tri2,vis_app)
 
 #add unique identifier column for surveys
