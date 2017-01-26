@@ -29,7 +29,7 @@ lab16_vis_sub = filter(lab16_vis, julianday <= 193 & julianday >= 147)
 vol15_sub_bird = vol15_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
 vol16_sub_bird = vol16_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
 lab15_sub_bird = lab15_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
-lab16_vis_sub_bird = lab16_bs_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
+lab16_bs_sub_bird = lab16_bs_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
 lab16_vis_sub_bird = lab16_vis_sub %>% filter(arthCode %in% c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA"))
 
 #calculate relative number of arthropods in each set of surveys #check that this is the right way to do this
@@ -45,7 +45,7 @@ lab16_bs_rel = data.frame(lab16_bs_rel)
 lab16_vis_rel = data.frame(lab16_vis_rel)
 bs_arth_rank = lab16_bs_rel[order(lab16_bs_rel$proportion, decreasing = T),] #can i use a forloop in this situation? how?
 vis_arth_rank = lab16_vis_rel[order(lab16_vis_rel$proportion, decreasing = T),] #can i use a forloop in this situation? how?
-#choosing to display COLE, DIPT, AUCH, all in the top 5 most commonly seen orders in both vis and bs, and in the "bird food" category, and LEPL
+#choosing to display top 5 most commonly seen orders in both vis and bs, and in the "bird food" category, and LEPL
 
 #merge lab vis and bs data for comparison of survey types within the lab, group arths not chosen for display into "other"
 lab_rel = data.frame(left_join(bs_arth_rank, vis_arth_rank, by = "arthCode"))
@@ -68,7 +68,7 @@ lab_rel$arthCode = ifelse(lab_rel$arthCode == "LEPL", "LEPL",
                                                ifelse(lab_rel$arthCode == "ORTH", "ORTH",
                                                    ifelse(lab_rel$arthCode == "DIPT", "DIPT", "OTHR"))))))
 
-lab_selected = lab_rel %>% group_by(arthCode) %>% summarize(vis = sum(vis), bs = sum(bs)) %>% data.frame()
+lab_selected = lab_rel %>% group_by(arthCode) %>% dplyr::summarize(vis = sum(vis), bs = sum(bs)) %>% data.frame()
 
 arth_rel$arthCode = ifelse(arth_rel$arthCode == "LEPL", "LEPL",
                            ifelse(arth_rel$arthCode == "COLE", "COLE",
@@ -76,7 +76,7 @@ arth_rel$arthCode = ifelse(arth_rel$arthCode == "LEPL", "LEPL",
                                          ifelse(arth_rel$arthCode == "ARAN", "ARAN",
                                                 ifelse(arth_rel$arthCode == "ORTH", "ORTH",
                                                   ifelse(arth_rel$arthCode == "DIPT", "DIPT", "OTHR"))))))
-arth_selected = arth_rel %>% group_by(arthCode) %>% summarize(vis_vol = sum(mean_vol15), vis_lab = sum(mean_lab15), bs_vol = sum(mean_vol16), bs_lab = sum(mean_lab16_bs)) %>% data.frame()
+arth_selected = arth_rel %>% group_by(arthCode) %>% dplyr::summarize(vis_vol = sum(mean_vol15), vis_lab = sum(mean_lab15), bs_vol = sum(mean_vol16), bs_lab = sum(mean_lab16_bs)) %>% data.frame()
 arth_selected1 = arth_selected [,-1]
 rownames(arth_selected1) = arth_selected[,1]
 arth_selected_vis = select(arth_selected1, vis_vol, vis_lab)
@@ -116,7 +116,7 @@ lab16_vis_trees$arthCode = ifelse(lab16_vis_trees$arthCode == "LEPL", "LEPL",
 lab16_vis_trees = data.frame(lab16_vis_trees)
 
 #calculate mean number of each type of arthropods seen by tree sp 
-trees_oth = lab16_vis_trees %>% group_by(clean_plantSp, arthCode) %>% summarize(vis = sum(mean_count))
+trees_oth = lab16_vis_trees %>% group_by(clean_plantSp, arthCode) %>% dplyr::summarize(vis = sum(mean_count))
 
 #only use 4 most common tree sp at PR (within 1-8) #sweet gum, common persimmon, box elder, chalk maple
 common_trees = trees_oth %>% filter(clean_plantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple")) 
@@ -141,26 +141,18 @@ names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #cha
 
 pdf('plots/Figure1_arthropods.pdf', height = 8, width = 11)
 
-arth_selected_bs1 = as.matrix(arth_selected_bs)
-arth_selected_vis1 = as.matrix(arth_selected_vis)
-
-par(mfrow = c(1, 1), mar = c(5, 5, 2, 2))
-barplot(arth_selected_bs1, legend = arth_selected$arthCode, las = 2, cex.names = .7, xlim = c(0,3.2),
-                 ylab = "Proportion Arthopods Seen")
-barplot(arth_selected_vis1, legend = arth_selected$arthCode, las = 2, cex.names = .7, xlim = c(0,3.2), 
-        ylab = "Proportion of Arthopods Seen")
 
 par(mfrow = c(2, 3), mar = c(5, 5, 2, 2))
 
-#figure 1
+#figure A
 lab_selected1 = lab_selected[,-1]
 rownames(lab_selected1) = lab_selected[,1]
 lab_selected1 = as.matrix(lab_selected1) #create matrix w/o arth code?
 
 barplot(lab_selected1, legend = lab_selected$arthCode, las = 2, cex.names = .7, xlim = c(0, 3.2),
-        ylab = "Proportion of Arthopods Seen") #this needs to be cleaned up
+        ylab = "Proportion of Arthopods Seen", las = .5) #this needs to be cleaned up
 
-#figure 2 
+#figure B
 par(mar = c(6, 6, 2, 2))
 common_trees2 = common_trees1[,-1]
 rownames(common_trees2) = common_trees1[,1]
@@ -168,7 +160,7 @@ common_trees2 = as.matrix(common_trees2)
 barplot(common_trees2, legend = common_trees1$arthCode, las = 2, cex.names = .6, xlim = c(0, 6),
         ylab = "Arthropods per Survey") #this needs to be cleaned up
 
-#figure 3 (BS vs VIS) (here we're comparing different years)
+#figure C (BS vs VIS) (here we're comparing different years)
 plot(arth_means$vol_vis, arth_means$vol_bs, las = 2, xlab = "Mean Arths per VIS",
         ylab = "Mean Arths per BS", col = "purple", pch = 20)
 volunteer =lm(vol_bs ~ vol_vis, data = arth_means)
@@ -178,7 +170,19 @@ laboratory = lm(lab_bs ~ lab_vis, data = arth_means)
 abline(laboratory, col = "blue", cex = 2)
 #legend
 
-#figure 4 (volunteers vs lab)
+#figure D
+arth_selected_bs1 = as.matrix(arth_selected_bs)
+arth_selected_vis1 = as.matrix(arth_selected_vis)
+
+barplot(arth_selected_vis1, legend = arth_selected$arthCode, las = 2, cex.names = .7, xlim = c(0,3.2), 
+        ylab = "Proportion of Arthopods Seen")
+
+#figure E
+par(mfrow = c(1, 1), mar = c(5, 5, 2, 2))
+barplot(arth_selected_bs1, legend = arth_selected$arthCode, las = 2, cex.names = .7, xlim = c(0,3.2),
+        ylab = "Proportion Arthopods Seen")
+
+#figure F (volunteers vs lab)
 plot(arth_means$lab_vis, arth_means$vol_vis, xlab = "Mean Arths per vol. survey ",
      ylab = "Mean Arths per lab survey", col = "pink", pch = 20) 
 visual =lm(vol_vis ~ lab_vis, data = arth_means)
