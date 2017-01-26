@@ -1,15 +1,15 @@
-setwd("~/Desktop/Lab")
+
 #all the number of leaves surveyed and when they were surveyed is the same across all years (4000 leaves every two weeks)
 #beech and sugar maple, but viburnum and striped maple were only surveyed 1996-1997
 #0s are not included in the dataset, so means aren't meaningful
-#
 
 #load libraries
 library(dplyr)
+
 #read in data
-btbw = read.csv('HubbardBrookData/BTBW_data_Dryad.csv', header=T, stringsAsFactors = F)
-dat = read.csv('HubbardBrookData/Copy of leps.csv', header=T, stringsAsFactors = F)
-singer = read.csv("SingerData/SingerData.csv", stringsAsFactors = F)
+btbw = read.csv('data/HubbardBrookData/BTBW_data_Dryad.csv', header=T, stringsAsFactors = F)
+dat = read.csv('data/HubbardBrookData/Copy of leps.csv', header=T, stringsAsFactors = F)
+singer = read.csv("data/SingerData.csv", stringsAsFactors = F)
 
 #source data
 source("tree_species_model.R")
@@ -68,6 +68,7 @@ south_relevant = cbind(south_ranks = rownames(south_relevant), south_relevant)
 # merge together the 3 data sets by tree species
 south_singer = left_join(south_relevant, singer_ranks, by = "ComName")
 all_ranks = south_singer %>% left_join(hubbard_ranks_sel, by = "ComName") 
+
 #create columns that allow for numeric plotting
 all_ranks$singer_cat = 1
 all_ranks$south_cat = 2
@@ -77,7 +78,11 @@ plot(all_ranks$south_cat, all_ranks$south_ranks, xlim = c(.2,3.6), ylim = c(0,6)
   text(all_ranks$singer_cat, as.numeric(all_ranks$singer_ranks)-3, labels = all_ranks$ComName, cex = .6)
   text(all_ranks$hubbard_cat, all_ranks$hubbard_ranks, labels = all_ranks$ComName, cex = .6)
 
-
-
+#number of sets of surveys conducted/year (says on website it should be 4-6 but this is not reflected in these counts) 
+hubbard_dates = dat %>% dplyr::select(date, year, plot) %>% dplyr::distinct() 
+plot1_dates = hubbard_dates %>% filter(plot == 1) %>% count(year) 
+plot2_dates = hubbard_dates %>% filter(plot == 2) %>% count(year) 
+plot3_dates = hubbard_dates %>% filter(plot == 3) %>% count(year) 
+plot4_dates = hubbard_dates %>% filter(plot == 4) %>% count(year) 
 
 
