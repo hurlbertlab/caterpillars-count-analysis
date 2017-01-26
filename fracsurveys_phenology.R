@@ -18,8 +18,8 @@ PR.LEPL15.sci = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' 
                                  xlim = c(130,207), ylim = c(0,.25), ylab = "Caterpillars", main = '2015 Visual')
 PR.LEPL15.cs = meanDensityByDay(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
-                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-legend("topright", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+legend("topright", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1, col = c('black', 'red'))
 legend("topleft", "A", bty="n")
 
 
@@ -30,8 +30,8 @@ PR.LEPL16.sci = meanDensityByDay(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_S
                                  xlim = c(130,207), ylim = c(0,.25), ylab = "", main = '2016 Beat Sheet')
 PR.LEPL16.cs = meanDensityByDay(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, 
-                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 legend("topleft", "B", bty="n")
 
 
@@ -42,8 +42,8 @@ PR.LEPL15.sci = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' 
                                  xlim = c(130,207), ylim = c(0,.4), ylab = "Orthopterans", main = '')
 PR.LEPL15.cs = meanDensityByDay(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "ORTH", inputYear = 2015, inputSite = 117, plot = T, 
-                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 legend("topleft", "C", bty="n")
 
 
@@ -54,8 +54,8 @@ PR.LEPL16.sci = meanDensityByDay(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_S
                                  xlim = c(130,207), ylim = c(0,.4), ylab = "", main = '')
 PR.LEPL16.cs = meanDensityByDay(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "ORTH", inputYear = 2016, inputSite = 117, plot = T, 
-                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 legend("topleft", "D", bty="n")
 
 
@@ -66,8 +66,8 @@ PR.BIRD15.sci = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' 
                                  xlim = c(130,207), ylim = c(0,.7), ylab = "Bird food", main = '')
 PR.BIRD15.cs = meanDensityByDay(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, 
-                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 legend("topleft", "E", bty="n")
 
 
@@ -78,8 +78,8 @@ PR.BIRDL16.sci = meanDensityByDay(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_
                                   xlim = c(130,207), ylim = c(0,.7), ylab = "", main = '')
 PR.BIRD16.cs = meanDensityByDay(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = multorders, inputYear = 2016, inputSite = 117, plot = T, 
-                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 legend("topleft", "F", bty="n")
 
 mtext("Fraction of surveys", side = 2, outer = TRUE, line = 2)
@@ -117,7 +117,7 @@ lines(130:207, p[3]*dnorm(130:207, p[1], p[2]), col = 'blue') # make sure it app
 PR.LEPL15.cs = meanDensityByDay(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2, lty = 2)
-legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 
 # Fit a normal curve using least squares
 gfit2 = fitG(PR.LEPL15.cs$julianday, PR.LEPL15.cs$fracSurveys, weighted.mean(PR.LEPL15.cs$julianday, PR.LEPL15.cs$fracSurveys),
@@ -373,7 +373,7 @@ PR.LEPL15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual'
 PR.LEPL15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 
 
 # Second panel
@@ -384,7 +384,7 @@ PR.LEPL16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_
 PR.LEPL16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 
 
 # Third panel
@@ -395,7 +395,7 @@ PR.LEPL15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual'
 PR.LEPL15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "ORTH", inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 
 
 # Fourth panel
@@ -406,7 +406,7 @@ PR.LEPL16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_
 PR.LEPL16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "ORTH", inputYear = 2016, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 
 
 # Fifth panel
@@ -417,7 +417,7 @@ PR.BIRD15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual'
 PR.BIRD15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 
 
 # Sixth panel
@@ -428,7 +428,7 @@ PR.BIRDL16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat
 PR.BIRD16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = multorders, inputYear = 2016, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 2)
-#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = c(1, 2))
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
 
 
 #----FIGURE 4 PHENOLOGY PLOT----
