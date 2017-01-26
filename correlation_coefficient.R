@@ -81,26 +81,31 @@ cordat <- data.frame(year = rep(c(2015,2016), times = 3),
 
 # Histograms of the times surveys were done
 
-vol15 = volunteer.pr[volunteer.pr$year == 2015,]
-hist(as.numeric(substr(vol15$date, 12, 13)))
-
-vol16 = volunteer.pr[volunteer.pr$year == 2016,]
-hist(as.numeric(substr(vol16$date, 12, 13)))
+par(mfrow = c(2,4), mar = c(4,4,3,2), oma = c(5,5,3,3))
 
 labvs15 = amsurvey.pr[amsurvey.pr$year == 2015,]
-hist(as.numeric(substr(labvs15$date, 12, 13)))
+hist(as.numeric(substr(labvs15$date, 12, 13)), xlab = 'Hour', main = 'Lab Visual 2015')
+
+vol15 = volunteer.pr[volunteer.pr$year == 2015,]
+hist(as.numeric(substr(vol15$date, 12, 13)), xlab = 'Hour', main = 'Vol Visual 2015')
 
 labbs15 = beatsheet.pr[beatsheet.pr$year == 2015,]
-hist(as.numeric(substr(labbs15$date, 12, 13)))
+hist(as.numeric(substr(labbs15$date, 12, 13)), xlab = 'Hour', main = 'Lab BS 2015')
 
 labpm15 = pmsurvey.pr[pmsurvey.pr$year == 2015,]
-hist(as.numeric(substr(labpm15$date, 12, 13)))
+hist(as.numeric(substr(labpm15$date, 12, 13)), xlab = 'Hour', main = 'Lab PM 2015')
 
 labvs16 = labdata.pr[labdata.pr$year == 2016 & labdata.pr$surveyType == 'Visual',]
-hist(as.numeric(substr(labvs16$date, 12, 13)))
+hist(as.numeric(substr(labvs16$date, 12, 13)), xlab = 'Hour', main = 'Lab Visual 2016')
+
+vol16 = volunteer.pr[volunteer.pr$year == 2016,]
+hist(as.numeric(substr(vol16$date, 12, 13)), xlab = 'Hour', main = 'Vol BS 2016')
 
 labbs16 = beatsheet.pr[beatsheet.pr$year == 2016,]
-hist(as.numeric(substr(labbs16$date, 12, 13)))
+hist(as.numeric(substr(labbs16$date, 12, 13)), xlab = 'Hour', main = 'Lab BS 2016')
+
+
+
 
 
 # Checking how similar pm lab is to am lab (2015)
