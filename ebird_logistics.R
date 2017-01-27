@@ -2,6 +2,8 @@ library(lubridate)
 
 setwd('c:/users/hayeste/my documents/495/eBird/NC')
 
+library(stringr)
+
 nc_ebird <- read.table(file = 'nc_ebird.txt', header = TRUE, sep = '\t', fill = TRUE, quote = '') 
 # once I decide on a resolution I won't have to read in this whole file
 nc_ebird_sub <- nc_ebird[,c(1,3,4,5,8,10,14,20,23,24,25,26)]
@@ -52,7 +54,7 @@ bg_ebird = subset(nc_ebird_sub, lat >= BGquad[4,2] & lat <= BGquad[2,2] &
 
 
   
-# Based on Hurlbert-Liang logistic script:
+# Based on Hurlbert-Liang filtered_logistics script:
 
 effort.by.day = aggregate(pr_ebird$lat_long, list(pr_ebird$year, pr_ebird$julianday), function(x) length(unique(x)))
 names(effort.by.day)=c('year','julianday','num_unique_locs')            #number of unique locs in sampling per day
@@ -61,15 +63,23 @@ temp.data1 = merge(effort.by.day,as.data.frame(window.days),by.x='julianday',by.
 temp.data1[is.na(temp.data1$num_unique_locs),'num_unique_locs'] = 0
 
 #observations
-pr_ebird[is.na(t.obs.NA1s$Observation.Count)==T,'Observation.Count'] = 1                                    #give all the ones without obs counts a value of 1
-combos = do.call('paste', t.obs.NA1s[c('Scientific.Name','Latitude','Longitude','Year','JulianDay')])         #paste these columns together
-max.by.siteday = aggregate(t.obs.NA1s$Observation.Count, by=list(combos), function(x) max(x))                 #take the max observation count 
-max.by.siteday.split = as.data.frame(matrix(unlist(strsplit(max.by.siteday$Group.1, " ")), ncol=6, byrow=T))  #unsplit them
-MAX.by.siteday.split = data.frame(do.call('paste', max.by.siteday.split[c('V1','V2')]), do.call('paste',max.by.siteday.split[c('V3','V4')]), max.by.siteday.split$V3, max.by.siteday.split$V4, max.by.siteday.split$V5, max.by.siteday.split$V6)
-pre.max.by.siteday = cbind(MAX.by.siteday.split, max.by.siteday$x)         
-names(pre.max.by.siteday) = c('Scientific.Name','Lat.Long','Latitude','Longitude','Year','JulianDay','Observation.Count')     #<-Added in Lat and Long separately too
-pre.max.by.siteday[,'Year'] = as.numeric(as.character(pre.max.by.siteday[,'Year']))
-pre.max.by.siteday[,'JulianDay'] = as.numeric(as.character(pre.max.by.siteday[,'JulianDay']))
-sorted.max.by.siteday = pre.max.by.siteday[order(pre.max.by.siteday$Scientific.Name, pre.max.by.siteday$Year, pre.max.by.siteday$JulianDay),]         #<-Now with Lat.Long added in.
+pr_ebird[pr_ebird$count == 'X',]$count = 1 # if count = x, still present, changing to 1
+pr_ebird$count = as.numeric(pr_ebird$count) # change from being a factor
+pr_ebird[is.na(pr_ebird$count)==T,'count'] = 1 #give all the ones without obs counts a value of 1 (don't think this is in my data)
+
+combos = do.call('paste', pr_ebird[c('scientific_name','lat','long','year','julianday')]) #paste these columns together
+max.by.siteday = aggregate(pr_ebird$count, by=list(combos), FUN = max) #take the max observation count (shortens list since by day)
+
+max.by.siteday.split = data.frame(str_split_fixed(max.by.siteday$Group.1, " ", 6)) # split rows back
+max.by.siteday.split$X7 = paste(max.by.siteday.split$X1, max.by.siteday.split$X2, sep = ' ') # create sci name column
+max.by.siteday.split$X8 = paste(max.by.siteday.split$X3, max.by.siteday.split$X4, sep = ' ') # create long lat column
+max.by.siteday.split = max.by.siteday.split[, c('X7', 'X8', 'X3', 'X4', 'X5', 'X6')]
+
+max.by.siteday.final = cbind(max.by.siteday.split, max.by.siteday$x)         
+names(max.by.siteday.final) = c('scientific_name','lat_long','lat','long','year','julianday','count')     #<-Added in Lat and Long separately too
+max.by.siteday.final[,'year'] = as.numeric(as.character(max.by.siteday.final[,'year']))
+max.by.siteday.final[,'julianday'] = as.numeric(as.character(max.by.siteday.final[,'julianday']))
+# NAs introduced by coercion??
+sorted.max.by.siteday = max.by.siteday.final[order(max.by.siteday.final$scientific_name, max.by.siteday.final$year, max.by.siteday.final$julianday),]         #<-Now with Lat.Long added in.
 
 
