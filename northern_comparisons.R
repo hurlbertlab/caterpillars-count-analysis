@@ -1,4 +1,3 @@
-
 #all the number of leaves surveyed and when they were surveyed is the same across all years (4000 leaves every two weeks)
 #beech and sugar maple, but viburnum and striped maple were only surveyed 1996-1997
 #0s are not included in the dataset, so means aren't meaningful
@@ -26,13 +25,36 @@ singer$hostplantspecies = gsub("Hammamelis virginiana", "Hamamelis virginiana", 
 plant_codes1 = dplyr::rename(plant_codes, hostplantspecies = TreeSciName)
 singer1 = singer %>% left_join(plant_codes1, by = "hostplantspecies") %>% select(-TreeCode, -Notes)
 
-#remove data from 1994 because it had far more caterpillars than any other year
-dat1 = dplyr::filter(dat, year!="1994")
+#remove data from 1994 (because it had far more caterpillars than any other year) & 1996 & 1997 b/c they only have 1 plot
+goodyears = c("1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1995")
+dat1 = dplyr::filter(dat, year %in% goodyears)
+
+#number of sets of surveys conducted/year (says on website it should be 4-6 but this is not reflected in these counts) 
+hubbard_dates = dat %>% dplyr::select(date, year, plot) %>% dplyr::distinct() 
+plot1_dates = hubbard_dates %>% dplyr::filter(plot == 1) %>% dplyr::count(year) 
+plot2_dates = hubbard_dates %>% dplyr::filter(plot == 2) %>% dplyr::count(year) 
+plot3_dates = hubbard_dates %>% dplyr::filter(plot == 3) %>% dplyr::count(year) 
+plot4_dates = hubbard_dates %>% dplyr::filter(plot == 4) %>% dplyr::count(year) 
+
+#check out weird years/plots
+two_92 = dat %>% dplyr::filter(year == 1992 & plot == 2)
+three_89 = dat %>% dplyr::filter(year == 1989 & plot == 3) #only 6 dates, one is left over
+four_89 = dat %>% dplyr::filter(year == 1989 & plot == 4)
+
+unique_hub = data.frame(table(dat %>% dplyr::select(year, yearday, plot, count, grid.letter))) 
+unique_hub1 = dplyr::filter(unique_hub, Freq > 0)
+
+# calculate total # of leaves surveyed for each tree species over the course of all years we are looking at
+unique_hub = dplyr::filter(data.frame(table(dat %>% dplyr:: select (year, plot, count))), Freq > 0)
+numvisits = unique_hub %>% dplyr::count(year, plot)
+numvisits$visits = numvisits$n*80 #number of visits in that plot in that year times the number of surveys/visit (4000 leaves surveyed/visit = 80 x 50 leaf surveys)
+total_surveys = numvisits %>% dplyr::summarize(sum_visits = sum(visits)) %>% dplyr::filter(year %in% goodyears) %>% dplyr::summarize(sum(sum_visits)) 
+total_surveys1 = 15040 #needs to be automated
 
 #global means for normal years (beech and sugar maple) #are there the same number of beech and sugar maple trees? or is there metadata?
 #same number of beech and sugar maple
 sumbysp = dat1 %>% group_by(tree.name) %>% 
-  dplyr::summarize(sum_count = sum(number.lep), biomass = sum(lepbio.mass.mg.)) 
+  dplyr::summarize(sum_count = sum(number.lep)/total_surveys1, biomass = sum(lepbio.mass.mg.)/total_surveys1) 
 hubbard_ranks = sumbysp[order(sumbysp$sum_count, decreasing = T),]
 hubbard_ranks_sel = hubbard_ranks %>% dplyr::rename(ComName = tree.name) %>% filter(ComName %in% c("Sugar maple", "American beech"))
 hubbard_ranks_sel = cbind(hubbard_ranks = rownames(hubbard_ranks_sel), hubbard_ranks_sel)
@@ -77,12 +99,5 @@ plot(all_ranks$south_cat, all_ranks$south_ranks, xlim = c(.2,3.6), ylim = c(0,6)
   text(all_ranks$south_cat, all_ranks$south_ranks, labels = all_ranks$ComName, cex = .6)
   text(all_ranks$singer_cat, as.numeric(all_ranks$singer_ranks)-3, labels = all_ranks$ComName, cex = .6)
   text(all_ranks$hubbard_cat, all_ranks$hubbard_ranks, labels = all_ranks$ComName, cex = .6)
-
-#number of sets of surveys conducted/year (says on website it should be 4-6 but this is not reflected in these counts) 
-hubbard_dates = dat %>% dplyr::select(date, year, plot) %>% dplyr::distinct() 
-plot1_dates = hubbard_dates %>% filter(plot == 1) %>% count(year) 
-plot2_dates = hubbard_dates %>% filter(plot == 2) %>% count(year) 
-plot3_dates = hubbard_dates %>% filter(plot == 3) %>% count(year) 
-plot4_dates = hubbard_dates %>% filter(plot == 4) %>% count(year) 
 
 
