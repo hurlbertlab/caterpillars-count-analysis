@@ -4,7 +4,6 @@
 # phpMyAdmin project site.
 
 # Load required libraries
-library(plyr)
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -108,16 +107,20 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
     temp3$totalBiomass = 0
 
   } else if (nrow(temp) > 0 & !byTreeSpecies) {
-    temp2 = ddply(temp, .(site, julianday, year), summarize, 
-                  totalCount = sum(count, na.rm = T), numSurveysGTzero = length(unique(surveyID[count > 0])), 
-                  totalBiomass = sum(biomass, na.rm = T))
+    temp2 = temp %>%
+      group_by(site, julianday, year) %>%
+      summarize(totalCount = sum(count, na.rm = T), 
+                numSurveysGTzero = length(unique(surveyID[count > 0])), 
+                totalBiomass = sum(biomass, na.rm = T))
     temp3 = merge(temp_effort[,c('site','numSurveys','julianday','year')], temp2, 
                   by = c('julianday', 'site', 'year'), all.x = T) 
 
   } else if (nrow(temp) > 0 & byTreeSpecies) {
-    temp2 = ddply(temp, .(site, julianday, year, clean_plantSp), summarize, 
-                  totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])), 
-                  totalBiomass = sum(biomass))
+    temp2 = temp %>%
+      group_by(site, julianday, year, clean_plantSp) %>%
+      summarize(totalCount = sum(count), 
+                numSurveysGTzero = length(unique(surveyID[count > 0])), 
+                totalBiomass = sum(biomass))
     temp3 = merge(temp_effort[,c('site','numSurveys','julianday','year')], temp2, 
                   by = c('julianday', 'site', 'year'), all.x = T)
   }  

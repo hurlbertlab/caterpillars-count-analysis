@@ -11,7 +11,7 @@
 #             each survey event
 
 # Load required libraries
-library(plyr)
+
 library(dplyr)
 library(lubridate)
 library(stringr)
