@@ -53,10 +53,10 @@ total_surveys1 = 15040 #needs to be automated
 
 #global means for normal years (beech and sugar maple) #are there the same number of beech and sugar maple trees? or is there metadata?
 #same number of beech and sugar maple
-sumbysp = dat1 %>% group_by(tree.name) %>% 
+hubbard_means = dat1 %>% dplyr::rename(ComName = tree.name) %>% group_by(ComName) %>% 
   dplyr::summarize(sum_count = sum(number.lep)/total_surveys1, biomass = sum(lepbio.mass.mg.)/total_surveys1) 
-hubbard_ranks = sumbysp[order(sumbysp$sum_count, decreasing = T),]
-hubbard_ranks_sel = hubbard_ranks %>% dplyr::rename(ComName = tree.name) %>% filter(ComName %in% c("Sugar maple", "American beech"))
+hubbard_ranks = hubbard_means[order(hubbard_means$sum_count, decreasing = T),]
+hubbard_ranks_sel = hubbard_ranks %>% filter(ComName %in% c("Sugar maple", "American beech"))
 hubbard_ranks_sel = cbind(hubbard_ranks = rownames(hubbard_ranks_sel), hubbard_ranks_sel)
 
 #subset dataset to only include 96/97 data to see if there is effect on beech and sugar maple amounts
@@ -69,7 +69,9 @@ surveysct = data.frame(table(surveys)) %>% filter(Freq>0)
 
 #Find patterns in Singer Data 
 #include only trees without a treatment
+
 singer_means = singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(generalist.density.m2)) 
+singer_means$ComName = gsub("Northern red oak", "Red oak", singer_means$ComName)
 singer_ranks = singer_means[order(singer_means$mean_cat_dens, decreasing = T),]
 singer_ranks = cbind(singer_ranks = rownames(singer_ranks), singer_ranks)
 singer_ranks$ComName = gsub("Northern red oak", "Red oak", singer_ranks$ComName)
@@ -77,27 +79,87 @@ singer_ranks$ComName = gsub("Northern red oak", "Red oak", singer_ranks$ComName)
 #CC & Appalachian data
 #add column with just caterpillar data
 vis$cats_count = ifelse(vis$arthCode == "LEPL", vis$count, 0)
+vis_tri2$cats_count = ifelse(vis_tri2$arthCode == "LEPL", vis_tri2$count, 0)
+vis_app$cats_count = ifelse(vis_app$arthCode == "LEPL", vis_app$count, 0)
 
-#group by unique surveys and summarize by caterpillar density
+#add column with caterpillars > 10
+vis$cats_count_10 = ifelse(vis$arthCode == "LEPL" & vis$length >= 10, vis$count, 0)
+vis_tri2$cats_count_10 = ifelse(vis_tri2$arthCode == "LEPL" & vis_tri2$length >= 10, vis_tri2$count, 0)
+vis_app$cats_count_10 = ifelse(vis_app$arthCode == "LEPL" & vis_app$length >= 10, vis_app$count, 0) # this is just spitting out the same result as w/o the length
+
+# all southern surveys together group by unique surveys and summarize by caterpillar density
 #vis_norm = filter(vis, cats_count <= 5) #use if you want to exclude big colonies
-south_means = vis %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count))
+south_means = vis %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 south_ranks = south_means[order(south_means$mean_cat_dens, decreasing = T),]
 south_relevant = filter(south_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple"))
 south_relevant = cbind(south_ranks = rownames(south_relevant), south_relevant)
 
+#triangle surveys group by unique surveys and summarize by caterpillar density
+tri_means = vis_tri2 %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
+tri_ranks = tri_means[order(tri_means$mean_cat_dens, decreasing = T),]
+tri_relevant = data.frame(filter(tri_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple")))
+tri_relevant = cbind(tri_ranks = rownames(tri_relevant), tri_relevant)
+tri_relevant$tri_ranks = as.character(tri_relevant$tri_ranks)
+
+#appalachian surveys broken down into middle appalachia (VA) and southern appalachia(NC, TN, SC, GA)
+va_means = vis_app %>% filter(grepl("88", site)) %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
+va_ranks = va_means[order(va_means$mean_cat_dens, decreasing = T),]
+va_relevant = data.frame(filter(va_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple")))
+va_relevant = cbind(va_ranks = rownames(va_relevant), va_relevant)
+va_relevant$va_ranks = as.character(va_relevant$va_ranks)
+
+sa_means = vis_app %>% filter(!grepl("88", site)) %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
+sa_ranks = sa_means[order(sa_means$mean_cat_dens, decreasing = T),]
+sa_relevant = filter(sa_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple"))
+sa_relevant = cbind(sa_ranks = rownames(sa_relevant), sa_relevant)
+sa_relevant$sa_ranks = as.character(sa_relevant$sa_ranks)
+
 # Visualize rankings #double check rankings for hubbard brook
 # convert rownames (ranking numbers) to a column (y-axis of figure)
 # merge together the 3 data sets by tree species
-south_singer = left_join(south_relevant, singer_ranks, by = "ComName")
-all_ranks = south_singer %>% left_join(hubbard_ranks_sel, by = "ComName") 
+all_ranks = south_relevant %>% left_join(singer_ranks, by = "ComName") %>% left_join(hubbard_ranks_sel, by = "ComName") %>% left_join(tri_relevant,  by = "ComName") %>% left_join(va_relevant,  by = "ComName") %>% left_join(sa_relevant,  by = "ComName")
+
 
 #create columns that allow for numeric plotting
 all_ranks$singer_cat = 1
-all_ranks$south_cat = 2
-all_ranks$hubbard_cat = 3
-plot(all_ranks$south_cat, all_ranks$south_ranks, xlim = c(.2,3.6), ylim = c(0,6), type = "n", xlab = "Location", ylab = "Relative Rank of Caterpillar Abund.") # needs work
-  text(all_ranks$south_cat, all_ranks$south_ranks, labels = all_ranks$ComName, cex = .6)
+all_ranks$tri_cat = 2
+all_ranks$va_cat = 3 
+all_ranks$sa_cat = 4
+all_ranks$hubbard_cat = 5
+plot(all_ranks$singer_cat, all_ranks$singer_ranks, xlim = c(.2,3.6), ylim = c(0,6), type = "n", xlab = "Location", ylab = "Relative Rank of Caterpillar Abund.") # needs work
   text(all_ranks$singer_cat, as.numeric(all_ranks$singer_ranks)-3, labels = all_ranks$ComName, cex = .6)
+  text(all_ranks$tri_cat, all_ranks$tri_ranks, labels = all_ranks$ComName, cex = .6)
+  text(all_ranks$va_cat, all_ranks$va_ranks, labels = all_ranks$ComName, cex = .6)
+  text(all_ranks$sa_cat, all_ranks$sa_ranks, labels = all_ranks$ComName, cex = .6)
   text(all_ranks$hubbard_cat, all_ranks$hubbard_ranks, labels = all_ranks$ComName, cex = .6)
+
+#--------------------------variance partitioning analysis of tree sp and site on caterpillar density----------------
+means1 = merge(va_means, sa_means, by = "ComName") 
+means1_r = rename(means1,va_cat = mean_cat_dens.x, sa_cat = mean_cat_dens.y)
+means2 = merge(means1_r, tri_means, by = "ComName", all.x = T)
+means2_r = rename(means2, tri_cat = mean_cat_dens)
+means3 = merge(means2_r, singer_means, all.x = T)
+means3_r = rename(means3, singer_cat = mean_cat_dens)
+means4 = merge(means3_r, hubbard_means, all.x = T)
+all_means = means4 %>% rename(hubbard_cat = sum_count) %>% select(-biomass)
+
+all_means_site = tidyr::gather(all_means, site,  mean_cat, va_cat, sa_cat, tri_cat, singer_cat, hubbard_cat)
+
+#linear models
+lm.site = lm(mean_cat ~ site, data = all_means_site)
+lm.species = lm(mean_cat ~ ComName, data = all_means_site) #what does it mean that the adjusted r2 is nothing?
+lm.site.species = lm(mean_cat ~ site + ComName, data = all_means_site)
+
+#variance partitioning
+#a = variance uniquely explained by site
+#b = variance explained by site and species together
+#c = variance uniquely explained by species
+#d = variance explained by neither
+
+a = summary(lm.site.species)$r.squared - summary(lm.species)$r.squared
+b = summary(lm.site)$r.squared - a
+c = summary(lm.site.species)$r.squared - summary(lm.site)$r.squared
+d = 1-summary(lm.site.species)$r.squared
+
 
 

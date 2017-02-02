@@ -6,11 +6,16 @@ library(agricolae)
 library(tidyr)
 library(dplyr)
 
+
+
 #read in data
-all_surveyTrees = read.csv("data/tbl_surveyTrees.csv", header=T)
+all_surveyTrees = read.csv("data/tbl_surveyTrees.csv", header=F)
 leaf_app = read.table("data/LeafAreaDatabase_20131126.txt", header=T, sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE)
 leaf_tri = read.table("data/LeafPhotoAreaDatabase_CC.txt", header=T, sep= '\t', quote="\"", fill = T)     #this is only a small subset of leaf area for the triangle for the most common trees
 plant_codes = read.csv("USA&AppalachianTrees_2016.csv", stringsAsFactors = F, header=T)
+
+#organizes column headers
+names(all_surveyTrees) = c("siteID", "circle", "survey", "plantSpecies")
 
 #Create 1 dataset with all data from PR/NCBG 2015 & 2016
 lab.triangle = rbind(labdata.pr, labdata.bg)
