@@ -1,13 +1,98 @@
-# Phenology plots
+# Phenology plots - comparing cit sci to trained sci [for overall paper], only Prairie Ridge
 # Included in 495 paper (Fall 2016)
-# Need volunteer beat sheet data from 2016
 # This script is a mess- ORGANIZE
+# DO BY WEEK
 
 setwd('c:/git/caterpillars-count-analysis')
 source("data_cleaning.r")
 
-par(mfrow = c(3,2), mar = c(3,4,3,2), oma = c(5,5,3,3))
+par(mfrow = c(3,2), mar = c(2,3,2,2), oma = c(5,5,3,3))
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
+
+#----PHENOLOGY PLOT for paper, by week----
+
+# First panel
+PR.LEPL15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
+                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
+                                 plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
+                                 xlim = c(20,30), ylim = c(0,.25), ylab = "Caterpillars", main = '2015 Visual')
+PR.LEPL15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
+                                ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topright", c('trained', 'citizen'), lwd = 2, lty = 1, col = c('black', 'red'))
+legend("topleft", "A", bty="n")
+LEPL15 = merge(PR.LEPL15.sci[,c('fracSurveys', 'week')], PR.LEPL15.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
+legend('topright', legend = c(paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL15$fracSurveys.y), 2))), bty="n")
+
+
+# Second panel
+PR.LEPL16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_Sheet' & beatsheet.pr$julianday %in% c(134:204),], 
+                                 ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, 
+                                 plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
+                                 xlim = c(20,30), ylim = c(0,.25), ylab = "", main = '2016 Beat Sheet')
+PR.LEPL16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
+                                ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, 
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
+legend("topleft", "B", bty="n")
+LEPL16 = merge(PR.LEPL16.sci[,c('fracSurveys', 'week')], PR.LEPL16.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
+legend('topright', legend = c(paste("r =", round(cor(LEPL16$fracSurveys.x, LEPL16$fracSurveys.y), 2))), bty="n")
+
+
+# Third panel
+PR.ORTH15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
+                                 ordersToInclude = "ORTH", inputYear = 2015, inputSite = 117, plot = T, 
+                                 plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
+                                 xlim = c(20,30), ylim = c(0,.4), ylab = "Orthopterans", main = '')
+PR.ORTH15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
+                                ordersToInclude = "ORTH", inputYear = 2015, inputSite = 117, plot = T, 
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
+legend("topleft", "C", bty="n")
+ORTH15 = merge(PR.ORTH15.sci[,c('fracSurveys', 'week')], PR.ORTH15.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
+legend('topright', legend = c(paste("r =", round(cor(ORTH15$fracSurveys.x, ORTH15$fracSurveys.y), 2))), bty="n")
+
+# Fourth panel
+PR.ORTH16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_Sheet' & beatsheet.pr$julianday %in% c(134:204),], 
+                                 ordersToInclude = "ORTH", inputYear = 2016, inputSite = 117, plot = T, 
+                                 plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
+                                 xlim = c(20,30), ylim = c(0,.4), ylab = "", main = '')
+PR.ORTH16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
+                                ordersToInclude = "ORTH", inputYear = 2016, inputSite = 117, plot = T, 
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
+legend("topleft", "D", bty="n")
+ORTH16 = merge(PR.ORTH16.sci[,c('fracSurveys', 'week')], PR.ORTH16.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
+legend('topright', legend = c(paste("r =", round(cor(ORTH16$fracSurveys.x, ORTH16$fracSurveys.y), 2))), bty="n")
+
+# Fifth panel
+PR.BIRD15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
+                                 ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, 
+                                 plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
+                                 xlim = c(20,30), ylim = c(0,.7), ylab = "Bird food", main = '')
+PR.BIRD15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
+                                ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, 
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
+legend("topleft", "E", bty="n")
+BIRD15 = merge(PR.BIRD15.sci[,c('fracSurveys', 'week')], PR.BIRD15.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
+legend('topright', legend = c(paste("r =", round(cor(BIRD15$fracSurveys.x, BIRD15$fracSurveys.y), 2))), bty="n")
+
+# Sixth panel
+PR.BIRD16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_Sheet' & beatsheet.pr$julianday %in% c(134:204),], 
+                                  ordersToInclude = multorders, inputYear = 2016, inputSite = 117, plot = T, 
+                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
+                                  xlim = c(20,30), ylim = c(0,.7), ylab = "", main = '')
+PR.BIRD16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
+                                ordersToInclude = multorders, inputYear = 2016, inputSite = 117, plot = T, 
+                                plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'red')
+#legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
+legend("topleft", "F", bty="n")
+BIRD16 = merge(PR.BIRD16.sci[,c('fracSurveys', 'week')], PR.BIRD16.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
+legend('topright', legend = c(paste("r =", round(cor(BIRD16$fracSurveys.x, BIRD16$fracSurveys.y), 2))), bty="n")
+
+mtext("Fraction of surveys", side = 2, outer = TRUE, line = 2)
+mtext("Week", side = 1, outer = TRUE, line = 2)
 
 #----FIGURE 3 PHENOLOGY PLOT *used in paper*, fraction of surveys----
 
