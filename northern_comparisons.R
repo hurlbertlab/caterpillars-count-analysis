@@ -82,28 +82,33 @@ vis$cats_count = ifelse(vis$arthCode == "LEPL", vis$count, 0)
 vis_tri2$cats_count = ifelse(vis_tri2$arthCode == "LEPL", vis_tri2$count, 0)
 vis_app$cats_count = ifelse(vis_app$arthCode == "LEPL", vis_app$count, 0)
 
+#add column with caterpillars > 10
+vis$cats_count_10 = ifelse(vis$arthCode == "LEPL" & vis$length >= 10, vis$count, 0)
+vis_tri2$cats_count_10 = ifelse(vis_tri2$arthCode == "LEPL" & vis_tri2$length >= 10, vis_tri2$count, 0)
+vis_app$cats_count_10 = ifelse(vis_app$arthCode == "LEPL" & vis_app$length >= 10, vis_app$count, 0) # this is just spitting out the same result as w/o the length
+
 # all southern surveys together group by unique surveys and summarize by caterpillar density
 #vis_norm = filter(vis, cats_count <= 5) #use if you want to exclude big colonies
-south_means = vis %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count))
+south_means = vis %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 south_ranks = south_means[order(south_means$mean_cat_dens, decreasing = T),]
 south_relevant = filter(south_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple"))
 south_relevant = cbind(south_ranks = rownames(south_relevant), south_relevant)
 
 #triangle surveys group by unique surveys and summarize by caterpillar density
-tri_means = vis_tri2 %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count))
+tri_means = vis_tri2 %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 tri_ranks = tri_means[order(tri_means$mean_cat_dens, decreasing = T),]
 tri_relevant = data.frame(filter(tri_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple")))
 tri_relevant = cbind(tri_ranks = rownames(tri_relevant), tri_relevant)
 tri_relevant$tri_ranks = as.character(tri_relevant$tri_ranks)
 
 #appalachian surveys broken down into middle appalachia (VA) and southern appalachia(NC, TN, SC, GA)
-va_means = vis_app %>% filter(grepl("88", site)) %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count))
+va_means = vis_app %>% filter(grepl("88", site)) %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 va_ranks = va_means[order(va_means$mean_cat_dens, decreasing = T),]
 va_relevant = data.frame(filter(va_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple")))
 va_relevant = cbind(va_ranks = rownames(va_relevant), va_relevant)
 va_relevant$va_ranks = as.character(va_relevant$va_ranks)
 
-sa_means = vis_app %>% filter(!grepl("88", site)) %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count))
+sa_means = vis_app %>% filter(!grepl("88", site)) %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 sa_ranks = sa_means[order(sa_means$mean_cat_dens, decreasing = T),]
 sa_relevant = filter(sa_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple"))
 sa_relevant = cbind(sa_ranks = rownames(sa_relevant), sa_relevant)
@@ -138,7 +143,7 @@ means3_r = rename(means3, singer_cat = mean_cat_dens)
 means4 = merge(means3_r, hubbard_means, all.x = T)
 all_means = means4 %>% rename(hubbard_cat = sum_count) %>% select(-biomass)
 
-all_means_site = dplyr::gather(all_means, site,  mean_cat, va_cat, sa_cat, tri_cat, singer_cat, hubbard_cat)
+all_means_site = tidyr::gather(all_means, site,  mean_cat, va_cat, sa_cat, tri_cat, singer_cat, hubbard_cat)
 
 #linear models
 lm.site = lm(mean_cat ~ site, data = all_means_site)
@@ -148,9 +153,8 @@ lm.site.species = lm(mean_cat ~ site + ComName, data = all_means_site)
 #variance partitioning
 #a = variance uniquely explained by site
 #b = variance explained by site and species together
-#c = variance uniquely explained by site and species
+#c = variance uniquely explained by species
 #d = variance explained by neither
-
 
 a = summary(lm.site.species)$r.squared - summary(lm.species)$r.squared
 b = summary(lm.site)$r.squared - a
