@@ -1,4 +1,5 @@
 # eBird data for Caterpillars Count! Project
+# Reading in, subsetting, cleaning and organizing data
 
 # Downloaded from eBird Sept. 22, 2016
 # Files include all data from 2006 to 2016 in NC (Prairie Ridge, Botanical Garden) 
@@ -6,25 +7,29 @@
 
 library(lubridate)
 
-setwd('c:/users/hayeste/my documents/495/eBird/NC')
-
 # ---- Read in files and clean ----
 
+setwd('c:/users/hayeste/my documents/495/eBird/NC')
+
 nc_ebird <- read.table(file = 'nc_ebird.txt', header = TRUE, sep = '\t', fill = TRUE, quote = '')
-nc_ebird_sub <- nc_ebird[,c(3,4,5,8,10,14,20,23,24,25,26)]
-names(nc_ebird_sub) <- c('category', 'common_name', 'scientific_name', 'count', 'age_sex', 
+nc_ebird_sub <- nc_ebird[,c(1,3,4,5,8,10,14,20,23,24,25,26)]
+names(nc_ebird_sub) <- c('identifier', 'category', 'common_name', 'scientific_name', 'count', 'age_sex', 
                          'state', 'locality', 'lat', 'long', 'date', 'time')
 nc_ebird_sub$scientific_name <- as.character(nc_ebird_sub$scientific_name)
 nc_ebird_sub$year = as.numeric(as.character(substr(nc_ebird_sub$date, 1, 4)))
 
+if (0) { # not using Hubbard Brook data currently
+  
 setwd('c:/users/hayeste/my documents/495/eBird/NH')
 
 nh_ebird <- read.table(file = 'nh_ebird.txt', header = TRUE, sep = '\t', fill = TRUE, quote = '')
 nh_ebird_sub <- nh_ebird[,c(3,4,5,8,10,14,20,23,24,25,26)]
-names(nh_ebird_sub) <- c('category', 'common_name', 'scientific_name', 'count', 'age_sex', 
+names(nh_ebird_sub) <- c('identifier', 'category', 'common_name', 'scientific_name', 'count', 'age_sex', 
                          'state', 'locality', 'lat', 'long', 'date', 'time')
 nh_ebird_sub$scientific_name <- as.character(nh_ebird_sub$scientific_name)
 nh_ebird_sub$year = as.numeric(as.character(substr(nh_ebird_sub$date, 1, 4)))
+
+} # end if (0)
 
 # Migratory status
 
@@ -35,7 +40,7 @@ migratoryguild$migclass1[migratoryguild$migclass1 == 'unk'] = NA
 migraguild <- migratoryguild[,5:7]
 names(migraguild) <- c('migclass', 'migclass_gen', 'scientific_name')
 nc_ebird_migra <- merge(nc_ebird_sub, migraguild, by = 'scientific_name', all.x = T, all.y = F)
-nh_ebird_migra <- merge(nh_ebird_sub, migraguild, by = 'scientific_name', all.x = T, all.y = F)
+#nh_ebird_migra <- merge(nh_ebird_sub, migraguild, by = 'scientific_name', all.x = T, all.y = F)
 
 # ---- longlatquad function ----
 # Making a dataframe of the longitude and latitude quadrants for each site with a given
@@ -67,7 +72,11 @@ BGquad = longlatquad(latpoint = 35.898645, longpoint = -79.031469, res_km = 8)
 HBquad = longlatquad(latpoint = 43.942407, longpoint = -71.710066, res_km = 8)
 
 nc_ebird_migra <- nc_ebird_migra[!is.na(nc_ebird_migra$long),] # if no longitude, no latitude either
-nh_ebird_migra <- nh_ebird_migra[!is.na(nh_ebird_migra$long),]
+#nh_ebird_migra <- nh_ebird_migra[!is.na(nh_ebird_migra$long),]
+
+# ---- Exclude casual observations, long travel distances, and short durations
+
+
 
 # ---- Site-specific subsets ----
 
@@ -76,8 +85,8 @@ pr_ebird = subset(nc_ebird_migra, lat >= PRquad[4,2] & lat <= PRquad[2,2] &
                     long >= PRquad[1,3] & long <= PRquad[2,3])
 bg_ebird = subset(nc_ebird_migra, lat >= BGquad[4,2] & lat <= BGquad[2,2] & 
                     long >= BGquad[1,3] & long <= BGquad[2,3])
-hb_ebird = subset(nh_ebird_migra, lat >= HBquad[4,2] & lat <= HBquad[2,2] & 
-                    long >= HBquad[1,3] & long <= HBquad[2,3])
+#hb_ebird = subset(nh_ebird_migra, lat >= HBquad[4,2] & lat <= HBquad[2,2] & 
+#                    long >= HBquad[1,3] & long <= HBquad[2,3])
 
 # Change date class and create a yday column
 
@@ -87,8 +96,27 @@ pr_ebird$jday = yday(pr_ebird$date)
 bg_ebird$date = as.Date(as.character(bg_ebird$date), format = '%Y-%m-%d')
 bg_ebird$jday = yday(bg_ebird$date)
 
-hb_ebird$date = as.Date(as.character(hb_ebird$date), format = '%Y-%m-%d')
-hb_ebird$jday = yday(hb_ebird$date)
+#hb_ebird$date = as.Date(as.character(hb_ebird$date), format = '%Y-%m-%d')
+#hb_ebird$jday = yday(hb_ebird$date)
+
+#---- Organize data into format for logistics script ----
+
+sampling_pr = pr_ebird[,c('lat', 'long', 'year', 'jday')]
+sampling_pr$Lat.Long = paste(sampling_pr$lat, sampling_pr$long, sep = "")
+names(sampling_pr) = c('Latitude', 'Longitude', 'Year.Collected', 'JulianDay', 'Lat.Long')
+
+obs_pr = pr_ebird[,c('scientific_name', 'lat', 'long', 'count', 'year', 'jday')]
+names(obs_pr) = c('Scientific.Name', 'Latitude', 'Longitude', 'Observation.Count', 'Year', 'JulianDay')
+
+sampling_bg = bg_ebird[,c('lat', 'long', 'year', 'jday')]
+sampling_bg$Lat.Long = paste(sampling_bg$lat, sampling_bg$long, sep = "")
+names(sampling_bg) = c('Latitude', 'Longitude', 'Year.Collected', 'JulianDay', 'Lat.Long')
+
+obs_bg = bg_ebird[,c('scientific_name', 'lat', 'long', 'count', 'year', 'jday')]
+names(obs_bg) = c('Scientific.Name', 'Latitude', 'Longitude', 'Observation.Count', 'Year', 'JulianDay')
+
+#----Everthing below is just experimenting with the data----
+# Can use datasets cleaned above for logistics script
 
 # Plot number of entries each year for each site, to compare
 par(mar = c(4,4,2,2), oma = c(1,1,1,1))
