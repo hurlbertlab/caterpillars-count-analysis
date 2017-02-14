@@ -93,7 +93,7 @@ return(refnum)
 par(mfrow = c(3,10), mar = c(2,2,1,1), oma = c(1,1,1,1))
 gddyear <- c()
 
-for (year in 2007:2016) {
+for (year in 2000:2016) {
   PR <- gddcalc(prismtemp, "PR", year)
   BG <- gddcalc(prismtemp, "BG", year)
   HB <- gddcalc(prismtemp, "HB", year)
@@ -104,7 +104,7 @@ for (year in 2007:2016) {
 par(mfrow = c(1,1))
 gddyear <- data.frame(gddyear) # Error is ok, I wanted that to happen
 names(gddyear) <- c('pr.gdd','bg.gdd','hb.gdd')
-gddyear$year = c(2007:2016)
+gddyear$year = c(2000:2016)
 plot(gddyear$year, gddyear$pr.gdd, col = 'red', type = 'l', lwd = 2, ylim = c(145,250))
 points(gddyear$year, gddyear$bg.gdd, col = 'blue', type = 'l', lwd = 2)
 points(gddyear$year, gddyear$hb.gdd, col = 'green3', type = 'l', lwd = 2)
