@@ -12,11 +12,17 @@ library(lubridate)
 setwd('c:/users/hayeste/my documents/495/eBird/NC')
 
 nc_ebird <- read.table(file = 'nc_ebird.txt', header = TRUE, sep = '\t', fill = TRUE, quote = '')
+
+# ---- Exclude casual observations, long travel distances, and short durations
+
+
+
 nc_ebird_sub <- nc_ebird[,c(1,3,4,5,8,10,14,20,23,24,25,26)]
 names(nc_ebird_sub) <- c('identifier', 'category', 'common_name', 'scientific_name', 'count', 'age_sex', 
                          'state', 'locality', 'lat', 'long', 'date', 'time')
 nc_ebird_sub$scientific_name <- as.character(nc_ebird_sub$scientific_name)
 nc_ebird_sub$year = as.numeric(as.character(substr(nc_ebird_sub$date, 1, 4)))
+
 
 if (0) { # not using Hubbard Brook data currently
   
@@ -67,14 +73,16 @@ longlatquad = function(longpoint,   # starting longitude (center of location)
   return(longlatdataframe)
   } # end function
   
-PRquad = longlatquad(latpoint = 35.809674, longpoint = -78.716546, res_km = 8)
-BGquad = longlatquad(latpoint = 35.898645, longpoint = -79.031469, res_km = 8)
-HBquad = longlatquad(latpoint = 43.942407, longpoint = -71.710066, res_km = 8)
+#PRquad = longlatquad(latpoint = 35.809674, longpoint = -78.716546, res_km = 8)
+#BGquad = longlatquad(latpoint = 35.898645, longpoint = -79.031469, res_km = 8)
+#HBquad = longlatquad(latpoint = 43.942407, longpoint = -71.710066, res_km = 8)
+
+PRquad = longlatquad(latpoint = 35.809674, longpoint = -78.716546, res_km = 4)
+BGquad = longlatquad(latpoint = 35.898645, longpoint = -79.031469, res_km = 4)
+#HBquad = longlatquad(latpoint = 43.942407, longpoint = -71.710066, res_km = 4)
 
 nc_ebird_migra <- nc_ebird_migra[!is.na(nc_ebird_migra$long),] # if no longitude, no latitude either
 #nh_ebird_migra <- nh_ebird_migra[!is.na(nh_ebird_migra$long),]
-
-# ---- Exclude casual observations, long travel distances, and short durations
 
 
 
