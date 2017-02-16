@@ -10,6 +10,8 @@ source('C:/git/caterpillars-count-analysis/eBird_logistics.R') # Bird arrival
 
 setwd('c:/git/caterpillars-count-analysis')
 
+
+
 # Is greenup affected by GDD?
 # Working with two datasets (one from prism_10year.R and one from modis_10year.R)
 
@@ -21,13 +23,14 @@ greenupgdd$bg.gdd.dev <- greenupgdd$bg.gdd - mean(greenupgdd$bg.gdd)
 greenupgdd$prgreenup.dev <- greenupgdd$prgreenup.log - mean(greenupgdd$prgreenup.log)
 greenupgdd$bggreenup.dev <- greenupgdd$bggreenup.log - mean(greenupgdd$bggreenup.log)
 
+#---- FIGURE 3 RESULTS----
 
 #---- GDD and greenup (deviation from mean) ----
-par(mar = c(4,4,2,2), mfrow = c(3,2))
+par(mar = c(4,4,2,2), mfrow = c(2,2), oma = c(2,2,1,1))
 plot(greenupgdd$pr.gdd.dev, greenupgdd$prgreenup.dev, col = 'white',
      xlab = 'GDD JD deviation from mean', ylab = 'Greenup JD deviation from mean',
-     xlim = c(-11,11), ylim = c(-10,10), main = 'Greenup JD vs. GDD JD')
-#abline(1,0)
+     xlim = c(-11,11), ylim = c(-10,10))
+abline(1,1) # what's going on with this?
 abline(h = 0, lty = 2)
 abline(v = 0, lty = 2)
 text(greenupgdd$pr.gdd.dev, greenupgdd$prgreenup.dev, greenupgdd$year, col = 'red')
@@ -35,248 +38,302 @@ text(greenupgdd$bg.gdd.dev, greenupgdd$bggreenup.dev, greenupgdd$year, col = 'bl
 
 # Blank plot for pdf
 plot.new()
-legend('bottomleft', c('2015 cat','2015 mult', '2016 cat', '2016 mult'), pch = c(21, 22, 16, 15), cex = 1.2)
+legend('topleft', c('Prairie Ridge (PR)', 'Botanical Garden (BG)'), pch = 16, col = c('red', 'blue'), cex = 1)
+
+plot(greenupgdd$pr.gdd, greenupgdd$bg.gdd, xlab = 'PR GDD', ylab = 'BG GDD')
+plot(greenupgdd$prgreenup.log, greenupgdd$bggreenup.log, xlab = 'PR Greenup', ylab = 'BG Greenup')
+
+
+#---- FIGURE 4 RESULTS ----
+par(mar = c(4,4,2,2), mfrow = c(3,2))
+
+# Blank plot for pdf
+plot.new()
+legend('bottomleft', c('2015 caterpillars','2015 bird food', '2016 caterpillars', '2016 bird food'), pch = c(21, 22, 16, 15), cex = 1.2)
 legend('topleft', c('Prairie Ridge', 'Botanical Garden'), pch = 16, col = c('red', 'blue'), cex = 1.2)
+plot.new()
 
 #---- Arths and greenup - visual surveys----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', ylim = c(160,185), xlim = c(85, 95),
-     main = 'Visual Surveys: Arth JD vs. Greenup JD')
-maxden1 <- max(PR.LEPL15vis[PR.LEPL15vis$julianday %in% c(80:185),]$meanDensity)
+plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', xlim = c(86,94), ylim = c(22, 30),
+     main = 'Visual')
+maxden1 <- max(PR.LEPL15.vis$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-       PR.LEPL15vis$julianday[PR.LEPL15vis$meanDensity == maxden1 & PR.LEPL15vis$julianday %in% c(80:185)], 
+       PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
        pch = 21, type = 'p', col = 'red')
-maxden2 <- max(PR.BIRD15vis[PR.BIRD15vis$julianday %in% c(80:185),]$meanDensity)
+maxden2 <- max(PR.BIRD15.vis$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-       PR.BIRD15vis$julianday[PR.BIRD15vis$meanDensity == maxden2 & PR.BIRD15vis$julianday %in% c(80:185)], 
+       PR.BIRD15.vis$week[PR.BIRD15.vis$fracSurveys == maxden2], 
        pch = 22, type = 'p', col = 'red')
-maxden3 <- max(PR.LEPL16vis[PR.LEPL16vis$julianday %in% c(80:185),]$meanDensity)
+maxden3 <- max(PR.LEPL16.vis$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-       PR.LEPL16vis$julianday[PR.LEPL16vis$meanDensity == maxden3 & PR.LEPL16vis$julianday %in% c(80:185)], 
+       PR.LEPL16.vis$week[PR.LEPL16.vis$fracSurveys == maxden3], 
        pch = 16, type = 'p', col = 'red')
-maxden4 <- max(PR.BIRD16vis[PR.BIRD16vis$julianday %in% c(80:185),]$meanDensity)
+maxden4 <- max(PR.BIRD16.vis$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-       PR.BIRD16vis$julianday[PR.BIRD16vis$meanDensity == maxden4 & PR.BIRD16vis$julianday %in% c(80:185)], 
+       PR.BIRD16.vis$week[PR.BIRD16.vis$fracSurveys == maxden4], 
        pch = 15, type = 'p', col = 'red')
 segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-         y0 = PR.LEPL15vis$julianday[PR.LEPL15vis$meanDensity == maxden1 & PR.LEPL15vis$julianday %in% c(80:185)], 
+         y0 = PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
          x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-         y1 = PR.LEPL16vis$julianday[PR.LEPL16vis$meanDensity == maxden3 & PR.LEPL16vis$julianday %in% c(80:185)], 
+         y1 = PR.LEPL16.vis$week[PR.LEPL16.vis$fracSurveys == maxden3], 
          col = 'red')
 segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-         y0 = PR.BIRD15vis$julianday[PR.BIRD15vis$meanDensity == maxden2 & PR.BIRD15vis$julianday %in% c(80:185)], 
+         y0 = PR.BIRD15.vis$week[PR.BIRD15.vis$fracSurveys == maxden2], 
          x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-         y1 = PR.BIRD16vis$julianday[PR.BIRD16vis$meanDensity == maxden4 & PR.BIRD16vis$julianday %in% c(80:185)], 
+         y1 = PR.BIRD16.vis$week[PR.BIRD16.vis$fracSurveys == maxden4], 
          col = 'red')
 # Botanical Garden
-maxden5 <- max(BG.LEPL15vis[BG.LEPL15vis$julianday %in% c(80:185),]$meanDensity)
+maxden5 <- max(BG.LEPL15.vis$fracSurveys)
 points(greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-       BG.LEPL15vis$julianday[BG.LEPL15vis$meanDensity == maxden5 & BG.LEPL15vis$julianday %in% c(80:185)], 
+       BG.LEPL15.vis$week[BG.LEPL15.vis$fracSurveys == maxden5], 
        pch = 21, type = 'p', col = 'blue')
-maxden6 <- max(BG.BIRD15vis[BG.BIRD15vis$julianday %in% c(80:185),]$meanDensity)
+maxden6 <- max(BG.BIRD15.vis$fracSurveys)
 points(greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-       BG.BIRD15vis$julianday[BG.BIRD15vis$meanDensity == maxden6 & BG.BIRD15vis$julianday %in% c(80:185)], 
+       BG.BIRD15.vis$week[BG.BIRD15.vis$fracSurveys == maxden6], 
        pch = 22, type = 'p', col = 'blue')
-maxden7 <- max(BG.LEPL16vis[BG.LEPL16vis$julianday %in% c(80:185),]$meanDensity)
+maxden7 <- max(BG.LEPL16.vis$fracSurveys)
 points(greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-       BG.LEPL16vis$julianday[BG.LEPL16vis$meanDensity == maxden7 & BG.LEPL16vis$julianday %in% c(80:185)], 
+       BG.LEPL16.vis$week[BG.LEPL16.vis$fracSurveys == maxden7], 
        pch = 16, type = 'p', col = 'blue')
-maxden8 <- max(BG.BIRD16vis[BG.BIRD16vis$julianday %in% c(80:185),]$meanDensity)
+maxden8 <- max(BG.BIRD16.vis$fracSurveys)
 points(greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-       BG.BIRD16vis$julianday[BG.BIRD16vis$meanDensity == maxden8 & BG.BIRD16vis$julianday %in% c(80:185)], 
+       BG.BIRD16.vis$week[BG.BIRD16.vis$fracSurveys == maxden8], 
        pch = 15, type = 'p', col = 'blue')
 segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-         y0 = BG.LEPL15vis$julianday[BG.LEPL15vis$meanDensity == maxden5 & BG.LEPL15vis$julianday %in% c(80:185)], 
+         y0 = BG.LEPL15.vis$week[BG.LEPL15.vis$fracSurveys == maxden5], 
          x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-         y1 = BG.LEPL16vis$julianday[BG.LEPL16vis$meanDensity == maxden7 & BG.LEPL16vis$julianday %in% c(80:185)], 
+         y1 = BG.LEPL16.vis$week[BG.LEPL16.vis$fracSurveys == maxden7], 
          col = 'blue')
 segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-         y0 = BG.BIRD15vis$julianday[BG.BIRD15vis$meanDensity == maxden6 & BG.BIRD15vis$julianday %in% c(80:185)], 
+         y0 = BG.BIRD15.vis$week[BG.BIRD15.vis$fracSurveys == maxden6], 
          x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-         y1 = BG.BIRD16vis$julianday[BG.BIRD16vis$meanDensity == maxden8 & BG.BIRD16vis$julianday %in% c(80:185)], 
+         y1 = BG.BIRD16.vis$week[BG.BIRD16.vis$fracSurveys == maxden8], 
          col = 'blue')
 #legend('topright', c('2015 cat','2015 mult', '2016 cat', '2016 mult'), pch = c(21, 22, 16, 15))
 
 #---- Arths and GDD - visual surveys----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', ylim = c(160,185), xlim = c(155, 165), 
-main = 'Visual Surveys: Arth JD vs. GDD JD')
-maxden1 <- max(PR.LEPL15vis[PR.LEPL15vis$julianday %in% c(80:185),]$meanDensity)
+plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', xlim = c(156,164), ylim = c(22, 30),
+main = 'Visual')
+maxden1 <- max(PR.LEPL15.vis$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-       PR.LEPL15vis$julianday[PR.LEPL15vis$meanDensity == maxden1 & PR.LEPL15vis$julianday %in% c(80:185)], 
+       PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
        pch = 21, type = 'p', col = 'red')
-maxden2 <- max(PR.BIRD15vis[PR.BIRD15vis$julianday %in% c(80:185),]$meanDensity)
+maxden2 <- max(PR.BIRD15.vis$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-       PR.BIRD15vis$julianday[PR.BIRD15vis$meanDensity == maxden2 & PR.BIRD15vis$julianday %in% c(80:185)], 
+       PR.BIRD15.vis$week[PR.BIRD15.vis$fracSurveys == maxden2], 
        pch = 22, type = 'p', col = 'red')
-maxden3 <- max(PR.LEPL16vis[PR.LEPL16vis$julianday %in% c(80:185),]$meanDensity)
+maxden3 <- max(PR.LEPL16.vis$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-       PR.LEPL16vis$julianday[PR.LEPL16vis$meanDensity == maxden3 & PR.LEPL16vis$julianday %in% c(80:185)], 
+       PR.LEPL16.vis$week[PR.LEPL16.vis$fracSurveys == maxden3], 
        pch = 16, type = 'p', col = 'red')
-maxden4 <- max(PR.BIRD16vis[PR.BIRD16vis$julianday %in% c(80:185),]$meanDensity)
+maxden4 <- max(PR.BIRD16.vis$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-       PR.BIRD16vis$julianday[PR.BIRD16vis$meanDensity == maxden4 & PR.BIRD16vis$julianday %in% c(80:185)], 
+       PR.BIRD16.vis$week[PR.BIRD16.vis$fracSurveys == maxden4], 
        pch = 15, type = 'p', col = 'red')
 segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-         y0 = PR.LEPL15vis$julianday[PR.LEPL15vis$meanDensity == maxden1 & PR.LEPL15vis$julianday %in% c(80:185)], 
+         y0 = PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
          x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-         y1 = PR.LEPL16vis$julianday[PR.LEPL16vis$meanDensity == maxden3 & PR.LEPL16vis$julianday %in% c(80:185)], 
+         y1 = PR.LEPL16.vis$week[PR.LEPL16.vis$fracSurveys == maxden3], 
          col = 'red')
 segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-         y0 = PR.BIRD15vis$julianday[PR.BIRD15vis$meanDensity == maxden2 & PR.BIRD15vis$julianday %in% c(80:185)], 
+         y0 = PR.BIRD15.vis$week[PR.BIRD15.vis$fracSurveys == maxden2], 
          x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-         y1 = PR.BIRD16vis$julianday[PR.BIRD16vis$meanDensity == maxden4 & PR.BIRD16vis$julianday %in% c(80:185)], 
+         y1 = PR.BIRD16.vis$week[PR.BIRD16.vis$fracSurveys == maxden4], 
          col = 'red')
 # Botanical Garden
-maxden5 <- max(BG.LEPL15vis[BG.LEPL15vis$julianday %in% c(80:185),]$meanDensity)
+maxden5 <- max(BG.LEPL15.vis$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-       BG.LEPL15vis$julianday[BG.LEPL15vis$meanDensity == maxden5 & BG.LEPL15vis$julianday %in% c(80:185)], 
+       BG.LEPL15.vis$week[BG.LEPL15.vis$fracSurveys == maxden5], 
        pch = 21, type = 'p', col = 'blue')
-maxden6 <- max(BG.BIRD15vis[BG.BIRD15vis$julianday %in% c(80:185),]$meanDensity)
+maxden6 <- max(BG.BIRD15.vis$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-       BG.BIRD15vis$julianday[BG.BIRD15vis$meanDensity == maxden6 & BG.BIRD15vis$julianday %in% c(80:185)], 
+       BG.BIRD15.vis$week[BG.BIRD15.vis$fracSurveys == maxden6], 
        pch = 22, type = 'p', col = 'blue')
-maxden7 <- max(BG.LEPL16[BG.LEPL16$julianday %in% c(80:185),]$meanDensity)
+maxden7 <- max(BG.LEPL16.vis$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-       BG.LEPL16vis$julianday[BG.LEPL16vis$meanDensity == maxden7 & BG.LEPL16vis$julianday %in% c(80:185)], 
+       BG.LEPL16.vis$week[BG.LEPL16.vis$fracSurveys == maxden7], 
        pch = 16, type = 'p', col = 'blue')
-maxden8 <- max(BG.BIRD16vis[BG.BIRD16vis$julianday %in% c(80:185),]$meanDensity)
+maxden8 <- max(BG.BIRD16.vis$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-       BG.BIRD16vis$julianday[BG.BIRD16vis$meanDensity == maxden8 & BG.BIRD16vis$julianday %in% c(80:185)], 
+       BG.BIRD16.vis$week[BG.BIRD16.vis$fracSurveys == maxden8], 
        pch = 15, type = 'p', col = 'blue')
 segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-         y0 = BG.LEPL15vis$julianday[BG.LEPL15vis$meanDensity == maxden5 & BG.LEPL15vis$julianday %in% c(80:185)], 
+         y0 = BG.LEPL15.vis$week[BG.LEPL15.vis$fracSurveys == maxden5], 
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-         y1 = BG.LEPL16vis$julianday[BG.LEPL16vis$meanDensity == maxden7 & BG.LEPL16vis$julianday %in% c(80:185)], 
+         y1 = BG.LEPL16.vis$week[BG.LEPL16.vis$fracSurveys == maxden7], 
          col = 'blue')
 segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-         y0 = BG.BIRD15vis$julianday[BG.BIRD15vis$meanDensity == maxden6 & BG.BIRD15vis$julianday %in% c(80:185)], 
+         y0 = BG.BIRD15.vis$week[BG.BIRD15.vis$fracSurveys == maxden6], 
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-         y1 = BG.BIRD16vis$julianday[BG.BIRD16vis$meanDensity == maxden8 & BG.BIRD16vis$julianday %in% c(80:185)], 
+         y1 = BG.BIRD16.vis$week[BG.BIRD16.vis$fracSurveys == maxden8], 
          col = 'blue')
 #legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
 
 #---- Arths and greenup - beat sheets----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', ylim = c(125,185), xlim = c(85, 95), 
-     main = 'Beat sheets: Arth JD vs. Greenup JD')
-maxden1 <- max(PR.LEPL15bts[PR.LEPL15bts$julianday %in% c(80:185),]$meanDensity)
+plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', ylim = c(22, 30), xlim = c(85, 95), 
+     main = 'Beat sheets')
+maxden1 <- max(PR.LEPL15.bs$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-       PR.LEPL15bts$julianday[PR.LEPL15bts$meanDensity == maxden1 & PR.LEPL15bts$julianday %in% c(80:185)], 
+       PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
        pch = 21, type = 'p', col = 'red')
-maxden2 <- max(PR.BIRD15bts[PR.BIRD15bts$julianday %in% c(80:185),]$meanDensity)
+maxden2 <- max(PR.BIRD15.bs$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-       PR.BIRD15bts$julianday[PR.BIRD15bts$meanDensity == maxden2 & PR.BIRD15bts$julianday %in% c(80:185)], 
+       PR.BIRD15.bs$week[PR.BIRD15.bs$fracSurveys == maxden2], 
        pch = 22, type = 'p', col = 'red')
-maxden3 <- max(PR.LEPL16bts[PR.LEPL16bts$julianday %in% c(80:185),]$meanDensity)
+maxden3 <- max(PR.LEPL16.bs$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-       PR.LEPL16bts$julianday[PR.LEPL16bts$meanDensity == maxden3 & PR.LEPL16bts$julianday %in% c(80:185)], 
+       PR.LEPL16.bs$week[PR.LEPL16.bs$fracSurveys == maxden3], 
        pch = 16, type = 'p', col = 'red')
-maxden4 <- max(PR.BIRD16bts[PR.BIRD16bts$julianday %in% c(80:185),]$meanDensity)
+maxden4 <- max(PR.BIRD16.bs$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-       PR.BIRD16bts$julianday[PR.BIRD16bts$meanDensity == maxden4 & PR.BIRD16bts$julianday %in% c(80:185)], 
+       PR.BIRD16.bs$week[PR.BIRD16.bs$fracSurveys == maxden4], 
        pch = 15, type = 'p', col = 'red')
 segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-         y0 = PR.LEPL15bts$julianday[PR.LEPL15bts$meanDensity == maxden1 & PR.LEPL15bts$julianday %in% c(80:185)], 
+         y0 = PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
          x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-         y1 = PR.LEPL16bts$julianday[PR.LEPL16bts$meanDensity == maxden3 & PR.LEPL16bts$julianday %in% c(80:185)], 
+         y1 = PR.LEPL16.bs$week[PR.LEPL16.bs$fracSurveys == maxden3], 
          col = 'red')
 segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-         y0 = PR.BIRD15bts$julianday[PR.BIRD15bts$meanDensity == maxden2 & PR.BIRD15bts$julianday %in% c(80:185)], 
+         y0 = PR.BIRD15.bs$week[PR.BIRD15.bs$fracSurveys == maxden2], 
          x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-         y1 = PR.BIRD16bts$julianday[PR.BIRD16bts$meanDensity == maxden4 & PR.BIRD16bts$julianday %in% c(80:185)], 
+         y1 = PR.BIRD16.bs$week[PR.BIRD16.bs$fracSurveys == maxden4], 
          col = 'red')
 # Botanical Garden
-maxden5 <- max(BG.LEPL15bts[BG.LEPL15bts$julianday %in% c(80:185),]$meanDensity)
+maxden5 <- max(BG.LEPL15.bs$fracSurveys)
 points(greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-       BG.LEPL15bts$julianday[BG.LEPL15bts$meanDensity == maxden5 & BG.LEPL15bts$julianday %in% c(80:185)], 
+       BG.LEPL15.bs$week[BG.LEPL15.bs$fracSurveys == maxden5], 
        pch = 21, type = 'p', col = 'blue')
-maxden6 <- max(BG.BIRD15bts[BG.BIRD15bts$julianday %in% c(80:185),]$meanDensity)
+maxden6 <- max(BG.BIRD15.bs$fracSurveys)
 points(greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-       BG.BIRD15bts$julianday[BG.BIRD15bts$meanDensity == maxden6 & BG.BIRD15bts$julianday %in% c(80:185)], 
+       BG.BIRD15.bs$week[BG.BIRD15.bs$fracSurveys == maxden6], 
        pch = 22, type = 'p', col = 'blue')
-maxden7 <- max(BG.LEPL16bts[BG.LEPL16bts$julianday %in% c(80:185),]$meanDensity)
+maxden7 <- max(BG.LEPL16.bs$fracSurveys)
 points(greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-       BG.LEPL16bts$julianday[BG.LEPL16bts$meanDensity == maxden7 & BG.LEPL16bts$julianday %in% c(80:185)], 
+       BG.LEPL16.bs$week[BG.LEPL16.bs$fracSurveys == maxden7], 
        pch = 16, type = 'p', col = 'blue')
-maxden8 <- max(BG.BIRD16bts[BG.BIRD16bts$julianday %in% c(80:185),]$meanDensity)
+maxden8 <- max(BG.BIRD16.bs$fracSurveys)
 points(greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-       BG.BIRD16bts$julianday[BG.BIRD16bts$meanDensity == maxden8 & BG.BIRD16bts$julianday %in% c(80:185)], 
+       BG.BIRD16.bs$week[BG.BIRD16.bs$fracSurveys == maxden8], 
        pch = 15, type = 'p', col = 'blue')
 segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-         y0 = BG.LEPL15bts$julianday[BG.LEPL15bts$meanDensity == maxden5 & BG.LEPL15bts$julianday %in% c(80:185)], 
+         y0 = BG.LEPL15.bs$week[BG.LEPL15.bs$fracSurveys == maxden5], 
          x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-         y1 = BG.LEPL16bts$julianday[BG.LEPL16bts$meanDensity == maxden7 & BG.LEPL16bts$julianday %in% c(80:185)], 
+         y1 = BG.LEPL16.bs$week[BG.LEPL16.bs$fracSurveys == maxden7], 
          col = 'blue')
 segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-         y0 = BG.BIRD15bts$julianday[BG.BIRD15bts$meanDensity == maxden6 & BG.BIRD15bts$julianday %in% c(80:185)], 
+         y0 = BG.BIRD15.bs$week[BG.BIRD15.bs$fracSurveys == maxden6], 
          x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-         y1 = BG.BIRD16bts$julianday[BG.BIRD16bts$meanDensity == maxden8 & BG.BIRD16bts$julianday %in% c(80:185)], 
+         y1 = BG.BIRD16.bs$week[BG.BIRD16.bs$fracSurveys == maxden8], 
          col = 'blue')
 #legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
 
 #---- Arths and GDD - beatsheets----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', ylim = c(125,185), xlim = c(155, 165), 
-     main = 'Beat sheets: Arth JD vs. GDD JD')
-maxden1 <- max(PR.LEPL15bts[PR.LEPL15bts$julianday %in% c(80:185),]$meanDensity)
+plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', ylim = c(22, 30), xlim = c(155, 165), 
+     main = 'Beat sheets')
+maxden1 <- max(PR.LEPL15.bs$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-       PR.LEPL15bts$julianday[PR.LEPL15bts$meanDensity == maxden1 & PR.LEPL15bts$julianday %in% c(80:185)], 
+       PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
        pch = 21, type = 'p', col = 'red')
-maxden2 <- max(PR.BIRD15bts[PR.BIRD15bts$julianday %in% c(80:185),]$meanDensity)
+maxden2 <- max(PR.BIRD15.bs$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-       PR.BIRD15bts$julianday[PR.BIRD15bts$meanDensity == maxden2 & PR.BIRD15bts$julianday %in% c(80:185)], 
+       PR.BIRD15.bs$week[PR.BIRD15.bs$fracSurveys == maxden2], 
        pch = 22, type = 'p', col = 'red')
-maxden3 <- max(PR.LEPL16bts[PR.LEPL16bts$julianday %in% c(80:185),]$meanDensity)
+maxden3 <- max(PR.LEPL16.bs$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-       PR.LEPL16bts$julianday[PR.LEPL16bts$meanDensity == maxden3 & PR.LEPL16bts$julianday %in% c(80:185)], 
+       PR.LEPL16.bs$week[PR.LEPL16.bs$fracSurveys == maxden3], 
        pch = 16, type = 'p', col = 'red')
-maxden4 <- max(PR.BIRD16bts[PR.BIRD16bts$julianday %in% c(80:185),]$meanDensity)
+maxden4 <- max(PR.BIRD16.bs$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-       PR.BIRD16bts$julianday[PR.BIRD16bts$meanDensity == maxden4 & PR.BIRD16bts$julianday %in% c(80:185)], 
+       PR.BIRD16.bs$week[PR.BIRD16.bs$fracSurveys == maxden4], 
        pch = 15, type = 'p', col = 'red')
 segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-         y0 = PR.LEPL15bts$julianday[PR.LEPL15bts$meanDensity == maxden1 & PR.LEPL15bts$julianday %in% c(80:185)], 
+         y0 = PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
          x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-         y1 = PR.LEPL16bts$julianday[PR.LEPL16bts$meanDensity == maxden3 & PR.LEPL16bts$julianday %in% c(80:185)], 
+         y1 = PR.LEPL16.bs$week[PR.LEPL16.bs$fracSurveys == maxden3], 
          col = 'red')
 segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-         y0 = PR.BIRD15bts$julianday[PR.BIRD15bts$meanDensity == maxden2 & PR.BIRD15bts$julianday %in% c(80:185)], 
+         y0 = PR.BIRD15.bs$week[PR.BIRD15.bs$fracSurveys == maxden2], 
          x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-         y1 = PR.BIRD16bts$julianday[PR.BIRD16bts$meanDensity == maxden4 & PR.BIRD16bts$julianday %in% c(80:185)], 
+         y1 = PR.BIRD16.bs$week[PR.BIRD16.bs$fracSurveys == maxden4], 
          col = 'red')
 # Botanical Garden
-maxden5 <- max(BG.LEPL15bts[BG.LEPL15bts$julianday %in% c(80:185),]$meanDensity)
+maxden5 <- max(BG.LEPL15.bs$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-       BG.LEPL15bts$julianday[BG.LEPL15bts$meanDensity == maxden5 & BG.LEPL15bts$julianday %in% c(80:185)], 
+       BG.LEPL15.bs$week[BG.LEPL15.bs$fracSurveys == maxden5], 
        pch = 21, type = 'p', col = 'blue')
-maxden6 <- max(BG.BIRD15bts[BG.BIRD15bts$julianday %in% c(80:185),]$meanDensity)
+maxden6 <- max(BG.BIRD15.bs$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-       BG.BIRD15bts$julianday[BG.BIRD15bts$meanDensity == maxden6 & BG.BIRD15bts$julianday %in% c(80:185)], 
+       BG.BIRD15.bs$week[BG.BIRD15.bs$fracSurveys == maxden6], 
        pch = 22, type = 'p', col = 'blue')
-maxden7 <- max(BG.LEPL16[BG.LEPL16$julianday %in% c(80:185),]$meanDensity)
+maxden7 <- max(BG.LEPL16$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-       BG.LEPL16bts$julianday[BG.LEPL16bts$meanDensity == maxden7 & BG.LEPL16bts$julianday %in% c(80:185)], 
+       BG.LEPL16.bs$week[BG.LEPL16.bs$fracSurveys == maxden7], 
        pch = 16, type = 'p', col = 'blue')
-maxden8 <- max(BG.BIRD16bts[BG.BIRD16bts$julianday %in% c(80:185),]$meanDensity)
+maxden8 <- max(BG.BIRD16.bs$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-       BG.BIRD16bts$julianday[BG.BIRD16bts$meanDensity == maxden8 & BG.BIRD16bts$julianday %in% c(80:185)], 
+       BG.BIRD16.bs$week[BG.BIRD16.bs$fracSurveys == maxden8], 
        pch = 15, type = 'p', col = 'blue')
 segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-         y0 = BG.LEPL15bts$julianday[BG.LEPL15bts$meanDensity == maxden5 & BG.LEPL15bts$julianday %in% c(80:185)], 
+         y0 = BG.LEPL15.bs$week[BG.LEPL15.bs$fracSurveys == maxden5], 
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-         y1 = BG.LEPL16bts$julianday[BG.LEPL16bts$meanDensity == maxden7 & BG.LEPL16bts$julianday %in% c(80:185)], 
+         y1 = BG.LEPL16.bs$week[BG.LEPL16.bs$fracSurveys == maxden7], 
          col = 'blue')
 segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-         y0 = BG.BIRD15bts$julianday[BG.BIRD15bts$meanDensity == maxden6 & BG.BIRD15bts$julianday %in% c(80:185)], 
+         y0 = BG.BIRD15.bs$week[BG.BIRD15.bs$fracSurveys == maxden6], 
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-         y1 = BG.BIRD16bts$julianday[BG.BIRD16bts$meanDensity == maxden8 & BG.BIRD16bts$julianday %in% c(80:185)], 
+         y1 = BG.BIRD16.bs$week[BG.BIRD16.bs$fracSurveys == maxden8], 
          col = 'blue')
 #legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
+
+
+#---- FIGURE 5 RESULTS ----
+
+inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
+inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
+plot(inbu_pr$pr.gdd, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'blue', ylim = c(82, 117))
+
+inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
+revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
+points(revi_pr$pr.gdd, as.numeric(as.character(revi_pr$inflection_pt)), pch = 16, col = 'red')
+
+inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
+coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
+points(coye_pr$pr.gdd, as.numeric(as.character(coye_pr$inflection_pt)), pch = 16, col = 'orange')
+
+inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
+bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
+points(bggn_pr$pr.gdd, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 16, col = 'gray')
+
+
+inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
+inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
+plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'blue', ylim = c(82, 117))
+
+inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
+revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
+points(revi_pr$prgreenup.log, as.numeric(as.character(revi_pr$inflection_pt)), pch = 16, col = 'red')
+
+inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
+coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
+points(coye_pr$prgreenup.log, as.numeric(as.character(coye_pr$inflection_pt)), pch = 16, col = 'orange')
+
+inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
+bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
+points(bggn_pr$prgreenup.log, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 16, col = 'gray')
+
+
+plot(greenupgdd$year, greenupgdd$pr.gdd, type = 'l')
+points(inf_pr_inbu$year, inf_pr_inbu$inflection_pt, type = 'l', col = 'red')
+#points(greenupgdd$year, greenupgdd$prgreenup.log, type = 'l', col = 'red')
+
 
 
 # Birds and greenup
