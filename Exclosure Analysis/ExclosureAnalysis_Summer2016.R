@@ -229,6 +229,7 @@ wilcox_test(visit_dif ~ TrapType, data=notfood_time)
 #Run analyses on dif between end arth density b/w treatment and control (independent of 2012 comparison)
 wilcox_test(Visit3~ TrapType, data=food_time)
 wilcox_test(Visit3~ TrapType, data=caterpillar_time)
+wilcox_test(Visit3~ TrapType, data=notfood_time)
 
 ##Reshape dataframe for visualization
 food_time1 <- dplyr::select(food_time, -Visit1, -Visit2, -visit_dif)
@@ -286,7 +287,6 @@ boxplot(caterpillar_final$Visit3VF ~ caterpillar_final$treeSp, main = "Caterpill
 unique_herbivory<-unique(ex_pairs2[, c("TrapType", "siteID", "circle", "survey", "VisitNumber", "percent_herb")])
 unique_herbivory_V3 <- filter(unique_herbivory, VisitNumber=="3")
 unique_herbivory_V3 <- spread(unique_herbivory_V3, TrapType, percent_herb)
-
 
 #Spread Visit 1 and Visit 3 for Herbivory and Create Difference Column to Format for Wilcox Test
 herb <- spread(unique_herbivory, VisitNumber, percent_herb)
