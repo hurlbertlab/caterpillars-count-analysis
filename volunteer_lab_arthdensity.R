@@ -161,6 +161,7 @@ barplot(common_trees2, legend = common_trees1$arthCode, las = 2, cex.names = .6,
         ylab = "Arthropods per Survey") #this needs to be cleaned up
 
 #figure C (BS vs VIS) (here we're comparing different years)
+
 plot(arth_means$vol_vis, arth_means$vol_bs, las = 2, xlab = "Mean Arths per VIS",
         ylab = "Mean Arths per BS", col = "purple", pch = 20)
 volunteer =lm(vol_bs ~ vol_vis, data = arth_means)
