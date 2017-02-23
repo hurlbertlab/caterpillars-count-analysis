@@ -194,12 +194,18 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
   temp$week = floor(temp$julianday/7) + 1
   
   if (byTreeSpecies) {
-    temp2 = ddply(temp, .(week, plantSp), summarize, 
-                  totalCount = sum(count))
+    temp2 = temp %>% 
+      group_by(week, plantSp) %>%
+      summarize(totalCount = sum(count),
+                numSurveysGTzero = length(unique(surveyID[count > 0])))
+    
+      
     
   } else {
-    temp2 = ddply(temp, .(week), summarize, 
-                  totalCount = sum(count), numSurveysGTzero = length(unique(surveyID[count > 0])))
+    temp2 = temp %>% 
+      group_by(week) %>%
+      summarize(totalCount = sum(count),
+                numSurveysGTzero = length(unique(surveyID[count > 0])))
                   #totalBiomass = sum(biomass))
   }
   
