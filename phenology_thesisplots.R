@@ -7,6 +7,8 @@ source("data_cleaning.r")
 
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 
+if (0) { # to not run by day plots
+
 #----PR by day phenology plots----
 par(mfrow = c(3,2), mar = c(2,3,2,2), oma = c(5,5,3,3))
 
@@ -159,8 +161,10 @@ mtext("Fraction of surveys", side = 2, outer = TRUE, line = 1.5)
 mtext("Julian day", side = 1, outer = TRUE, line = 2)
 mtext('Botanical Garden', side = 3, outer = T, line = 1)
 
+} # end if (0)
+
 #----PR by week phenology plots----
-par(mfrow = c(3,2), mar = c(2,3,2,2), oma = c(5,5,3,3))
+par(mfrow = c(3,2), mar = c(2,4,2,2), oma = c(5,5,3,3))
 
 # First panel
 PR.LEPL15.vis = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
@@ -170,8 +174,8 @@ PR.LEPL15.vis = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual'
 PR.LEPL15.bs = meanDensityByWeek(beatsheet.pr[beatsheet.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'sienna3')
-legend(19.8, .209, c('visual', 'beat'), lwd = 2, lty = 1, col = c('forestgreen', 'sienna3'))
-legend("topleft", "A", bty="n")
+legend('topleft', c('visual', 'beat'), lwd = 2, lty = 1, col = c('forestgreen', 'sienna3'))
+mtext('A', side = 2, line = 1)
 LEPL15 = merge(PR.LEPL15.vis[,c('fracSurveys', 'week')], PR.LEPL15.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', legend = c(paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL15$fracSurveys.y), 2))), bty="n")
 
@@ -244,7 +248,7 @@ mtext("Week", side = 1, outer = TRUE, line = 2)
 mtext('Prairie Ridge', side = 3, outer = T, line = 1)
 
 #----BG by week phenology plots----
-par(mfrow = c(3,2), mar = c(2,3,2,2), oma = c(5,5,3,3))
+par(mfrow = c(3,2), mar = c(2,4,2,2), oma = c(5,5,3,3))
 
 # First panel
 BG.LEPL15.vis = meanDensityByWeek(amsurvey.bg[amsurvey.bg$surveyType == 'Visual' & amsurvey.bg$julianday %in% c(134:204),], 
