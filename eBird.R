@@ -1,5 +1,5 @@
 # eBird data for Caterpillars Count! Project
-# Reading in, subsetting, cleaning and organizing data
+# Reading in, subsetting, cleaning and organizing data, creating CSVs for eBird_logistics.R
 
 # Downloaded from eBird Sept. 22, 2016
 # Files include all data from 2006 to 2016 in NC (Prairie Ridge, Botanical Garden) 
@@ -112,16 +112,20 @@ bg_ebird$jday = yday(bg_ebird$date)
 sampling_pr = pr_ebird[,c('lat', 'long', 'year', 'jday')]
 sampling_pr$Lat.Long = paste(sampling_pr$lat, sampling_pr$long, sep = "")
 names(sampling_pr) = c('Latitude', 'Longitude', 'Year.Collected', 'JulianDay', 'Lat.Long')
+write.csv(sampling_pr, 'c:/git/caterpillars-count-analysis/data/ebird_sampling_pr.csv')
 
 obs_pr = pr_ebird[,c('scientific_name', 'lat', 'long', 'count', 'year', 'jday')]
 names(obs_pr) = c('Scientific.Name', 'Latitude', 'Longitude', 'Observation.Count', 'Year', 'JulianDay')
+write.csv(obs_pr, 'c:/git/caterpillars-count-analysis/data/ebird_obs_pr.csv')
 
 sampling_bg = bg_ebird[,c('lat', 'long', 'year', 'jday')]
 sampling_bg$Lat.Long = paste(sampling_bg$lat, sampling_bg$long, sep = "")
 names(sampling_bg) = c('Latitude', 'Longitude', 'Year.Collected', 'JulianDay', 'Lat.Long')
+write.csv(sampling_bg, 'c:/git/caterpillars-count-analysis/data/ebird_sampling_bg.csv')
 
 obs_bg = bg_ebird[,c('scientific_name', 'lat', 'long', 'count', 'year', 'jday')]
 names(obs_bg) = c('Scientific.Name', 'Latitude', 'Longitude', 'Observation.Count', 'Year', 'JulianDay')
+write.csv(obs_bg, 'c:/git/caterpillars-count-analysis/data/ebird_obs_bg.csv')
 
 #----Everthing below is just experimenting with the data----
 # Can use datasets cleaned above for logistics script
