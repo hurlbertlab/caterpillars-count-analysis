@@ -29,8 +29,9 @@ greenupgdd$bggreenup.dev <- greenupgdd$bggreenup.log - mean(greenupgdd$bggreenup
 par(mar = c(4,4,2,2), mfrow = c(2,2), oma = c(2,2,1,1))
 plot(greenupgdd$pr.gdd.dev, greenupgdd$prgreenup.dev, col = 'white',
      xlab = 'GDD JD deviation from mean', ylab = 'Greenup JD deviation from mean',
-     xlim = c(-11,11), ylim = c(-10,10))
-abline(1,1) # what's going on with this?
+     xlim = c(-12,12), ylim = c(-12,12))
+legend("topleft", "A", bty="n")
+#abline(1,1, lty = 2) # what's going on with this?
 abline(h = 0, lty = 2)
 abline(v = 0, lty = 2)
 text(greenupgdd$pr.gdd.dev, greenupgdd$prgreenup.dev, greenupgdd$year, col = 'red')
@@ -41,7 +42,17 @@ plot.new()
 legend('topleft', c('Prairie Ridge (PR)', 'Botanical Garden (BG)'), pch = 16, col = c('red', 'blue'), cex = 1)
 
 plot(greenupgdd$pr.gdd, greenupgdd$bg.gdd, xlab = 'PR GDD', ylab = 'BG GDD')
+legend("topleft", "B", bty="n")
+gddlm = lm(greenupgdd$bg.gdd ~ greenupgdd$pr.gdd)
+abline(gddlm)
+summary(gddlm)
+abline(1,1, lty = 2)
 plot(greenupgdd$prgreenup.log, greenupgdd$bggreenup.log, xlab = 'PR Greenup', ylab = 'BG Greenup')
+legend("topleft", "C", bty="n")
+greenuplm = lm(greenupgdd$bggreenup.log ~ greenupgdd$prgreenup.log)
+abline(greenuplm)
+summary(greenuplm)
+abline(1,1, lty = 2)
 
 
 #---- FIGURE 4 RESULTS ----
@@ -50,14 +61,15 @@ par(mar = c(4,4,2,2), mfrow = c(3,2))
 # Blank plot for pdf
 plot.new()
 legend('bottomleft', c('2015 caterpillars','2015 bird food', '2016 caterpillars', '2016 bird food'), pch = c(21, 22, 16, 15), cex = 1.2)
-legend('topleft', c('Prairie Ridge', 'Botanical Garden'), pch = 16, col = c('red', 'blue'), cex = 1.2)
+legend('topleft', c('Prairie Ridge (PR)', 'Botanical Garden (BG)'), pch = 16, col = c('red', 'blue'), cex = 1.2)
 plot.new()
 
 #---- Arths and greenup - visual surveys----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', xlim = c(86,94), ylim = c(22, 30),
+plot(0,bty='n',pch='',ylab='Arth peak week',xlab='Greenup JD', xlim = c(86,94), ylim = c(22, 30),
      main = 'Visual')
+legend("topleft", "A", bty="n")
 maxden1 <- max(PR.LEPL15.vis$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
        PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
@@ -116,8 +128,9 @@ segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015],
 #---- Arths and GDD - visual surveys----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', xlim = c(156,164), ylim = c(22, 30),
+plot(0,bty='n',pch='',ylab='Arth peak week',xlab='GDD JD', xlim = c(156,164), ylim = c(22, 30),
 main = 'Visual')
+legend("topleft", "B", bty="n")
 maxden1 <- max(PR.LEPL15.vis$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
        PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
@@ -176,8 +189,9 @@ segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015],
 #---- Arths and greenup - beat sheets----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='Greenup JD', ylim = c(22, 30), xlim = c(85, 95), 
+plot(0,bty='n',pch='',ylab='Arth peak week',xlab='Greenup JD', ylim = c(22, 30), xlim = c(85, 95), 
      main = 'Beat sheets')
+legend("topleft", "C", bty="n")
 maxden1 <- max(PR.LEPL15.bs$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
        PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
@@ -236,8 +250,9 @@ segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015],
 #---- Arths and GDD - beatsheets----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth JD',xlab='GDD JD', ylim = c(22, 30), xlim = c(155, 165), 
+plot(0,bty='n',pch='',ylab='Arth peak week',xlab='GDD JD', ylim = c(22, 30), xlim = c(155, 165), 
      main = 'Beat sheets')
+legend("topleft", "D", bty="n")
 maxden1 <- max(PR.LEPL15.bs$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
        PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
@@ -296,38 +311,150 @@ segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015],
 
 #---- FIGURE 5 RESULTS ----
 
+par(mar = c(4,4,2,2), mfrow = c(3,2))
+
+# Blank plot for pdf
+plot.new()
+legend('bottomleft', c('indigo bunting', 'red-eyed vireo', 'common yellowthroat', 'blue-gray gnatcatcher'), pch = 16, col = c('blue', 'red', 'orange', 'gray'), cex = 1.2)
+plot.new()
+
+# Prairie Ridge GDD
+
 inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
 inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_pr$pr.gdd, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'blue', ylim = c(82, 117))
+plot(inbu_pr$pr.gdd, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'blue', 
+     ylim = c(82, 117), main = 'Prairie Ridge', xlab = 'GDD JD', ylab = 'Bird arrival inflection point JD')
+legend("topleft", "A", bty="n")
+inbu_lm = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$pr.gdd)
+abline(inbu_lm, col = 'blue')
+summary(inbu_lm)
 
 inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
 revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
 points(revi_pr$pr.gdd, as.numeric(as.character(revi_pr$inflection_pt)), pch = 16, col = 'red')
+revi_lm = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$pr.gdd)
+abline(revi_lm, col = 'red')
+summary(revi_lm)
 
 inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
 coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
 points(coye_pr$pr.gdd, as.numeric(as.character(coye_pr$inflection_pt)), pch = 16, col = 'orange')
+coye_lm = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$pr.gdd)
+abline(coye_lm, col = 'orange')
+summary(coye_lm)
 
 inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
 bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
 points(bggn_pr$pr.gdd, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 16, col = 'gray')
+bggn_lm = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$pr.gdd)
+abline(bggn_lm, col = 'gray')
+summary(bggn_lm)
 
+
+# Prairie Ridge Greenup
 
 inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
 inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'blue', ylim = c(82, 117))
+plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'blue', 
+     ylim = c(82, 117), main = 'Prairie Ridge', xlab = 'Greenup JD', ylab = 'Bird arrival inflection point JD')
+legend("topleft", "B", bty="n")
+inbu_lm = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$prgreenup.log)
+abline(inbu_lm, col = 'blue')
+summary(inbu_lm)
 
 inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
 revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
 points(revi_pr$prgreenup.log, as.numeric(as.character(revi_pr$inflection_pt)), pch = 16, col = 'red')
+revi_lm = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$prgreenup.log)
+abline(revi_lm, col = 'red')
+summary(revi_lm)
 
 inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
 coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
 points(coye_pr$prgreenup.log, as.numeric(as.character(coye_pr$inflection_pt)), pch = 16, col = 'orange')
+coye_lm = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$prgreenup.log)
+abline(coye_lm, col = 'orange')
+summary(coye_lm)
 
 inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
 bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
 points(bggn_pr$prgreenup.log, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 16, col = 'gray')
+bggn_lm = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$prgreenup.log)
+abline(bggn_lm, col = 'gray')
+summary(bggn_lm)
+
+# Botanical Garden GDD
+
+inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
+inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
+plot(inbu_bg$bg.gdd, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'blue', 
+     ylim = c(82, 117), main = 'Botanical Garden', xlab = 'GDD JD', ylab = 'Bird arrival inflection point JD')
+legend("topleft", "C", bty="n")
+inbu_lm = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bg.gdd)
+abline(inbu_lm, col = 'blue')
+summary(inbu_lm)
+
+inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
+revi_bg = merge(inf_bg_revi, greenupgdd, by = 'year', all = FALSE)
+points(revi_bg$bg.gdd, as.numeric(as.character(revi_bg$inflection_pt)), pch = 16, col = 'red')
+revi_lm = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bg.gdd)
+abline(revi_lm, col = 'red')
+summary(revi_lm)
+
+inf_bg_coye = inflection_bg[inflection_bg$scientific_name == 'Geothlypis trichas',]
+coye_bg = merge(inf_bg_coye, greenupgdd, by = 'year', all = FALSE)
+points(coye_bg$bg.gdd, as.numeric(as.character(coye_bg$inflection_pt)), pch = 16, col = 'orange')
+coye_lm = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bg.gdd)
+abline(coye_lm, col = 'orange')
+summary(coye_lm)
+
+inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
+bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
+bggn_bg = bggn_bg[bggn_bg$year != 2008,]
+points(bggn_bg$bg.gdd, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 16, col = 'gray')
+bggn_lm = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bg.gdd)
+abline(bggn_lm, col = 'gray')
+summary(bggn_lm)
+
+
+# Botanical Garden Greenup
+
+inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
+inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
+plot(inbu_bg$bggreenup.log, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'blue', 
+     ylim = c(82, 117), main = 'Botanical Garden', xlab = 'Greenup JD', ylab = 'Bird arrival inflection point JD')
+legend("topleft", "D", bty="n")
+inbu_lm = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bggreenup.log)
+abline(inbu_lm, col = 'blue')
+summary(inbu_lm)
+
+inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
+revi_bg = merge(inf_bg_revi, greenupgdd, by = 'year', all = FALSE)
+points(revi_bg$bggreenup.log, as.numeric(as.character(revi_bg$inflection_pt)), pch = 16, col = 'red')
+revi_lm = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bggreenup.log)
+abline(revi_lm, col = 'red')
+summary(revi_lm)
+
+inf_bg_coye = inflection_bg[inflection_bg$scientific_name == 'Geothlypis trichas',]
+coye_bg = merge(inf_bg_coye, greenupgdd, by = 'year', all = FALSE)
+points(coye_bg$bggreenup.log, as.numeric(as.character(coye_bg$inflection_pt)), pch = 16, col = 'orange')
+coye_lm = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bggreenup.log)
+abline(coye_lm, col = 'orange')
+summary(coye_lm)
+
+inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
+bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
+bggn_bg = bggn_bg[bggn_bg$year != 2008,]
+points(bggn_bg$bggreenup.log, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 16, col = 'gray')
+bggn_lm = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bggreenup.log)
+abline(bggn_lm, col = 'gray')
+summary(bggn_lm)
+
+#---- FIGURE 6 RESULTS ----
+
+# Final results plot, will be comparing arth peaks to bird peaks
+
+
 
 
 plot(greenupgdd$year, greenupgdd$pr.gdd, type = 'l')
