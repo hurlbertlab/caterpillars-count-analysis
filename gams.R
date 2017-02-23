@@ -1,13 +1,22 @@
 # GAMs
 
+# Eventually will use this data for each GAM
+source('C:/git/caterpillars-count-analysis/phenology_thesisplots.R')
+
+findMaxJD <- function(lp_formatted, # dataset from phenology_thesisplots.R by week
+                      year, # 2015 or 2015
+                      site, # 117 or 8892356
+                      species) # caterpillars, orthopterans, or bird food
+  
+{ # start function
 
 # use an already subsetted dataset (like PR.LEPL15.bs)
-lp_formatted <- PR.LEPL15.bs
-names(lp_formatted) = c('DAYNO', 'numSurveys', 'totalCount', 'numSurveysGTzero', 'meanDensity',
+names(lp_formatted) = c('WEEKNO', 'numSurveys', 'totalCount', 'numSurveysGTzero', 'meanDensity',
                         'COUNT')
-lp_formatted$YEAR = 2015
-lp_formatted$SITE = 117
-lp_formatted$trimDAYNO = 1:length(lp_formatted$DAYNO)
+lp_formatted$YEAR = year
+lp_formatted$SITE = site
+lp_formatted$trimWEEKNO = 1:length(lp_formatted$WEEKNO)
+lp_formatted$SPECIES = species
 
 
 #for storing results
@@ -18,7 +27,7 @@ for (i in 1:length(unique(lp_formatted$YEAR))) {
   
   lp_yr<-lp_formatted[lp_formatted$YEAR==unique(lp_formatted$YEAR)[i],]
   
-  lp_gams[[i]] <- try(gam(COUNT~ s(trimDAYNO,bs="cr") + SITE,data=lp_yr,family = poisson(link="log")), silent=TRUE)
+  lp_gams[[i]] <- try(gam(COUNT~ s(trimWEEKNO,bs="cr") + SITE,data=lp_yr,family=betar(link="logit")), silent=TRUE)
   gam.check(lp_gams[[i]])
   
   lp_yr[,"FITTED"]<-predict.gam(lp_gams[[i]], newdata = lp_yr, type="response")
@@ -39,19 +48,22 @@ for (i in 1:length(unique(lp_formatted$YEAR))) {
   #sp_data_filled <- lp_data
   
   
-  flight_curve <- data.frame(species=lp_yr$SPECIES, year=lp_yr$YEAR, week=lp_yr$WEEK, DAYNO=lp_yr$DAYNO,DAYNO_adj=lp_yr$trimDAYNO, nm=lp_yr$NM)[!duplicated(paste(lp_yr$YEAR,lp_yr$DAYNO,sep="_")),]
+  flight_curve <- data.frame(species=lp_yr$SPECIES, year=lp_yr$YEAR, WEEKNO=lp_yr$WEEKNO,WEEKNO_adj=lp_yr$trimWEEKNO, nm=lp_yr$NM)[!duplicated(paste(lp_yr$YEAR,lp_yr$WEEKNO,sep="_")),]
   
-  flight_curve <- flight_curve[order(flight_curve$DAYNO),]
+  flight_curve <- flight_curve[order(flight_curve$WEEKNO),]
   
   #Plot flight curve (phenology) and original count data
+  par(mfrow = c(1,1))
+  plot(flight_curve$WEEKNO,flight_curve$nm,type='l', main = paste(flight_curve$species[1], unique(lp_formatted$YEAR)[i]), ylim = c(0, max(lp_yr$COUNT)))
+  #points(flight_curve$WEEKNO,flight_curve$nm,col='red')
   
-  plot(flight_curve$DAYNO,flight_curve$nm,type='l', main = paste(flight_curve$species[1], unique(lp_formatted$YEAR)[i]))
-  points(flight_curve$DAYNO,flight_curve$nm,col='red')
-  
-  scalar1<-max(flight_curve$nm)/max(lp_yr$COUNT[is.na(lp_yr$COUNT)==F])
-  for (j in 1:length(levels(lp_yr$SITE))) {
-    site_j<-levels(lp_yr$SITE)[j]
-    points(lp_yr$DAYNO[lp_yr$SITE==site_j],lp_yr$COUNT[lp_yr$SITE==site_j]*scalar1,col=rainbow(length(levels(lp_yr$SITE)))[j], pch=16)
-  }
+  points(lp_yr$WEEKNO, lp_yr$COUNT, lty = 1, col = 'red')
   
 }
+
+
+maxweek <- flight_curve$WEEKNO[flight_curve$nm == max(flight_curve$nm)] # to find max
+jday = (maxweek*7)+4 # julian day of the middle of the week
+return(jday)
+
+} # end function
