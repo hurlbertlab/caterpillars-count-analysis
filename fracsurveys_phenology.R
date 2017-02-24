@@ -20,7 +20,7 @@ PR.LEPL15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:
                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'darkgoldenrod3')
 legend(20, .2, c('trained', 'citizen'), lwd = 2, lty = 1, col = c('blueviolet', 'darkgoldenrod3'))
-legend("topleft", "A", bty="n")
+mtext("A", 2, adj=1, line=2, las = 1)
 LEPL15 = merge(PR.LEPL15.sci[,c('fracSurveys', 'week')], PR.LEPL15.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', legend = c(paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL15$fracSurveys.y), 2))), bty="n")
 
@@ -94,7 +94,7 @@ legend('topright', legend = c(paste("r =", round(cor(BIRD16$fracSurveys.x, BIRD1
 mtext("Fraction of surveys", side = 2, outer = TRUE, line = 2)
 mtext("Week", side = 1, outer = TRUE, line = 2)
 
-#----FIGURE 3 PHENOLOGY PLOT *used in paper*, fraction of surveys----
+#----FIGURE 3 PHENOLOGY PLOT *used in 495 paper*, fraction of surveys----
 
 # First panel
 PR.LEPL15.sci = meanDensityByDay(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
