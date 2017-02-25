@@ -21,12 +21,8 @@ lab.triangle = rbind(labdata.pr, labdata.bg)
 #subset for  visual surveys
 vis_tri = lab.triangle[lab.triangle$surveyType == "Visual", ]
 
-#subset to bird food
-birdfood = c('ARAN', 'AUCH', 'COLE', 'DIPT', 'HETE', 'LEPL', 'ORTH', 'LEPA')
-vis_tri_food = filter(vis_tri, arthCode %in% birdfood)
-
 #add loc_ID column to specify unique trees for each year
-vis_tri_food$loc_ID = paste0(vis_tri_food$site, vis_tri_food$circle, vis_tri_food$survey, vis_tri_food$year)
+vis_tri$loc_ID = paste0(vis_tri$site, vis_tri$circle, vis_tri$survey, vis_tri$year)
 
 #Get list of tree species for each year for NCBG & PR
 all_surveyTrees_triangle = all_surveyTrees[all_surveyTrees$siteID %in% c("117", "8892356"),]
@@ -52,7 +48,7 @@ trees_tri$plantSpecies[trees_tri$loc_ID %in% c("88923567E2015", "88923567E2014")
 trees_tri$plantSpecies = as.factor(trees_tri$plantSpecies)
 
 #merge tree sp with corrections with vis_tri
-vis_tri1 = merge(vis_tri_food, trees_tri, by.x= "loc_ID", by.y= "loc_ID", all.x=TRUE)
+vis_tri1 = merge(vis_tri, trees_tri, by.x= "loc_ID", by.y= "loc_ID", all.x=TRUE)
 vis_tri2 = dplyr::select(vis_tri1, -loc_ID, -clean_plantSp, -circle.y, -survey.y, -year.y, -siteID, -date)
 names(vis_tri2) = c("surveyID", "userID", "site", "survey", "circle", "date", "julianday", "plantSp", "herbivory", 
                     "arthropod", "arthCode", "length", "count", "notes.y", "notes.x", "surveyType", "leafCount", "wetLeaves", "year", 
@@ -60,21 +56,30 @@ names(vis_tri2) = c("surveyID", "userID", "site", "survey", "circle", "date", "j
 
 #merge triangle surveys and appalachian surveys
 vis_app = cleandata.app %>% dplyr::filter(surveyType =="Visual") %>% dplyr::select(-date) %>% dplyr::rename(date = date2)
-vis_app_food = dplyr::filter(vis_app, arthCode %in% birdfood)
-vis_food = rbind(vis_tri2,vis_app_food)
+vis = rbind(vis_tri2, vis_app)
 
 #add unique identifier column for surveys
-vis_food$identifier = paste0(vis_food$site, vis_food$circle, vis_food$survey, vis_food$date)
-vis_food$loc_ID = paste0(vis_food$site, vis_food$circle, vis_food$survey, vis_food$year)
+vis$identifier = paste0(vis$site, vis$circle, vis$survey, vis$date)
+vis$loc_ID = paste0(vis$site, vis$circle, vis$survey, vis$year)
 
 #create unique tree-locations list for all trees, 2010-2016, app and triangle
-trees_all = unique(vis_food[,c("clean_plantSp", "loc_ID")])
+trees_all = unique(vis[,c("clean_plantSp", "loc_ID")])
+
+#subset to bird food and caterpillars as groups that are being affected by bottom-up
+birdfood = c('ARAN', 'AUCH', 'COLE', 'DIPT', 'HETE', 'LEPL', 'ORTH', 'LEPA')
+vis_food = filter(vis, arthCode %in% birdfood)
+vis_caterpillar = filter(vis, arthCode == "LEPL")
 
 #group by unique surveys and summarize arthropod density
-vis_count = vis_food %>% group_by(site, circle, survey, date) %>% summarise(sum(count))
-vis_count$identifier = paste0(vis_count$site, vis_count$circle, vis_count$survey, vis_count$date)
-names(vis_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
-vis_count = data.frame(vis_count)
+vis_food_count = vis_food %>% group_by(site, circle, survey, date) %>% summarise(sum(count))
+vis_food_count$identifier = paste0(vis_food_count$site, vis_food_count$circle, vis_food_count$survey, vis_food_count$date)
+names(vis_food_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
+vis_food_count = data.frame(vis_food_count)
+
+vis_caterpillar_count = vis_caterpillar %>% group_by(site, circle, survey, date) %>% summarise(sum(count))
+vis_caterpillar_count$identifier = paste0(vis_caterpillar_count$site, vis_caterpillar_count$circle, vis_caterpillar_count$survey, vis_caterpillar_count$date)
+names(vis_caterpillar_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
+vis_caterpillar_count = data.frame(vis_caterpillar_count)
 
 #vis_biomass = dplyr::summarise(vis_grouped, sum(biomass)) #biomass estimates only exist for ~ half of unique surveys. could populate fields w/zero count w/ zeros, but what about others
 #vis_biomass$identifier = paste0(vis_biomass$site, vis_biomass$circle, vis_biomass$survey, vis_biomass$date)
@@ -83,30 +88,28 @@ vis_count = data.frame(vis_count)
 
 #add year column to summarized arth densities
 vis_year = unique(vis[, c("identifier", "year")])
-vis_count1 = merge(vis_count, vis_year, by.x = "identifier", by.y = "identifier")
-#vis_biomass1 = merge(vis_biomass, vis_year, by.x="identifier", by.y="identifier")
+vis_food_count1 = merge(vis_food_count, vis_year, by.x = "identifier", by.y = "identifier")
+vis_caterpillar_count1 = merge(vis_caterpillar_count, vis_year, by.x = "identifier", by.y = "identifier")
 
-#merge to add tree species data to summary data
-vis_count1$loc_ID = paste0(vis_count1$site, vis_count1$circle, vis_count1$survey, vis_count1$year)
-#vis_biomass1$loc_ID = paste0(vis_biomass1$site, vis_biomass1$circle, vis_biomass1$survey, vis_biomass1$year)
+#merge to add tree species data to summary data for bird food and catepillars
+vis_food_count1$loc_ID = paste0(vis_food_count1$site, vis_food_count1$circle, vis_food_count1$survey, vis_food_count1$year)
+food_count_merged = merge(vis_food_count1, trees_all, by.x = "loc_ID", by.y = "loc_ID", all.x = T) 
+food_count_merged1 = dplyr::select(food_count_merged, site, circle, survey, year, sum_count, clean_plantSp)
+names(food_count_merged1) = c("site", "circle", "survey", "year", "sum_count", "plantSpecies")
 
-count_merged = merge(vis_count1, trees_all, by.x = "loc_ID", by.y = "loc_ID", all.x = T) 
-#biomass_merged = merge(vis_biomass1, trees_all, by.x = "loc_ID", by.y = "loc_ID", all.x = T)
+vis_caterpillar_count1$loc_ID = paste0(vis_caterpillar_count1$site, vis_caterpillar_count1$circle, vis_caterpillar_count1$survey, vis_caterpillar_count1$year)
+caterpillar_count_merged = merge(vis_caterpillar_count1, trees_all, by.x = "loc_ID", by.y = "loc_ID", all.x = T) 
+caterpillar_count_merged1 = dplyr::select(caterpillar_count_merged, site, circle, survey, year, sum_count, clean_plantSp)
+names(caterpillar_count_merged1) = c("site", "circle", "survey", "year", "sum_count", "plantSpecies")
 
-count_merged1 = dplyr::select(count_merged, site, circle, survey, year, sum_count, clean_plantSp)
-names(count_merged1) = c("site", "circle", "survey", "year", "sum_count", "plantSpecies")
-
-#biomass_merged1 = dplyr::select(biomass_merged, site, circle, survey, year, sum_biomass, clean_plantSp)
-#names(biomass_merged1) = c("site", "circle", "survey", "year", "sum_biomass", "plantSpecies")
 
 #Find 10 most common tree species to use in analysis 
 #you need to ask about for loops!!!
-trees = select(count_merged1, plantSpecies)
+trees = select(count_merged1, plantSpecies) # this will need to be redone
 trees_freq = data.frame(table(trees))
 trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),] 
 trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
 common_trees = trees_ordered1[1:10,]
-
 
 
 #find 24 most common tree species to use in graphing extremes (these each have at least 100 surveys)
@@ -150,28 +153,31 @@ for (code in missingnames) {
   print(sum(leaf_app$TreeSpecies == code))}
 
 #merge avg leaf area with arth density data
-count_merged2 = merge(count_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
-count_merged2 = dplyr::select(count_merged2, plantSpecies, site, circle, survey, year, sum_count, avg_leaf_area_cm2)
+food_count_merged2 = merge(food_count_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
+food_count_merged2 = dplyr::select(food_count_merged2, plantSpecies, site, circle, survey, year, sum_count, avg_leaf_area_cm2)
 
-#biomass_merged2 = merge(biomass_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
-#biomass_merged2 = dplyr::select(biomass_merged2, plantSpecies, site, circle, survey, year, sum_biomass, avg_leaf_area_cm2)
-
+caterpillar_count_merged2 = merge(caterpillar_count_merged1, leaves_sp1, by.x = "plantSpecies", by.y="ComName", all.x = T)
+caterpillar_count_merged2 = dplyr::select(caterpillar_count_merged2, plantSpecies, site, circle, survey, year, sum_count, avg_leaf_area_cm2)
 
 #normalize arth density by avg area
-count_merged2$count_norm = (count_merged2$sum_count/count_merged2$avg_leaf_area_cm2)*mean(count_merged2$avg_leaf_area_cm2, na.rm=TRUE)
-#biomass_merged2$count_norm = (biomass_merged2$sum_biomass/biomass_merged2$avg_leaf_area_cm2)*mean(biomass_merged2$avg_leaf_area_cm2, na.rm=TRUE)
+food_count_merged2$count_norm = (food_count_merged2$sum_count/food_count_merged2$avg_leaf_area_cm2)*mean(food_count_merged2$avg_leaf_area_cm2, na.rm=TRUE)
+caterpillar_count_merged2$count_norm = (caterpillar_count_merged2$sum_count/caterpillar_count_merged2$avg_leaf_area_cm2)*mean(caterpillar_count_merged2$avg_leaf_area_cm2, na.rm=TRUE)
 
 #log transform 
-count_merged2$count_log10 = log10(count_merged2$count_norm+.01) 
-#biomass_merged2$biomass_log10 = log10(biomass_merged2$biomass_norm+.01) 
+food_count_merged2$count_log10 = log10(food_count_merged2$count_norm+.01) 
+caterpillar_count_merged2$count_log10 = log10(caterpillar_count_merged2$count_norm+.01) 
+
+
 
 #subset to surveys conducted in appalachians or triangle
 triangle = c(117, 8892356)
 appalachians = c(6391028, 6391108, 2704132, 2704111, 6391138, 6391006, 8892036, 8204240, 8204206, 8892025, 6303105, 6303117,
                  6390615, 8290339, 6390644, 8290344, 8890236, 8890517, 8890009, 8890029, 8890538, 8890223, 8892130, 8892242,
                   8892217, 8890721, 8890745, 8892305, 8892346, 8892112, 6302205, 8290243, 6390627, 8204219, 6390944, 6390909)
-count_tri= dplyr::filter(count_merged2, site %in% triangle)
-count_app = dplyr::filter(count_merged2, site %in% appalachians)
+food_count_tri= dplyr::filter(food_count_merged2, site %in% triangle)
+caterpillar_count_tri = dplyr::filter(caterpillar_count_merged2, site %in% triangle)
+food_count_app = dplyr::filter(food_count_merged2, site %in% appalachians)
+caterpillar_count_app = dplyr::filter(caterpillar_count_merged2, site %in% appalachians)
 
 #Only use surveys conducted on 10 most common tree species
 count_common = dplyr::filter(count_merged2, plantSpecies %in% common_trees$trees)
