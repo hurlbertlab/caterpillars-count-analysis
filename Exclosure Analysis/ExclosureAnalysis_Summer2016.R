@@ -142,9 +142,8 @@ total_caterpillar$surveyID<- paste0(total_caterpillar$siteID, total_caterpillar$
                                 total_caterpillar$circle, total_caterpillar$survey,total_caterpillar$TrapType)
 
 #Summarise Observations for Orders not of Interest to Birds or individuals < 5 mm
-notfood <- filter(ex_pairs2, (orderArthropod %in% c("Ants (Formicidae)", "Bees and Wasps (Hymenoptera, excluding ants)", 
-                                                    "Daddy longlegs (Opiliones)", "Flies (Diptera)", "Moths, Butterflies (Lepidoptera)") 
-                                                    | orderLength < 5))
+notfood_orders = c("Ants (Formicidae)", "Bees and Wasps (Hymenoptera, excluding ants)", "Daddy longlegs (Opiliones)", "Flies (Diptera)", "Moths, Butterflies (Lepidoptera)")
+notfood <- filter(ex_pairs2, orderArthropod %in% notfood_orders & orderLength < 5 | orderArthropod %in% notfood_orders | orderLength<5)
 grouped_notfood <- notfood %>% group_by(TrapType, siteID, circle, survey, VisitNumber)
 total_notfood <- dplyr::summarise(grouped_notfood, sum(orderCount))
 total_notfood$surveyID<- paste0(total_notfood$siteID, total_notfood$VisitNumber,
@@ -232,21 +231,20 @@ wilcox_test(Visit3~ TrapType, data=caterpillar_time)
 wilcox_test(Visit3~ TrapType, data=notfood_time)
 
 ##Reshape dataframe for visualization
-food_time1 <- dplyr::select(food_time, -Visit1, -Visit2, -visit_dif)
-food_Visit3<- spread(food_time1, TrapType, Visit3)
-names(food_Visit3) <- c("siteID", "circle", "survey", "Visit3VF", "Visit3VFX")
-food_Visit3$Visit3Dif <- (food_Visit3$Visit3VFX - food_Visit3$Visit3VF)
-food_Visit3$identifier <- paste0(food_Visit3$siteID, food_Visit3$circle, food_Visit3$survey)
-food_final<-merge(food_Visit3, all_surveyTrees, by.x = "identifier", by.y="identifier")
+food_V3 <- food_time %>% dplyr::select(-Visit1, -Visit2, -visit_dif) %>% spread(TrapType, Visit3)
+names(food_V3) <- c("siteID", "circle", "survey", "Visit3VF", "Visit3VFX")
+food_V3$Visit3Dif <- (food_V3$Visit3VFX - food_V3$Visit3VF)
+food_V3$identifier <- paste0(food_V3$siteID, food_V3$circle, food_V3$survey)
+food_final<-merge(food_V3, all_surveyTrees, by.x = "identifier", by.y="identifier")
 food_final <- dplyr::select(food_final, -siteID.y, -circle.y, -survey.y)
 names(food_final)<- c("identifier", "siteID", "circle", "survey", "Visit3VF", "Visit3VFX", "Visit3Dif", "treeSp")
 
 caterpillar_time1 <- dplyr::select(caterpillar_time, -Visit1, -Visit2, -visit_dif)
-caterpillar_Visit3<- spread(caterpillar_time1, TrapType, Visit3)
-names(caterpillar_Visit3) <- c("siteID", "circle", "survey", "Visit3VF", "Visit3VFX")
-caterpillar_Visit3$Visit3Dif <- caterpillar_Visit3$Visit3VFX - caterpillar_Visit3$Visit3VF
-caterpillar_Visit3$identifier <- paste0(caterpillar_Visit3$siteID, caterpillar_Visit3$circle, caterpillar_Visit3$survey)
-caterpillar_final<-merge(caterpillar_Visit3, all_surveyTrees, by.x = "identifier", by.y="identifier")
+caterpillar_V3<- spread(caterpillar_time1, TrapType, Visit3)
+names(caterpillar_V3) <- c("siteID", "circle", "survey", "Visit3VF", "Visit3VFX")
+caterpillar_V3$Visit3Dif <- caterpillar_V3$Visit3VFX - caterpillar_V3$Visit3VF
+caterpillar_V3$identifier <- paste0(caterpillar_V3$siteID, caterpillar_V3$circle, caterpillar_V3$survey)
+caterpillar_final<-merge(caterpillar_V3, all_surveyTrees, by.x = "identifier", by.y="identifier")
 caterpillar_final <- dplyr::select(caterpillar_final, -siteID.y, -circle.y, -survey.y)
 names(caterpillar_final)<- c("identifier", "siteID", "circle", "survey", "Visit3VF", "Visit3VFX", "Visit3Dif", "treeSp")
 
@@ -337,3 +335,43 @@ plot(mean_site_PR$julianday, mean_site_PR$mean.percent_herb.)
 plot.default(mean_site_BG$julianday, mean_site_BG$mean.percent_herb.)
 #plot.default(mean_species_herb$julianday, mean_species_herb$mean.percent_herb., ylab=="Mean Percent Herbivory", xlab=="Julian Day")
 
+#plot 
+
+##Bird Food Group Reshaping for histograms 
+#have column for differences between V3 and V2 for VF and VFX, and then column that is "difference of differences" difference in those columns
+food_time1_t <- select(food_time, -Visit1, -Visit3,  -visit_dif)
+food_Visit2_t<- spread(food_time1_t, TrapType, Visit2)
+names(food_Visit2_t) <- c("siteID", "circle", "survey", "Visit2VF", "Visit2VFX")
+food_Visit2_t$ID <- paste(food_Visit2_t$siteID, food_Visit2_t$circle, food_Visit2_t$survey)
+
+food_time2_t <- select(food_time, -Visit1, -Visit2, -visit_dif)
+food_Visit3_t<- spread(food_time2_t, TrapType, Visit3)
+names(food_Visit3_t) <- c("siteID", "circle", "survey", "Visit3VF", "Visit3VFX")
+food_Visit3_t$ID <- paste(food_Visit3_t$siteID, food_Visit3_t$circle, food_Visit3_t$survey)
+
+food_time3_t <- merge(food_Visit2_t, food_Visit3_t, by.x="ID", by.y="ID")
+food_time4_t <- select(food_time3_t, -siteID.y, -circle.y, -survey.y, -ID)
+names(food_time4_t) <- c("siteID", "circle", "survey", "Visit2VF", "Visit2VFX", "Visit3VF", "Visit3VFX")
+
+food_time4_t$VF_dif<- food_time4_t$Visit3VF-food_time4_t$Visit2VF
+food_time4_t$VFX_dif<- food_time4_t$Visit3VFX-food_time4_t$Visit2VFX
+food_time4_t$VFX_VF_dif<-food_time4_t$VFX_dif-food_time4_t$VF_dif
+
+##Caterpillar Food Group Reshaping
+caterpillar_time1_t <- select(caterpillar_time, -Visit1, -Visit3,  -visit_dif)
+caterpillar_Visit2_t<- spread(caterpillar_time1_t, TrapType, Visit2)
+names(caterpillar_Visit2_t) <- c("siteID", "circle", "survey", "Visit2VF", "Visit2VFX")
+caterpillar_Visit2_t$ID <- paste(caterpillar_Visit2_t$siteID, caterpillar_Visit2_t$circle, caterpillar_Visit2_t$survey)
+
+caterpillar_time2_t <- select(caterpillar_time, -Visit1, -Visit2, -visit_dif)
+caterpillar_Visit3_t<- spread(caterpillar_time2_t, TrapType, Visit3)
+names(caterpillar_Visit3_t) <- c("siteID", "circle", "survey", "Visit3VF", "Visit3VFX")
+caterpillar_Visit3_t$ID <- paste(caterpillar_Visit3_t$siteID, caterpillar_Visit3_t$circle, caterpillar_Visit3_t$survey)
+
+caterpillar_time3_t <- merge(caterpillar_Visit2_t, caterpillar_Visit3_t, by.x="ID", by.y="ID")
+caterpillar_time4_t <- select(caterpillar_time3_t, -siteID.y, -circle.y, -survey.y, -ID)
+names(caterpillar_time4_t) <- c("siteID", "circle", "survey", "Visit2VF", "Visit2VFX", "Visit3VF", "Visit3VFX")
+
+caterpillar_time4_t$VF_dif<- caterpillar_time4_t$Visit3VF-caterpillar_time4_t$Visit2VF
+caterpillar_time4_t$VFX_dif<- caterpillar_time4_t$Visit3VFX-caterpillar_time4_t$Visit2VFX
+caterpillar_time4_t$VFX_VF_dif<-caterpillar_time4_t$VFX_dif-caterpillar_time4_t$VF_dif
