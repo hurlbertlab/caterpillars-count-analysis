@@ -139,59 +139,68 @@ names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #cha
 # xlab="Number of Gears", col=c("darkblue","red"),
 # legend = rownames(counts), beside=TRUE) 
 
-pdf('plots/Figure1_arthropods.pdf', height = 8, width = 11)
+pdf('plots/paper_plots/Figures1to6_arthropods.pdf', height = 8, width = 11)
 
-
-par(mfrow = c(2, 3), mar = c(5, 5, 2, 2))
+par(xpd=FALSE)
+par(mfrow = c(3, 2), mar = c(5, 5, 2, 1))
 
 #figure A
 lab_selected1 = lab_selected[,-1]
 rownames(lab_selected1) = lab_selected[,1]
 lab_selected1 = as.matrix(lab_selected1) #create matrix w/o arth code?
 
-barplot(lab_selected1, legend = lab_selected$arthCode, las = 2, cex.names = .7, xlim = c(0, 3.2),
-        ylab = "Proportion of Arthopods Seen", las = .5) #this needs to be cleaned up
+barplot(lab_selected1, las = 2, cex.names = .7, xlim = c(0, 3.2),
+        ylab = "Proportion Arths", las = .5) #this needs to be cleaned up
+
 
 #figure B
 par(mar = c(6, 6, 2, 2))
 common_trees2 = common_trees1[,-1]
 rownames(common_trees2) = common_trees1[,1]
 common_trees2 = as.matrix(common_trees2)
-barplot(common_trees2, legend = common_trees1$arthCode, las = 2, cex.names = .6, xlim = c(0, 6),
-        ylab = "Arthropods per Survey") #this needs to be cleaned up
+barplot(common_trees2, las = 2, cex.names = .6, xlim = c(0, 6), legend = arth_selected$arthCode,
+        ylab = "Mean Arths") #this needs to be cleaned up
 
-#figure C (BS vs VIS) (here we're comparing different years)
-
-plot(arth_means$vol_vis, arth_means$vol_bs, las = 2, xlab = "Mean Arths per VIS",
-        ylab = "Mean Arths per BS", col = "purple", pch = 20)
-volunteer =lm(vol_bs ~ vol_vis, data = arth_means)
-abline(volunteer, col = "purple", cex = 2)
-points(arth_means$lab_vis, arth_means$lab_bs, las = 2, col = "blue", pch = 15)
-laboratory = lm(lab_bs ~ lab_vis, data = arth_means)
-abline(laboratory, col = "blue", cex = 2)
 #legend
 
 #figure D
 arth_selected_bs1 = as.matrix(arth_selected_bs)
 arth_selected_vis1 = as.matrix(arth_selected_vis)
 
-barplot(arth_selected_vis1, legend = arth_selected$arthCode, las = 2, cex.names = .7, xlim = c(0,3.2), 
-        ylab = "Proportion of Arthopods Seen")
+barplot(arth_selected_vis1, las = 2, cex.names = .7, xlim = c(0,3.2), 
+        ylab = "Proportion Arths")
 
 #figure E
-par(mfrow = c(1, 1), mar = c(5, 5, 2, 2))
-barplot(arth_selected_bs1, legend = arth_selected$arthCode, las = 2, cex.names = .7, xlim = c(0,3.2),
-        ylab = "Proportion Arthopods Seen")
+barplot(arth_selected_bs1, las = 2, cex.names = .7, xlim = c(0,3.2),
+        ylab = "Proportion Arths")
+
+#figure C (BS vs VIS) (here we're comparing different years)
+plot(arth_means$vol_vis, arth_means$vol_bs, las = 2, xlab = "Mean Arths (VIS)",
+     ylab = "Mean Arths (BS)", col = "purple", pch = 20)
+volunteer =lm(vol_bs ~ vol_vis, data = arth_means)
+abline(volunteer, col = "purple", cex = 2)
+points(arth_means$lab_vis, arth_means$lab_bs, las = 2, col = "blue", pch = 15)
+laboratory = lm(lab_bs ~ lab_vis, data = arth_means)
+abline(laboratory, col = "blue", cex = 2)
+legend(x = "bottomright",
+       c("vol", "lab"),
+       lty=c(1,1),
+        col=c("purple", "blue"))
 
 #figure F (volunteers vs lab)
-plot(arth_means$lab_vis, arth_means$vol_vis, xlab = "Mean Arths per vol. survey ",
-     ylab = "Mean Arths per lab survey", col = "pink", pch = 20) 
+plot(arth_means$lab_vis, arth_means$vol_vis, xlab = "Mean Arths (vol)",
+     ylab = "Mean Arths (lab)", col = "pink", pch = 20) 
 visual =lm(vol_vis ~ lab_vis, data = arth_means)
 abline(visual, col = "pink", cex = 2)
 points(arth_means$lab_bs, arth_means$vol_bs, las = 2, col = "red", pch = 15)
 beat = lm(vol_bs ~ lab_bs, data = arth_means)
 abline(beat, col = "red", cex = 2)
 abline(0,1)
+
+legend(x = "bottomright",
+       c("vis", "BS"),
+       lty=c(1,1),
+       col=c("red", "pink"))
 
 dev.off()
 
