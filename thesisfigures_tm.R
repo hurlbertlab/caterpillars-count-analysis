@@ -44,3 +44,28 @@ histogram(caterpillar_time4_12$Visit3VF, type="count",
 histogram(caterpillar_time4_12$Visit3VFX, type="count",
           ylab="Number of Surveys", ylim=c(0,25), xlab="Arthropod density (# of arthropods)", col="slate blue2")
 #Figure 3 
+#Plot HSD results
+par(mfrow = c(2, 2), mar=c(7,4,3,3))
+barplot(plotting.log_app_food$means, names.arg=plotting.log_app_food$tree_sp, las=2,  
+        ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        col = blues9)
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_app_food$M)
+
+#caterpillar appalachians
+barplot(plotting.log_app_caterpillar$means, names.arg=plotting.log_app_caterpillar$tree_sp, las=2, 
+        ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        col = blues9)
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_app_caterpillar$M)
+
+#bird food triangle
+barplot(plotting.log_tri_food$means, names.arg=plotting.log_tri_food$tree_sp, las=2, 
+        ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        col = blues9)
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_tri_food$M)
+
+#caterpillar triangle
+barplot(plotting.log_tri_caterpillar$means, names.arg=plotting.log_tri_caterpillar$tree_sp, las=2, 
+        ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        col = blues9)
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_tri_caterpillar$M)
+#if then statement for the colors?
