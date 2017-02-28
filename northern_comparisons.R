@@ -26,6 +26,7 @@ dat$tree.name = ifelse(dat$tree.spec == 1, "American beech",
 singer$hostplantspecies = gsub("Hammamelis virginiana", "Hamamelis virginiana", singer$hostplantspecies) #incorrect spelling
 plant_codes1 = dplyr::rename(plant_codes, hostplantspecies = TreeSciName)
 singer1 = singer %>% left_join(plant_codes1, by = "hostplantspecies") %>% select(-TreeCode, -Notes)
+singer1$ComName = gsub("Northern red oak", "Red oak", singer1$ComName)
 
 #remove data from 1994 (because it had far more caterpillars than any other year) & 1996 & 1997 b/c they only have 1 plot
 goodyears = c("1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1995")
@@ -43,9 +44,6 @@ two_92 = dat %>% dplyr::filter(year == 1992 & plot == 2)
 three_89 = dat %>% dplyr::filter(year == 1989 & plot == 3) #only 6 dates, one is left over
 four_89 = dat %>% dplyr::filter(year == 1989 & plot == 4)
 
-unique_hub = data.frame(table(dat %>% dplyr::select(year, yearday, plot, count, grid.letter))) 
-unique_hub1 = dplyr::filter(unique_hub, Freq > 0)
-
 # calculate total # of leaves surveyed for each tree species over the course of all years we are looking at
 unique_hub = dplyr::filter(data.frame(table(dat %>% dplyr:: select (year, plot, count))), Freq > 0)
 numvisits = unique_hub %>% dplyr::count(year, plot)
@@ -56,10 +54,14 @@ total_surveys1 = 15040 #needs to be automated
 #global means for normal years (beech and sugar maple) #are there the same number of beech and sugar maple trees? or is there metadata?
 #same number of beech and sugar maple
 hubbard_means = dat1 %>% dplyr::rename(ComName = tree.name) %>% group_by(ComName) %>% 
-  dplyr::summarize(sum_count = sum(number.lep)/total_surveys1, biomass = sum(lepbio.mass.mg.)/total_surveys1) 
+  dplyr::summarize(mean_cat_dens = sum(number.lep)/total_surveys1, biomass = sum(lepbio.mass.mg.)/total_surveys1) 
 hubbard_ranks = hubbard_means[order(hubbard_means$sum_count, decreasing = T),]
 hubbard_ranks_sel = hubbard_ranks %>% filter(ComName %in% c("Sugar maple", "American beech"))
 hubbard_ranks_sel = cbind(hubbard_ranks = rownames(hubbard_ranks_sel), hubbard_ranks_sel)
+
+#hubbard means by site
+hub_means_sites = dat1 %>% dplyr::rename(ComName = tree.name) %>% group_by(ComName, plot) %>% 
+  dplyr::summarize(mean_cat_dens = sum(number.lep)/total_surveys1) 
 
 #subset dataset to only include 96/97 data to see if there is effect on beech and sugar maple amounts
 sumbysp_67 = dat1 %>% filter(year %in% c("1996", "1997") & plot =="1") %>% group_by(tree.name) %>% 
@@ -67,12 +69,13 @@ sumbysp_67 = dat1 %>% filter(year %in% c("1996", "1997") & plot =="1") %>% group
 
 #Find patterns in Singer Data 
 #include only trees without a treatment
-
 singer_means = singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(generalist.density.m2)) 
-singer_means$ComName = gsub("Northern red oak", "Red oak", singer_means$ComName)
 singer_ranks = singer_means[order(singer_means$mean_cat_dens, decreasing = T),]
 singer_ranks = cbind(singer_ranks = rownames(singer_ranks), singer_ranks)
 singer_ranks$ComName = gsub("Northern red oak", "Red oak", singer_ranks$ComName)
+
+#singer means by site 
+singer_means_sites = singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(generalist.density.m2)) 
 
 #CC & Appalachian data
 #add column with just caterpillar data
@@ -96,6 +99,8 @@ tri_ranks = tri_means[order(tri_means$mean_cat_dens, decreasing = T),]
 tri_relevant = data.frame(filter(tri_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple")))
 tri_relevant = cbind(tri_ranks = rownames(tri_relevant), tri_relevant)
 tri_relevant$tri_ranks = as.character(tri_relevant$tri_ranks)
+tri_means_sites = vis_tri2 %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
+
 
 #appalachian surveys broken down into middle appalachia (VA) and southern appalachia(NC, TN, SC, GA)
 va_sites = vis_app %>% filter(grepl("88", site))
@@ -105,6 +110,7 @@ va_ranks = va_means[order(va_means$mean_cat_dens, decreasing = T),]
 va_relevant = data.frame(filter(va_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple")))
 va_relevant = cbind(va_ranks = rownames(va_relevant), va_relevant)
 va_relevant$va_ranks = as.character(va_relevant$va_ranks)
+va_means_sites = va_sites %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 
 sa_sites = vis_app %>% filter(!grepl("88", site))
 uniq_sa = unique(sa_sites$site)
@@ -113,6 +119,8 @@ sa_ranks = sa_means[order(sa_means$mean_cat_dens, decreasing = T),]
 sa_relevant = filter(sa_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple"))
 sa_relevant = cbind(sa_ranks = rownames(sa_relevant), sa_relevant)
 sa_relevant$sa_ranks = as.character(sa_relevant$sa_ranks)
+sa_means_sites = sa_sites %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
+
 
 # Visualize rankings #double check rankings for hubbard brook
 # convert rownames (ranking numbers) to a column (y-axis of figure)
@@ -134,15 +142,32 @@ plot(all_ranks$sing, all_ranks$singer_ranks, xlim = c(.2,3.6), ylim = c(0,6), ty
   text(all_ranks$hub, all_ranks$hubbard_ranks, labels = all_ranks$ComName, cex = .6)
 
 #--------------------------variance partitioning analysis of tree sp and site on caterpillar density----------------
+#spread
 #merge means from all regions into one df
-means1 = merge(va_means, sa_means, by = "ComName") 
-means1_r = rename(means1,va = mean_cat_dens.x, sa = mean_cat_dens.y)
-means2 = merge(means1_r, tri_means, by = "ComName", all.x = T)
-means2_r = rename(means2, tri = mean_cat_dens)
-means3 = merge(means2_r, singer_means, all.x = T)
-means3_r = rename(means3, sing = mean_cat_dens)
-means4 = merge(means3_r, hubbard_means, all.x = T)
-all_means = means4 %>% rename(hub = sum_count) %>% dplyr::select(-biomass)
+#means1 = merge(va_means_sites, sa_means_sites, by = "ComName") 
+#means2 = merge(means1_r, tri_means_sites, by = "ComName", all.x = T)
+#means2_r = rename(means2, tri = mean_cat_dens)
+#means3 = merge(means2_r, singer_means_sites, all.x = T)
+#means3_r = rename(means3, sing = mean_cat_dens)
+#means4 = merge(means3_r, hubbard_means, all.x = T)
+#all_means = means4 %>% rename(hub = sum_count) %>% dplyr::select(-biomass)
+#add column to each regional dataframe to identify after the bind
+va_means_sites$region = "va"
+sa_means_sites$region = "sa"
+tri_means_sites$region = "tri"
+singer_means_sites$region = "sing"
+hub_means_sites$region = "hub"
+
+#create one dataframe with all densities
+hub_means_sites = rename(hub_means_sites, site = plot)
+hub_means_sites$site = as.character(hub_means_sites$site)
+va_sa = rbind(va_means_sites, sa_means_sites)
+va_sa_tri = rbind(va_sa, tri_means_sites)
+va_sa_tri$site = as.character(va_sa_tri$site)
+va_sa_tri_singer = rbind(va_sa_tri, singer_means_sites)
+all_regions = rbind(va_sa_tri, hub_means_sites)
+
+
 
 #remove meaningless "UNID" tree sp
 all_means1= filter(all_means, ComName != "UNID")
@@ -167,25 +192,41 @@ region_complete$total_precip = region_complete$ppt_may + region_complete$ppt_jun
 
 #linear models
 lm.region = lm(mean_cat ~ region, data = region_complete)
-lm.species = lm(mean_cat ~ ComName, data = all_means_site) #what does it mean that the adjusted r2 is nothing?
-lm.site.species = lm(mean_cat ~ site + ComName, data = all_means_site)
+lm.species = lm(mean_cat ~ ComName, data = region_complete) #what does it mean that the adjusted r2 is nothing?
+lm.precip = lm(mean_cat ~ total_precip, data = region_complete)
+lm.region.species = lm(mean_cat ~ region + ComName, data = region_complete)
+lm.region.precip = lm(mean_cat ~ region + total_precip, data = region_complete )
+lm.species.precip = lm(mean_cat ~ ComName + total_precip, data = region_complete)
+lm.all = lm(mean_cat ~ region + ComName + total_precip, data = region_complete)
 
+#potential variables currently not included
 lm.maytemp = lm(mean_cat ~ temp_may, data = region_complete)
 lm.junetemp = lm(mean_cat ~ temp_june, data = region_complete)
 lm.julytemp = lm(mean_cat ~ temp_july, data = region_complete)
 
-lm.precip = lm(mean_cat ~ total_precip, data = region_complete)
-
 #variance partitioning
-#a = variance uniquely explained by site
-#b = variance explained by site and species together
-#c = variance uniquely explained by species
-#d = variance explained by neither
+#a(1) = variance uniquely explained by region
+#b(1) = variance uniquely explained by species
+#c(1) = variance uniquely explained by net precipitation may-july
+#d(1) = variance explained by both region and species
+#e(1) = variance explained by both region and precip
+#f(1) = variance explained by both species and precip
+#g(1) = variance explained by none of the 3
+#h(1) = variance explained by all of the 3
 
-a = summary(lm.site.species)$r.squared - summary(lm.species)$r.squared
-b = summary(lm.site)$r.squared - a
-c = summary(lm.site.species)$r.squared - summary(lm.site)$r.squared
-d = 1-summary(lm.site.species)$r.squared
+a = summary(lm.all)$r.squared - summary(lm.species.precip)$r.squared
+b = summary(lm.all)$r.squared - summary(lm.region.precip)$r.squared
+c = summary(lm.all)$r.squared - summary(lm.region.species)$r.squared
+dh = summary(lm.region)$r.squared + summary(lm.species)$r.squared - summary(lm.region.species)$r.squared
+eh = summary(lm.region)$r.squared + summary(lm.precip)$r.squared - summary(lm.region.precip)$r.squared
+hf = summary(lm.species)$r.squared + summary(lm.precip)$r.squared - summary(lm.species.precip)$r.squared
+e = summary(lm.region)$r.squared - dh - a
+f = summary(lm.species)$r.squared -dh - b
+d = summary(lm.region.species)$r.squared - hf - e - c - b
+h = hf - f
+g = 1 - summary(lm.all)$r.squared
+
+
 
 #how to do this... you have 5 site
 
