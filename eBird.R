@@ -13,13 +13,10 @@ setwd('c:/users/hayeste/my documents/495/eBird/NC')
 
 nc_ebird <- read.table(file = 'nc_ebird.txt', header = TRUE, sep = '\t', fill = TRUE, quote = '')
 
-# ---- Exclude casual observations, long travel distances, and short durations
 
-
-
-nc_ebird_sub <- nc_ebird[,c(1,3,4,5,8,10,14,20,23,24,25,26)]
+nc_ebird_sub <- nc_ebird[,c(1,3,4,5,8,10,14,20,23,24,25,26,33,35,36)]
 names(nc_ebird_sub) <- c('identifier', 'category', 'common_name', 'scientific_name', 'count', 'age_sex', 
-                         'state', 'locality', 'lat', 'long', 'date', 'time')
+                         'state', 'locality', 'lat', 'long', 'date', 'time', 'protocol_type', 'duration', 'distance')
 nc_ebird_sub$scientific_name <- as.character(nc_ebird_sub$scientific_name)
 nc_ebird_sub$year = as.numeric(as.character(substr(nc_ebird_sub$date, 1, 4)))
 
@@ -107,23 +104,35 @@ bg_ebird$jday = yday(bg_ebird$date)
 #hb_ebird$date = as.Date(as.character(hb_ebird$date), format = '%Y-%m-%d')
 #hb_ebird$jday = yday(hb_ebird$date)
 
+# ---- Exclude casual observations, long travel distances, and short durations
+
+# Prairie Ridge
+pr_ebird_clean <- pr_ebird[pr_ebird$protocol_type != 'eBird - Casual Observation',]
+pr_ebird_clean <- pr_ebird_clean[pr_ebird_clean$distance <= 5,]
+pr_ebird_clean <- pr_ebird_clean[pr_ebird_clean$duration >= 30,]
+
+# Botanical Garden
+bg_ebird_clean <- bg_ebird[bg_ebird$protocol_type != 'eBird - Casual Observation',]
+bg_ebird_clean <- bg_ebird_clean[bg_ebird_clean$distance <= 5,]
+bg_ebird_clean <- bg_ebird_clean[bg_ebird_clean$duration >= 30,]
+
 #---- Organize data into format for logistics script ----
 
-sampling_pr = pr_ebird[,c('lat', 'long', 'year', 'jday')]
+sampling_pr = pr_ebird_clean[,c('lat', 'long', 'year', 'jday')]
 sampling_pr$Lat.Long = paste(sampling_pr$lat, sampling_pr$long, sep = "")
 names(sampling_pr) = c('Latitude', 'Longitude', 'Year.Collected', 'JulianDay', 'Lat.Long')
 write.csv(sampling_pr, 'c:/git/caterpillars-count-analysis/data/ebird_sampling_pr.csv')
 
-obs_pr = pr_ebird[,c('scientific_name', 'lat', 'long', 'count', 'year', 'jday')]
+obs_pr = pr_ebird_clean[,c('scientific_name', 'lat', 'long', 'count', 'year', 'jday')]
 names(obs_pr) = c('Scientific.Name', 'Latitude', 'Longitude', 'Observation.Count', 'Year', 'JulianDay')
 write.csv(obs_pr, 'c:/git/caterpillars-count-analysis/data/ebird_obs_pr.csv')
 
-sampling_bg = bg_ebird[,c('lat', 'long', 'year', 'jday')]
+sampling_bg = bg_ebird_clean[,c('lat', 'long', 'year', 'jday')]
 sampling_bg$Lat.Long = paste(sampling_bg$lat, sampling_bg$long, sep = "")
 names(sampling_bg) = c('Latitude', 'Longitude', 'Year.Collected', 'JulianDay', 'Lat.Long')
 write.csv(sampling_bg, 'c:/git/caterpillars-count-analysis/data/ebird_sampling_bg.csv')
 
-obs_bg = bg_ebird[,c('scientific_name', 'lat', 'long', 'count', 'year', 'jday')]
+obs_bg = bg_ebird_clean[,c('scientific_name', 'lat', 'long', 'count', 'year', 'jday')]
 names(obs_bg) = c('Scientific.Name', 'Latitude', 'Longitude', 'Observation.Count', 'Year', 'JulianDay')
 write.csv(obs_bg, 'c:/git/caterpillars-count-analysis/data/ebird_obs_bg.csv')
 
