@@ -15,7 +15,7 @@ obs_bg <- read.csv('c:/git/caterpillars-count-analysis/data/ebird_obs_bg.csv')
 #---- CREATE PRAIRIE RIDGE DATASET ----
 
 par(mfrow=c(3,2)) #mai=c(0.3,0.6,0.25,0.5), las=1,xaxs="r")
-splist = c('Passerina cyanea', 'Vireo olivaceus', 'Troglodytes aedon', 'Geothlypis trichas', 'Icterus spurius', 'Polioptila caerulea')
+splist = c('Passerina cyanea', 'Vireo olivaceus', 'Geothlypis trichas', 'Polioptila caerulea')
 
 inflection.pt.output=c()
 singlesp = c()
@@ -37,7 +37,7 @@ t.obs.NA1s$Observation.Count = as.numeric(as.character(t.obs.NA1s$Observation.Co
 if(nrow(t.samp)>0 & nrow(t.obs.NA1s)>0 & (length(unique(t.obs.NA1s$JulianDay))>=30)==T){    #       nrow(t.samp)>49 &
   effort.by.day = aggregate(t.samp$Lat.Long, list(t.samp$Year.Collected, t.samp$JulianDay), function(x) length(unique(x)))
   names(effort.by.day)=c('Year','JulianDay','Num.Unique.locs')            #number of unique locs in sampling per day
-  window.days = 80:180     #the days without records are discarded, and here we're adding the 0's back in to replace the NA's
+  window.days = 60:180     #the days without records are discarded, and here we're adding the 0's back in to replace the NA's
   temp.data1 = merge(effort.by.day,as.data.frame(window.days),by.x='JulianDay',by.y='window.days',all=T)
   temp.data1[is.na(temp.data1$Num.Unique.locs),'Num.Unique.locs'] = 0
   
@@ -75,13 +75,13 @@ if(nrow(t.samp)>0 & nrow(t.obs.NA1s)>0 & (length(unique(t.obs.NA1s$JulianDay))>=
   temp.data2 = merge(locc[locc$Year==yr,],window.days2,by.x='JulianDay',by.y='V1',all=T)
   temp.data2[is.na(temp.data2$Num.uniq.locs),'Num.uniq.locs'] = 0
   
-  temp.data2 = temp.data2[temp.data2$JulianDay<=180 & temp.data2$JulianDay>=80, ]         ##<<Change both here if want to change window of days seen<<##
-  temp.data1 = temp.data1[temp.data1$JulianDay<=180 & temp.data1$JulianDay>=80, ]
+  temp.data2 = temp.data2[temp.data2$JulianDay<=180 & temp.data2$JulianDay>=60, ]         ##<<Change both here if want to change window of days seen<<##
+  temp.data1 = temp.data1[temp.data1$JulianDay<=180 & temp.data1$JulianDay>=60, ]
   
   temp.data2$prop = temp.data2$Num.uniq.locs/temp.data1$Num.Unique.locs
   
   #plotting
-  plot(temp.data2$JulianDay, temp.data2$prop,ylim=c(0,1),xlab='JulianDay',ylab='Prop of Uniq Locs',main=paste(as.character(splist[sp])), xlim=c(80,180), pch=16,type='o')
+  plot(temp.data2$JulianDay, temp.data2$prop,ylim=c(0,1),xlab='JulianDay',ylab='Prop of Uniq Locs',main=paste(as.character(splist[sp])), xlim=c(60,180), pch=16,type='o')
   text(min(temp.data2$JulianDay)+5, 0.9, yr, cex=1.5)
   #text(160, 0.9, as.character(splist[sp]))
   
@@ -110,8 +110,9 @@ if(nrow(t.samp)>0 & nrow(t.obs.NA1s)>0 & (length(unique(t.obs.NA1s$JulianDay))>=
     nll
   }
   nll<-numeric()
+  xmids<-seq(60,180,20)
   coef.mat<-matrix(NA,ncol=3,nrow=length(xmids))
-  xmids<-seq(80,180,20)
+  
   for(xm in 1:length(xmids)){
     guess <- list(Asym=.6,xmid=xmids[xm],scal=1)
     fit.exp.con<- mle2(ll.exp.con, start = guess, method = "Nelder-Mead",skip.hessian=T)
@@ -180,7 +181,7 @@ for(sp in 1:6) { par(mfrow=c(3,2))
     if(nrow(t.samp)>0 & nrow(t.obs.NA1s)>0 & (length(unique(t.obs.NA1s$JulianDay))>=30)==T){    #       nrow(t.samp)>49 &
       effort.by.day = aggregate(t.samp$Lat.Long, list(t.samp$Year.Collected, t.samp$JulianDay), function(x) length(unique(x)))
       names(effort.by.day)=c('Year','JulianDay','Num.Unique.locs')            #number of unique locs in sampling per day
-      window.days = 80:180     #the days without records are discarded, and here we're adding the 0's back in to replace the NA's
+      window.days = 60:180     #the days without records are discarded, and here we're adding the 0's back in to replace the NA's
       temp.data1 = merge(effort.by.day,as.data.frame(window.days),by.x='JulianDay',by.y='window.days',all=T)
       temp.data1[is.na(temp.data1$Num.Unique.locs),'Num.Unique.locs'] = 0
       
@@ -218,13 +219,13 @@ for(sp in 1:6) { par(mfrow=c(3,2))
       temp.data2 = merge(locc[locc$Year==yr,],window.days2,by.x='JulianDay',by.y='V1',all=T)
       temp.data2[is.na(temp.data2$Num.uniq.locs),'Num.uniq.locs'] = 0
       
-      temp.data2 = temp.data2[temp.data2$JulianDay<=180 & temp.data2$JulianDay>=80, ]         ##<<Change both here if want to change window of days seen<<##
-      temp.data1 = temp.data1[temp.data1$JulianDay<=180 & temp.data1$JulianDay>=80, ]
+      temp.data2 = temp.data2[temp.data2$JulianDay<=180 & temp.data2$JulianDay>=60, ]         ##<<Change both here if want to change window of days seen<<##
+      temp.data1 = temp.data1[temp.data1$JulianDay<=180 & temp.data1$JulianDay>=60, ]
       
       temp.data2$prop = temp.data2$Num.uniq.locs/temp.data1$Num.Unique.locs
       
       #plotting
-      plot(temp.data2$JulianDay, temp.data2$prop,ylim=c(0,1),xlab='JulianDay',ylab='Prop of Uniq Locs',main=paste(as.character(splist[sp])), xlim=c(80,180), pch=16,type='o')
+      plot(temp.data2$JulianDay, temp.data2$prop,ylim=c(0,1),xlab='JulianDay',ylab='Prop of Uniq Locs',main=paste(as.character(splist[sp])), xlim=c(60,180), pch=16,type='o')
       text(min(temp.data2$JulianDay)+5, 0.9, yr, cex=1.5)
       #text(160, 0.9, as.character(splist[sp]))
       
@@ -254,7 +255,7 @@ for(sp in 1:6) { par(mfrow=c(3,2))
       }
       nll<-numeric()
       coef.mat<-matrix(NA,ncol=3,nrow=length(xmids))
-      xmids<-seq(80,180,20)
+      xmids<-seq(60,180,20)
       for(xm in 1:length(xmids)){
         guess <- list(Asym=.6,xmid=xmids[xm],scal=1)
         fit.exp.con<- mle2(ll.exp.con, start = guess, method = "Nelder-Mead",skip.hessian=T)
