@@ -4,7 +4,7 @@ source('C:/git/caterpillars-count-analysis/prism_10year.R') # GDDs
 
 source('C:/git/caterpillars-count-analysis/modis_10year.R') # Spring green-up
 
-source('C:/git/caterpillars-count-analysis/gams.R') # eventually arths peaks, once I get this to work
+source('C:/git/caterpillars-count-analysis/spline_thesis.R') # Arths peaks
 
 source('C:/git/caterpillars-count-analysis/eBird_logistics.R') # Bird arrival
 
@@ -60,252 +60,308 @@ par(mar = c(4,4,2,2), mfrow = c(3,2))
 
 # Blank plot for pdf
 plot.new()
-legend('bottomleft', c('2015 caterpillars','2015 bird food', '2016 caterpillars', '2016 bird food'), pch = c(21, 22, 16, 15), cex = 1.2)
-legend('topleft', c('Prairie Ridge (PR)', 'Botanical Garden (BG)'), pch = 16, col = c('red', 'blue'), cex = 1.2)
+legend('bottomleft', c('caterpillars','orthopterans', 'bird food'), pch = 16, cex = 1.2, col = c('seagreen3', 'plum', 'orange3'))
+legend('topleft', c('Prairie Ridge 2015 21', 'Prairie Ridge 2016 16','Botanical Garden 2015 22', 'Botanical Garden 2016 15'), pch = c(21,16,22,15), cex = 1.2)
 plot.new()
 
 #---- Arths and greenup - visual surveys----
-par(mar = c(4,4,2,2))
+par(mar = c(4,4,2,2), mfrow = c(2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth peak week',xlab='Greenup JD', xlim = c(86,94), ylim = c(22, 30),
+plot(0,bty='n',pch='',ylab='Arth peak JD',xlab='Greenup JD', xlim = c(86,94), ylim = c(150, 210),
      main = 'Visual')
 legend("topleft", "A", bty="n")
-maxden1 <- max(PR.LEPL15.vis$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-       PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
-       pch = 21, type = 'p', col = 'red')
-maxden2 <- max(PR.BIRD15.vis$fracSurveys)
+       PR.LEPL15.vis.max, 
+       pch = 21, type = 'p', cex = 2,  col = 'seagreen3')
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-       PR.BIRD15.vis$week[PR.BIRD15.vis$fracSurveys == maxden2], 
-       pch = 22, type = 'p', col = 'red')
-maxden3 <- max(PR.LEPL16.vis$fracSurveys)
+       PR.BIRD15.vis.max, 
+       pch = 21, type = 'p', cex = 2,  col = 'orange3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+       PR.ORTH15.vis.max, 
+       pch = 21, type = 'p', cex = 2,  col = 'plum')
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-       PR.LEPL16.vis$week[PR.LEPL16.vis$fracSurveys == maxden3], 
-       pch = 16, type = 'p', col = 'red')
-maxden4 <- max(PR.BIRD16.vis$fracSurveys)
+       PR.LEPL16.vis.max, 
+       pch = 16, type = 'p', cex = 2,  col = 'seagreen3')
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-       PR.BIRD16.vis$week[PR.BIRD16.vis$fracSurveys == maxden4], 
-       pch = 15, type = 'p', col = 'red')
+       PR.BIRD16.vis.max, 
+       pch = 16, type = 'p', cex = 2,  col = 'orange3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+       PR.ORTH16.vis.max, 
+       pch = 16, type = 'p', cex = 2,  col = 'plum')
 segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-         y0 = PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
+         y0 = PR.LEPL15.vis.max, 
          x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-         y1 = PR.LEPL16.vis$week[PR.LEPL16.vis$fracSurveys == maxden3], 
-         col = 'red')
+         y1 = PR.LEPL16.vis.max, 
+         col = 'seagreen3', lwd = 1.5, lty = 2)
 segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-         y0 = PR.BIRD15.vis$week[PR.BIRD15.vis$fracSurveys == maxden2], 
+         y0 = PR.BIRD15.vis.max, 
          x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-         y1 = PR.BIRD16.vis$week[PR.BIRD16.vis$fracSurveys == maxden4], 
-         col = 'red')
+         y1 = PR.BIRD16.vis.max, 
+         col = 'orange3', lwd = 1.5, lty = 2)
+segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+         y0 = PR.ORTH15.vis.max, 
+         x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+         y1 = PR.ORTH16.vis.max, 
+         col = 'plum', lwd = 1.5, lty = 2)
 # Botanical Garden
-maxden5 <- max(BG.LEPL15.vis$fracSurveys)
-points(greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-       BG.LEPL15.vis$week[BG.LEPL15.vis$fracSurveys == maxden5], 
-       pch = 21, type = 'p', col = 'blue')
-maxden6 <- max(BG.BIRD15.vis$fracSurveys)
-points(greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-       BG.BIRD15.vis$week[BG.BIRD15.vis$fracSurveys == maxden6], 
-       pch = 22, type = 'p', col = 'blue')
-maxden7 <- max(BG.LEPL16.vis$fracSurveys)
-points(greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-       BG.LEPL16.vis$week[BG.LEPL16.vis$fracSurveys == maxden7], 
-       pch = 16, type = 'p', col = 'blue')
-maxden8 <- max(BG.BIRD16.vis$fracSurveys)
-points(greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-       BG.BIRD16.vis$week[BG.BIRD16.vis$fracSurveys == maxden8], 
-       pch = 15, type = 'p', col = 'blue')
-segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-         y0 = BG.LEPL15.vis$week[BG.LEPL15.vis$fracSurveys == maxden5], 
-         x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-         y1 = BG.LEPL16.vis$week[BG.LEPL16.vis$fracSurveys == maxden7], 
-         col = 'blue')
-segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-         y0 = BG.BIRD15.vis$week[BG.BIRD15.vis$fracSurveys == maxden6], 
-         x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-         y1 = BG.BIRD16.vis$week[BG.BIRD16.vis$fracSurveys == maxden8], 
-         col = 'blue')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+       BG.LEPL15.vis.max, 
+       pch = 22, type = 'p', cex = 1.5,  col = 'seagreen3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+       BG.BIRD15.vis.max, 
+       pch = 22, type = 'p', cex = 1.5,  col = 'orange3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+       BG.ORTH15.vis.max, 
+       pch = 22, type = 'p', cex = 1.5,  col = 'plum')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+       BG.LEPL16.vis.max, 
+       pch = 15, type = 'p', cex = 1.5,  col = 'seagreen3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+       BG.BIRD16.vis.max, 
+       pch = 15, type = 'p', cex = 1.5,  col = 'orange3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+       BG.ORTH16.vis.max, 
+       pch = 15, type = 'p', cex = 1.5,  col = 'plum')
+segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+         y0 = BG.LEPL15.vis.max, 
+         x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+         y1 = BG.LEPL16.vis.max, 
+         col = 'seagreen3', lwd = 2, lty = 1)
+segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+         y0 = BG.BIRD15.vis.max, 
+         x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+         y1 = BG.BIRD16.vis.max, 
+         col = 'orange3', lwd = 2, lty = 1)
+segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+         y0 = BG.ORTH15.vis.max, 
+         x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+         y1 = BG.ORTH16.vis.max, 
+         col = 'plum', lwd = 2, lty = 1)
 #legend('topright', c('2015 cat','2015 mult', '2016 cat', '2016 mult'), pch = c(21, 22, 16, 15))
 
 #---- Arths and GDD - visual surveys----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth peak week',xlab='GDD JD', xlim = c(156,164), ylim = c(22, 30),
+plot(0,bty='n',pch='',ylab='Arth peak JD',xlab='GDD JD', xlim = c(156,164), ylim = c(150, 210),
 main = 'Visual')
 legend("topleft", "B", bty="n")
-maxden1 <- max(PR.LEPL15.vis$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-       PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
-       pch = 21, type = 'p', col = 'red')
-maxden2 <- max(PR.BIRD15.vis$fracSurveys)
+       PR.LEPL15.vis.max, 
+       pch = 21, type = 'p', cex = 2, col = 'seagreen3')
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-       PR.BIRD15.vis$week[PR.BIRD15.vis$fracSurveys == maxden2], 
-       pch = 22, type = 'p', col = 'red')
-maxden3 <- max(PR.LEPL16.vis$fracSurveys)
+       PR.BIRD15.vis.max, 
+       pch = 21, type = 'p', cex = 2, col = 'orange3')
+points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
+       PR.ORTH15.vis.max, 
+       pch = 21, type = 'p', cex = 2, col = 'plum')
 points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-       PR.LEPL16.vis$week[PR.LEPL16.vis$fracSurveys == maxden3], 
-       pch = 16, type = 'p', col = 'red')
-maxden4 <- max(PR.BIRD16.vis$fracSurveys)
+       PR.LEPL16.vis.max, 
+       pch = 16, type = 'p', cex = 2, col = 'seagreen3')
 points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-       PR.BIRD16.vis$week[PR.BIRD16.vis$fracSurveys == maxden4], 
-       pch = 15, type = 'p', col = 'red')
+       PR.BIRD16.vis.max, 
+       pch = 16, type = 'p', cex = 2, col = 'orange3')
+points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
+       PR.ORTH16.vis.max, 
+       pch = 16, type = 'p', cex = 2, col = 'plum')
 segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-         y0 = PR.LEPL15.vis$week[PR.LEPL15.vis$fracSurveys == maxden1], 
+         y0 = PR.LEPL15.vis.max, 
          x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-         y1 = PR.LEPL16.vis$week[PR.LEPL16.vis$fracSurveys == maxden3], 
-         col = 'red')
+         y1 = PR.LEPL16.vis.max, 
+         col = 'seagreen3', lwd = 1.5, lty = 2)
 segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-         y0 = PR.BIRD15.vis$week[PR.BIRD15.vis$fracSurveys == maxden2], 
+         y0 = PR.BIRD15.vis.max, 
          x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-         y1 = PR.BIRD16.vis$week[PR.BIRD16.vis$fracSurveys == maxden4], 
-         col = 'red')
+         y1 = PR.BIRD16.vis.max, 
+         col = 'orange3', lwd = 1.5, lty = 2)
+segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
+         y0 = PR.ORTH15.vis.max, 
+         x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
+         y1 = PR.ORTH16.vis.max, 
+         col = 'plum', lwd = 1.5, lty = 2)
 # Botanical Garden
-maxden5 <- max(BG.LEPL15.vis$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-       BG.LEPL15.vis$week[BG.LEPL15.vis$fracSurveys == maxden5], 
-       pch = 21, type = 'p', col = 'blue')
-maxden6 <- max(BG.BIRD15.vis$fracSurveys)
+       BG.LEPL15.vis.max, 
+       pch = 22, type = 'p', cex = 1.5, col = 'seagreen3')
 points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-       BG.BIRD15.vis$week[BG.BIRD15.vis$fracSurveys == maxden6], 
-       pch = 22, type = 'p', col = 'blue')
-maxden7 <- max(BG.LEPL16.vis$fracSurveys)
+       BG.BIRD15.vis.max, 
+       pch = 22, type = 'p', cex = 1.5, col = 'orange3')
+points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
+       BG.ORTH15.vis.max, 
+       pch = 22, type = 'p', cex = 1.5, col = 'plum')
 points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-       BG.LEPL16.vis$week[BG.LEPL16.vis$fracSurveys == maxden7], 
-       pch = 16, type = 'p', col = 'blue')
-maxden8 <- max(BG.BIRD16.vis$fracSurveys)
+       BG.LEPL16.vis.max, 
+       pch = 15, type = 'p', cex = 1.5, col = 'seagreen3')
 points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-       BG.BIRD16.vis$week[BG.BIRD16.vis$fracSurveys == maxden8], 
-       pch = 15, type = 'p', col = 'blue')
+       BG.BIRD16.vis.max, 
+       pch = 15, type = 'p', cex = 1.5, col = 'orange3')
+points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
+       BG.ORTH16.vis.max, 
+       pch = 15, type = 'p', cex = 1.5, col = 'plum')
 segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-         y0 = BG.LEPL15.vis$week[BG.LEPL15.vis$fracSurveys == maxden5], 
+         y0 = BG.LEPL15.vis.max, 
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-         y1 = BG.LEPL16.vis$week[BG.LEPL16.vis$fracSurveys == maxden7], 
-         col = 'blue')
+         y1 = BG.LEPL16.vis.max, 
+         col = 'seagreen3', lwd = 2, lty = 1)
 segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-         y0 = BG.BIRD15.vis$week[BG.BIRD15.vis$fracSurveys == maxden6], 
+         y0 = BG.BIRD15.vis.max, 
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-         y1 = BG.BIRD16.vis$week[BG.BIRD16.vis$fracSurveys == maxden8], 
-         col = 'blue')
+         y1 = BG.BIRD16.vis.max, 
+         col = 'orange3', lwd = 2, lty = 1)
+segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
+         y0 = BG.ORTH15.vis.max, 
+         x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
+         y1 = BG.ORTH16.vis.max, 
+         col = 'plum', lwd = 2, lty = 1)
 #legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
 
 #---- Arths and greenup - beat sheets----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth peak week',xlab='Greenup JD', ylim = c(22, 30), xlim = c(85, 95), 
+plot(0,bty='n',pch='',ylab='Arth peak JD',xlab='Greenup JD', xlim = c(86,94), ylim = c(150, 210),
      main = 'Beat sheets')
 legend("topleft", "C", bty="n")
-maxden1 <- max(PR.LEPL15.bs$fracSurveys)
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-       PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
-       pch = 21, type = 'p', col = 'red')
-maxden2 <- max(PR.BIRD15.bs$fracSurveys)
+       PR.LEPL15.bs.max, 
+       pch = 21, type = 'p', cex = 2,  col = 'seagreen3')
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-       PR.BIRD15.bs$week[PR.BIRD15.bs$fracSurveys == maxden2], 
-       pch = 22, type = 'p', col = 'red')
-maxden3 <- max(PR.LEPL16.bs$fracSurveys)
+       PR.BIRD15.bs.max, 
+       pch = 21, type = 'p', cex = 2,  col = 'orange3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+       PR.ORTH15.bs.max, 
+       pch = 21, type = 'p', cex = 2,  col = 'plum')
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-       PR.LEPL16.bs$week[PR.LEPL16.bs$fracSurveys == maxden3], 
-       pch = 16, type = 'p', col = 'red')
-maxden4 <- max(PR.BIRD16.bs$fracSurveys)
+       PR.LEPL16.bs.max, 
+       pch = 16, type = 'p', cex = 2,  col = 'seagreen3')
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-       PR.BIRD16.bs$week[PR.BIRD16.bs$fracSurveys == maxden4], 
-       pch = 15, type = 'p', col = 'red')
+       PR.BIRD16.bs.max, 
+       pch = 16, type = 'p', cex = 2,  col = 'orange3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+       PR.ORTH16.bs.max, 
+       pch = 16, type = 'p', cex = 2,  col = 'plum')
 segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-         y0 = PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
+         y0 = PR.LEPL15.bs.max, 
          x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-         y1 = PR.LEPL16.bs$week[PR.LEPL16.bs$fracSurveys == maxden3], 
-         col = 'red')
+         y1 = PR.LEPL16.bs.max, 
+         col = 'seagreen3', lwd = 1.5, lty = 2)
 segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
-         y0 = PR.BIRD15.bs$week[PR.BIRD15.bs$fracSurveys == maxden2], 
+         y0 = PR.BIRD15.bs.max, 
          x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
-         y1 = PR.BIRD16.bs$week[PR.BIRD16.bs$fracSurveys == maxden4], 
-         col = 'red')
+         y1 = PR.BIRD16.bs.max, 
+         col = 'orange3', lwd = 1.5, lty = 2)
+segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+         y0 = PR.ORTH15.bs.max, 
+         x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+         y1 = PR.ORTH16.bs.max, 
+         col = 'plum', lwd = 1.5, lty = 2)
 # Botanical Garden
-maxden5 <- max(BG.LEPL15.bs$fracSurveys)
-points(greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-       BG.LEPL15.bs$week[BG.LEPL15.bs$fracSurveys == maxden5], 
-       pch = 21, type = 'p', col = 'blue')
-maxden6 <- max(BG.BIRD15.bs$fracSurveys)
-points(greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-       BG.BIRD15.bs$week[BG.BIRD15.bs$fracSurveys == maxden6], 
-       pch = 22, type = 'p', col = 'blue')
-maxden7 <- max(BG.LEPL16.bs$fracSurveys)
-points(greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-       BG.LEPL16.bs$week[BG.LEPL16.bs$fracSurveys == maxden7], 
-       pch = 16, type = 'p', col = 'blue')
-maxden8 <- max(BG.BIRD16.bs$fracSurveys)
-points(greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-       BG.BIRD16.bs$week[BG.BIRD16.bs$fracSurveys == maxden8], 
-       pch = 15, type = 'p', col = 'blue')
-segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-         y0 = BG.LEPL15.bs$week[BG.LEPL15.bs$fracSurveys == maxden5], 
-         x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-         y1 = BG.LEPL16.bs$week[BG.LEPL16.bs$fracSurveys == maxden7], 
-         col = 'blue')
-segments(x0 = greenupgdd$bggreenup.log[greenupgdd$year == 2015], 
-         y0 = BG.BIRD15.bs$week[BG.BIRD15.bs$fracSurveys == maxden6], 
-         x1 = greenupgdd$bggreenup.log[greenupgdd$year == 2016], 
-         y1 = BG.BIRD16.bs$week[BG.BIRD16.bs$fracSurveys == maxden8], 
-         col = 'blue')
-#legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+       BG.LEPL15.bs.max, 
+       pch = 22, type = 'p', cex = 1.5,  col = 'seagreen3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+       BG.BIRD15.bs.max, 
+       pch = 22, type = 'p', cex = 1.5,  col = 'orange3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+       BG.ORTH15.bs.max, 
+       pch = 22, type = 'p', cex = 1.5,  col = 'plum')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+       BG.LEPL16.bs.max, 
+       pch = 15, type = 'p', cex = 1.5,  col = 'seagreen3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+       BG.BIRD16.bs.max, 
+       pch = 15, type = 'p', cex = 1.5,  col = 'orange3')
+points(greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+       BG.ORTH16.bs.max, 
+       pch = 15, type = 'p', cex = 1.5,  col = 'plum')
+segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+         y0 = BG.LEPL15.bs.max, 
+         x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+         y1 = BG.LEPL16.bs.max, 
+         col = 'seagreen3', lwd = 2, lty = 1)
+segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+         y0 = BG.BIRD15.bs.max, 
+         x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+         y1 = BG.BIRD16.bs.max, 
+         col = 'orange3', lwd = 2, lty = 1)
+segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
+         y0 = BG.ORTH15.bs.max, 
+         x1 = greenupgdd$prgreenup.log[greenupgdd$year == 2016], 
+         y1 = BG.ORTH16.bs.max, 
+         col = 'plum', lwd = 2, lty = 1)
+#legend('topright', c('2015 cat','2015 mult', '2016 cat', '2016 mult'), pch = c(21, 22, 16, 15))
 
-#---- Arths and GDD - beatsheets----
+#---- Arths and GDD - beat sheets----
 par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arth peak week',xlab='GDD JD', ylim = c(22, 30), xlim = c(155, 165), 
+plot(0,bty='n',pch='',ylab='Arth peak JD',xlab='GDD JD', xlim = c(156,164), ylim = c(150, 210),
      main = 'Beat sheets')
 legend("topleft", "D", bty="n")
-maxden1 <- max(PR.LEPL15.bs$fracSurveys)
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-       PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
-       pch = 21, type = 'p', col = 'red')
-maxden2 <- max(PR.BIRD15.bs$fracSurveys)
+       PR.LEPL15.bs.max, 
+       pch = 21, type = 'p', cex = 2, col = 'seagreen3')
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-       PR.BIRD15.bs$week[PR.BIRD15.bs$fracSurveys == maxden2], 
-       pch = 22, type = 'p', col = 'red')
-maxden3 <- max(PR.LEPL16.bs$fracSurveys)
+       PR.BIRD15.bs.max, 
+       pch = 21, type = 'p', cex = 2, col = 'orange3')
+points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
+       PR.ORTH15.bs.max, 
+       pch = 21, type = 'p', cex = 2, col = 'plum')
 points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-       PR.LEPL16.bs$week[PR.LEPL16.bs$fracSurveys == maxden3], 
-       pch = 16, type = 'p', col = 'red')
-maxden4 <- max(PR.BIRD16.bs$fracSurveys)
+       PR.LEPL16.bs.max, 
+       pch = 16, type = 'p', cex = 2, col = 'seagreen3')
 points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-       PR.BIRD16.bs$week[PR.BIRD16.bs$fracSurveys == maxden4], 
-       pch = 15, type = 'p', col = 'red')
+       PR.BIRD16.bs.max, 
+       pch = 16, type = 'p', cex = 2, col = 'orange3')
+points(greenupgdd$pr.gdd[greenupgdd$year == 2016], 
+       PR.ORTH16.bs.max, 
+       pch = 16, type = 'p', cex = 2, col = 'plum')
 segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-         y0 = PR.LEPL15.bs$week[PR.LEPL15.bs$fracSurveys == maxden1], 
+         y0 = PR.LEPL15.bs.max, 
          x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-         y1 = PR.LEPL16.bs$week[PR.LEPL16.bs$fracSurveys == maxden3], 
-         col = 'red')
+         y1 = PR.LEPL16.bs.max, 
+         col = 'seagreen3', lwd = 1.5, lty = 2)
 segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
-         y0 = PR.BIRD15.bs$week[PR.BIRD15.bs$fracSurveys == maxden2], 
+         y0 = PR.BIRD15.bs.max, 
          x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
-         y1 = PR.BIRD16.bs$week[PR.BIRD16.bs$fracSurveys == maxden4], 
-         col = 'red')
+         y1 = PR.BIRD16.bs.max, 
+         col = 'orange3', lwd = 1.5, lty = 2)
+segments(x0 = greenupgdd$pr.gdd[greenupgdd$year == 2015], 
+         y0 = PR.ORTH15.bs.max, 
+         x1 = greenupgdd$pr.gdd[greenupgdd$year == 2016], 
+         y1 = PR.ORTH16.bs.max, 
+         col = 'plum', lwd = 1.5, lty = 2)
 # Botanical Garden
-maxden5 <- max(BG.LEPL15.bs$fracSurveys)
 points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-       BG.LEPL15.bs$week[BG.LEPL15.bs$fracSurveys == maxden5], 
-       pch = 21, type = 'p', col = 'blue')
-maxden6 <- max(BG.BIRD15.bs$fracSurveys)
+       BG.LEPL15.bs.max, 
+       pch = 22, type = 'p', cex = 1.5, col = 'seagreen3')
 points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-       BG.BIRD15.bs$week[BG.BIRD15.bs$fracSurveys == maxden6], 
-       pch = 22, type = 'p', col = 'blue')
-maxden7 <- max(BG.LEPL16$fracSurveys)
+       BG.BIRD15.bs.max, 
+       pch = 22, type = 'p', cex = 1.5, col = 'orange3')
+points(greenupgdd$bg.gdd[greenupgdd$year == 2015], 
+       BG.ORTH15.bs.max, 
+       pch = 22, type = 'p', cex = 1.5, col = 'plum')
 points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-       BG.LEPL16.bs$week[BG.LEPL16.bs$fracSurveys == maxden7], 
-       pch = 16, type = 'p', col = 'blue')
-maxden8 <- max(BG.BIRD16.bs$fracSurveys)
+       BG.LEPL16.bs.max, 
+       pch = 15, type = 'p', cex = 1.5, col = 'seagreen3')
 points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-       BG.BIRD16.bs$week[BG.BIRD16.bs$fracSurveys == maxden8], 
-       pch = 15, type = 'p', col = 'blue')
+       BG.BIRD16.bs.max, 
+       pch = 15, type = 'p', cex = 1.5, col = 'orange3')
+points(greenupgdd$bg.gdd[greenupgdd$year == 2016], 
+       BG.ORTH16.bs.max, 
+       pch = 15, type = 'p', cex = 1.5, col = 'plum')
 segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-         y0 = BG.LEPL15.bs$week[BG.LEPL15.bs$fracSurveys == maxden5], 
+         y0 = BG.LEPL15.bs.max, 
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-         y1 = BG.LEPL16.bs$week[BG.LEPL16.bs$fracSurveys == maxden7], 
-         col = 'blue')
+         y1 = BG.LEPL16.bs.max, 
+         col = 'seagreen3', lwd = 2, lty = 1)
 segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
-         y0 = BG.BIRD15.bs$week[BG.BIRD15.bs$fracSurveys == maxden6], 
+         y0 = BG.BIRD15.bs.max, 
          x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
-         y1 = BG.BIRD16.bs$week[BG.BIRD16.bs$fracSurveys == maxden8], 
-         col = 'blue')
+         y1 = BG.BIRD16.bs.max, 
+         col = 'orange3', lwd = 2, lty = 1)
+segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015], 
+         y0 = BG.ORTH15.bs.max, 
+         x1 = greenupgdd$bg.gdd[greenupgdd$year == 2016], 
+         y1 = BG.ORTH16.bs.max, 
+         col = 'plum', lwd = 2, lty = 1)
 #legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
 
 
@@ -322,150 +378,288 @@ plot.new()
 
 inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
 inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_pr$pr.gdd, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'blue', 
+plot(inbu_pr$pr.gdd, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue4', 
      ylim = c(82, 117), main = 'Prairie Ridge', xlab = 'GDD JD', ylab = 'Bird arrival inflection point JD')
 legend("topleft", "A", bty="n")
-inbu_lm = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$pr.gdd)
-abline(inbu_lm, col = 'blue')
-summary(inbu_lm)
+inbu_lm_prgdd = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$pr.gdd)
+abline(inbu_lm_prgdd, col = 'blue')
+summary(inbu_lm_prgdd)
 
 inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
 revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
 points(revi_pr$pr.gdd, as.numeric(as.character(revi_pr$inflection_pt)), pch = 16, col = 'red')
-revi_lm = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$pr.gdd)
-abline(revi_lm, col = 'red')
-summary(revi_lm)
+revi_lm_prgdd = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$pr.gdd)
+abline(revi_lm_prgdd, col = 'red')
+summary(revi_lm_prgdd)
 
 inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
 coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
 points(coye_pr$pr.gdd, as.numeric(as.character(coye_pr$inflection_pt)), pch = 16, col = 'orange')
-coye_lm = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$pr.gdd)
-abline(coye_lm, col = 'orange')
-summary(coye_lm)
+coye_lm_prgdd = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$pr.gdd)
+abline(coye_lm_prgdd, col = 'orange')
+summary(coye_lm_prgdd)
 
 inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
 bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
 points(bggn_pr$pr.gdd, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 16, col = 'gray')
 bggn_lm = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$pr.gdd)
-abline(bggn_lm, col = 'gray')
-summary(bggn_lm)
+abline(bggn_lm_prgdd, col = 'gray')
+summary(bggn_lm_prgdd)
 
 
 # Prairie Ridge Greenup
 
 inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
 inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'blue', 
+plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue4', 
      ylim = c(82, 117), main = 'Prairie Ridge', xlab = 'Greenup JD', ylab = 'Bird arrival inflection point JD')
 legend("topleft", "B", bty="n")
-inbu_lm = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$prgreenup.log)
-abline(inbu_lm, col = 'blue')
-summary(inbu_lm)
+inbu_lm_prgreen = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$prgreenup.log)
+abline(inbu_lm_prgreen, col = 'blue')
+summary(inbu_lm_prgreen)
 
 inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
 revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
 points(revi_pr$prgreenup.log, as.numeric(as.character(revi_pr$inflection_pt)), pch = 16, col = 'red')
-revi_lm = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$prgreenup.log)
-abline(revi_lm, col = 'red')
-summary(revi_lm)
+revi_lm_prgreen = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$prgreenup.log)
+abline(revi_lm_prgreen, col = 'red')
+summary(revi_lm_prgreen)
 
 inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
 coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
 points(coye_pr$prgreenup.log, as.numeric(as.character(coye_pr$inflection_pt)), pch = 16, col = 'orange')
-coye_lm = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$prgreenup.log)
-abline(coye_lm, col = 'orange')
-summary(coye_lm)
+coye_lm_prgreen = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$prgreenup.log)
+abline(coye_lm_prgreen, col = 'orange')
+summary(coye_lm_prgreen)
 
 inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
 bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
 points(bggn_pr$prgreenup.log, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 16, col = 'gray')
-bggn_lm = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$prgreenup.log)
-abline(bggn_lm, col = 'gray')
-summary(bggn_lm)
+bggn_lm_prgreen = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$prgreenup.log)
+abline(bggn_lm_prgreen, col = 'gray')
+summary(bggn_lm_prgreen)
 
 # Botanical Garden GDD
 
 inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
 inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_bg$bg.gdd, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'blue', 
+plot(inbu_bg$bg.gdd, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue4', 
      ylim = c(82, 117), main = 'Botanical Garden', xlab = 'GDD JD', ylab = 'Bird arrival inflection point JD')
 legend("topleft", "C", bty="n")
-inbu_lm = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bg.gdd)
-abline(inbu_lm, col = 'blue')
-summary(inbu_lm)
+inbu_lm_bggdd = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bg.gdd)
+abline(inbu_lm_bggdd, col = 'blue')
+summary(inbu_lm_bggdd)
 
 inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
 revi_bg = merge(inf_bg_revi, greenupgdd, by = 'year', all = FALSE)
 points(revi_bg$bg.gdd, as.numeric(as.character(revi_bg$inflection_pt)), pch = 16, col = 'red')
-revi_lm = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bg.gdd)
-abline(revi_lm, col = 'red')
-summary(revi_lm)
+revi_lm_bggdd = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bg.gdd)
+abline(revi_lm_bggdd, col = 'red')
+summary(revi_lm_bggdd)
 
 inf_bg_coye = inflection_bg[inflection_bg$scientific_name == 'Geothlypis trichas',]
 coye_bg = merge(inf_bg_coye, greenupgdd, by = 'year', all = FALSE)
 points(coye_bg$bg.gdd, as.numeric(as.character(coye_bg$inflection_pt)), pch = 16, col = 'orange')
-coye_lm = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bg.gdd)
-abline(coye_lm, col = 'orange')
-summary(coye_lm)
+coye_lm_bggdd = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bg.gdd)
+abline(coye_lm_bggdd, col = 'orange')
+summary(coye_lm_bggdd)
 
 inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
 bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
 bggn_bg = bggn_bg[bggn_bg$year != 2008,]
 points(bggn_bg$bg.gdd, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 16, col = 'gray')
-bggn_lm = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bg.gdd)
-abline(bggn_lm, col = 'gray')
-summary(bggn_lm)
+bggn_lm_bggdd = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bg.gdd)
+abline(bggn_lm_bggdd, col = 'gray')
+summary(bggn_lm_bggdd)
 
 
 # Botanical Garden Greenup
 
 inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
 inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_bg$bggreenup.log, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'blue', 
+plot(inbu_bg$bggreenup.log, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue4', 
      ylim = c(82, 117), main = 'Botanical Garden', xlab = 'Greenup JD', ylab = 'Bird arrival inflection point JD')
 legend("topleft", "D", bty="n")
-inbu_lm = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bggreenup.log)
-abline(inbu_lm, col = 'blue')
-summary(inbu_lm)
+inbu_lm_bggreen = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bggreenup.log)
+abline(inbu_lm_bggreen, col = 'blue')
+summary(inbu_lm_bggreen)
 
 inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
 revi_bg = merge(inf_bg_revi, greenupgdd, by = 'year', all = FALSE)
 points(revi_bg$bggreenup.log, as.numeric(as.character(revi_bg$inflection_pt)), pch = 16, col = 'red')
-revi_lm = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bggreenup.log)
-abline(revi_lm, col = 'red')
-summary(revi_lm)
+revi_lm_bggreen = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bggreenup.log)
+abline(revi_lm_bggreen, col = 'red')
+summary(revi_lm_bggreen)
 
 inf_bg_coye = inflection_bg[inflection_bg$scientific_name == 'Geothlypis trichas',]
 coye_bg = merge(inf_bg_coye, greenupgdd, by = 'year', all = FALSE)
 points(coye_bg$bggreenup.log, as.numeric(as.character(coye_bg$inflection_pt)), pch = 16, col = 'orange')
-coye_lm = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bggreenup.log)
-abline(coye_lm, col = 'orange')
-summary(coye_lm)
+coye_lm_bggreen = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bggreenup.log)
+abline(coye_lm_bggreen, col = 'orange')
+summary(coye_lm_bggreen)
 
 inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
 bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
 bggn_bg = bggn_bg[bggn_bg$year != 2008,]
 points(bggn_bg$bggreenup.log, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 16, col = 'gray')
-bggn_lm = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bggreenup.log)
-abline(bggn_lm, col = 'gray')
-summary(bggn_lm)
+bggn_lm_bggreen = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bggreenup.log)
+abline(bggn_lm_bggreen, col = 'gray')
+summary(bggn_lm_bggreen)
+
+# Stats of this
+
 
 #---- FIGURE 6 RESULTS ----
 
-# Final results plot, will be comparing arth peaks to bird peaks
+# Final results plot, will be comparing arth peaks to bird peaks (pick one bird species??)
+
+inflection_pr$year = as.numeric(as.character(inflection_pr$year))
+inflection_pr$inflection_pt = as.numeric(as.character(inflection_pr$inflection_pt))
+inflection_pr$scientific_name = as.character(inflection_pr$scientific_name)
+
+#---- Arths and inbu - visual surveys----
+
+# INDIGO BUNTING <3
+
+# Visual
+par(mar = c(4,4,2,2), mfrow = c(2,2))
+# Prairie Ridge
+plot(0,bty='n',pch='',ylab='Bird arrival JD',xlab='Arth peak JD', xlim = c(150,210), ylim = c(114.7, 114.9),
+     main = 'Visual')
+legend("topleft", "A", bty="n")
+points(PR.LEPL15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 21, type = 'p', cex = 2,  col = 'seagreen3')
+points(PR.BIRD15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 21, type = 'p', cex = 2,  col = 'orange3')
+points(PR.ORTH15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 21, type = 'p', cex = 2,  col = 'plum')
+points(PR.LEPL16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 16, type = 'p', cex = 2,  col = 'seagreen3')
+points(PR.BIRD16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 16, type = 'p', cex = 2,  col = 'orange3')
+points(PR.ORTH16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 16, type = 'p', cex = 2,  col = 'plum')
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = PR.LEPL15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = PR.LEPL16.vis.max, 
+         col = 'seagreen3', lwd = 1.5, lty = 2)
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = PR.BIRD15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = PR.BIRD16.vis.max, 
+         col = 'orange3', lwd = 1.5, lty = 2)
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = PR.ORTH15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = PR.ORTH16.vis.max, 
+         col = 'plum', lwd = 1.5, lty = 2)
+# Botanical Garden
+points(BG.LEPL15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 22, type = 'p', cex = 1.5,  col = 'seagreen3')
+points(BG.BIRD15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 22, type = 'p', cex = 1.5,  col = 'orange3')
+points(BG.ORTH15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 22, type = 'p', cex = 1.5,  col = 'plum')
+points(BG.LEPL16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 15, type = 'p', cex = 1.5,  col = 'seagreen3')
+points(BG.BIRD16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 15, type = 'p', cex = 1.5,  col = 'orange3')
+points(BG.ORTH16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 15, type = 'p', cex = 1.5,  col = 'plum')
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = BG.LEPL15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = BG.LEPL16.vis.max, 
+         col = 'seagreen3', lwd = 2, lty = 1)
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = BG.BIRD15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = BG.BIRD16.vis.max, 
+         col = 'orange3', lwd = 2, lty = 1)
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = BG.ORTH15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = BG.ORTH16.vis.max, 
+         col = 'plum', lwd = 2, lty = 1)
+
+
+# RED-EYED VIREO
+
+par(mar = c(4,4,2,2))
+# Prairie Ridge
+plot(0,bty='n',pch='',ylab='Bird arrival JD',xlab='Arth peak JD', xlim = c(150,210), ylim = c(99, 103),
+     main = 'Visual')
+legend("topleft", "A", bty="n")
+points(PR.LEPL15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 21, type = 'p', cex = 2,  col = 'seagreen3')
+points(PR.BIRD15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 21, type = 'p', cex = 2,  col = 'orange3')
+points(PR.ORTH15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 21, type = 'p', cex = 2,  col = 'plum')
+points(PR.LEPL16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 16, type = 'p', cex = 2,  col = 'seagreen3')
+points(PR.BIRD16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 16, type = 'p', cex = 2,  col = 'orange3')
+points(PR.ORTH16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 16, type = 'p', cex = 2,  col = 'plum')
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = PR.LEPL15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = PR.LEPL16.vis.max, 
+         col = 'seagreen3', lwd = 1.5, lty = 2)
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = PR.BIRD15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = PR.BIRD16.vis.max, 
+         col = 'orange3', lwd = 1.5, lty = 2)
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = PR.ORTH15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = PR.ORTH16.vis.max, 
+         col = 'plum', lwd = 1.5, lty = 2)
+
+# Botanical Garden
+points(BG.LEPL15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 22, type = 'p', cex = 1.5,  col = 'seagreen3')
+points(BG.BIRD15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 22, type = 'p', cex = 1.5,  col = 'orange3')
+points(BG.ORTH15.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+       pch = 22, type = 'p', cex = 1.5,  col = 'plum')
+points(BG.LEPL16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 15, type = 'p', cex = 1.5,  col = 'seagreen3')
+points(BG.BIRD16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 15, type = 'p', cex = 1.5,  col = 'orange3')
+points(BG.ORTH16.vis.max, inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+       pch = 15, type = 'p', cex = 1.5,  col = 'plum')
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = BG.LEPL15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = BG.LEPL16.vis.max, 
+         col = 'seagreen3', lwd = 2, lty = 1)
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = BG.BIRD15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = BG.BIRD16.vis.max, 
+         col = 'orange3', lwd = 2, lty = 1)
+segments(y0 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2015], 
+         x0 = BG.ORTH15.vis.max, 
+         y1 = inflection_pr$inflection_pt[inflection_pr$scientific_name == 'Passerina cyanea' & inflection_pr$year == 2016], 
+         x1 = BG.ORTH16.vis.max, 
+         col = 'plum', lwd = 2, lty = 1)
 
 
 
+
+
+
+
+# Other miscellanea
 
 plot(greenupgdd$year, greenupgdd$pr.gdd, type = 'l')
 points(inf_pr_inbu$year, inf_pr_inbu$inflection_pt, type = 'l', col = 'red')
 #points(greenupgdd$year, greenupgdd$prgreenup.log, type = 'l', col = 'red')
 
-
-
-# Birds and greenup
-
-# Birds and GDD
 
 
 # ANOVAs
