@@ -6,6 +6,8 @@
 setwd('c:/git/caterpillars-count-analysis')
 source("data_cleaning.r")
 
+pdf(file = 'c:/git/caterpillars-count-analysis/plots/paper_plots/phenology.pdf', width = 6, height = 7)
+
 par(mfrow = c(3,2), mar = c(2,3,2,2), oma = c(5,5,3,3))
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 
@@ -20,7 +22,8 @@ PR.LEPL15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:
                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'darkgoldenrod3')
 legend(20, .2, c('trained', 'citizen'), lwd = 2, lty = 1, col = c('blueviolet', 'darkgoldenrod3'))
-mtext("A", 2, adj=1, line=2, las = 1)
+#mtext("A", 1, adj=2, line=1, las = 2)
+legend("topleft", "B", bty="n")
 LEPL15 = merge(PR.LEPL15.sci[,c('fracSurveys', 'week')], PR.LEPL15.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', legend = c(paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL15$fracSurveys.y), 2))), bty="n")
 
@@ -34,7 +37,7 @@ PR.LEPL16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:
                                 ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'darkgoldenrod3')
 #legend("topleft", c('trained scientists', 'citizen scientists'), lwd = 2, lty = 1)
-legend("topleft", "B", bty="n")
+legend("topleft", "A", bty="n")
 LEPL16 = merge(PR.LEPL16.sci[,c('fracSurveys', 'week')], PR.LEPL16.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', legend = c(paste("r =", round(cor(LEPL16$fracSurveys.x, LEPL16$fracSurveys.y), 2))), bty="n")
 
@@ -91,8 +94,10 @@ legend("topleft", "F", bty="n")
 BIRD16 = merge(PR.BIRD16.sci[,c('fracSurveys', 'week')], PR.BIRD16.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', legend = c(paste("r =", round(cor(BIRD16$fracSurveys.x, BIRD16$fracSurveys.y), 2))), bty="n")
 
-mtext("Fraction of surveys", side = 2, outer = TRUE, line = 2)
-mtext("Week", side = 1, outer = TRUE, line = 2)
+mtext("Occurrence (fraction of surveys)", side = 2, outer = TRUE, line = 2)
+mtext("Time (week)", side = 1, outer = TRUE, line = 2)
+
+dev.off()
 
 #----FIGURE 3 PHENOLOGY PLOT *used in 495 paper*, fraction of surveys----
 
