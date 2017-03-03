@@ -119,9 +119,10 @@ lab16_vis_trees = data.frame(lab16_vis_trees)
 trees_oth = lab16_vis_trees %>% group_by(clean_plantSp, arthCode) %>% dplyr::summarize(vis = sum(mean_count))
 
 #only use 4 most common tree sp at PR (within 1-8) #sweet gum, common persimmon, box elder, chalk maple
-common_trees = trees_oth %>% filter(clean_plantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple")) 
+common_trees = trees_oth %>% 
+  filter(clean_plantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak")) 
 common_trees1 = data.frame(spread(common_trees, clean_plantSp, vis))
-names(common_trees1) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Sweet gum")
+names(common_trees1) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Pin oak", "Sweet gum")
 
 #merge all means into one dataframe
 join = left_join(vol15_means, vol16_means, by = "arthCode")
@@ -139,27 +140,58 @@ names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #cha
 # xlab="Number of Gears", col=c("darkblue","red"),
 # legend = rownames(counts), beside=TRUE) 
 
-pdf('plots/paper_plots/Figures1to6_arthropods.pdf', height = 8, width = 11)
+pdf('plots/paper_plots/Figures1to6_arthropods.pdf', height = 6, width = 8)
 
 par(xpd=FALSE)
-par(mfrow = c(3, 2), mar = c(5, 5, 2, 1))
+par(mfrow = c(2, 3), mar = c(5, 5, 2, 1))
 
-#figure A
-lab_selected1 = lab_selected[,-1]
-rownames(lab_selected1) = lab_selected[,1]
-lab_selected1 = as.matrix(lab_selected1) #create matrix w/o arth code?
+#create color palette:
+library(RColorBrewer)
+coul = brewer.pal(7, "Set3") 
 
-barplot(lab_selected1, las = 2, cex.names = .7, xlim = c(0, 3.2),
-        ylab = "Proportion Arths", las = .5) #this needs to be cleaned up
+arthcols = data.frame(arthCode = lab_selected$arthCode,
+                      col = coul[c(3, 1, 4, 2, 7, 6, 5)])
+arthcols$col = as.character(arthcols$col)
+arthcols$col2 = arthcols$col
+arthcols$col2[arthcols$arthCode=='DIPT'] = 'gray50'
+arthcols$name = c('Aranae', 'Auchenorrhyncha', 'Coleoptera', 'Diptera', 'Caterpillars', 'Orthoptera', 'Other')
 
-
-#figure B
-par(mar = c(6, 6, 2, 2))
+#panel A
 common_trees2 = common_trees1[,-1]
 rownames(common_trees2) = common_trees1[,1]
 common_trees2 = as.matrix(common_trees2)
-barplot(common_trees2, las = 2, cex.names = .6, xlim = c(0, 6), legend = arth_selected$arthCode,
-        ylab = "Mean Arths") #this needs to be cleaned up
+par(mgp = c(3.5, 1, 0))
+barplot(common_trees2, las = 1, cex.axis = 1.2, cex.lab = 1.5, xaxt="n", 
+        xlim = c(0, 6), ylab = "Density (#/survey)", col = arthcols$col, ylim = c(0, 0.25)) 
+text(seq(1, 5.5, length.out = 5), rep(-.01, 4), c('Box elder', 'Chalk maple', 'Persimmon', 'Pin oak', 'Sweet gum'),
+     srt = 45, xpd = TRUE, adj = 1, cex = 1.2)
+
+#panel B
+par(mgp = c(3, 1, 0))
+lab_selected1 = lab_selected[,-1]
+rownames(lab_selected1) = lab_selected[,1]
+lab_selected1 = as.matrix(lab_selected1) #create matrix w/o arth code?
+tops = cumsum(lab_selected1[,2])
+bottoms = c(0, tops[1:6])
+centers = (tops + bottoms)/2
+
+barplot(lab_selected1, las = 1, xlim = c(0, 3.2), xaxt = "n",
+        ylab = "Proportion", col = arthcols$col, cex.axis = 1.2, cex.lab = 1.5)
+mtext(c("Visual", "Beat sheet"), 1, at = c(.7, 2), line = 1)
+mtext(arthcols$name, 4, at = centers, las = 1, line = -3.6, col = arthcols$col2, 
+      cex = c(.75, .5, .75, .75, .75, .75, .75))
+
+
+#panel C
+arth_means2 = left_join(arth_means, arthcols)
+arth_means2$col[is.na(arth_means2$col)] = "#80B1D3"
+arth_means2 = arth_means2[arth_means2$arthCode != 'NONE', ]
+plot(arth_means2$lab_vis, arth_means2$lab_bs, las = 1, col = arth_means2$col, pch = 17, 
+     xlab = "Density (visual)", ylab = "Density (beat sheet)", cex = 3, cex.lab = 1.5, 
+     xlim = c(0, 0.65), ylim = c(0, 0.65), cex.axis = 1.2)
+laboratory = lm(lab_bs ~ lab_vis, data = arth_means2)
+abline(laboratory, col = "black", lwd = 2)
+abline(a = 0, b = 1, col = 'gray50', lwd = 1)
 
 #legend
 
@@ -167,40 +199,30 @@ barplot(common_trees2, las = 2, cex.names = .6, xlim = c(0, 6), legend = arth_se
 arth_selected_bs1 = as.matrix(arth_selected_bs)
 arth_selected_vis1 = as.matrix(arth_selected_vis)
 
-barplot(arth_selected_vis1, las = 2, cex.names = .7, xlim = c(0,3.2), 
-        ylab = "Proportion Arths")
+barplot(arth_selected_vis1, las = 1, xaxt = "n", xlim = c(0,3.2), 
+        ylab = "Proportion", col = arthcols$col, cex.lab = 1.5, cex.axis = 1.2)
+mtext(c("Volunteers", "Trained"), 1, at = c(.7, 2), line = 1)
+
 
 #figure E
-barplot(arth_selected_bs1, las = 2, cex.names = .7, xlim = c(0,3.2),
-        ylab = "Proportion Arths")
+barplot(arth_selected_bs1, las = 1, xaxt = "n", xlim = c(0,3.2),
+        ylab = "Proportion", col = arthcols$col, cex.lab = 1.5, cex.axis = 1.2)
+mtext(c("Volunteers", "Trained"), 1, at = c(.7, 2), line = 1)
 
-#figure C (BS vs VIS) (here we're comparing different years)
-plot(arth_means$vol_vis, arth_means$vol_bs, las = 2, xlab = "Mean Arths (VIS)",
-     ylab = "Mean Arths (BS)", col = "purple", pch = 20)
-volunteer =lm(vol_bs ~ vol_vis, data = arth_means)
-abline(volunteer, col = "purple", cex = 2)
-points(arth_means$lab_vis, arth_means$lab_bs, las = 2, col = "blue", pch = 15)
-laboratory = lm(lab_bs ~ lab_vis, data = arth_means)
-abline(laboratory, col = "blue", cex = 2)
-legend(x = "bottomright",
-       c("vol", "lab"),
-       lty=c(1,1),
-        col=c("purple", "blue"))
 
-#figure F (volunteers vs lab)
-plot(arth_means$lab_vis, arth_means$vol_vis, xlab = "Mean Arths (vol)",
-     ylab = "Mean Arths (lab)", col = "pink", pch = 20) 
-visual =lm(vol_vis ~ lab_vis, data = arth_means)
-abline(visual, col = "pink", cex = 2)
-points(arth_means$lab_bs, arth_means$vol_bs, las = 2, col = "red", pch = 15)
-beat = lm(vol_bs ~ lab_bs, data = arth_means)
-abline(beat, col = "red", cex = 2)
-abline(0,1)
+#figure F
+plot(arth_means2$lab_vis, arth_means2$vol_vis, las = 1, xlab = "Density (trained)",
+     ylab = "Density (volunteers)", col = arth_means2$col, pch = 17, cex = 3,
+     cex.lab = 1.5, cex.axis = 1.2)
+vol.lab.vis =lm(vol_vis ~ lab_vis, data = arth_means2)
+abline(vol.lab.vis, lwd = 2)
+points(arth_means2$lab_bs, arth_means2$vol_bs, las = 1, col = arth_means2$col, pch = 1, cex =3)
+points(arth_means2$lab_bs, arth_means2$vol_bs, las = 1, col = arth_means2$col, pch = 16, cex =2)
+vol.lab.bs = lm(vol_bs ~ lab_vis, data = arth_means2)
+abline(vol.lab.bs, lty = 'dashed', lwd = 2)
+abline(a = 0, b = 1, col = 'gray50', lwd = 1)
 
-legend(x = "bottomright",
-       c("vis", "BS"),
-       lty=c(1,1),
-       col=c("red", "pink"))
+legend("bottomright", c('visual', 'beat sheet'), lwd = 2, lty = c('solid', 'dashed'))
 
 dev.off()
 
