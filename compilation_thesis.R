@@ -393,13 +393,13 @@ dev.off()
 
 #---- FIGURE 5 RESULTS ----
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure5.pdf', width = 6.5, height = 7.5)
+pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure5.pdf', width = 6.5, height = 8.5)
 
-par(mar = c(4,4,2,2), mfrow = c(3,2), oma = c(1,1,1,1))
+par(mar = c(4,4,2,2), mfrow = c(3,2), oma = c(1,3,1,1))
 
 # Blank plot for pdf
 plot.new()
-legend('bottomleft', c('Indigo bunting', 'Red-eyed vireo', 'Common yellowthroat', 'Blue-gray gnatcatcher'), pch = 16, col = c('dodgerblue4', 'red', 'orange', 'gray'), cex = 1.2)
+legend('bottomleft', c('Indigo bunting', 'Red-eyed vireo', 'Common yellowthroat', 'Blue-gray gnatcatcher'), pch = c(16, 24, 15, 9), col = c('dodgerblue4', 'red', 'orange', 'gray67'), cex = 1.2)
 plot.new()
 
 # Prairie Ridge GDD
@@ -407,31 +407,31 @@ plot.new()
 inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
 inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
 plot(inbu_pr$pr.gdd, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue4', 
-     ylim = c(80, 119), main = 'Prairie Ridge', xlab = 'GDD (Julian day)', ylab = 'Bird arrival inflection point (Julian day)')
+     ylim = c(80, 119), main = 'Prairie Ridge', xlab = 'GDD (Julian day)', ylab = '')
 legend("topleft", "A", bty="n")
-inbu_lm_prgdd = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$pr.gdd)
+inbu_lm_prgdd = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$pr.gdd, weights = 1/inbu_pr$confint)
 abline(inbu_lm_prgdd, col = 'dodgerblue4')
 summary(inbu_lm_prgdd)
 
 inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
 revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
-points(revi_pr$pr.gdd, as.numeric(as.character(revi_pr$inflection_pt)), pch = 16, col = 'red')
-revi_lm_prgdd = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$pr.gdd)
+points(revi_pr$pr.gdd, as.numeric(as.character(revi_pr$inflection_pt)), pch = 24, col = 'red')
+revi_lm_prgdd = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$pr.gdd, weights = 1/revi_pr$confint)
 abline(revi_lm_prgdd, col = 'red')
 summary(revi_lm_prgdd)
 
 inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
 coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
-points(coye_pr$pr.gdd, as.numeric(as.character(coye_pr$inflection_pt)), pch = 16, col = 'orange')
-coye_lm_prgdd = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$pr.gdd)
+points(coye_pr$pr.gdd, as.numeric(as.character(coye_pr$inflection_pt)), pch = 15, col = 'orange')
+coye_lm_prgdd = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$pr.gdd, weights = 1/coye_pr$confint)
 abline(coye_lm_prgdd, col = 'orange')
 summary(coye_lm_prgdd)
 
 inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
 bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
-points(bggn_pr$pr.gdd, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 16, col = 'gray')
-bggn_lm_prgdd = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$pr.gdd)
-abline(bggn_lm_prgdd, col = 'gray')
+points(bggn_pr$pr.gdd, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 9, col = 'gray67')
+bggn_lm_prgdd = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$pr.gdd, weights = 1/bggn_pr$confint)
+abline(bggn_lm_prgdd, col = 'gray67')
 summary(bggn_lm_prgdd)
 
 # Botanical Garden GDD
@@ -439,32 +439,32 @@ summary(bggn_lm_prgdd)
 inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
 inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
 plot(inbu_bg$bg.gdd, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue4', 
-     ylim = c(80, 119), main = 'Botanical Garden', xlab = 'GDD (Julian day)', ylab = 'Bird arrival inflection point (Julian day)')
+     ylim = c(80, 119), main = 'Botanical Garden', xlab = 'GDD (Julian day)', ylab = '')
 legend("topleft", "C", bty="n")
-inbu_lm_bggdd = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bg.gdd)
+inbu_lm_bggdd = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bg.gdd, weights = 1/inbu_bg$confint)
 abline(inbu_lm_bggdd, col = 'dodgerblue4')
 summary(inbu_lm_bggdd)
 
 inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
 revi_bg = merge(inf_bg_revi, greenupgdd, by = 'year', all = FALSE)
-points(revi_bg$bg.gdd, as.numeric(as.character(revi_bg$inflection_pt)), pch = 16, col = 'red')
-revi_lm_bggdd = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bg.gdd)
+points(revi_bg$bg.gdd, as.numeric(as.character(revi_bg$inflection_pt)), pch = 24, col = 'red')
+revi_lm_bggdd = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bg.gdd, weights = 1/revi_bg$confint)
 abline(revi_lm_bggdd, col = 'red')
 summary(revi_lm_bggdd)
 
 inf_bg_coye = inflection_bg[inflection_bg$scientific_name == 'Geothlypis trichas',]
 coye_bg = merge(inf_bg_coye, greenupgdd, by = 'year', all = FALSE)
-points(coye_bg$bg.gdd, as.numeric(as.character(coye_bg$inflection_pt)), pch = 16, col = 'orange')
-coye_lm_bggdd = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bg.gdd)
+points(coye_bg$bg.gdd, as.numeric(as.character(coye_bg$inflection_pt)), pch = 15, col = 'orange')
+coye_lm_bggdd = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bg.gdd, weights = 1/coye_bg$confint)
 abline(coye_lm_bggdd, col = 'orange')
 summary(coye_lm_bggdd)
 
 inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
 bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
 bggn_bg = bggn_bg[bggn_bg$year != 2008,]
-points(bggn_bg$bg.gdd, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 16, col = 'gray')
-bggn_lm_bggdd = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bg.gdd)
-abline(bggn_lm_bggdd, col = 'gray')
+points(bggn_bg$bg.gdd, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 9, col = 'gray67')
+bggn_lm_bggdd = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bg.gdd, weights = 1/bggn_bg$confint)
+abline(bggn_lm_bggdd, col = 'gray67')
 summary(bggn_lm_bggdd)
 
 
@@ -475,31 +475,31 @@ summary(bggn_lm_bggdd)
 inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
 inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
 plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue4', 
-     ylim = c(80, 119), main = '', xlab = 'Greenup (Julian day)', ylab = 'Bird arrival inflection point (Julian day)')
+     ylim = c(80, 119), main = '', xlab = 'Greenup (Julian day)', ylab = '')
 legend("topleft", "B", bty="n")
-inbu_lm_prgreen = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$prgreenup.log)
+inbu_lm_prgreen = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$prgreenup.log, weights = 1/inbu_pr$confint)
 abline(inbu_lm_prgreen, col = 'dodgerblue4')
 summary(inbu_lm_prgreen)
 
 inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
 revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
-points(revi_pr$prgreenup.log, as.numeric(as.character(revi_pr$inflection_pt)), pch = 16, col = 'red')
-revi_lm_prgreen = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$prgreenup.log)
+points(revi_pr$prgreenup.log, as.numeric(as.character(revi_pr$inflection_pt)), pch = 24, col = 'red')
+revi_lm_prgreen = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$prgreenup.log, weights = 1/revi_pr$confint)
 abline(revi_lm_prgreen, col = 'red')
 summary(revi_lm_prgreen)
 
 inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
 coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
-points(coye_pr$prgreenup.log, as.numeric(as.character(coye_pr$inflection_pt)), pch = 16, col = 'orange')
-coye_lm_prgreen = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$prgreenup.log)
+points(coye_pr$prgreenup.log, as.numeric(as.character(coye_pr$inflection_pt)), pch = 15, col = 'orange')
+coye_lm_prgreen = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$prgreenup.log, weights = 1/coye_pr$confint)
 abline(coye_lm_prgreen, col = 'orange')
 summary(coye_lm_prgreen)
 
 inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
 bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
-points(bggn_pr$prgreenup.log, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 16, col = 'gray')
-bggn_lm_prgreen = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$prgreenup.log)
-abline(bggn_lm_prgreen, col = 'gray')
+points(bggn_pr$prgreenup.log, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 9, col = 'gray67')
+bggn_lm_prgreen = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$prgreenup.log, weights = 1/bggn_pr$confint)
+abline(bggn_lm_prgreen, col = 'gray67')
 summary(bggn_lm_prgreen)
 
 
@@ -508,33 +508,35 @@ summary(bggn_lm_prgreen)
 inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
 inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
 plot(inbu_bg$bggreenup.log, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue4', 
-     ylim = c(80, 119), main = '', xlab = 'Greenup (Julian day)', ylab = 'Bird arrival inflection point (Julian day)')
+     ylim = c(80, 119), main = '', xlab = 'Greenup (Julian day)', ylab = '')
 legend("topleft", "D", bty="n")
-inbu_lm_bggreen = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bggreenup.log)
+inbu_lm_bggreen = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bggreenup.log, weights = 1/inbu_bg$confint)
 abline(inbu_lm_bggreen, col = 'dodgerblue4')
 summary(inbu_lm_bggreen)
 
 inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
 revi_bg = merge(inf_bg_revi, greenupgdd, by = 'year', all = FALSE)
-points(revi_bg$bggreenup.log, as.numeric(as.character(revi_bg$inflection_pt)), pch = 16, col = 'red')
-revi_lm_bggreen = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bggreenup.log)
+points(revi_bg$bggreenup.log, as.numeric(as.character(revi_bg$inflection_pt)), pch = 24, col = 'red')
+revi_lm_bggreen = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bggreenup.log, weights = 1/revi_bg$confint)
 abline(revi_lm_bggreen, col = 'red')
 summary(revi_lm_bggreen)
 
 inf_bg_coye = inflection_bg[inflection_bg$scientific_name == 'Geothlypis trichas',]
 coye_bg = merge(inf_bg_coye, greenupgdd, by = 'year', all = FALSE)
-points(coye_bg$bggreenup.log, as.numeric(as.character(coye_bg$inflection_pt)), pch = 16, col = 'orange')
-coye_lm_bggreen = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bggreenup.log)
+points(coye_bg$bggreenup.log, as.numeric(as.character(coye_bg$inflection_pt)), pch = 15, col = 'orange')
+coye_lm_bggreen = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bggreenup.log, weights = 1/coye_bg$confint)
 abline(coye_lm_bggreen, col = 'orange')
 summary(coye_lm_bggreen)
 
 inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
 bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
 bggn_bg = bggn_bg[bggn_bg$year != 2008,]
-points(bggn_bg$bggreenup.log, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 16, col = 'gray')
-bggn_lm_bggreen = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bggreenup.log)
-abline(bggn_lm_bggreen, col = 'gray')
+points(bggn_bg$bggreenup.log, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 9, col = 'gray67')
+bggn_lm_bggreen = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bggreenup.log, weights = 1/bggn_bg$confint)
+abline(bggn_lm_bggreen, col = 'gray67')
 summary(bggn_lm_bggreen)
+
+mtext("Bird arrival (Julian day)", side = 2, outer = TRUE, line = 1.5)
 
 dev.off()
 
@@ -545,19 +547,10 @@ legend('bottomright',
 summary(bggn_lm_bggreen)
 
 
-#---- FIGURE 6 RESULTS ----
+#---- FIGURE 6 RESULTS: Arths and birds ----
 
 # Final results plot, comparing arth peaks to bird peaks
 
-inflection_pr$year = as.numeric(as.character(inflection_pr$year))
-inflection_pr$inflection_pt = as.numeric(as.character(inflection_pr$inflection_pt))
-inflection_pr$scientific_name = as.character(inflection_pr$scientific_name)
-
-inflection_bg$year = as.numeric(as.character(inflection_bg$year))
-inflection_bg$inflection_pt = as.numeric(as.character(inflection_bg$inflection_pt))
-inflection_bg$scientific_name = as.character(inflection_bg$scientific_name)
-
-#---- Arths and birds ----
 
 pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure6.pdf', width = 6.5, height = 8)
 
