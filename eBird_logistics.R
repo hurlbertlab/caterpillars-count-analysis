@@ -21,7 +21,7 @@ inflection.pt.output=c()
 singlesp = c()
 singlesp1yr = c()
 
-for(sp in 1:6) { par(mfrow=c(3,2))
+for(sp in 1:4) { par(mfrow=c(3,2))
  for (yr in 2006:2016) {                   # 
 #for(i in 1:(nrow(long)-1)) {         # no lat long needed because datasets already subsetted
 #for(j in 1:(nrow(lat)-1)) {          # so only need year and sp
@@ -159,13 +159,13 @@ names(inflection_pr) <- c('scientific_name', 'year', 'inflection_pt')
 #---- CREATE BOTANICAL GARDEN DATASET ----
 
 par(mfrow=c(3,2)) #mai=c(0.3,0.6,0.25,0.5), las=1,xaxs="r")
-splist = c('Passerina cyanea', 'Vireo olivaceus', 'Troglodytes aedon', 'Geothlypis trichas', 'Icterus spurius', 'Polioptila caerulea')
+splist = c('Passerina cyanea', 'Vireo olivaceus', 'Geothlypis trichas', 'Polioptila caerulea')
 
 inflection.pt.output=c()
 singlesp = c()
 singlesp1yr = c()
 
-for(sp in 1:6) { par(mfrow=c(3,2))
+for(sp in 1:4) { par(mfrow=c(3,2))
   for (yr in 2006:2016) {                   # 
     #for(i in 1:(nrow(long)-1)) {         # no lat long needed because datasets already subsetted
     #for(j in 1:(nrow(lat)-1)) {          # so only need year and sp
