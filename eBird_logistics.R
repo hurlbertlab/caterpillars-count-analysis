@@ -3,6 +3,7 @@
 # Still have errors to work out
 
 library(bbmle) ##has function 'mle2' which is a wrapper for the base function 'optim'
+require(agricolae)
 
 setwd('c:/git/caterpillars-count-analysis')
 
@@ -123,6 +124,27 @@ if(nrow(t.samp)>0 & nrow(t.obs.NA1s)>0 & (length(unique(t.obs.NA1s$JulianDay))>=
     nll[xm]<- -sum( dbinom(temp.data2$Num.uniq.locs,size=temp.data1$Num.Unique.locs,prob=sapply(temp.data2$JulianDay,function(jd) plogis(Asym)/(1 + exp((xmid - jd)/(scal)))),log=TRUE))
   }
   best.coef<-coef.mat[order(nll)[1],] ##only takes coef from the model with the smallest neg.log.likelihood
+  
+  #Functions - calculate "confidence intervals" on the esimate of arrival date based on julian days at which the best fit logistic
+  #            predicts 2.5% and 97.5% of the occupancy of the asymptotic value.
+  ad.LL = function(params) {
+    Asym = plogis(params[1])
+    xmid = params[2]
+    scal = params[3]
+    occupancy = Asym/(1 + exp((xmid - 60:180)/scal))
+    LL2.5 = max(which(occupancy <= 0.025*Asym)) + 59
+  }
+  ad.UL = function(params) {
+    Asym = plogis(params[1])
+    xmid = params[2]
+    scal = params[3]
+    occupancy = Asym/(1 + exp((xmid - 60:180)/scal))
+    LL97.5 = min(which(occupancy >= 0.975*Asym)) + 59
+  }
+  
+  lowerconf = ad.LL(best.coef)
+  upperconf = ad.UL(best.coef)
+  
   #ADD BEST FIT LOGISTIC CURVE TO PLOT
   lines(temp.data2$JulianDay,exp.mod(best.coef,temp.data2$JulianDay),col='blue') ##model result
   abline(v=best.coef[2], col='red')
@@ -134,7 +156,7 @@ if(nrow(t.samp)>0 & nrow(t.obs.NA1s)>0 & (length(unique(t.obs.NA1s$JulianDay))>=
   
   x=lm(exp.mod(best.coef, temp.data2$JulianDay)~temp.prop)
   
-  singlesp1yr = c(as.character(splist[sp]), yr, best.coef[2])
+  singlesp1yr = c(as.character(splist[sp]), yr, best.coef[2], lowerconf, upperconf)
   singlesp = rbind(singlesp, singlesp1yr)
   
 }}
@@ -149,8 +171,13 @@ if(nrow(t.samp)>0 & nrow(t.obs.NA1s)>0 & (length(unique(t.obs.NA1s$JulianDay))>=
 # Use this code after running sampling_pr and obs_pr initial datasets through:
 inflection_pr <- unique(inflection.pt.output) 
 inflection_pr <- data.frame(inflection_pr) # warning message is ok?
-names(inflection_pr) <- c('scientific_name', 'year', 'inflection_pt')
-
+names(inflection_pr) <- c('scientific_name', 'year', 'inflection_pt', 'lowerconf', 'upperconf')
+inflection_pr$year = as.numeric(as.character(inflection_pr$year))
+inflection_pr$inflection_pt = as.numeric(as.character(inflection_pr$inflection_pt))
+inflection_pr$scientific_name = as.character(inflection_pr$scientific_name)
+inflection_pr$lowerconf = as.numeric(as.character(inflection_pr$lowerconf))
+inflection_pr$upperconf = as.numeric(as.character(inflection_pr$upperconf))
+inflection_pr$confint = inflection_pr$upperconf - inflection_pr$lowerconf
 
 
 
@@ -265,7 +292,31 @@ for(sp in 1:4) { par(mfrow=c(3,2))
         scal<-coef(fit.exp.con)[3]
         nll[xm]<- -sum( dbinom(temp.data2$Num.uniq.locs,size=temp.data1$Num.Unique.locs,prob=sapply(temp.data2$JulianDay,function(jd) plogis(Asym)/(1 + exp((xmid - jd)/(scal)))),log=TRUE))
       }
+      
+      
+      
       best.coef<-coef.mat[order(nll)[1],] ##only takes coef from the model with the smallest neg.log.likelihood
+      
+      #Functions - calculate "confidence intervals" on the esimate of arrival date based on julian days at which the best fit logistic
+      #            predicts 2.5% and 97.5% of the occupancy of the asymptotic value.
+      ad.LL = function(params) {
+        Asym = plogis(params[1])
+        xmid = params[2]
+        scal = params[3]
+        occupancy = Asym/(1 + exp((xmid - 60:180)/scal))
+        LL2.5 = max(which(occupancy <= 0.025*Asym)) + 59
+      }
+      ad.UL = function(params) {
+        Asym = plogis(params[1])
+        xmid = params[2]
+        scal = params[3]
+        occupancy = Asym/(1 + exp((xmid - 60:180)/scal))
+        LL97.5 = min(which(occupancy >= 0.975*Asym)) + 59
+      }
+      
+      lowerconf = ad.LL(best.coef)
+      upperconf = ad.UL(best.coef)
+      
       #ADD BEST FIT LOGISTIC CURVE TO PLOT
       lines(temp.data2$JulianDay,exp.mod(best.coef,temp.data2$JulianDay),col='blue') ##model result
       abline(v=best.coef[2], col='red')
@@ -277,7 +328,7 @@ for(sp in 1:4) { par(mfrow=c(3,2))
       
       x=lm(exp.mod(best.coef, temp.data2$JulianDay)~temp.prop)
       
-      singlesp1yr = c(as.character(splist[sp]), yr, best.coef[2])
+      singlesp1yr = c(as.character(splist[sp]), yr, best.coef[2], lowerconf, upperconf)
       singlesp = rbind(singlesp, singlesp1yr)
       
     }}
@@ -292,6 +343,12 @@ for(sp in 1:4) { par(mfrow=c(3,2))
 # Use this code after running sampling_bg and obs_bg initial datasets through:
 inflection_bg <- unique(inflection.pt.output) 
 inflection_bg <- data.frame(inflection_bg) # warning message is ok?
-names(inflection_bg) <- c('scientific_name', 'year', 'inflection_pt')
+names(inflection_bg) <- c('scientific_name', 'year', 'inflection_pt', 'lowerconf', 'upperconf')
+inflection_bg$year = as.numeric(as.character(inflection_bg$year))
+inflection_bg$inflection_pt = as.numeric(as.character(inflection_bg$inflection_pt))
+inflection_bg$scientific_name = as.character(inflection_bg$scientific_name)
+inflection_bg$lowerconf = as.numeric(as.character(inflection_bg$lowerconf))
+inflection_bg$upperconf = as.numeric(as.character(inflection_bg$upperconf))
+inflection_bg$confint = inflection_bg$upperconf - inflection_bg$lowerconf
 
 
