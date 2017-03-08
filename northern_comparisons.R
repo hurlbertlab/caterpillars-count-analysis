@@ -23,6 +23,10 @@ dat$tree.name = ifelse(dat$tree.spec == 1, "American beech",
                 ifelse(dat$tree.spec == 2, "Sugar maple",
                 ifelse(dat$tree.spec == 3, "Striped maple",
                 ifelse(dat$tree.spec == 4, "Viburnum", NA))))
+dat$plot = gsub(1, "Hubbard Brook", dat$plot)
+dat$plot = gsub(2, "Moosilauke", dat$plot)
+dat$plot = gsub(3, "Russell", dat$plot)
+dat$plot = gsub(4, "Stinson", dat$plot)
 singer$hostplantspecies = gsub("Hammamelis virginiana", "Hamamelis virginiana", singer$hostplantspecies) #incorrect spelling
 plant_codes1 = dplyr::rename(plant_codes, hostplantspecies = TreeSciName)
 singer1 = singer %>% left_join(plant_codes1, by = "hostplantspecies") %>% select(-TreeCode, -Notes)
@@ -34,15 +38,15 @@ dat1 = dplyr::filter(dat, year %in% goodyears)
 
 #number of sets of surveys conducted/year (says on website it should be 4-6 but this is not reflected in these counts) 
 hubbard_dates = dat %>% dplyr::select(date, year, plot) %>% dplyr::distinct() 
-plot1_dates = hubbard_dates %>% dplyr::filter(plot == 1) %>% dplyr::count(year) 
-plot2_dates = hubbard_dates %>% dplyr::filter(plot == 2) %>% dplyr::count(year) 
-plot3_dates = hubbard_dates %>% dplyr::filter(plot == 3) %>% dplyr::count(year) 
-plot4_dates = hubbard_dates %>% dplyr::filter(plot == 4) %>% dplyr::count(year) 
+plot1_dates = hubbard_dates %>% dplyr::filter(plot == "Hubbard Brook") %>% dplyr::count(year) 
+plot2_dates = hubbard_dates %>% dplyr::filter(plot == "Moosilauke") %>% dplyr::count(year) 
+plot3_dates = hubbard_dates %>% dplyr::filter(plot == "Russell") %>% dplyr::count(year) 
+plot4_dates = hubbard_dates %>% dplyr::filter(plot == "Stinson") %>% dplyr::count(year) 
 
 #check out weird years/plots
-two_92 = dat %>% dplyr::filter(year == 1992 & plot == 2)
-three_89 = dat %>% dplyr::filter(year == 1989 & plot == 3) #only 6 dates, one is left over
-four_89 = dat %>% dplyr::filter(year == 1989 & plot == 4)
+two_92 = dat %>% dplyr::filter(year == 1992 & plot == "Moosilauke")
+three_89 = dat %>% dplyr::filter(year == 1989 & plot == "Russell") #only 6 dates, one is left over
+four_89 = dat %>% dplyr::filter(year == 1989 & plot == "Stinson")
 
 # calculate total # of leaves surveyed for each tree species over the course of all years we are looking at
 unique_hub = dplyr::filter(data.frame(table(dat %>% dplyr:: select (year, plot, count))), Freq > 0)
@@ -50,18 +54,21 @@ numvisits = unique_hub %>% dplyr::count(year, plot)
 numvisits$visits = numvisits$n*80 #number of visits in that plot in that year times the number of surveys/visit (4000 leaves surveyed/visit = 80 x 50 leaf surveys)
 total_surveys = numvisits %>% dplyr::summarize(sum_visits = sum(visits)) %>% dplyr::filter(year %in% goodyears) %>% dplyr::summarize(sum(sum_visits)) 
 total_surveys1 = 15040 #needs to be automated
+surveyspersite=total_surveys1/4
 
 #global means for normal years (beech and sugar maple) #are there the same number of beech and sugar maple trees? or is there metadata?
 #same number of beech and sugar maple
+#rename hubbard sites more intuitively
 hubbard_means = dat1 %>% dplyr::rename(ComName = tree.name) %>% group_by(ComName) %>% 
   dplyr::summarize(mean_cat_dens = sum(number.lep)/total_surveys1, biomass = sum(lepbio.mass.mg.)/total_surveys1) 
-hubbard_ranks = hubbard_means[order(hubbard_means$sum_count, decreasing = T),]
+hubbard_ranks = hubbard_means[order(hubbard_means$mean_cat_dens, decreasing = T),]
 hubbard_ranks_sel = hubbard_ranks %>% filter(ComName %in% c("Sugar maple", "American beech"))
 hubbard_ranks_sel = cbind(hubbard_ranks = rownames(hubbard_ranks_sel), hubbard_ranks_sel)
 
 #hubbard means by site
-hub_means_sites = dat1 %>% dplyr::rename(ComName = tree.name) %>% group_by(ComName, plot) %>% 
-  dplyr::summarize(mean_cat_dens = sum(number.lep)/total_surveys1) 
+hub_means_sites = data.frame(dat1 %>% dplyr::rename(ComName = tree.name, site=plot) %>% group_by(ComName, site) %>% 
+  dplyr::summarize(mean_cat_dens = sum(number.lep)/(surveyspersite))) 
+
 
 #subset dataset to only include 96/97 data to see if there is effect on beech and sugar maple amounts
 sumbysp_67 = dat1 %>% filter(year %in% c("1996", "1997") & plot =="1") %>% group_by(tree.name) %>% 
@@ -75,7 +82,7 @@ singer_ranks = cbind(singer_ranks = rownames(singer_ranks), singer_ranks)
 singer_ranks$ComName = gsub("Northern red oak", "Red oak", singer_ranks$ComName)
 
 #singer means by site 
-singer_means_sites = singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(generalist.density.m2)) 
+singer_means_sites = data.frame(singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(generalist.density.m2))) 
 
 #CC & Appalachian data
 #add column with just caterpillar data
@@ -102,24 +109,51 @@ tri_relevant$tri_ranks = as.character(tri_relevant$tri_ranks)
 tri_means_sites = vis_tri2 %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 
 
-#appalachian surveys broken down into middle appalachia (VA) and southern appalachia(NC, TN, SC, GA)
-va_sites = vis_app %>% filter(grepl("88", site))
+## Appalachian surveys broken down into middle appalachia (VA) and southern appalachia(NC, TN, SC, GA)
+# Site/tree sp combos with the most surveys
+surveys_app = vis_app %>%
+                     select(site, date, survey, circle, clean_plantSp) %>% 
+                     unique() %>% 
+                     count(site, clean_plantSp) %>% 
+                     arrange(desc(n)) %>% 
+                     filter(n >= 15) %>%
+                     data.frame() 
+  
+
+# filter to site/tree sp combos with at least 10 surveys to reduce uncertainty
+surveys_app$site_tree = paste0(surveys_app$site, surveys_app$clean_plantSP)
+vis_app$site_tree = paste0(vis_app$site, vis_app$tree)
+
+most_surveys_app = filter(vis_app, site_tree %in% surveys_app$site_tree)
+va_sites = most_surveys_app %>% filter(grepl("88", site))
 uniq_va = unique(va_sites$site)
-va_means = va_sites %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
+va_means = va_sites %>%
+    dplyr::rename(ComName = clean_plantSp) %>% 
+    group_by(ComName)  %>% 
+    dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 va_ranks = va_means[order(va_means$mean_cat_dens, decreasing = T),]
 va_relevant = data.frame(filter(va_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple")))
 va_relevant = cbind(va_ranks = rownames(va_relevant), va_relevant)
 va_relevant$va_ranks = as.character(va_relevant$va_ranks)
-va_means_sites = va_sites %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
+va_means_sites = va_sites %>% 
+                 dplyr::rename(ComName = clean_plantSp) %>% 
+                 group_by(ComName, site) %>% 
+                 dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 
-sa_sites = vis_app %>% filter(!grepl("88", site))
+sa_sites = most_surveys_app %>% filter(!grepl("88", site))
 uniq_sa = unique(sa_sites$site)
-sa_means = sa_sites %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
+sa_means = sa_sites %>% 
+  dplyr::rename(ComName = clean_plantSp) %>% 
+  group_by(ComName) %>% 
+  dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 sa_ranks = sa_means[order(sa_means$mean_cat_dens, decreasing = T),]
 sa_relevant = filter(sa_ranks, ComName %in% c("Red oak","Red maple", "Witch hazel", "Sweet birch", "American beech", "Sugar maple"))
 sa_relevant = cbind(sa_ranks = rownames(sa_relevant), sa_relevant)
 sa_relevant$sa_ranks = as.character(sa_relevant$sa_ranks)
-sa_means_sites = sa_sites %>% dplyr::rename(ComName = clean_plantSp) %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(cats_count_10))
+sa_means_sites = sa_sites %>% 
+                 dplyr::rename(ComName = clean_plantSp) %>% 
+                 group_by(ComName, site) %>% 
+                 dplyr::summarize(mean_cat_dens = mean(cats_count_10))
 
 
 # Visualize rankings #double check rankings for hubbard brook
@@ -142,15 +176,6 @@ plot(all_ranks$sing, all_ranks$singer_ranks, xlim = c(.2,3.6), ylim = c(0,6), ty
   text(all_ranks$hub, all_ranks$hubbard_ranks, labels = all_ranks$ComName, cex = .6)
 
 #--------------------------variance partitioning analysis of tree sp and site on caterpillar density----------------
-#spread
-#merge means from all regions into one df
-#means1 = merge(va_means_sites, sa_means_sites, by = "ComName") 
-#means2 = merge(means1_r, tri_means_sites, by = "ComName", all.x = T)
-#means2_r = rename(means2, tri = mean_cat_dens)
-#means3 = merge(means2_r, singer_means_sites, all.x = T)
-#means3_r = rename(means3, sing = mean_cat_dens)
-#means4 = merge(means3_r, hubbard_means, all.x = T)
-#all_means = means4 %>% rename(hub = sum_count) %>% dplyr::select(-biomass)
 #add column to each regional dataframe to identify after the bind
 va_means_sites$region = "va"
 sa_means_sites$region = "sa"
@@ -159,76 +184,79 @@ singer_means_sites$region = "sing"
 hub_means_sites$region = "hub"
 
 #create one dataframe with all densities
-hub_means_sites = rename(hub_means_sites, site = plot)
-hub_means_sites$site = as.character(hub_means_sites$site)
 va_sa = rbind(va_means_sites, sa_means_sites)
 va_sa_tri = rbind(va_sa, tri_means_sites)
 va_sa_tri$site = as.character(va_sa_tri$site)
+va_sa_tri = data.frame(va_sa_tri)
 va_sa_tri_singer = rbind(va_sa_tri, singer_means_sites)
-all_regions = rbind(va_sa_tri, hub_means_sites)
-
-
+all_regions = data.frame(rbind(va_sa_tri_singer, hub_means_sites))
 
 #remove meaningless "UNID" tree sp
-all_means1= filter(all_means, ComName != "UNID")
+all_regions = filter(all_regions, ComName != "UNID")
 
-#gather into 3 columns (ComName, site, caterpillar density)
-all_means_region = tidyr::gather(all_means1, region,  mean_cat, va, sa, tri, sing, hub)
+#change site names for PR and NCBG to match those in the climate dataframe
+all_regions$site = gsub(117, "Prairie Ridge", all_regions$site) # change so that 
+all_regions$site = gsub(8892356, "Botanical Garden", all_regions$site)
 
-#------------summarize climate data by region----------------------------------------------------------------
+
+##------------summarize climate data by region----------------##
 clim = merge(precipitation, temperature, by= "X")
-climate = rename(clim, site_region=X) #no location data for sites for brook & singer, sites close to each other & at low elevation, so same temp & precip used
-climate$region = ifelse(climate$site_region %in% uniq_va, "va",
-                    ifelse(climate$site_region %in% uniq_sa, "sa",
-                           ifelse(climate$site_region %in% c("Botanical Garden", "Prairie Ridge"), "tri",
-                                  ifelse(climate$site_region == "Hubbard Brook", "hub",
-                                         ifelse(climate$site_region == "Singer", "sing", NA)))))
-clim_summary = data.frame(climate %>% group_by(region) %>% summarize(ppt_may = mean(ppt_normals_may), ppt_june = mean(ppt_normals_june), ppt_july = mean(ppt_normals_july),
-                                                     temp_may = mean(temp_normals_may), temp_june = mean(temp_normals_june), temp_july = mean(temp_normals_july)))
+climate = dplyr::rename(clim, site=X) #no location data for sites for brook & singer, sites close to each other & at low elevation, so same temp & precip used
+clim_summary = data.frame(climate %>% group_by(site) %>% summarize(annual_ppt = sum(ppt_normals_1, ppt_normals_2, ppt_normals_3, ppt_normals_4, ppt_normals_5, ppt_normals_6, 
+                                                                                           ppt_normals_7, ppt_normals_8, ppt_normals_9, ppt_normals_10, ppt_normals_11, ppt_normals_12),
+                                                                          avg_summer_tmp = mean(temp_normals_may, temp_normals_june, temp_normals_july)))
+clim_summary$region = ifelse(climate$site %in% uniq_va, "va",
+                        ifelse(climate$site %in% uniq_sa, "sa",
+                               ifelse(climate$site %in% c("Botanical Garden", "Prairie Ridge"), "tri",
+                                      ifelse(climate$site %in% c("Hubbard Brook", "Moosilauke", "Russell", "Stinson"), "hub",
+                                             ifelse(climate$site %in% c("C", "H", "M"), "sing", NA)))))
 # merge climate data with caterpillar density data for variance partitioning
-region_complete = merge(all_means_region, clim_summary, by = "region", all.x = T)
+region_complete = merge(all_regions, clim_summary, by = "site", all.x = T)
+region_complete1 = region_complete %>% dplyr::select(-region.y) %>% rename(region = region.x)
 
-region_complete$total_precip = region_complete$ppt_may + region_complete$ppt_june + region_complete$ppt_july
+#Linear models - VP 1 (between climate and tree sp)
+lm.climate = lm(mean_cat_dens ~ annual_ppt + avg_summer_tmp, data = region_complete1)
+lm.species = lm(mean_cat_dens ~ ComName, data = region_complete1)
+lm.climate.species = lm(mean_cat_dens ~ region + annual_ppt + avg_summer_tmp, data = region_complete1)
 
-#linear models
-lm.region = lm(mean_cat ~ region, data = region_complete)
-lm.species = lm(mean_cat ~ ComName, data = region_complete) #what does it mean that the adjusted r2 is nothing?
-lm.precip = lm(mean_cat ~ total_precip, data = region_complete)
-lm.region.species = lm(mean_cat ~ region + ComName, data = region_complete)
-lm.region.precip = lm(mean_cat ~ region + total_precip, data = region_complete )
-lm.species.precip = lm(mean_cat ~ ComName + total_precip, data = region_complete)
-lm.all = lm(mean_cat ~ region + ComName + total_precip, data = region_complete)
+#VP 1- between region and tree sp
+#a = variance uniquely explained by climate		  
+#b = variance explained by climate and species together		  
+#c = variance uniquely explained by species		
+#d = variance explained by neither		 
+  
+a = summary(lm.climate.species)$r.squared - summary(lm.species)$r.squared		 
+b = summary(lm.climate)$r.squared - a		
+c = summary(lm.climate.species)$r.squared - summary(lm.climate)$r.squared		 
+d = 1-summary(lm.climate.species)$r.squared
 
-#potential variables currently not included
-lm.maytemp = lm(mean_cat ~ temp_may, data = region_complete)
-lm.junetemp = lm(mean_cat ~ temp_june, data = region_complete)
-lm.julytemp = lm(mean_cat ~ temp_july, data = region_complete)
+#linear models - VP 2 (between precipitation and temp)
+#a = variance uniquely explained by precip	  
+#b = variance explained by climate and species together		  
+#c = variance uniquely explained by temp		
+#d = variance explained by neither
+lm.precip = lm(mean_cat_dens ~ annual_ppt, data = region_complete1)
+lm.temp = lm(mean_cat_dens ~ avg_summer_tmp, data = region_complete1)
+#lm.climate created earlier
+a1 = summary(lm.climate)$r.squared - summary(lm.temp)$r.squared		 
+b1 = summary(lm.precip)$r.squared - a1		
+c1 = summary(lm.climate)$r.squared - summary(lm.precip)$r.squared		 
+d1 = 1-summary(lm.climate)$r.squared
 
-#variance partitioning
-#a(1) = variance uniquely explained by region
-#b(1) = variance uniquely explained by species
-#c(1) = variance uniquely explained by net precipitation may-july
-#d(1) = variance explained by both region and species
-#e(1) = variance explained by both region and precip
-#f(1) = variance explained by both species and precip
-#g(1) = variance explained by none of the 3
-#h(1) = variance explained by all of the 3
-
-a = summary(lm.all)$r.squared - summary(lm.species.precip)$r.squared
-b = summary(lm.all)$r.squared - summary(lm.region.precip)$r.squared
-c = summary(lm.all)$r.squared - summary(lm.region.species)$r.squared
-dh = summary(lm.region)$r.squared + summary(lm.species)$r.squared - summary(lm.region.species)$r.squared
-eh = summary(lm.region)$r.squared + summary(lm.precip)$r.squared - summary(lm.region.precip)$r.squared
-hf = summary(lm.species)$r.squared + summary(lm.precip)$r.squared - summary(lm.species.precip)$r.squared
-e = summary(lm.region)$r.squared - dh - a
-f = summary(lm.species)$r.squared -dh - b
-d = summary(lm.region.species)$r.squared - hf - e - c - b
-h = hf - f
-g = 1 - summary(lm.all)$r.squared
+#correlation coefficient matrix
+mean_cat_dens=c(1,cor(region_complete1$mean_cat_dens, region_complete1$avg_summer_tmp, use = "complete.obs"),
+                   cor(region_complete1$mean_cat_dens, region_complete1$annual_ppt, use = "complete.obs"))
+avg_summer_tmp = c(cor(region_complete1$avg_summer_tmp, region_complete1$mean_cat_dens, use = "complete.obs"), 1,
+                   cor(region_complete1$avg_summer_tmp, region_complete1$annual_ppt, use = "complete.obs"))
+annual_ppt = c(cor(region_complete1$annual_ppt, region_complete1$mean_cat_dens, use = "complete.obs"), 
+               cor(region_complete1$annual_ppt, region_complete1$avg_summer_tmp, use = "complete.obs"), 1)                  
+coefficients = data.frame(rbind(mean_cat_dens, avg_summer_tmp, annual_ppt))
+names(coefficients) = c("mean_cat_dens", "avg_summer_tmp", "annual_ppt")
 
 
 
-#how to do this... you have 5 site
+
+var(region_complete1$mean_cat_dens, region_complete1$avg_summer_tmp, na.rm = T)#cat dens and temp
 
 
 
