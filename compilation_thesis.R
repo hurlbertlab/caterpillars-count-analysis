@@ -392,25 +392,29 @@ segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015],
 dev.off()
 
 #---- FIGURE 5 RESULTS ----
+pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/results_legendfig5.pdf', width = 6.5, height = 3)
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure5.pdf', width = 6.5, height = 8.5)
-
-par(mar = c(4,4,2,2), mfrow = c(3,2), oma = c(1,3,1,1))
+par(mar = c(4,4,2,2), mfrow = c(1,1), oma = c(1,3,1,1))
 
 # Blank plot for pdf
 plot.new()
-legend('bottomleft', c('Indigo bunting', 'Red-eyed vireo', 'Common yellowthroat', 'Blue-gray gnatcatcher'), pch = c(16, 24, 15, 9), col = c('dodgerblue4', 'red', 'orange', 'gray67'), cex = 1.2)
-plot.new()
+legend('bottomleft', c('Indigo bunting', 'Red-eyed vireo', 'Common yellowthroat', 'Blue-gray gnatcatcher'), pch = c(16, 24, 15, 9), col = c('dodgerblue3', 'red', 'orange', 'gray67'), cex = 1.2)
+
+dev.off()
+
+pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure5.pdf', width = 6.5, height = 7)
+
+par(mar = c(4,2,2,2), mfrow = c(2,2), oma = c(1,3,1,1))
 
 # Prairie Ridge GDD
 
 inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
 inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_pr$pr.gdd, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue4', 
+plot(inbu_pr$pr.gdd, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue3', 
      ylim = c(80, 119), main = 'Prairie Ridge', xlab = 'GDD (Julian day)', ylab = '')
 legend("topleft", "A", bty="n")
 inbu_lm_prgdd = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$pr.gdd, weights = 1/inbu_pr$confint)
-abline(inbu_lm_prgdd, col = 'dodgerblue4')
+abline(inbu_lm_prgdd, col = 'dodgerblue3')
 summary(inbu_lm_prgdd)
 
 inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
@@ -438,11 +442,11 @@ summary(bggn_lm_prgdd)
 
 inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
 inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_bg$bg.gdd, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue4', 
+plot(inbu_bg$bg.gdd, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue3', 
      ylim = c(80, 119), main = 'Botanical Garden', xlab = 'GDD (Julian day)', ylab = '')
 legend("topleft", "C", bty="n")
 inbu_lm_bggdd = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bg.gdd, weights = 1/inbu_bg$confint)
-abline(inbu_lm_bggdd, col = 'dodgerblue4')
+abline(inbu_lm_bggdd, col = 'dodgerblue3')
 summary(inbu_lm_bggdd)
 
 inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
@@ -461,7 +465,6 @@ summary(coye_lm_bggdd)
 
 inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
 bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
-bggn_bg = bggn_bg[bggn_bg$year != 2008,]
 points(bggn_bg$bg.gdd, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 9, col = 'gray67')
 bggn_lm_bggdd = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bg.gdd, weights = 1/bggn_bg$confint)
 abline(bggn_lm_bggdd, col = 'gray67')
@@ -474,11 +477,11 @@ summary(bggn_lm_bggdd)
 
 inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
 inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue4', 
+plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue3', 
      ylim = c(80, 119), main = '', xlab = 'Greenup (Julian day)', ylab = '')
 legend("topleft", "B", bty="n")
 inbu_lm_prgreen = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$prgreenup.log, weights = 1/inbu_pr$confint)
-abline(inbu_lm_prgreen, col = 'dodgerblue4')
+abline(inbu_lm_prgreen, col = 'dodgerblue3')
 summary(inbu_lm_prgreen)
 
 inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
@@ -507,11 +510,11 @@ summary(bggn_lm_prgreen)
 
 inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
 inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_bg$bggreenup.log, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue4', 
+plot(inbu_bg$bggreenup.log, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue3', 
      ylim = c(80, 119), main = '', xlab = 'Greenup (Julian day)', ylab = '')
 legend("topleft", "D", bty="n")
 inbu_lm_bggreen = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bggreenup.log, weights = 1/inbu_bg$confint)
-abline(inbu_lm_bggreen, col = 'dodgerblue4')
+abline(inbu_lm_bggreen, col = 'dodgerblue3')
 summary(inbu_lm_bggreen)
 
 inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
@@ -530,7 +533,6 @@ summary(coye_lm_bggreen)
 
 inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
 bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
-bggn_bg = bggn_bg[bggn_bg$year != 2008,]
 points(bggn_bg$bggreenup.log, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 9, col = 'gray67')
 bggn_lm_bggreen = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bggreenup.log, weights = 1/bggn_bg$confint)
 abline(bggn_lm_bggreen, col = 'gray67')
@@ -541,10 +543,30 @@ mtext("Bird arrival (Julian day)", side = 2, outer = TRUE, line = 1.5)
 dev.off()
 
 # Stats of this
-legend('bottomright', 
-       paste("R2 =", round(summary(greenuplm)$r.squared, 2), ", p = ", round(summary(greenuplm)$coefficients[2,4], 2)), bty = 'n')
+# ONE OF THE COMMON YELLOWTHROATS IS BAD OH NO
 
-summary(bggn_lm_bggreen)
+datalist = c(inbu_lm_prgdd, revi_lm_prgdd, coye_lm_prgdd, bggn_lm_prgdd)
+
+birdstats = data.frame(Species = rep(c("Indigo bunting", "Red-eyed vireo", "Common yellowthroat", "Blue-gray gnatcatcher"), 4),
+                      Site = c(rep('PR', 4), rep('BG', 4), rep('PR', 4), rep('BG', 4)),
+                      Metric = c(rep('GDD', 8), rep('Greenup', 8)),
+                      R2 = c(round(summary(inbu_lm_prgdd)$r.squared, 2), round(summary(revi_lm_prgdd)$r.squared, 2),
+                            round(summary(coye_lm_prgdd)$r.squared, 2), round(summary(bggn_lm_prgdd)$r.squared, 2),
+                            round(summary(inbu_lm_bggdd)$r.squared, 2), round(summary(revi_lm_bggdd)$r.squared, 2),
+                            round(summary(coye_lm_bggdd)$r.squared, 2), round(summary(bggn_lm_bggdd)$r.squared, 2),
+                            round(summary(inbu_lm_prgreen)$r.squared, 2), round(summary(revi_lm_prgreen)$r.squared, 2),
+                            round(summary(coye_lm_prgreen)$r.squared, 2), round(summary(bggn_lm_prgreen)$r.squared, 2),
+                            round(summary(inbu_lm_bggreen)$r.squared, 2), round(summary(revi_lm_bggreen)$r.squared, 2),
+                            round(summary(coye_lm_bggreen)$r.squared, 2), round(summary(bggn_lm_bggreen)$r.squared, 2)),
+                      p = c(round(summary(inbu_lm_prgdd)$coefficients[2,4], 2), round(summary(revi_lm_prgdd)$coefficients[2,4], 2),
+                            round(summary(coye_lm_prgdd)$coefficients[2,4], 2), round(summary(bggn_lm_prgdd)$coefficients[2,4], 2),
+                            round(summary(inbu_lm_bggdd)$coefficients[2,4], 2), round(summary(revi_lm_bggdd)$coefficients[2,4], 2),
+                            round(summary(coye_lm_bggdd)$coefficients[2,4], 2), round(summary(bggn_lm_bggdd)$coefficients[2,4], 2),
+                            round(summary(inbu_lm_prgreen)$coefficients[2,4], 2), round(summary(revi_lm_prgreen)$coefficients[2,4], 2),
+                            round(summary(coye_lm_prgreen)$coefficients[2,4], 2), round(summary(bggn_lm_prgreen)$coefficients[2,4], 2),
+                            round(summary(inbu_lm_bggreen)$coefficients[2,4], 2), round(summary(revi_lm_bggreen)$coefficients[2,4], 2),
+                            round(summary(coye_lm_bggreen)$coefficients[2,4], 2), round(summary(bggn_lm_bggreen)$coefficients[2,4], 2)))
+
 
 
 #---- FIGURE 6 RESULTS: Arths and birds ----
@@ -1068,13 +1090,37 @@ dev.off()
 
 #---- METHODS (FIGURE 2) to show how everything was calculated ----
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/methodsfigure2.pdf', width = 6.5, height = 8)
+pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/methodsfigure2.pdf', width = 7, height = 6.5)
 
-par(mfrow = c(2,2), mar = c(4,4,2,2), oma = c(1,1,1,1))
+par(mfrow = c(2,2), mar = c(2,4,4,2), oma = c(3,1,1,1))
 
 # GDD
 # 1000 GGDs 
-gddcalc(prismtemp, "PR", 2015)
+subdata <- prismtemp[, c('PR', "date", "jday", "year")]
+pregddfull <- subdata[subdata$year == 2015,]
+pregdd <- pregddfull[,'PR']
+pregdd[pregdd < 7] = 7
+pregdd[pregdd > 30] = 30 # need to do more research about thresholds
+pregdd1 <- pregdd - 7
+gdd <- cumsum(pregdd1)
+GDD <- data.frame(pregddfull$jday, gdd)
+names(GDD) <- c('jday', 'GDD')
+plot(GDD$jday, GDD$GDD, xlab = "", ylab = "GDD", type = 'l', lwd = 1, main = 'Temperature')
+legend("topleft", "A", bty="n")
+
+# Calculate reference julian day for comparison (at 1000 GDDs)
+refnum <- which.min(abs(GDD$GDD - 1000))
+segments(y0 = 1000,
+         x0 = 0, 
+         y1 = 1000, 
+         x1 = 161, 
+         col = 'darkorchid1', lwd = 2, lty = 1)
+segments(y0 = 0,
+         x0 = 161, 
+         y1 = 1000, 
+         x1 = 161, 
+         col = 'plum', lwd = 2, lty = 2)
+points(x = refnum, y = 1000, pch = 8, cex = 2, lwd = 3, col = 'chocolate2')
 
 # Greenup
 # Logistic inflection of EVI
@@ -1091,17 +1137,22 @@ subprmean = prmean[prmean$julianday %in% 1:200,]
 subprmean$EVIdis = subprmean$EVImean - min(subprmean$EVImean)+.01
 prlog = nls(EVIdis ~ SSlogis(julianday, Asym, xmid, scal), data = subprmean) # CHECK ON THIS EVIDIS STUFF
 #par(mar=c(5, 4, 4, 4) + 0.1)
-plot(subprmean$julianday, subprmean$EVIdis, xlab = "Julian Day", ylab = "Mean EVI",
-     col = 'red', type = 'l', lwd = 3)
-curve(predict(prlog,data.frame(julianday=x),type="resp"),add=TRUE)
+plot(subprmean$julianday, subprmean$EVIdis, xlab = "", ylab = "Mean EVI - min EVI",
+     col = 'black', type = 'l', lwd = 1, main = 'Greenup')
+curve(predict(prlog,data.frame(julianday=x),type="resp"),add=TRUE, col = 'darkorchid1', lwd = 2)
 subprmean$prEVIlog = predict(prlog)+min(subprmean$EVImean)-.01
 #points(prmean$julianday, prmean$prEVIlog, col = 'red', lwd = 3, 
 #       lty = 'dashed', type = 'l')
 prgreenup.log <- summary(prlog)$coefficients["xmid","Estimate"]
+abline(v=prgreenup.log, col='plum', lwd = 2, lty = 2)
+points(x = prgreenup.log, y = .124, pch = 8, cex = 2, lwd = 3, col = 'chocolate2') # estimation of y
+legend("topleft", "B", bty="n")
 
 # Arthropods
 # Spline curve and line through peak
 PR.LEPL15.vis.max = splinearth(PR.LEPL15.vis, 5)
+title('Arthropods')
+legend("topleft", "C", bty="n")
 
 # Birds
 # Logistic inflection of proportion checklists
@@ -1169,8 +1220,8 @@ for(sp in 1) {
       temp.data2$prop = temp.data2$Num.uniq.locs/temp.data1$Num.Unique.locs
       
       #plotting
-      plot(temp.data2$JulianDay, temp.data2$prop,ylim=c(0,1),xlab='JulianDay',ylab='Prop of Uniq Locs',main=paste(as.character(splist[sp])), xlim=c(60,180), pch=16,type='o')
-      text(min(temp.data2$JulianDay)+5, 0.9, yr, cex=1.5)
+      plot(temp.data2$JulianDay, temp.data2$prop,ylim=c(0,1),xlab='',ylab='Proportion of checklists',main='Birds', xlim=c(60,180), pch=16, cex = .7, type='o')
+      #text(min(temp.data2$JulianDay)+5, 0.9, yr, cex=1.5)
       #text(160, 0.9, as.character(splist[sp]))
       
       # FUNCTION FOR DRAWING A LOGISTIC CURVE GIVEN LOGISTIC FIT COEFFICIENTS
@@ -1212,8 +1263,10 @@ for(sp in 1) {
       }
       best.coef<-coef.mat[order(nll)[1],] ##only takes coef from the model with the smallest neg.log.likelihood
       #ADD BEST FIT LOGISTIC CURVE TO PLOT
-      lines(temp.data2$JulianDay,exp.mod(best.coef,temp.data2$JulianDay),col='blue') ##model result
-      abline(v=best.coef[2], col='red')
+      lines(temp.data2$JulianDay,exp.mod(best.coef,temp.data2$JulianDay),col='darkorchid1', lwd = 2) ##model result
+      abline(v=best.coef[2], col='plum', lwd = 2, lty = 2)
+      points(x = best.coef[2], y = .43, pch = 8, cex = 2, lwd = 3, col = 'chocolate2') # estimation of y
+      
       
       temp.data2$prop[is.nan(temp.data2$prop)==T] = 0                                                     
       temp.jd = temp.data2$JulianDay#[is.nan(temp.data2$prop)==F]
@@ -1231,10 +1284,11 @@ for(sp in 1) {
   
   #inflection.pt.output = rbind(inflection.pt.output, cbind(as.character(splist[sp]), yr, best.coef[1], best.coef[2], best.coef[3], temp.jd, temp.prop, long[i,], lat[j,]))
 }
+legend("topleft", "D", bty="n")
 
+mtext("Julian day", side = 1, outer = TRUE, line = 1.5)
 
-
-
+dev.off()
 
 
 
