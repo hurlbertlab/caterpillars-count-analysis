@@ -12,10 +12,12 @@ splinearth <- function(dataset, # enter dataset
 
   dataset$julianday = (dataset$week - 1)*7 + 4
   spline = smooth.spline(dataset$julianday, dataset$fracSurveys, df = degreesf)
-  plot(dataset$julianday, dataset$fracSurveys, lty = 1, col = 'red', pch = 16,
-      xlab = 'Julian day', ylab = 'Fraction of surveys')
+  plot(dataset$julianday, dataset$fracSurveys, type = 'l', col = 'black', lwd = 1,
+      xlab = 'Julian day', ylab = 'Occurrence (fraction of surveys)')
   spl.pred = predict(spline, 135:204)
-  lines(predict(spline, sort(c(seq(135, 204, by = 1), unique(dataset$julianday)))))
+  lines(predict(spline, sort(c(seq(135, 204, by = 1), unique(dataset$julianday)))), lwd = 2, col = 'darkorchid1')
+  abline(v=spl.pred$x[spl.pred$y==max(spl.pred$y)], col='plum', lwd = 2, lty = 2)
+  points(x = spl.pred$x[spl.pred$y==max(spl.pred$y)], y = max(spl.pred$y), pch = 8, cex = 2, lwd = 3, col = 'chocolate2') # estimation of y
   return(spl.pred$x[spl.pred$y==max(spl.pred$y)])
   
 } # end function
@@ -55,40 +57,3 @@ BG.BIRD16.bs.max = splinearth(BG.BIRD16.bs, 5)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-lines(predict(foo, sort(c(seq(20, 30, by = .1428), unique(lp_yr$WEEKNO)))))
-foo = smooth.spline(lp_yr$WEEKNO, lp_yr$COUNT/sum(lp_yr$COUNT), df = 3)
-lines(predict(foo, sort(c(seq(20, 30, by = .1428), unique(lp_yr$WEEKNO)))))
-plot(lp_yr$WEEKNO, lp_yr$COUNT/sum(lp_yr$COUNT), lty = 1, col = 'red', pch = 16)
-foo = smooth.spline(lp_yr$WEEKNO, lp_yr$COUNT/sum(lp_yr$COUNT), df = 4)
-lines(predict(foo, sort(c(seq(20, 30, by = .1428), unique(lp_yr$WEEKNO)))))
-foo = smooth.spline(lp_yr$WEEKNO, lp_yr$COUNT/sum(lp_yr$COUNT), df = 5)
-lines(predict(foo, sort(c(seq(20, 30, by = .1428), unique(lp_yr$WEEKNO)))))
-foo = smooth.spline(lp_yr$WEEKNO, lp_yr$COUNT, df = 5)
-plot(lp_yr$WEEKNO, lp_yr$COUNT, lty = 1, col = 'red', pch = 16)
-lines(predict(foo, sort(c(seq(20, 30, by = .1428), unique(lp_yr$WEEKNO)))))
-lp_yr$jd = lp_yr$WEEKNO*7-4
-lp_yr$jd = (lp_yr$WEEKNO - 1)*7+4
-plot(lp_yr$jd, lp_yr$COUNT, lty = 1, col = 'red', pch = 16)
-foo = smooth.spline(lp_yr$jd, lp_yr$COUNT, df = 5)
-lines(predict(foo, 135:210))
-names(foo)
-[1] "x"        "y"        "w"        "yin"      "data"     "lev"      "cv.crit"  "pen.crit" "crit"     "df"      
-[11] "spar"     "lambda"   "iparms"   "fit"      "call"    
-spl.pred = predict(foo, 135:210)
-names(spl.pred)
-[1] "x" "y"
-spl.pred$x[spl.pred$y==max(spl.pred$y)]
-[1] 169
