@@ -76,13 +76,13 @@ sumbysp_67 = dat1 %>% filter(year %in% c("1996", "1997") & plot =="1") %>% group
 
 #Find patterns in Singer Data 
 #include only trees without a treatment
-singer_means = singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(generalist.density.m2)) 
+singer_means = singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName) %>% dplyr::summarize(mean_cat_dens = mean(X.generalists*50/numberlvs)) #calculate number of caterpillars that would appear on a 50 leaf count
 singer_ranks = singer_means[order(singer_means$mean_cat_dens, decreasing = T),]
 singer_ranks = cbind(singer_ranks = rownames(singer_ranks), singer_ranks)
 singer_ranks$ComName = gsub("Northern red oak", "Red oak", singer_ranks$ComName)
 
 #singer means by site 
-singer_means_sites = data.frame(singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName, site) %>% dplyr::summarize(mean_cat_dens = mean(generalist.density.m2))) 
+singer_means_sites = data.frame(singer1 %>% filter(treatment == "unbagged") %>% group_by(ComName, site) %>% summarize(mean_cat_dens = mean(X.generalists*50/numberlvs))) 
 
 #CC & Appalachian data
 #add column with just caterpillar data
@@ -195,53 +195,81 @@ all_regions = data.frame(rbind(va_sa_tri_singer, hub_means_sites))
 all_regions = filter(all_regions, ComName != "UNID")
 
 #change site names for PR and NCBG to match those in the climate dataframe
-all_regions$site = gsub(117, "Prairie Ridge", all_regions$site) # change so that 
+all_regions$site = gsub(117, "Prairie Ridge", all_regions$site) 
+all_regions$site = gsub("6303Prairie Ridge", 6303117, all_regions$site )
 all_regions$site = gsub(8892356, "Botanical Garden", all_regions$site)
 
 
 ##------------summarize climate data by region----------------##
 clim = merge(precipitation, temperature, by= "X")
 climate = dplyr::rename(clim, site=X) #no location data for sites for brook & singer, sites close to each other & at low elevation, so same temp & precip used
-clim_summary = data.frame(climate %>% group_by(site) %>% summarize(annual_ppt = sum(ppt_normals_1, ppt_normals_2, ppt_normals_3, ppt_normals_4, ppt_normals_5, ppt_normals_6, 
-                                                                                           ppt_normals_7, ppt_normals_8, ppt_normals_9, ppt_normals_10, ppt_normals_11, ppt_normals_12),
-                                                                          avg_summer_tmp = mean(temp_normals_may, temp_normals_june, temp_normals_july)))
+clim_summary = climate %>%
+               group_by(site) %>%
+               summarize(annual_ppt = sum(ppt_normals_1, ppt_normals_2, ppt_normals_3, ppt_normals_4, ppt_normals_5, ppt_normals_6, ppt_normals_7, ppt_normals_8, ppt_normals_9, ppt_normals_10, ppt_normals_11, ppt_normals_12),
+                         avg_summer_tmp = mean(temp_normals_may, temp_normals_june, temp_normals_july)) %>%
+               data.frame() 
 clim_summary$region = ifelse(climate$site %in% uniq_va, "va",
                         ifelse(climate$site %in% uniq_sa, "sa",
                                ifelse(climate$site %in% c("Botanical Garden", "Prairie Ridge"), "tri",
                                       ifelse(climate$site %in% c("Hubbard Brook", "Moosilauke", "Russell", "Stinson"), "hub",
                                              ifelse(climate$site %in% c("C", "H", "M"), "sing", NA)))))
+
 # merge climate data with caterpillar density data for variance partitioning
 region_complete = merge(all_regions, clim_summary, by = "site", all.x = T)
-region_complete1 = region_complete %>% dplyr::select(-region.y) %>% rename(region = region.x)
-
-#Linear models - VP 1 (between climate and tree sp)
-lm.climate = lm(mean_cat_dens ~ annual_ppt + avg_summer_tmp, data = region_complete1)
-lm.species = lm(mean_cat_dens ~ ComName, data = region_complete1)
-lm.climate.species = lm(mean_cat_dens ~ region + annual_ppt + avg_summer_tmp, data = region_complete1)
-
-#VP 1- between region and tree sp
-#a = variance uniquely explained by climate		  
-#b = variance explained by climate and species together		  
-#c = variance uniquely explained by species		
-#d = variance explained by neither		 
+region_complete1 = region_complete %>% 
+                   dplyr::select(-region.y) %>%
+                   rename(region = region.x)
+#merge leaf data & normalize 
+region_normalized = left_join(region_complete1, leaves_sp1, by = "ComName") #this has 350 rows vs 346 in region_complete1 because Sassafrass occurs twice in leaves_sp1, one w/ a leaf area, 1 w/ a NA. fix later, won't affect analysis because it will get filtered out
+region_normalized1 = filter(region_normalized, avg_leaf_area_cm2 != "NA")
+region_normalized1$cat_normalized = ((region_normalized1$mean_cat_dens)/(region_normalized1$avg_leaf_area_cm2))*mean(region_normalized1$avg_leaf_area_cm2)
   
-a = summary(lm.climate.species)$r.squared - summary(lm.species)$r.squared		 
-b = summary(lm.climate)$r.squared - a		
-c = summary(lm.climate.species)$r.squared - summary(lm.climate)$r.squared		 
-d = 1-summary(lm.climate.species)$r.squared
+byregion = region_normalized1 %>% 
+  group_by(region, ComName) %>%
+  summarize(cat_dens_region=mean(mean_cat_dens), annual_ppt = mean(annual_ppt), avg_summer_tmp = mean(avg_summer_tmp)) %>%
+  data.frame()
 
-#linear models - VP 2 (between precipitation and temp)
-#a = variance uniquely explained by precip	  
-#b = variance explained by climate and species together		  
-#c = variance uniquely explained by temp		
+## VP 1- between region and tree sp (by region)
+#a = variance uniquely explained by region		  
+#b = variance explained by region and species together		  
+#c = variance uniquely explained by species		
 #d = variance explained by neither
-lm.precip = lm(mean_cat_dens ~ annual_ppt, data = region_complete1)
-lm.temp = lm(mean_cat_dens ~ avg_summer_tmp, data = region_complete1)
-#lm.climate created earlier
-a1 = summary(lm.climate)$r.squared - summary(lm.temp)$r.squared		 
-b1 = summary(lm.precip)$r.squared - a1		
-c1 = summary(lm.climate)$r.squared - summary(lm.precip)$r.squared		 
-d1 = 1-summary(lm.climate)$r.squared
+rlm.region = lm(cat_dens_region ~ region, data = byregion)
+rlm.species = lm(cat_dens_region ~ ComName, data = byregion) #what does it mean that the adjusted r2 is nothing?
+rlm.region.species = lm(cat_dens_region ~ region + ComName, data = byregion)
+
+a = summary(rlm.region.species)$r.squared - summary(rlm.species)$r.squared 
+b = summary(rlm.region)$r.squared - a		
+c = summary(rlm.region.species)$r.squared - summary(rlm.region)$r.squared		 
+d = 1-summary(rlm.region.species)$r.squared
+
+#VP 2- between climate and tree sp (by region)
+#a2 = variance uniquely explained by climate		  
+#b2 = variance explained by climate and species together		  
+#c2 = variance uniquely explained by species		
+#d2 = variance explained by neither
+lm.climate = lm(cat_dens_region ~ annual_ppt + avg_summer_tmp, data = byregion)
+lm.species = lm(cat_dens_region ~ ComName, data = byregion)
+lm.climate.species = lm(cat_dens_region ~ ComName + annual_ppt + avg_summer_tmp, data = byregion)
+
+a2 = summary(lm.climate.species)$r.squared - summary(lm.species)$r.squared #greater than total variance explained by 		 
+b2 = summary(lm.climate)$r.squared - a2		
+c2 = summary(lm.climate.species)$r.squared - summary(lm.climate)$r.squared		 
+d2 = 1-summary(lm.climate.species)$r.squared
+
+#VP 3 (between precip and temp)
+#a3 = variance uniquely explained by precip		  
+#b3 = variance explained by precip and temp together (climate)		  
+#c3 = variance uniquely explained by temp		
+#d3 = variance explained by neither
+lm.precip = lm(cat_dens_region ~ annual_ppt, data = byregion)
+lm.temp = lm(cat_dens_region ~ avg_summer_tmp, data = byregion)
+
+a3 = summary(lm.climate)$r.squared - summary(lm.temp)$r.squared #greater than total variance explained by 		 
+b3 = summary(lm.precip)$r.squared - a3		
+c3 = summary(lm.climate)$r.squared - summary(lm.precip)$r.squared		 
+d3 = 1-summary(lm.climate)$r.squared
+
 
 #correlation coefficient matrix
 mean_cat_dens=c(1,cor(region_complete1$mean_cat_dens, region_complete1$avg_summer_tmp, use = "complete.obs"),
@@ -257,6 +285,7 @@ names(coefficients) = c("mean_cat_dens", "avg_summer_tmp", "annual_ppt")
 
 
 var(region_complete1$mean_cat_dens, region_complete1$avg_summer_tmp, na.rm = T)#cat dens and temp
+
 
 
 
