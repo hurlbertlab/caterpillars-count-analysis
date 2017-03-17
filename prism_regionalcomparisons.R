@@ -5,9 +5,10 @@
 library(prism)
 library(raster)
 
+options(prism.path = "~tmckinno/prismtmp")
 # Set path and download data
-get_prism_normals(type = 'tmean', resolution = "800m", m = c(1:12), keepZip = FALSE)
-get_prism_normals(type = 'ppt', resolution = "800m", m = c(5,6,7), keepZip = FALSE)
+get_prism_normals(type = 'tmean', resolution = "800m", m = c(5,6,7), keepZip = FALSE)
+get_prism_normals(type = 'ppt', resolution = "800m", m = c(1:12), keepZip = FALSE)
 
 # Longitude and latitude of 5 locations
 BBS_coordinates <- read.table("data/BBS_stop_latlongs.txt", sep= '\t', quote="\"", header=TRUE)
@@ -21,13 +22,13 @@ all_coordinates = rbind(BBS_coordinates, oth_coordinates)
 ### SKIP SECTION BELOW IF ALREADY HAVE DATA ORGANIZED ###
 
 #how tracie's code said to read in the files
-list_temp = as.vector(ls_prism_data()[4:6,1])
+list_temp = as.vector(ls_prism_data()[13:15,1])
 files_temp = paste("/Users/tmckinno/prismtmp/",list_temp,"/",list_temp,".bil", sep="")
 normals_temp = raster::stack(files_temp) 
 #ls_prism_data()[1:10,]
 
 #how tracie's code said to read in the files
-list_precip = as.vector(ls_prism_data()[1:3,1])
+list_precip = as.vector(ls_prism_data()[1:12,1])
 files_precip = paste("/Users/tmckinno/prismtmp/",list_precip,"/",list_precip,".bil", sep="")
 normals_precip = raster::stack(files_precip) 
 
@@ -44,7 +45,9 @@ precip = extract(normals_precip, all_coordinates[,3:2])
 precip1 <- data.frame(t(precip))
 names(precip1) = all_coordinates$location
 precip2 = data.frame(t(precip1))
-names(precip2) = c("ppt_normals_may", "ppt_normals_june", "ppt_normals_july")
+names(precip2) = c("ppt_normals_1", "ppt_normals_2", "ppt_normals_3", "ppt_normals_4",
+                   "ppt_normals_5", "ppt_normals_6", "ppt_normals_7", "ppt_normals_8",
+                   "ppt_normals_9", "ppt_normals_10", "ppt_normals_11", "ppt_normals_12")
 write.csv(precip2, file = "~/Desktop/caterpillars-count-analysis/data/prism_precip_northerncomp.csv")
 
 # Read in csvs if finished obtaining data
