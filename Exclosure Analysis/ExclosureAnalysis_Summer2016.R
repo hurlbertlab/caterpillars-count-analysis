@@ -307,15 +307,6 @@ mean_site_BG <- filter(mean_site_herb, siteID=="8892356")
 
 #Summarise observations for 2016 herbivory by date, site, and tree species
 grouped_species <- visual_surveys_clean %>% group_by(siteID, date, surveyTrees)
-#mean_species_herb <- data.frame(mean_species_herb) #something has started to be problematic here
-#mean_species_herb$julianday = yday(mean_species_herb$date)
-#mean_Spicebush <- filter(mean_species_herb, surveyTrees=="Spicebush")
-#mean_Redmaple <- filter(mean_species_herb, surveyTrees=="Red maple")
-#mean_Sugarmaple <- filter(mean_species_herb, surveyTrees=="Sugar maple")
-#mean_Americanbeech <- filter(mean_species_herb, surveyTrees=="American beech")
-#mean_Boxelder <- filter(mean_species_herb, surveyTrees=="Box elder")
-#mean_Sweetgum<- filter(mean_species_herb, surveyTrees=="Sweet gum")
-#mean_Commonpersimmon<- filter(mean_species_herb, surveyTrees=="Common persimmon")
 
 #Histogram of Total Arth Density on 3rd Visit & Herbivory
 par(mfcol=c(2, 2))
@@ -375,3 +366,13 @@ names(caterpillar_time4_t) <- c("siteID", "circle", "survey", "Visit2VF", "Visit
 caterpillar_time4_t$VF_dif<- caterpillar_time4_t$Visit3VF-caterpillar_time4_t$Visit2VF
 caterpillar_time4_t$VFX_dif<- caterpillar_time4_t$Visit3VFX-caterpillar_time4_t$Visit2VFX
 caterpillar_time4_t$VFX_VF_dif<-caterpillar_time4_t$VFX_dif-caterpillar_time4_t$VF_dif
+
+#Run wilcox_test (Difference of Difference, parallel to 2012 Comparison)
+wilcox_test(visit_dif ~ TrapType, data=all_time)
+wilcox_test(visit_dif ~ TrapType, data=food_time)
+wilcox_test(visit_dif ~ TrapType, data=caterpillar_time)
+wilcox_test(visit_dif ~ TrapType, data=notfood_time) 
+
+#Run analyses on dif between end arth density b/w treatment and control (independent of 2012 comparison)
+wilcox.test(food_final$Visit3VF, food_final$Visit3VFX, paired =TRUE)
+wilcox.test(caterpillar_final$Visit3VF, caterpillar_final$Visit3VFX, paired=TRUE)
