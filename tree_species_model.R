@@ -103,20 +103,32 @@ caterpillar_count_merged1 = dplyr::select(caterpillar_count_merged, site, circle
 names(caterpillar_count_merged1) = c("site", "circle", "survey", "year", "sum_count", "plantSpecies")
 
 
-#Find 10 most common tree species to use in analysis 
+#Find 10 most common tree species to use in analysis for each set of locations
 #you need to ask about for loops!!!
-trees = select(count_merged1, plantSpecies) # this will need to be redone
+triangle = c(117, 8892356)
+appalachians = c(6391028, 6391108, 2704132, 2704111, 6391138, 6391006, 8892036, 8204240, 8204206, 8892025, 6303105, 6303117,
+                 6390615, 8290339, 6390644, 8290344, 8890236, 8890517, 8890009, 8890029, 8890538, 8890223, 8892130, 8892242,
+                 8892217, 8890721, 8890745, 8892305, 8892346, 8892112, 6302205, 8290243, 6390627, 8204219, 6390944, 6390909)
+#both sets (in case it is needed later)
+trees = food_count_merged1 %>% select(plantSpecies) # this will need to be redone
 trees_freq = data.frame(table(trees))
 trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),] 
 trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
 common_trees = trees_ordered1[1:10,]
-
+#just Appalachians
+trees_app = food_count_merged1 %>% filter(site %in% appalachians) %>% dplyr::select(plantSpecies) 
+trees_freq_app = data.frame(table(trees_app))
+trees_ordered_app = trees_freq_app[order(trees_freq_app$Freq, decreasing = T),] 
+trees_ordered1_app = filter(trees_ordered_app, trees_app !="UNID") # remove unidentified tree species
+common_trees_app = trees_ordered1_app[1:10,]
+#just triangle
+trees_tri = food_count_merged1 %>% filter(site %in% triangle) %>% dplyr::select(plantSpecies) 
+trees_freq_tri = data.frame(table(trees_tri))
+trees_ordered_tri = trees_freq_tri[order(trees_freq_tri$Freq, decreasing = T),] 
+trees_ordered1_tri = filter(trees_ordered_tri, trees_tri !="UNID") # remove unidentified tree species
+common_trees_tri = trees_ordered1_tri[1:10,]
 
 #find 24 most common tree species to use in graphing extremes (these each have at least 100 surveys)
-trees = select(count_merged1, plantSpecies)
-trees_freq = data.frame(table(trees))
-trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),] 
-trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
 common_24 = trees_ordered1[1:24,]
 
 #get avg leaf area for each species
@@ -141,8 +153,8 @@ leaves_sp = dplyr::summarize(leaves_grouped, (avg_leaf_area_cm2 = mean(leaf_area
 leaves_sp1 = merge(leaves_sp, plant_codes, by.x = "TreeCodes", by.y = "TreeCode", all.x=T)
 leaves_sp1 = as.data.frame(leaves_sp1)
 leaves_sp1 = dplyr::select(leaves_sp1, -TreeCodes, -TreeSciName, -Notes)
-names(leaves_sp1) = c("avg_leaf_area_cm2", "ComName")
 
+names(leaves_sp1) = c("avg_leaf_area_cm2", "ComName")
 
 #are the NA TreeSpecies typos or missing? (appear to be typos, will leave b/c just need leaf approximation)
 missingnames = c("ACPU", "ACRV", "ACSU","ARSP", "ASCA", "ASH", "CADRE","CAKYA", "CALA","CARYA"
@@ -167,66 +179,99 @@ caterpillar_count_merged2$count_norm = (caterpillar_count_merged2$sum_count/cate
 food_count_merged2$count_log10 = log10(food_count_merged2$count_norm+.01) 
 caterpillar_count_merged2$count_log10 = log10(caterpillar_count_merged2$count_norm+.01) 
 
-
-
 #subset to surveys conducted in appalachians or triangle
-triangle = c(117, 8892356)
-appalachians = c(6391028, 6391108, 2704132, 2704111, 6391138, 6391006, 8892036, 8204240, 8204206, 8892025, 6303105, 6303117,
-                 6390615, 8290339, 6390644, 8290344, 8890236, 8890517, 8890009, 8890029, 8890538, 8890223, 8892130, 8892242,
-                  8892217, 8890721, 8890745, 8892305, 8892346, 8892112, 6302205, 8290243, 6390627, 8204219, 6390944, 6390909)
 food_count_tri= dplyr::filter(food_count_merged2, site %in% triangle)
 caterpillar_count_tri = dplyr::filter(caterpillar_count_merged2, site %in% triangle)
 food_count_app = dplyr::filter(food_count_merged2, site %in% appalachians)
 caterpillar_count_app = dplyr::filter(caterpillar_count_merged2, site %in% appalachians)
 
-#Only use surveys conducted on 10 most common tree species
-count_common = dplyr::filter(count_merged2, plantSpecies %in% common_trees$trees)
+#Only use surveys conducted on 10 most common tree species in each location
+#all locations
+#count_common = dplyr::filter(count_merged2, plantSpecies %in% common_trees$trees)
+#just app
+count_common_app_food = dplyr::filter(food_count_merged2, plantSpecies %in% common_trees_app$trees_app)
+count_common_app_caterpillar = dplyr::filter(caterpillar_count_merged2, plantSpecies %in% common_trees_app$trees_app)
+#just tri
+count_common_tri_food = dplyr::filter(food_count_merged2, plantSpecies %in% common_trees_tri$trees_tri)
+count_common_tri_caterpillar = dplyr::filter(caterpillar_count_merged2, plantSpecies %in% common_trees_tri$trees_tri)
 #biomass_common = dplyr::filter(biomass_merged2, plantSpecies %in% common_trees$trees)
 
-#HSD model- raw data
-lm.raw = lm(count_norm ~ plantSpecies, data=count_common)
-
-HSD_raw<- HSD.test(lm.raw, "plantSpecies")
-
-#Create dataframe with results of HSD test
-groups.df = data.frame(HSD_raw$groups)
-means.df = data.frame(HSD_raw$means)
-means.ordered = means.df[order(means.df$count_norm, decreasing = T),]
-plotting = cbind(groups.df, means.ordered)
-plotting = dplyr::select(plotting, -count_norm)
-names(plotting)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
-write.csv(plotting, 'data/tree_sp_mean_density.csv', row.names = F)
-
 #Plot HSD results
 
-# NOTE!!! should merge color info in based on 'M' designation rather than
-# specifying it manually as done below. If the data/analysis changes,
-# you might forget to change the colors appropriately!
-par(mar=c(6,4,4,4))
-barplot(plotting$means, names.arg=plotting$tree_sp, las=2, ylab="mean arth density", 
-        main = "Mean Arthropod Density by Tree Species", ylim = c(0,10), cex.names=.65, 
-        cex.axis = .75, 
-        col = c("red", "red", "purple", "purple", "purple", "purple", "purple", "purple", "blue", "blue"))
-text(x=seq(from=.7, to= 11.5 ,by=1.2), y=4, plotting$M)
-
-#Do HSD model- log transformed data
-lm.log = lm(count_log10 ~ plantSpecies, data=count_common)
-HSD_log<- HSD.test(lm.log, "plantSpecies")
+#bird food in the appalachians
+lm.log_app_food = lm(count_log10 ~ plantSpecies, data= count_common_app_food)
+HSD_log_app_food<- HSD.test(lm.log_app_food, "plantSpecies")
 
 #Create dataframe with results of HSD test
-groups.log.df = data.frame(HSD_log$groups)
-means.log.df = data.frame(HSD_log$means)
-means.log.ordered = means.log.df[order(means.log.df$count_log10, decreasing = T),]
-plotting.log = cbind(groups.log.df, means.log.ordered)
-plotting.log = dplyr::select(plotting.log, -count_log10)
-names(plotting.log)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
+groups.log.df_app_food = data.frame(HSD_log_app_food$groups)
+means.log.df_app_food = data.frame(HSD_log_app_food$means)
+means.log.ordered_app_food = means.log.df_app_food[order(means.log.df_app_food$count_log10, decreasing = T),]
+plotting.log_app_food = cbind(groups.log.df_app_food, means.log.ordered_app_food)
+plotting.log_app_food = dplyr::select(plotting.log_app_food, -count_log10)
+names(plotting.log_app_food)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
+
+#caterpillar in the appalachians
+lm.log_app_caterpillar = lm(count_log10 ~ plantSpecies, data= count_common_app_caterpillar)
+HSD_log_app_caterpillar<- HSD.test(lm.log_app_caterpillar, "plantSpecies")
+
+#Create dataframe with results of HSD test
+groups.log.df_app_caterpillar = data.frame(HSD_log_app_caterpillar$groups)
+means.log.df_app_caterpillar = data.frame(HSD_log_app_caterpillar$means)
+means.log.ordered_app_caterpillar = means.log.df_app_caterpillar[order(means.log.df_app_caterpillar$count_log10, decreasing = T),]
+plotting.log_app_caterpillar = cbind(groups.log.df_app_caterpillar, means.log.ordered_app_caterpillar)
+plotting.log_app_caterpillar = dplyr::select(plotting.log_app_caterpillar, -count_log10)
+names(plotting.log_app_caterpillar)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
+
+#food in the triangle
+lm.log_tri_food = lm(count_log10 ~ plantSpecies, data= count_common_tri_food)
+HSD_log_tri_food<- HSD.test(lm.log_tri_food, "plantSpecies")
+
+#Create dataframe with results of HSD test
+groups.log.df_tri_food = data.frame(HSD_log_tri_food$groups)
+means.log.df_tri_food = data.frame(HSD_log_tri_food$means)
+means.log.ordered_tri_food = means.log.df_tri_food[order(means.log.df_tri_food$count_log10, decreasing = T),]
+plotting.log_tri_food = cbind(groups.log.df_tri_food, means.log.ordered_tri_food)
+plotting.log_tri_food = dplyr::select(plotting.log_tri_food, -count_log10)
+names(plotting.log_tri_food)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
+
+#caterpillar in the triangle
+lm.log_tri_caterpillar = lm(count_log10 ~ plantSpecies, data= count_common_tri_caterpillar)
+HSD_log_tri_caterpillar<- HSD.test(lm.log_tri_caterpillar, "plantSpecies")
+
+#Create dataframe with results of HSD test
+groups.log.df_tri_caterpillar = data.frame(HSD_log_tri_caterpillar$groups)
+means.log.df_tri_caterpillar = data.frame(HSD_log_tri_caterpillar$means)
+means.log.ordered_tri_caterpillar = means.log.df_tri_caterpillar[order(means.log.df_tri_caterpillar$count_log10, decreasing = T),]
+plotting.log_tri_caterpillar = cbind(groups.log.df_tri_caterpillar, means.log.ordered_tri_caterpillar)
+plotting.log_tri_caterpillar = dplyr::select(plotting.log_tri_caterpillar, -count_log10)
+names(plotting.log_tri_caterpillar)=c("tree_sp", "means", "M", "std", "r", "Min", "Max")
 
 #Plot HSD results
-par(mfrow = c(1, 1), mar=c(7,4,3,3))
-barplot(plotting.log$means, names.arg=plotting.log$tree_sp, las=2, ylab="log mean arth density", 
-        main = "Mean Arth Density by Tree Species", ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+par(mfrow = c(2, 2), mar=c(7,4,3,3))
+barplot(plotting.log_app_food$means, names.arg=plotting.log_app_food$tree_sp, las=2, ylab="log mean arth density", 
+              ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+              col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_app_food$M)
+
+#caterpillar appalachians
+barplot(plotting.log_app_caterpillar$means, names.arg=plotting.log_app_caterpillar$tree_sp, las=2, ylab="log mean arth density", 
+         ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
         col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
-text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log$M)
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_app_caterpillar$M)
+
+#bird food triangle
+barplot(plotting.log_tri_food$means, names.arg=plotting.log_tri_food$tree_sp, las=2, ylab="log mean arth density", 
+        ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_tri_food$M)
+
+#caterpillar triangle
+barplot(plotting.log_tri_caterpillar$means, names.arg=plotting.log_tri_caterpillar$tree_sp, las=2, ylab="log mean arth density", 
+         ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_tri_caterpillar$M)
+#if then statement for the colors?
+
 #-----------------------------------------------------------------------test for how often you see an arthropod density at least this extreme-----------------------
 #create columns with Y/N data for certain arth density thresholds
 count_merged3 = count_merged2
@@ -289,14 +334,14 @@ lm.1 =lm(extremes_241$perc1 ~ extremes_241$avg_leaf_area_cm2)
 abline(lm.1)
 
 #chi squared data reshaping
-table40 = table(count_merged3$percent40, count_merged3$plantSpecies)
-table10 = table(count_merged3$percent10, count_merged3$plantSpecies)
-table5 = table(count_merged3$percent5, count_merged3$plantSpecies)
-table1 = table(count_merged3$percent1, count_merged3$plantSpecies)
-chisq.test(table40)
-chisq.test(table10)
-chisq.test(table5)
-chisq.test(table1)
+#table40 = table(count_merged3$percent40, count_merged3$plantSpecies)
+#table10 = table(count_merged3$percent10, count_merged3$plantSpecies)
+#table5 = table(count_merged3$percent5, count_merged3$plantSpecies)
+#table1 = table(count_merged3$percent1, count_merged3$plantSpecies)
+#chisq.test(table40)
+#chisq.test(table10)
+#chisq.test(table5)
+#chisq.test(table1)
 
 #so the above results tell me that the number of arthropods seen at each threshold is dependent on 
 #tree species (is this true for all tree species)?
