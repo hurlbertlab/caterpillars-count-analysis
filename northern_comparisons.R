@@ -1,6 +1,8 @@
-#all the number of leaves surveyed and when they were surveyed is the same across all years (4000 leaves every two weeks)
-#beech and sugar maple, but viburnum and striped maple were only surveyed 1996-1997
-#0s are not included in the dataset, so means aren't meaningful
+##Data cleaning and Variance Partitioning Analyses for Regional Comparisons Section of Tara's Thesis
+
+#A ll the number of leaves surveyed and when they were surveyed is the same across all years (4000 leaves every two weeks)
+#Beech and sugar maple, but viburnum and striped maple were only surveyed 1996-1997
+# 0s are not included in the dataset, so means aren't meaningful
 
 #load libraries
 library(dplyr)
@@ -29,7 +31,7 @@ dat$plot = gsub(3, "Russell", dat$plot)
 dat$plot = gsub(4, "Stinson", dat$plot)
 singer$hostplantspecies = gsub("Hammamelis virginiana", "Hamamelis virginiana", singer$hostplantspecies) #incorrect spelling
 plant_codes1 = dplyr::rename(plant_codes, hostplantspecies = TreeSciName)
-singer1 = singer %>% left_join(plant_codes1, by = "hostplantspecies") %>% select(-TreeCode, -Notes)
+singer1 = singer %>% left_join(plant_codes1, by = "hostplantspecies") %>% dplyr::select(-TreeCode, -Notes)
 singer1$ComName = gsub("Northern red oak", "Red oak", singer1$ComName)
 
 #remove data from 1994 (because it had far more caterpillars than any other year) & 1996 & 1997 b/c they only have 1 plot
@@ -112,7 +114,7 @@ tri_means_sites = vis_tri2 %>% dplyr::rename(ComName = clean_plantSp) %>% group_
 ## Appalachian surveys broken down into middle appalachia (VA) and southern appalachia(NC, TN, SC, GA)
 # Site/tree sp combos with the most surveys
 surveys_app = vis_app %>%
-                     select(site, date, survey, circle, clean_plantSp) %>% 
+                     dplyr::select(site, date, survey, circle, clean_plantSp) %>% 
                      unique() %>% 
                      count(site, clean_plantSp) %>% 
                      arrange(desc(n)) %>% 
@@ -196,7 +198,7 @@ all_regions = filter(all_regions, ComName != "UNID")
 
 #change site names for PR and NCBG to match those in the climate dataframe
 all_regions$site = gsub(117, "Prairie Ridge", all_regions$site) 
-all_regions$site = gsub("6303Prairie Ridge", 6303117, all_regions$site )
+all_regions$site = gsub("6303Prairie Ridge", 6303117, all_regions$site)
 all_regions$site = gsub(8892356, "Botanical Garden", all_regions$site)
 
 
@@ -252,7 +254,7 @@ lm.climate = lm(cat_dens_region ~ annual_ppt + avg_summer_tmp, data = byregion)
 lm.species = lm(cat_dens_region ~ ComName, data = byregion)
 lm.climate.species = lm(cat_dens_region ~ ComName + annual_ppt + avg_summer_tmp, data = byregion)
 
-a2 = summary(lm.climate.species)$r.squared - summary(lm.species)$r.squared #greater than total variance explained by 		 
+a2 = summary(lm.climate.species)$r.squared - summary(lm.species)$r.squared
 b2 = summary(lm.climate)$r.squared - a2		
 c2 = summary(lm.climate.species)$r.squared - summary(lm.climate)$r.squared		 
 d2 = 1-summary(lm.climate.species)$r.squared
@@ -262,6 +264,7 @@ d2 = 1-summary(lm.climate.species)$r.squared
 #b3 = variance explained by precip and temp together (climate)		  
 #c3 = variance uniquely explained by temp		
 #d3 = variance explained by neither
+lm.climate.int = lm(cat_dens_region ~ annual_ppt*avg_summer_tmp, data = byregion)   #examining the interaction between climate and tree species 
 lm.precip = lm(cat_dens_region ~ annual_ppt, data = byregion)
 lm.temp = lm(cat_dens_region ~ avg_summer_tmp, data = byregion)
 
