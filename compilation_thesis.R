@@ -33,12 +33,20 @@ par(mar = c(4,4,2,2), mfrow = c(2,2), oma = c(2,2,1,1))
 plot(greenupgdd$pr.gdd.dev, greenupgdd$prgreenup.dev, col = 'white',
      xlab = 'GDD deviation (day)', ylab = 'Greenup deviation (day)',
      xlim = c(-12,12), ylim = c(-12,12))
+abline(0,1, lty = 2)
 legend("topleft", "A", bty="n")
-#abline(1,1, lty = 2) # what's going on with this?
 abline(h = 0, lty = 3, col = 'gray60')
 abline(v = 0, lty = 3, col = 'gray60')
 text(greenupgdd$pr.gdd.dev, greenupgdd$prgreenup.dev, greenupgdd$year, col = 'deeppink3', cex = 0.7)
 text(greenupgdd$bg.gdd.dev, greenupgdd$bggreenup.dev, greenupgdd$year, col = 'steelblue3', cex = 0.7)
+
+allgdd <- c(greenupgdd$pr.gdd.dev, greenupgdd$bg.gdd.dev)
+allgreenup <- c(greenupgdd$prgreenup.dev, greenupgdd$bggreenup.dev)
+all_lm <- lm(allgreenup ~ allgdd)
+
+legend('bottomright', 
+       paste("r =", round(cor(allgdd, allgreenup), 2), ", p < 0.01"), bty = 'n')
+
 
 # Blank plot for pdf
 plot.new()
@@ -48,13 +56,14 @@ legend('bottomleft', c('Linear regression', '1:1 line'), lty = c(1,2), cex = 1)
 
 plot(greenupgdd$pr.gdd, greenupgdd$bg.gdd, xlab = 'PR GDD (Julian day)', ylab = 'BG GDD (Julian day)', 
      ylim = c(142,172), xlim = c(142,172))
+abline(0,1, lty = 2)
 l = legend("topleft", "B", bty="n")
 gddlm = lm(greenupgdd$bg.gdd ~ greenupgdd$pr.gdd)
 abline(gddlm)
 summary(gddlm)
 abline(0,1, lty = 2)
 legend('bottomright', 
-     paste("R2 =", round(summary(gddlm)$r.squared, 2), ", p < 0.01"), bty = 'n')
+     paste("r =", round(cor(greenupgdd$pr.gdd, greenupgdd$bg.gdd), 2), ", p < 0.01"), bty = 'n')
 summary(gddlm)$r.squared
 
 plot(greenupgdd$prgreenup.log, greenupgdd$bggreenup.log, xlab = 'PR Greenup (Julian day)', ylab = 'BG Greenup (Julian day)'
@@ -65,9 +74,12 @@ abline(greenuplm)
 summary(greenuplm)
 abline(0,1, lty = 2)
 legend('bottomright', 
-     paste("R2 =", round(summary(greenuplm)$r.squared, 2), ", p = ", round(summary(greenuplm)$coefficients[2,4], 2)), bty = 'n')
+     paste("r =", round(cor(greenupgdd$prgreenup.log, greenupgdd$bggreenup.log), 2), ", p = ", round(summary(greenuplm)$coefficients[2,4], 2)), bty = 'n')
 
 dev.off()
+
+diffvec = greenupgdd$bg.gdd - greenupgdd$pr.gdd
+mean(diffvec)
 
 #---- FIGURE 4 RESULTS ----
 pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/results_legendfig4&6.pdf', width = 6, height = 3.5)
@@ -85,9 +97,9 @@ dev.off()
 pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure4.pdf', width = 6.5, height = 6)
 
 #---- Arths and GDD - visual surveys----
-par(mar = c(4,4,2,2), mfrow = c(2,2), oma = c(1,1,1,1))
+par(mar = c(4,2,2,2), mfrow = c(2,2), oma = c(1,4,1,1))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arthropod peak (Julian day)',xlab='GDD (Julian day)', xlim = c(156,164), ylim = c(150, 215),
+plot(0,bty='n',pch='',ylab='',xlab='GDD (Julian day)', xlim = c(156,164), ylim = c(150, 215),
      main = 'Visual')
 legend("topleft", "A", bty="n")
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
@@ -160,9 +172,8 @@ segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015],
 #legend('topright', c('2015 cat', '2016 cat', '2015 mult', '2016 mult'), pch = c(21, 16, 22, 15))
 
 #---- Arths and GDD - beat sheets----
-par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arthropod peak (Julian day)',xlab='GDD (Julian day)', xlim = c(156,164), ylim = c(150, 215),
+plot(0,bty='n',pch='',ylab='',xlab='GDD (Julian day)', xlim = c(156,164), ylim = c(150, 215),
      main = 'Beat sheet')
 legend("topleft", "B", bty="n")
 points(greenupgdd$pr.gdd[greenupgdd$year == 2015], 
@@ -237,10 +248,8 @@ segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015],
 
 #---- Arths and greenup - visual surveys----
 
-
-par(mar = c(4,4,2,2))
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arthropod peak (Julian day)',xlab='Greenup (Julian day)', xlim = c(86,94), ylim = c(150, 215),
+plot(0,bty='n',pch='',ylab='',xlab='Greenup (Julian day)', xlim = c(86,94), ylim = c(150, 215),
      main = '')
 legend("topleft", "C", bty="n")
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
@@ -314,9 +323,9 @@ segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015],
 
 
 #---- Arths and greenup - beat sheets----
-par(mar = c(4,4,2,2))
+
 # Prairie Ridge
-plot(0,bty='n',pch='',ylab='Arthropod peak (Julian day)',xlab='Greenup (Julian day)', xlim = c(86,94), ylim = c(150, 215),
+plot(0,bty='n',pch='',ylab='',xlab='Greenup (Julian day)', xlim = c(86,94), ylim = c(150, 215),
      main = '')
 legend("topleft", "D", bty="n")
 points(greenupgdd$prgreenup.log[greenupgdd$year == 2015], 
@@ -388,6 +397,7 @@ segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015],
          col = 'plum', lwd = 2, lty = 1)
 #legend('topright', c('2015 cat','2015 mult', '2016 cat', '2016 mult'), pch = c(21, 22, 16, 15))
 
+mtext("Arthropod peak (Julian day)", side = 2, outer = TRUE, line = 1.5)
 
 dev.off()
 
@@ -444,7 +454,7 @@ inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',
 inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
 plot(inbu_bg$bg.gdd, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue3', 
      ylim = c(80, 119), main = 'Botanical Garden', xlab = 'GDD (Julian day)', ylab = '')
-legend("topleft", "C", bty="n")
+legend("topleft", "B", bty="n")
 inbu_lm_bggdd = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bg.gdd, weights = 1/inbu_bg$confint)
 abline(inbu_lm_bggdd, col = 'dodgerblue3')
 summary(inbu_lm_bggdd)
@@ -479,7 +489,7 @@ inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',
 inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
 plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue3', 
      ylim = c(80, 119), main = '', xlab = 'Greenup (Julian day)', ylab = '')
-legend("topleft", "B", bty="n")
+legend("topleft", "C", bty="n")
 inbu_lm_prgreen = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$prgreenup.log, weights = 1/inbu_pr$confint)
 abline(inbu_lm_prgreen, col = 'dodgerblue3')
 summary(inbu_lm_prgreen)
@@ -567,7 +577,7 @@ birdstats = data.frame(Species = rep(c("Indigo bunting", "Red-eyed vireo", "Comm
                             round(summary(inbu_lm_bggreen)$coefficients[2,4], 2), round(summary(revi_lm_bggreen)$coefficients[2,4], 2),
                             round(summary(coye_lm_bggreen)$coefficients[2,4], 2), round(summary(bggn_lm_bggreen)$coefficients[2,4], 2)))
 
-
+write.csv(birdstats, file = 'c:/git/caterpillars-count-analysis/data/birdstats.csv')
 
 #---- FIGURE 6 RESULTS: Arths and birds ----
 
@@ -576,7 +586,7 @@ birdstats = data.frame(Species = rep(c("Indigo bunting", "Red-eyed vireo", "Comm
 
 pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure6.pdf', width = 6.5, height = 8)
 
-par(mfrow = c(4,2), mar = c(2,4,2,2), oma = c(5,5,3,3))
+par(mfrow = c(4,2), mar = c(0,4,2,2), oma = c(5,5,3,3))
 
 # INDIGO BUNTING <3
 
@@ -1082,7 +1092,7 @@ segments(y0 = inflection_bg$inflection_pt[inflection_bg$scientific_name == 'Poli
          x1 = BG.ORTH16.bs.max, 
          col = 'plum', lwd = 2, lty = 1)
 
-mtext("Bird arrival inflection point (Julian day)", side = 2, outer = TRUE, line = 1.5)
+mtext("Bird arrival (Julian day)", side = 2, outer = TRUE, line = 1.5)
 mtext("Arthropod peak (Julian day)", side = 1, outer = TRUE, line = 2)
 
 dev.off()
@@ -1338,3 +1348,68 @@ plot(greenupgdd$prgreenup.log, greenupgdd$bggreenup.log)
 # Still unsure about what to use as peak to find JD
 # Just largest number before a certain julian day like 180?
 #greenupgdd$prlepl15 <- c(rep(0,8), PR.LEPL15[max(PR.LEPL15[PR.LEPL15$julianday %in% c(80:180),]$meanDensity),]$julianday)
+
+
+
+
+
+
+
+#---- Added plots----
+par(mfrow = c(2,2), mar = c(4,2,3,2), oma = c(1,3,1,1))
+hist(as.numeric(as.character(inflection_pr$scale_param)), xlab = 'R2', main = 'Prairie Ridge', ylab = '')
+legend("topright", "A", bty="n")
+hist(as.numeric(as.character(inflection_bg$scale_param)), xlab = 'R2', main = 'Botanical Garden', ylab = '')
+legend("topright", "B", bty="n")
+
+par(mfrow = c(1,2), mar = c(4,2,3,2), oma = c(1,3,1,1))
+hist(as.numeric(as.character(inflection_pr$scale_param)), xlab = 'Scale parameter', main = '', ylab = '')
+#legend("topright", "C", bty="n")
+hist(as.numeric(as.character(inflection_bg$scale_param)), xlab = 'Scale parameter', main = '', ylab = '')
+#legend("topright", "D", bty="n")
+mtext("Frequency", side = 2, outer = TRUE, line = 1.5)
+
+
+# Results figure 2 (a) (after figure 4 of paper)
+
+pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure2a.pdf', width = 6.5, height = 6.5)
+
+par(mfrow = c(1,1), mar = c(4,4,2,2), oma = c(1,1,1,1))
+plot(PR.LEPL15.vis.max, PR.LEPL15.bs.max, pch = 21, col = 'seagreen3', 
+     xlab = 'Arthropod peak (Julian day) visual', ylab = 'Arthropod peak (Julian day) beat sheet',
+     xlim = c(150, 210), ylim = c(150, 210), cex = 2)
+abline(0,1, lty = 2)
+points(PR.LEPL16.vis.max, PR.LEPL16.bs.max, pch = 16, col = 'seagreen3', cex = 2)
+points(PR.ORTH15.vis.max, PR.ORTH15.bs.max, pch = 21, col = 'plum', cex = 2)
+points(PR.ORTH16.vis.max, PR.ORTH16.bs.max, pch = 16, col = 'plum', cex = 2)
+points(PR.BIRD15.vis.max, PR.BIRD15.bs.max, pch = 21, col = 'orange3', cex = 2)
+points(PR.BIRD16.vis.max, PR.BIRD16.bs.max, pch = 16, col = 'orange3', cex = 2)
+points(BG.LEPL15.vis.max, BG.LEPL15.bs.max, pch = 22, col = 'seagreen3', cex = 2)
+points(BG.LEPL16.vis.max, BG.LEPL16.bs.max, pch = 15, col = 'seagreen3', cex = 2)
+points(BG.ORTH15.vis.max, BG.ORTH15.bs.max, pch = 22, col = 'plum', cex = 2)
+points(BG.ORTH16.vis.max, BG.ORTH16.bs.max, pch = 15, col = 'plum', cex = 2)
+points(BG.BIRD15.vis.max, BG.BIRD15.bs.max, pch = 22, col = 'orange3', cex = 2)
+points(BG.BIRD16.vis.max, BG.BIRD16.bs.max, pch = 15, col = 'orange3', cex = 2)
+
+arthpeakvis <- c(PR.LEPL15.vis.max, PR.LEPL16.vis.max,  
+                 PR.ORTH15.vis.max, PR.ORTH16.vis.max, 
+                 PR.BIRD15.vis.max, PR.BIRD16.vis.max,
+                 BG.LEPL15.vis.max, BG.LEPL16.vis.max,  
+                 BG.ORTH15.vis.max, BG.ORTH16.vis.max,
+                 BG.BIRD15.vis.max, BG.BIRD16.vis.max)
+arthpeakbs <- c(PR.LEPL15.bs.max, PR.LEPL16.bs.max, 
+                PR.ORTH15.bs.max, PR.ORTH16.bs.max,
+                PR.BIRD15.bs.max, PR.BIRD16.bs.max,
+                BG.LEPL15.bs.max, BG.LEPL16.bs.max, 
+                BG.ORTH15.bs.max, BG.ORTH16.bs.max,
+                BG.BIRD15.bs.max, BG.BIRD16.bs.max)
+peaklm <- lm(arthpeakbs ~ arthpeakvis)
+legend('bottomright', 
+       paste("r =", round(cor(arthpeakvis, arthpeakbs), 2), ", p = ", round(summary(peaklm)$coefficients[2,4], 2)), bty = 'n')
+legend('topleft', 
+       '1:1 line', lty = 2, bty = 'n')
+
+
+dev.off()
+
+
