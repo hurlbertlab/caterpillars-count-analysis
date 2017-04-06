@@ -218,11 +218,12 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
   temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
   #temp3$meanBiomass = temp3$totalBiomass/temp3$numSurveys
   temp3$week = as.numeric(as.character(temp3$week))
+  temp3$JDweek = (temp3$week - 1)*7 + 4
   if (plot & new) {
-    plot(temp3$week, temp3[, plotVar], type = 'l', 
+    plot(temp3$JDweek, temp3[, plotVar], type = 'l', 
          col = color, xlab = "Week", ...)
   } else if (plot & new==F) {
-    points(temp3$week, temp3[, plotVar], type = 'l', col = color, ...)
+    points(temp3$JDweek, temp3[, plotVar], type = 'l', col = color, ...)
   }
   return(temp3)
 }
