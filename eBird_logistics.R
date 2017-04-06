@@ -156,7 +156,7 @@ if(nrow(t.samp)>0 & nrow(t.obs.NA1s)>0 & (length(unique(t.obs.NA1s$JulianDay))>=
   
   x=lm(exp.mod(best.coef, temp.data2$JulianDay)~temp.prop)
   
-  singlesp1yr = c(as.character(splist[sp]), yr, best.coef[2], lowerconf, upperconf)
+  singlesp1yr = c(as.character(splist[sp]), yr, best.coef[2], best.coef[3], lowerconf, upperconf)
   singlesp = rbind(singlesp, singlesp1yr)
   
 }}
@@ -171,15 +171,21 @@ if(nrow(t.samp)>0 & nrow(t.obs.NA1s)>0 & (length(unique(t.obs.NA1s$JulianDay))>=
 # Use this code after running sampling_pr and obs_pr initial datasets through:
 inflection_pr <- unique(inflection.pt.output) 
 inflection_pr <- data.frame(inflection_pr) # warning message is ok?
-names(inflection_pr) <- c('scientific_name', 'year', 'inflection_pt', 'lowerconf', 'upperconf')
+names(inflection_pr) <- c('scientific_name', 'year', 'inflection_pt', 'scale_param', 'lowerconf', 'upperconf')
 inflection_pr$year = as.numeric(as.character(inflection_pr$year))
 inflection_pr$inflection_pt = as.numeric(as.character(inflection_pr$inflection_pt))
 inflection_pr$scientific_name = as.character(inflection_pr$scientific_name)
 inflection_pr$lowerconf = as.numeric(as.character(inflection_pr$lowerconf))
 inflection_pr$upperconf = as.numeric(as.character(inflection_pr$upperconf))
+
+# Fix common yellowthroat in 2016, lower confidence is out of bounds but plot looks ok
+inflection_pr$lowerconf[inflection_pr$scientific_name == 'Geothlypis trichas' & inflection_pr$year == 2016] = 56
+
+# Calculate confidence interval
 inflection_pr$confint = inflection_pr$upperconf - inflection_pr$lowerconf
 
-
+# Take out INBU in 2011, only 4 data points, all confidence Inf
+inflection_pr = inflection_pr[inflection_pr$confint != Inf,]
 
 
 
@@ -328,7 +334,7 @@ for(sp in 1:4) { par(mfrow=c(3,2))
       
       x=lm(exp.mod(best.coef, temp.data2$JulianDay)~temp.prop)
       
-      singlesp1yr = c(as.character(splist[sp]), yr, best.coef[2], lowerconf, upperconf)
+      singlesp1yr = c(as.character(splist[sp]), yr, best.coef[2], best.coef[3], lowerconf, upperconf)
       singlesp = rbind(singlesp, singlesp1yr)
       
     }}
@@ -343,7 +349,7 @@ for(sp in 1:4) { par(mfrow=c(3,2))
 # Use this code after running sampling_bg and obs_bg initial datasets through:
 inflection_bg <- unique(inflection.pt.output) 
 inflection_bg <- data.frame(inflection_bg) # warning message is ok?
-names(inflection_bg) <- c('scientific_name', 'year', 'inflection_pt', 'lowerconf', 'upperconf')
+names(inflection_bg) <- c('scientific_name', 'year', 'inflection_pt', 'scale_param', 'lowerconf', 'upperconf')
 inflection_bg$year = as.numeric(as.character(inflection_bg$year))
 inflection_bg$inflection_pt = as.numeric(as.character(inflection_bg$inflection_pt))
 inflection_bg$scientific_name = as.character(inflection_bg$scientific_name)
