@@ -14,21 +14,21 @@ source("data_analysis.R") # Southern Appalachian exclosures (top-down)
 #Figure 1 - Differences of Differences histogram comparing effects of exclosures on 
 #Bird Food Arthropods and caterpillars in the Southern Appalachians and in the triangle #still need to figure out how to do this in a panel/do I really want to show this?
 caterpillar_time4_t1 = dplyr::filter(caterpillar_time4_t, VFX_VF_dif != 26)
-par(mfrow = c(2, 2), mar=c(4,4,2,2), oma = c(3,3,2,2), cex.lab = 1.3, cex.axis = 1.4, cex.main = 1.5)
-hist(food_time4_12$VFX_VF_dif, breaks=30, col = "deepskyblue", ylab="Appalachians", xlab = "", main = "Arthropods",
+par(mfrow = c(2, 2), mar=c(4,4.5,2,2), oma = c(3,3,2,2), cex.lab = 1.5, cex.axis = 1.5, cex.main = 1.5)
+hist(food_time4_12$VFX_VF_dif, breaks=30, col = "deepskyblue", ylab="Appalachians", xlab = "", main = "Arthropods", ylim = c(0,70),
          plot = TRUE) #bird food app
-legend("topright", "A", bty="n")
-hist(caterpillar_time4_12$VFX_VF_dif, breaks=10, col = "deepsky blue", ylab="", xlab = "", main = "Caterpillars", xlim = c(-2,2),
+legend("topright", "A", bty="n", cex = 1.5)
+hist(caterpillar_time4_12$VFX_VF_dif, breaks=10, col = "deepsky blue", ylab="", xlab = "", main = "Caterpillars", xlim = c(-2,2), ylim = c(0,70),
          plot = TRUE) #caterpillars app
-legend("topright", "B", bty="n")
-hist(food_time4_t$VFX_VF_dif, breaks=10, col = "mediumspringgreen", ylab="Piedmont", xlab = "", 
+legend("topright", "B", bty="n", cex = 1.5)
+hist(food_time4_t$VFX_VF_dif, breaks=10, col = "mediumspringgreen", ylab="Piedmont", xlab = "", ylim = c(0,20),
           main="", plot = TRUE) #bird food tri
-legend("topright", "C", bty="n")
-hist(caterpillar_time4_t1$VFX_VF_dif, breaks=10, col = "mediumspringgreen", ylab="", xlab = "", xlim = c(-2,2),
+legend("topright", "C", bty="n", cex = 1.5)
+hist(caterpillar_time4_t1$VFX_VF_dif, breaks=10, col = "mediumspringgreen", ylab="", xlab = "", xlim = c(-2,2), ylim = c(0,20),
           main="", plot = TRUE) #caterpillars tri
-legend("topright", "D", bty="n")
-mtext("Number of Surveys", side = 2, outer = TRUE, line = 1.5)
-mtext("Difference in Change in Arthropod Density", side = 1, outer = TRUE, line = .5)
+legend("topright", "D", bty="n", cex = 1.5)
+mtext("Number of Surveys", side = 2, outer = TRUE, line = 1.5, cex  = 1.5)
+mtext("Difference in Change in Arthropod Density", side = 1, outer = TRUE, line = .5, cex = 1.5)
 #there is an outlier in NC piedmont caterpillars and bird food (26 caterpillars)
 #removed for plotting ease, but should note
 
@@ -36,7 +36,7 @@ mtext("Difference in Change in Arthropod Density", side = 1, outer = TRUE, line 
 #xlab  = "Difference in Change in Arth Density between VFX and VF
 #Figure 2- Raw arth counts for bird food, caterpillars for triangle and southern appalachians
 caterpillar_final1 = filter(caterpillar_final, Visit3VFX != 26)
-par(mfrow = c(4, 2), mar=c(4,4,2,2), cex.lab = 1.4, cex.axis = 1.6, cex.main = 1.8)
+par(mfrow = c(4, 2), mar=c(4,4,2,2), cex.lab = 1.5, cex.axis = 1.6, cex.main = 1.8)
 hist(food_time4_12$Visit3VF,  ylim=c(0,80), main ="Control", xlab = "Arth. density", ylab = "",
      col="deepskyblue",  plot = TRUE)
 legend("topright", "A", bty="n", cex = 1.5)
@@ -77,7 +77,7 @@ barplot(plotting.log_app_food$means, las=2, main = "Arthropods", ylab = "Appalac
 
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.6, plotting.log_app_food$M)
 text(x=seq(from=.9, to= 12, by = 1.29), y = -.15, labels = plotting.log_app_food$tree_sp, lheight = 1.5,
-     srt = 55, adj = 1, xpd = TRUE, cex = .85)
+     srt = 55, adj = 1, xpd = TRUE, cex = .9)
 
 #caterpillar appalachians
 barplot(plotting.log_app_caterpillar$means, las=2, main = "Caterpillars", ylim = c(-.3,.8),  
@@ -89,34 +89,34 @@ barplot(plotting.log_app_caterpillar$means, las=2, main = "Caterpillars", ylim =
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.6, plotting.log_app_caterpillar$M)
 #plotting.log_tri_caterpillar$tree_sp
 text(x=seq(from=.9, to= 12, by = 1.29), y = -.15, labels = plotting.log_app_caterpillar$tree_sp, lheight = 1.5,
-     srt = 55, adj = 1, xpd = TRUE, cex = .85)
+     srt = 55, adj = 1, xpd = TRUE, cex = .9)
 
 #bird food triangle
-barplot(plotting.log_tri_food$means, las=2, ylab = "Piedmont", ylim = c(0,.7), 
+barplot(plotting.log_tri_food$means, las=2, ylab = "Piedmont", ylim = c(0,.55), 
         col = (ifelse(plotting.log_tri_food$M == "a", "seagreen4", 
                     ifelse(plotting.log_tri_food$M == "ab", "seagreen3", 
                       ifelse(plotting.log_tri_food$M == "b","mediumspringgreen", 
                              ifelse(plotting.log_tri_food$M == "bc", "lightgreen", 
                                     ifelse(plotting.log_tri_food$M == "c", "mintcream", NA)))))))
 
-text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.6, plotting.log_tri_food$M)
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.5, plotting.log_tri_food$M)
 #plotting.log_tri_caterpillar$tree_sp
-text(x=seq(from=.9, to= 12, by = 1.29), y = -.01, labels = plotting.log_tri_food$tree_sp, lheight = 1.5,
-     srt = 55, adj = 1, xpd = TRUE, cex = .85)
+text(x=seq(from=.9, to= 12, by = 1.29), y = 0, labels = plotting.log_tri_food$tree_sp, lheight = 1.5,
+     srt = 55, adj = 1, xpd = TRUE, cex = .9)
 
 #caterpillar triangle
-barplot(plotting.log_tri_caterpillar$means, las=2, mar =c(1,1,1,1), ylim = c(0,.7), 
+barplot(plotting.log_tri_caterpillar$means, las=2, mar =c(1,1,1,1), ylim = c(0,.55), 
         col = (ifelse(plotting.log_tri_caterpillar$M == "a", "seagreen4", 
                             ifelse(plotting.log_tri_caterpillar$M == "ab", "seagreen3", 
                                    ifelse(plotting.log_tri_caterpillar$M == "b","mediumspringgreen", 
                                           ifelse(plotting.log_tri_caterpillar$M == "bc", "lightgreen", 
                                                  ifelse(plotting.log_tri_caterpillar$M == "c", "mintcream", NA)))))))
-text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.6, plotting.log_tri_caterpillar$M)
-mtext("Log-transformed Arth Density", side = 2, outer = TRUE, line = 1.5)
-mtext("Tree Species", side = 1, outer = TRUE, line = .5)
+text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.5, plotting.log_tri_caterpillar$M)
+mtext("Log-transformed Arth Density", side = 2, outer = TRUE, line = 1.5, cex = 1.3)
+mtext("Tree Species", side = 1, outer = TRUE, line = .5, cex = 1.3)
 #plotting.log_tri_caterpillar$tree_sp
-text(x=seq(from=.9, to= 12, by = 1.29), y = -.01, labels = plotting.log_tri_caterpillar$tree_sp, lheight = 1.5,
-     srt = 55, adj = 1, xpd = TRUE, cex = .85)
+text(x=seq(from=.9, to= 12, by = 1.29), y = 0, labels = plotting.log_tri_caterpillar$tree_sp, lheight = 1.5,
+     srt = 55, adj = 1, xpd = TRUE, cex = .9)
 
 #Map locations of sites and Regions 
 library(RgoogleMaps)
@@ -129,6 +129,8 @@ oth_coordinates = data.frame(location = c("Botanical Garden", "Prairie Ridge", "
                              lat = c(35.898645, 35.809674, 43.93903, 43.990567,44.004677, 43.83500, 41.460058, 41.521779, 41.476715), 
                              long = c(-79.031469, -78.716546, -71.75115, -71.773936, -71.645864, -71.773936, -72.520527, -72.541126, -72.631527))
 all_coordinates = rbind(BBS_coordinates, oth_coordinates)
+all_coordinates1=filter(all_coordinates, location %in% unique(region_complete$site))
+write.csv(all_coordinates1, "data/northern_comparisons_coordinates.csv")
 
 ##Map lat-long data
 par(mfrow = c(1, 1), mar=c(7,4,3,3))
@@ -137,6 +139,12 @@ sing = filter(all_coordinates, location %in% c("C", "H", "M"))
 va = filter(all_coordinates, location %in% uniq_va)
 sa = filter(all_coordinates, location %in% uniq_sa)
 tri = filter(all_coordinates, location %in% c("Botanical Garden", "Prairie Ridge"))
+
+write.csv(hub, "data/hub_latlong.csv")
+write.csv(sing, "data/sing_latlong.csv")
+write.csv(va, "data/va_latlong.csv")
+write.csv(sa, "data/sa_latlong.csv")
+write.csv(tri, "data/tri_latlong.csv")
 
 map('state', xlim = c(-85, -70), ylim = c(33, 45))
 points(hub$lon, hub$lat, pch = 1, col ='pink', 
@@ -150,5 +158,3 @@ points(sa$lon, sa$lat, pch = 4, col ='blue',
 points(tri$lon, tri$lat, pch = 4, col ='green', 
        cex = 1, bg="black", main="Survey Site Locations")
 
-(ifelse (plotting.log_tri_caterpillar$M == "a", "blue", 
-         ifelse(plotting.log_tri_caterpillar$M == "ab", "red", NA)
