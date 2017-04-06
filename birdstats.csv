@@ -1,0 +1,17 @@
+"","Species","Site","Metric","R2","p"
+"1","Indigo bunting","PR","GDD",0.68,0.09
+"2","Red-eyed vireo","PR","GDD",0.97,0.11
+"3","Common yellowthroat","PR","GDD",0.47,0.31
+"4","Blue-gray gnatcatcher","PR","GDD",0.58,0.13
+"5","Indigo bunting","BG","GDD",0.3,0.21
+"6","Red-eyed vireo","BG","GDD",0.86,0
+"7","Common yellowthroat","BG","GDD",0.55,0.04
+"8","Blue-gray gnatcatcher","BG","GDD",0.19,0.29
+"9","Indigo bunting","PR","Greenup",0.62,0.11
+"10","Red-eyed vireo","PR","Greenup",0.93,0.17
+"11","Common yellowthroat","PR","Greenup",0.53,0.28
+"12","Blue-gray gnatcatcher","PR","Greenup",0.26,0.38
+"13","Indigo bunting","BG","Greenup",0.02,0.74
+"14","Red-eyed vireo","BG","Greenup",0.45,0.1
+"15","Common yellowthroat","BG","Greenup",0.46,0.06
+"16","Blue-gray gnatcatcher","BG","Greenup",0.18,0.3
