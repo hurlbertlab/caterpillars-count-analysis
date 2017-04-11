@@ -1,11 +1,27 @@
 # Plots for honors presentation
 
+# Note that I only presented beat sheet data of arthropods -TEH
+
+# Will need to set working directory to the caterpillars-count-analysis repository
+setwd('c:/git/caterpillars-count-analysis')
+
+source('prism_10year.R') # GDDs
+
+source('modis_10year.R') # Spring green-up
+
+source('spline_thesis.R') # Arths peaks
+
+source('eBird_logistics.R') # Bird arrival
+
+
+#---- PPT results figure 1 ----
+
 # Create pdf
 
 pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/pptresultsfigure1.pdf', width = 7, height = 4.5)
 
 
-#----PR by week phenology plots----
+# PR by week phenology plots
 par(mfrow = c(2,3), mar = c(2,2,2,2), oma = c(4,4,2,2))
 
 # First panel
@@ -80,14 +96,14 @@ dev.off()
 
 
 
-
+#---- PPT results figure 4 ----
 
 
 pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/pptresultsfigure4.pdf', width = 6.5, height = 3.5)
 par(mar = c(4,2,2,2), mfrow = c(1,2), oma = c(1,4,1,1))
 
 
-#---- Arths and GDD - beat sheets----
+# Arths and GDD
 # Prairie Ridge
 plot(0,bty='n',pch='',ylab='',xlab='GDD (Julian day)', xlim = c(156,164), ylim = c(150, 215),
      main = '')
@@ -163,7 +179,7 @@ segments(x0 = greenupgdd$bg.gdd[greenupgdd$year == 2015],
 
 
 
-#---- Arths and greenup - beat sheets----
+# Arths and greenup
 
 # Prairie Ridge
 plot(0,bty='n',pch='',ylab='',xlab='Greenup (Julian day)', xlim = c(86,94), ylim = c(150, 215),
@@ -243,7 +259,9 @@ mtext("Arthropod peak (Julian day)", side = 2, outer = TRUE, line = 1.5)
 dev.off()
 
 
-#----Birds and GDD/Greenup----
+#---- PPT results figure 5 ----
+
+# Birds and GDD/Greenup
 
 greenupgdd <- merge(gddyear, greenup, by = 'year')
 
@@ -327,7 +345,9 @@ mtext("Bird arrival (Julian day)", side = 2, outer = TRUE, line = 1.5)
 
 dev.off()
 
-#have to run full plot in compilation_thesis.R
+#---- PPT results figure 5 *extra for ppt* ----
+
+# WARNING: have to run full plot in compilation_thesis.R FIRST (not as a pdf, need PR datasets)
 
 datalist = c(inbu_lm_prgdd, revi_lm_prgdd, coye_lm_prgdd, bggn_lm_prgdd)
 
@@ -373,7 +393,7 @@ dev.off()
 
 
 
-
+#---- PPT results figure 6 ----
 
 
 pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/pptresultsfigure6.pdf', width = 6.5, height = 5)
@@ -641,150 +661,4 @@ mtext("Arthropod peak (Julian day)", side = 1, outer = TRUE, line = 2)
 
 dev.off()
 
-
-
-
-
-
-
-
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/pptresultsfigure5.pdf', width = 6, height = 5.5)
-
-par(mar = c(4,2,2,2), mfrow = c(2,2), oma = c(1,3,1,1))
-
-# Prairie Ridge GDD
-
-inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
-inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_pr$pr.gdd, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue3', 
-     ylim = c(80, 119), main = 'Prairie Ridge', xlab = 'GDD (Julian day)', ylab = '')
-#legend("topleft", "A", bty="n")
-inbu_lm_prgdd = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$pr.gdd, weights = 1/inbu_pr$confint)
-abline(inbu_lm_prgdd, col = 'dodgerblue3')
-summary(inbu_lm_prgdd)
-
-inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
-revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
-points(revi_pr$pr.gdd, as.numeric(as.character(revi_pr$inflection_pt)), pch = 24, col = 'red')
-revi_lm_prgdd = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$pr.gdd, weights = 1/revi_pr$confint)
-abline(revi_lm_prgdd, col = 'red')
-summary(revi_lm_prgdd)
-
-inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
-coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
-points(coye_pr$pr.gdd, as.numeric(as.character(coye_pr$inflection_pt)), pch = 15, col = 'orange')
-coye_lm_prgdd = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$pr.gdd, weights = 1/coye_pr$confint)
-abline(coye_lm_prgdd, col = 'orange')
-summary(coye_lm_prgdd)
-
-inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
-bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
-points(bggn_pr$pr.gdd, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 9, col = 'gray67')
-bggn_lm_prgdd = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$pr.gdd, weights = 1/bggn_pr$confint)
-abline(bggn_lm_prgdd, col = 'gray67')
-summary(bggn_lm_prgdd)
-
-# Botanical Garden GDD
-
-inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
-inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_bg$bg.gdd, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue3', 
-     ylim = c(80, 119), main = 'Botanical Garden', xlab = 'GDD (Julian day)', ylab = '')
-#legend("topleft", "B", bty="n")
-inbu_lm_bggdd = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bg.gdd, weights = 1/inbu_bg$confint)
-abline(inbu_lm_bggdd, col = 'dodgerblue3')
-summary(inbu_lm_bggdd)
-
-inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
-revi_bg = merge(inf_bg_revi, greenupgdd, by = 'year', all = FALSE)
-points(revi_bg$bg.gdd, as.numeric(as.character(revi_bg$inflection_pt)), pch = 24, col = 'red')
-revi_lm_bggdd = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bg.gdd, weights = 1/revi_bg$confint)
-abline(revi_lm_bggdd, col = 'red')
-summary(revi_lm_bggdd)
-
-inf_bg_coye = inflection_bg[inflection_bg$scientific_name == 'Geothlypis trichas',]
-coye_bg = merge(inf_bg_coye, greenupgdd, by = 'year', all = FALSE)
-points(coye_bg$bg.gdd, as.numeric(as.character(coye_bg$inflection_pt)), pch = 15, col = 'orange')
-coye_lm_bggdd = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bg.gdd, weights = 1/coye_bg$confint)
-abline(coye_lm_bggdd, col = 'orange')
-summary(coye_lm_bggdd)
-
-inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
-bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
-points(bggn_bg$bg.gdd, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 9, col = 'gray67')
-bggn_lm_bggdd = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bg.gdd, weights = 1/bggn_bg$confint)
-abline(bggn_lm_bggdd, col = 'gray67')
-summary(bggn_lm_bggdd)
-
-
-
-
-# Prairie Ridge Greenup
-
-inf_pr_inbu = inflection_pr[inflection_pr$scientific_name == 'Passerina cyanea',]
-inbu_pr = merge(inf_pr_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_pr$prgreenup.log, as.numeric(as.character(inbu_pr$inflection_pt)), pch = 16, col = 'dodgerblue3', 
-     ylim = c(80, 119), main = '', xlab = 'Greenup (Julian day)', ylab = '')
-#legend("topleft", "C", bty="n")
-inbu_lm_prgreen = lm(as.numeric(as.character(inbu_pr$inflection_pt)) ~ inbu_pr$prgreenup.log, weights = 1/inbu_pr$confint)
-abline(inbu_lm_prgreen, col = 'dodgerblue3')
-summary(inbu_lm_prgreen)
-
-inf_pr_revi = inflection_pr[inflection_pr$scientific_name == 'Vireo olivaceus',]
-revi_pr = merge(inf_pr_revi, greenupgdd, by = 'year', all = FALSE)
-points(revi_pr$prgreenup.log, as.numeric(as.character(revi_pr$inflection_pt)), pch = 24, col = 'red')
-revi_lm_prgreen = lm(as.numeric(as.character(revi_pr$inflection_pt)) ~ revi_pr$prgreenup.log, weights = 1/revi_pr$confint)
-abline(revi_lm_prgreen, col = 'red')
-summary(revi_lm_prgreen)
-
-inf_pr_coye = inflection_pr[inflection_pr$scientific_name == 'Geothlypis trichas',]
-coye_pr = merge(inf_pr_coye, greenupgdd, by = 'year', all = FALSE)
-points(coye_pr$prgreenup.log, as.numeric(as.character(coye_pr$inflection_pt)), pch = 15, col = 'orange')
-coye_lm_prgreen = lm(as.numeric(as.character(coye_pr$inflection_pt)) ~ coye_pr$prgreenup.log, weights = 1/coye_pr$confint)
-abline(coye_lm_prgreen, col = 'orange')
-summary(coye_lm_prgreen)
-
-inf_pr_bggn = inflection_pr[inflection_pr$scientific_name == 'Polioptila caerulea',]
-bggn_pr = merge(inf_pr_bggn, greenupgdd, by = 'year', all = FALSE)
-points(bggn_pr$prgreenup.log, as.numeric(as.character(bggn_pr$inflection_pt)), pch = 9, col = 'gray67')
-bggn_lm_prgreen = lm(as.numeric(as.character(bggn_pr$inflection_pt)) ~ bggn_pr$prgreenup.log, weights = 1/bggn_pr$confint)
-abline(bggn_lm_prgreen, col = 'gray67')
-summary(bggn_lm_prgreen)
-
-
-# Botanical Garden Greenup
-
-inf_bg_inbu = inflection_bg[inflection_bg$scientific_name == 'Passerina cyanea',]
-inbu_bg = merge(inf_bg_inbu, greenupgdd, by = 'year', all = FALSE)
-plot(inbu_bg$bggreenup.log, as.numeric(as.character(inbu_bg$inflection_pt)), pch = 16, col = 'dodgerblue3', 
-     ylim = c(80, 119), main = '', xlab = 'Greenup (Julian day)', ylab = '')
-#legend("topleft", "D", bty="n")
-inbu_lm_bggreen = lm(as.numeric(as.character(inbu_bg$inflection_pt)) ~ inbu_bg$bggreenup.log, weights = 1/inbu_bg$confint)
-abline(inbu_lm_bggreen, col = 'dodgerblue3')
-summary(inbu_lm_bggreen)
-
-inf_bg_revi = inflection_bg[inflection_bg$scientific_name == 'Vireo olivaceus',]
-revi_bg = merge(inf_bg_revi, greenupgdd, by = 'year', all = FALSE)
-points(revi_bg$bggreenup.log, as.numeric(as.character(revi_bg$inflection_pt)), pch = 24, col = 'red')
-revi_lm_bggreen = lm(as.numeric(as.character(revi_bg$inflection_pt)) ~ revi_bg$bggreenup.log, weights = 1/revi_bg$confint)
-abline(revi_lm_bggreen, col = 'red')
-summary(revi_lm_bggreen)
-
-inf_bg_coye = inflection_bg[inflection_bg$scientific_name == 'Geothlypis trichas',]
-coye_bg = merge(inf_bg_coye, greenupgdd, by = 'year', all = FALSE)
-points(coye_bg$bggreenup.log, as.numeric(as.character(coye_bg$inflection_pt)), pch = 15, col = 'orange')
-coye_lm_bggreen = lm(as.numeric(as.character(coye_bg$inflection_pt)) ~ coye_bg$bggreenup.log, weights = 1/coye_bg$confint)
-abline(coye_lm_bggreen, col = 'orange')
-summary(coye_lm_bggreen)
-
-inf_bg_bggn = inflection_bg[inflection_bg$scientific_name == 'Polioptila caerulea',]
-bggn_bg = merge(inf_bg_bggn, greenupgdd, by = 'year', all = FALSE)
-points(bggn_bg$bggreenup.log, as.numeric(as.character(bggn_bg$inflection_pt)), pch = 9, col = 'gray67')
-bggn_lm_bggreen = lm(as.numeric(as.character(bggn_bg$inflection_pt)) ~ bggn_bg$bggreenup.log, weights = 1/bggn_bg$confint)
-abline(bggn_lm_bggreen, col = 'gray67')
-summary(bggn_lm_bggreen)
-
-mtext("Bird arrival (Julian day)", side = 2, outer = TRUE, line = 1.5)
-
-dev.off()
 
