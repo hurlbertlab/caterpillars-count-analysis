@@ -183,7 +183,7 @@ PR.LEPL15.bs = meanDensityByWeek(beatsheet.pr[beatsheet.pr$julianday %in% c(134:
 legend('topright', c('visual', 'beat'), lwd = 2, lty = 1, col = c('forestgreen', 'sienna3'))
 l = legend("topleft", "A", bty="n")
 LEPL15 = merge(PR.LEPL15.vis[,c('fracSurveys', 'week')], PR.LEPL15.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL15$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL15$fracSurveys.y), 2)), adj=c(0,1))
 
 # Second panel
 PR.LEPL16.vis = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
@@ -196,7 +196,7 @@ PR.LEPL16.bs = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_S
                                 xlim = c(135,209), ylab = "", col = 'sienna3')
 l = legend("topleft", "B", bty="n")
 LEPL16 = merge(PR.LEPL16.vis[,c('fracSurveys', 'week')], PR.LEPL16.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(LEPL16$fracSurveys.x, LEPL16$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(LEPL16$fracSurveys.x, LEPL16$fracSurveys.y), 2)), adj=c(0,1))
 
 
 # Third panel
@@ -209,7 +209,7 @@ PR.ORTH15.bs = meanDensityByWeek(beatsheet.pr[beatsheet.pr$julianday %in% c(134:
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'sienna3')
 l = legend("topleft", "C", bty="n")
 ORTH15 = merge(PR.ORTH15.vis[,c('fracSurveys', 'week')], PR.ORTH15.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(ORTH15$fracSurveys.x, ORTH15$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(ORTH15$fracSurveys.x, ORTH15$fracSurveys.y), 2)), adj=c(0,1))
 
 # Fourth panel
 PR.ORTH16.vis = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
@@ -222,7 +222,7 @@ PR.ORTH16.bs = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_S
                                 xlim = c(135,209), ylab = "", col = 'sienna3')
 l = legend("topleft", "D", bty="n")
 ORTH16 = merge(PR.ORTH16.vis[,c('fracSurveys', 'week')], PR.ORTH16.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(ORTH16$fracSurveys.x, ORTH16$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(ORTH16$fracSurveys.x, ORTH16$fracSurveys.y), 2)), adj=c(0,1))
 
 # Fifth panel
 PR.BIRD15.vis = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
@@ -234,7 +234,7 @@ PR.BIRD15.bs = meanDensityByWeek(beatsheet.pr[beatsheet.pr$julianday %in% c(134:
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'sienna3')
 l = legend("topleft", "E", bty="n")
 BIRD15 = merge(PR.BIRD15.vis[,c('fracSurveys', 'week')], PR.BIRD15.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(BIRD15$fracSurveys.x, BIRD15$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(BIRD15$fracSurveys.x, BIRD15$fracSurveys.y), 2)), adj=c(0,1))
 
 # Sixth panel
 PR.BIRD16.vis = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
@@ -247,7 +247,7 @@ PR.BIRD16.bs = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_S
                                 xlim = c(135,209), ylab = "")
 l = legend("topleft", "F", bty="n")
 BIRD16 = merge(PR.BIRD16.vis[,c('fracSurveys', 'week')], PR.BIRD16.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(BIRD16$fracSurveys.x, BIRD16$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(BIRD16$fracSurveys.x, BIRD16$fracSurveys.y), 2)), adj=c(0,1))
 
 mtext("Occurrence (fraction of surveys)", side = 2, outer = TRUE, line = 1.5)
 mtext("Julian day", side = 1, outer = TRUE, line = 2)
@@ -275,7 +275,7 @@ BG.LEPL15.bs = meanDensityByWeek(beatsheet.bg[beatsheet.bg$julianday %in% c(134:
 legend('topright', c('visual', 'beat'), lwd = 2, lty = 1, col = c('forestgreen', 'sienna3'))
 l = legend("topleft", "A", bty="n")
 LEPL15 = merge(BG.LEPL15.vis[,c('fracSurveys', 'week')], BG.LEPL15.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL15$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL15$fracSurveys.y), 2)), adj=c(0,1))
 
 
 # Second panel
@@ -289,7 +289,7 @@ BG.LEPL16.bs = meanDensityByWeek(beatsheet.bg[beatsheet.bg$surveyType == 'Beat_S
                                 xlim = c(135,209), ylab = "", col = 'sienna3')
 l = legend("topleft", "B", bty="n")
 LEPL16 = merge(BG.LEPL16.vis[,c('fracSurveys', 'week')], BG.LEPL16.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(LEPL16$fracSurveys.x, LEPL16$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(LEPL16$fracSurveys.x, LEPL16$fracSurveys.y), 2)), adj=c(0,1))
 
 
 # Third panel
@@ -302,7 +302,7 @@ BG.ORTH15.bs = meanDensityByWeek(beatsheet.bg[beatsheet.bg$julianday %in% c(134:
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'sienna3')
 l = legend("topleft", "C", bty="n")
 ORTH15 = merge(BG.ORTH15.vis[,c('fracSurveys', 'week')], BG.ORTH15.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(ORTH15$fracSurveys.x, ORTH15$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(ORTH15$fracSurveys.x, ORTH15$fracSurveys.y), 2)), adj=c(0,1))
 
 
 # Fourth panel
@@ -316,7 +316,7 @@ BG.ORTH16.bs = meanDensityByWeek(beatsheet.bg[beatsheet.bg$surveyType == 'Beat_S
                                 xlim = c(135,209), ylab = "", col = 'sienna3')
 l = legend("topleft", "D", bty="n")
 ORTH16 = merge(BG.ORTH16.vis[,c('fracSurveys', 'week')], BG.ORTH16.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(ORTH16$fracSurveys.x, ORTH16$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(ORTH16$fracSurveys.x, ORTH16$fracSurveys.y), 2)), adj=c(0,1))
 
 
 # Fifth panel
@@ -329,7 +329,7 @@ BG.BIRD15.bs = meanDensityByWeek(beatsheet.bg[beatsheet.bg$julianday %in% c(134:
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'sienna3')
 l = legend("topleft", "E", bty="n")
 BIRD15 = merge(BG.BIRD15.vis[,c('fracSurveys', 'week')], BG.BIRD15.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(BIRD15$fracSurveys.x, BIRD15$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(BIRD15$fracSurveys.x, BIRD15$fracSurveys.y), 2)), adj=c(0,1))
 
 
 # Sixth panel
@@ -343,7 +343,8 @@ BG.BIRD16.bs = meanDensityByWeek(beatsheet.bg[beatsheet.bg$surveyType == 'Beat_S
                                 xlim = c(135,209), ylab = "")
 l = legend("topleft", "F", bty="n")
 BIRD16 = merge(BG.BIRD16.vis[,c('fracSurveys', 'week')], BG.BIRD16.bs[,c('fracSurveys', 'week')], by = 'week', all = F)
-text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(BIRD16$fracSurveys.x, BIRD16$fracSurveys.y), 2)), adj=c(0,1))
+#text(x=l$text$x, y=l$text$y-l$rect$h/2, paste("r =", round(cor(BIRD16$fracSurveys.x, BIRD16$fracSurveys.y), 2)), adj=c(0,1))
+
 
 
 mtext("Occurrence (fraction of surveys)", side = 2, outer = TRUE, line = 1.5)
