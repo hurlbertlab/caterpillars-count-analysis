@@ -1,4 +1,4 @@
-# Script for NCBG and PR MODIS greenup data and temperature data - from Summer 2015
+# Script for NCBG and PR MODIS greenup data and temperature data
 # Tracie Hayes
 # September 8, 2015
 
