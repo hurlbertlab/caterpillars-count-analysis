@@ -44,8 +44,9 @@ surveys = tempsurveys[tempsurveys$isValid == 1,]
 surveys$survey = as.character(surveys$survey)
 
 # Fix a few missing dates (based on checking old MS Access database)
-surveys$date = as.character(as.POSIXlt(surveys$dateStart, format = "%Y-%m-%d %H:%M:%S"))
-surveys$date2 = as.character(as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d"))
+surveys$datetime = as.POSIXlt(surveys$dateStart, format = "%Y-%m-%d %H:%M:%S")
+surveys$date = as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d")
+surveys$time = format(surveys$datetime, "%H:%M")
 surveys$date[surveys$surveyID %in% c(6497, 6499, 6501, 6502, 6503, 6504, 6507)] = "2011-06-05"
 surveys$date[surveys$surveyID == 9992] = "2011-06-01"
 surveys$date[surveys$site == 8892351 & surveys$dateStart == "0000-00-00 00:00:00"] = "2016-06-10"
@@ -56,10 +57,12 @@ surveys$survey = toupper(surveys$survey)
 # Merge orders and surveys table
 orders2 = merge(surveys, orders, by = 'surveyID', sort = FALSE, all.x = TRUE)
 orders2$julianday = yday(orders2$date)
+orders2$date = as.character(orders2$date)
 
-orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date', 'date2', 'julianday',
+orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date', 'time.x', 'julianday',
                       'plantSp','herbivory','arthropod','length',
                       'count','notes.y','notes.x', 'surveyType', 'leafCount')]
+names(orders3)[names(orders3) == 'time.x'] = 'time'
 
 # Clean arthropod names and then add column with arthopod order code
 orders3$arthropod[orders3$arthropod == "Bees and Wasps (Hymenoptera excluding ants)"] = 
@@ -85,11 +88,11 @@ orders3["count"][is.na(orders3["count"])] <- 0
 # Remove all records where the Order is "Leaf Roll"
 orders4 = orders3[orders3$arthropod != "Leaf Roll",]
 
-arthcodes = read.csv('arth_codes.csv', header=T)
+arthcodes = read.csv('data/arth_codes.csv', header=T)
 arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
 names(arthcodes1) = c('arthCode', 'arthropod')
 cleandata <- merge(orders4, arthcodes1, by = 'arthropod', all.x = TRUE, sort = FALSE)
-cleandata <- cleandata[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','date2', 'julianday',
+cleandata <- cleandata[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','time', 'julianday',
                        'plantSp','herbivory','arthropod','arthCode','length',
                        'count','notes.y','notes.x', 'surveyType', 'leafCount')]
 cleandata <- cleandata[order(cleandata$date),]
@@ -148,7 +151,7 @@ cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 
 # y = a(x)^b
 # Read in arthropod regression data with slope = b and intercept = log(a)
-reg.data.temp <- read.csv('arth_regression.csv', header = T, sep = ',')
+reg.data.temp <- read.csv('data/arth_regression.csv', header = T, sep = ',')
 # Calculate a (the coefficient)
 reg.data.temp$coefficient <- 10^(reg.data.temp$intercept)
 
