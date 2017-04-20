@@ -2,8 +2,7 @@
 # Both Prairie Ridge and Bot Garden
 # This script is a mess- ORGANIZE
 
-setwd('c:/git/caterpillars-count-analysis')
-source("data_cleaning.r")
+source("cleaning_scripts/data_cleaning.r")
 
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 
@@ -166,7 +165,7 @@ mtext('Botanical Garden', side = 3, outer = T, line = 1)
 
 # Create pdf
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure1.pdf', width = 6.5, height = 7)
+#pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure1.pdf', width = 6.5, height = 7)
 
 
 #----PR by week phenology plots----
@@ -253,12 +252,12 @@ mtext("Occurrence (fraction of surveys)", side = 2, outer = TRUE, line = 1.5)
 mtext("Julian day", side = 1, outer = TRUE, line = 2)
 mtext('Prairie Ridge', side = 3, outer = T, line = 1)
 
-dev.off()
+#dev.off()
 
 
 # Create pdf
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure2.pdf', width = 6.5, height = 7)
+#pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure2.pdf', width = 6.5, height = 7)
 
 
 #----BG by week phenology plots----
@@ -351,4 +350,4 @@ mtext("Occurrence (fraction of surveys)", side = 2, outer = TRUE, line = 1.5)
 mtext("Julian day", side = 1, outer = TRUE, line = 2)
 mtext('Botanical Garden', side = 3, outer = T, line = 1)
 
-dev.off()
+#dev.off()

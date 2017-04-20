@@ -1,13 +1,12 @@
 # Calculating greenup date for the last 10 years using average EVI at Prairie Ridge and NCBG
 # 1/14/2016
 
-setwd('c:/git/caterpillars-count-analysis')
 
-source('C:/git/caterpillars-count-analysis/summary_functions.r')
+source('analysis_scripts/summary_functions.r')
 
-source('C:/git/caterpillars-count-analysis/data_cleaning.R')
+source('cleaning_scripts/data_cleaning.R')
 
-setwd('C:/git/caterpillars-count-analysis/modis-and-temp')
+
 
 
 

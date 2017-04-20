@@ -17,18 +17,16 @@ library(lubridate)
 library(stringr)
 
 #Source summary_functions.r
-source("summary_functions.r")
+source("analysis_scripts/summary_functions.r")
 
 # UserIDs of Hurlbert Lab data collectors
 labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191)
 
 
-# Set working directory
-# setwd('c:/git/caterpillars-count-analysis')
 
 # Read in data
-tempsurveys = read.csv('data/tbl_surveys.csv', header=F, stringsAsFactors = F)
-orders = read.csv('data/tbl_orders.csv', header=F, stringsAsFactors = F)
+tempsurveys = read.csv('data/arths_survey/tbl_surveys.csv', header=F, stringsAsFactors = F)
+orders = read.csv('data/arths_survey/tbl_orders.csv', header=F, stringsAsFactors = F)
 
 names(tempsurveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
                    'dateSubmit', 'tempMin', 'tempMax', 'notes', 'plantSp',
@@ -88,7 +86,7 @@ orders3["count"][is.na(orders3["count"])] <- 0
 # Remove all records where the Order is "Leaf Roll"
 orders4 = orders3[orders3$arthropod != "Leaf Roll",]
 
-arthcodes = read.csv('data/arth_codes.csv', header=T)
+arthcodes = read.csv('data/arths_survey/arth_codes.csv', header=T)
 arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
 names(arthcodes1) = c('arthCode', 'arthropod')
 cleandata <- merge(orders4, arthcodes1, by = 'arthropod', all.x = TRUE, sort = FALSE)
@@ -151,7 +149,7 @@ cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 
 # y = a(x)^b
 # Read in arthropod regression data with slope = b and intercept = log(a)
-reg.data.temp <- read.csv('data/arth_regression.csv', header = T, sep = ',')
+reg.data.temp <- read.csv('data/arths_survey/arth_regression.csv', header = T, sep = ',')
 # Calculate a (the coefficient)
 reg.data.temp$coefficient <- 10^(reg.data.temp$intercept)
 

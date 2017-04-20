@@ -1,16 +1,12 @@
 # Comparing GDD, greenup, arthropod phenology, and avian reproductive timing
 
-source('C:/git/caterpillars-count-analysis/prism_10year.R') # GDDs
+source('analysis_scripts/prism_10year.R') # GDDs
 
-source('C:/git/caterpillars-count-analysis/modis_10year.R') # Spring green-up
+source('analysis_scripts/modis_10year.R') # Spring green-up
 
-source('C:/git/caterpillars-count-analysis/spline_thesis.R') # Arths peaks
+source('archived_scripts/Tracie_thesis/spline_thesis.R') # Arths peaks
 
-source('C:/git/caterpillars-count-analysis/eBird_logistics.R') # Bird arrival
-
-setwd('c:/git/caterpillars-count-analysis')
-
-
+source('analysis_scripts/eBird_logistics.R') # Bird arrival
 
 # Is greenup affected by GDD?
 # Working with two datasets (one from prism_10year.R and one from modis_10year.R)
@@ -26,7 +22,7 @@ greenupgdd$bggreenup.dev <- greenupgdd$bggreenup.log - mean(greenupgdd$bggreenup
 #---- FIGURE 3 RESULTS----
 
 # Create pdf
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure3.pdf', width = 6.5, height = 6)
+#pdf(file = 'output/plots/thesis_plots_tracie/resultsfigure3.pdf', width = 6.5, height = 6)
 
 #---- GDD and greenup (deviation from mean) ----
 par(mar = c(4,4,2,2), mfrow = c(2,2), oma = c(2,2,1,1))
@@ -76,13 +72,13 @@ abline(0,1, lty = 2)
 legend('bottomright', 
      paste("r =", round(cor(greenupgdd$prgreenup.log, greenupgdd$bggreenup.log), 2), ", p = ", round(summary(greenuplm)$coefficients[2,4], 2)), bty = 'n')
 
-dev.off()
+#dev.off()
 
 diffvec = greenupgdd$bg.gdd - greenupgdd$pr.gdd
 mean(diffvec)
 
 #---- FIGURE 4 RESULTS ----
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/results_legendfig4&6.pdf', width = 6, height = 3.5)
+#pdf(file = 'output/plots/thesis_plots_tracie/results_legendfig4&6.pdf', width = 6, height = 3.5)
 
 par(mar = c(4,4,2,2), mfrow = c(1,1))
 
@@ -90,11 +86,11 @@ par(mar = c(4,4,2,2), mfrow = c(1,1))
 plot.new()
 legend('bottomleft', c('caterpillars','orthopterans', 'bird food'), pch = 16, cex = 1.2, col = c('seagreen3', 'plum', 'orange3'))
 legend('topleft', c('Prairie Ridge 2015', 'Prairie Ridge 2016','Botanical Garden 2015', 'Botanical Garden 2016'), pch = c(21,16,22,15), cex = 1.2)
-dev.off()
+#dev.off()
 
 
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure4.pdf', width = 6.5, height = 6)
+#pdf(file = 'output/plots/thesis_plots_tracie/resultsfigure4.pdf', width = 6.5, height = 6)
 
 #---- Arths and GDD - visual surveys----
 par(mar = c(4,2,2,2), mfrow = c(2,2), oma = c(1,4,1,1))
@@ -399,10 +395,10 @@ segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015],
 
 mtext("Arthropod peak (Julian day)", side = 2, outer = TRUE, line = 1.5)
 
-dev.off()
+#dev.off()
 
 #---- FIGURE 5 RESULTS ----
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/results_legendfig5.pdf', width = 6.5, height = 3)
+#pdf(file = 'output/plots/thesis_plots_tracie/results_legendfig5.pdf', width = 6.5, height = 3)
 
 par(mar = c(4,4,2,2), mfrow = c(1,1), oma = c(1,3,1,1))
 
@@ -410,9 +406,9 @@ par(mar = c(4,4,2,2), mfrow = c(1,1), oma = c(1,3,1,1))
 plot.new()
 legend('bottomleft', c('Indigo bunting', 'Red-eyed vireo', 'Common yellowthroat', 'Blue-gray gnatcatcher'), pch = c(16, 24, 15, 9), col = c('dodgerblue3', 'red', 'orange', 'gray67'), cex = 1.2)
 
-dev.off()
+#dev.off()
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure5.pdf', width = 6.5, height = 7)
+#pdf(file = 'output/plots/thesis_plots_tracie/resultsfigure5.pdf', width = 6.5, height = 7)
 
 par(mar = c(4,2,2,2), mfrow = c(2,2), oma = c(1,3,1,1))
 
@@ -550,7 +546,7 @@ summary(bggn_lm_bggreen)
 
 mtext("Bird arrival (Julian day)", side = 2, outer = TRUE, line = 1.5)
 
-dev.off()
+#dev.off()
 
 # Stats of this
 # ONE OF THE COMMON YELLOWTHROATS IS BAD OH NO
@@ -577,14 +573,14 @@ birdstats = data.frame(Species = rep(c("Indigo bunting", "Red-eyed vireo", "Comm
                             round(summary(inbu_lm_bggreen)$coefficients[2,4], 2), round(summary(revi_lm_bggreen)$coefficients[2,4], 2),
                             round(summary(coye_lm_bggreen)$coefficients[2,4], 2), round(summary(bggn_lm_bggreen)$coefficients[2,4], 2)))
 
-write.csv(birdstats, file = 'c:/git/caterpillars-count-analysis/data/birdstats.csv')
+#write.csv(birdstats, file = 'output/tabular/birdstats.csv')
 
 #---- FIGURE 6 RESULTS: Arths and birds ----
 
 # Final results plot, comparing arth peaks to bird peaks
 
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/resultsfigure6.pdf', width = 6.5, height = 8)
+#pdf(file = 'output/plots/thesis_plots_tracie/resultsfigure6.pdf', width = 6.5, height = 8)
 
 par(mfrow = c(4,2), mar = c(0,4,2,2), oma = c(5,5,3,3))
 
@@ -1095,12 +1091,12 @@ segments(y0 = inflection_bg$inflection_pt[inflection_bg$scientific_name == 'Poli
 mtext("Bird arrival (Julian day)", side = 2, outer = TRUE, line = 1.5)
 mtext("Arthropod peak (Julian day)", side = 1, outer = TRUE, line = 2)
 
-dev.off()
+#dev.off()
 
 
 #---- METHODS (FIGURE 2) to show how everything was calculated ----
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/methodsfigure2.pdf', width = 7, height = 6.5)
+#pdf(file = 'outputs/plots/thesis_plots_tracie/methodsfigure2.pdf', width = 7, height = 6.5)
 
 par(mfrow = c(2,2), mar = c(2,4,4,2), oma = c(3,1,1,1))
 
@@ -1298,7 +1294,7 @@ legend("topleft", "D", bty="n")
 
 mtext("Julian day", side = 1, outer = TRUE, line = 1.5)
 
-dev.off()
+#dev.off()
 
 
 

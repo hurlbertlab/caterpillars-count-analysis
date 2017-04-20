@@ -3,22 +3,21 @@
 # Note that I only presented beat sheet data of arthropods -TEH
 
 # Will need to set working directory to the caterpillars-count-analysis repository
-setwd('c:/git/caterpillars-count-analysis')
 
-source('prism_10year.R') # GDDs
+source('analysis_scripts/prism_10year.R') # GDDs
 
-source('modis_10year.R') # Spring green-up
+source('analysis_scripts/modis_10year.R') # Spring green-up
 
-source('spline_thesis.R') # Arths peaks
+source('archived_scripts/Tracie_thesis/spline_thesis.R') # Arths peaks
 
-source('eBird_logistics.R') # Bird arrival
+source('analysis_scripts/eBird_logistics.R') # Bird arrival
 
 
 #---- PPT results figure 1 ----
 
 # Create pdf
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/pptresultsfigure1.pdf', width = 7, height = 4.5)
+#pdf(file = 'output/plots/thesis_plots_tracie/pptresultsfigure1.pdf', width = 7, height = 4.5)
 
 
 # PR by week phenology plots
@@ -92,14 +91,14 @@ l = legend("topleft", "F", bty="n")
 mtext("Occurrence (fraction of surveys)", side = 2, outer = TRUE, line = 1.5)
 mtext("Julian day", side = 1, outer = TRUE, line = 2)
 
-dev.off()
+#dev.off()
 
 
 
 #---- PPT results figure 4 ----
 
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/pptresultsfigure4.pdf', width = 6.5, height = 3.5)
+#pdf(file = 'output/plots/thesis_plots_tracie/pptresultsfigure4.pdf', width = 6.5, height = 3.5)
 par(mar = c(4,2,2,2), mfrow = c(1,2), oma = c(1,4,1,1))
 
 
@@ -256,7 +255,7 @@ segments(x0 = greenupgdd$prgreenup.log[greenupgdd$year == 2015],
 
 mtext("Arthropod peak (Julian day)", side = 2, outer = TRUE, line = 1.5)
 
-dev.off()
+#dev.off()
 
 
 #---- PPT results figure 5 ----
@@ -271,7 +270,7 @@ greenupgdd$bg.gdd.dev <- greenupgdd$bg.gdd - mean(greenupgdd$bg.gdd)
 greenupgdd$prgreenup.dev <- greenupgdd$prgreenup.log - mean(greenupgdd$prgreenup.log)
 greenupgdd$bggreenup.dev <- greenupgdd$bggreenup.log - mean(greenupgdd$bggreenup.log)
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/pptresultsfigure5.pdf', width = 6.5, height = 3.5)
+#pdf(file = 'output/plots/thesis_plots_tracie/pptresultsfigure5.pdf', width = 6.5, height = 3.5)
 
 par(mar = c(4,2,2,2), mfrow = c(1,2), oma = c(1,3,1,1))
 
@@ -343,7 +342,7 @@ summary(bggn_lm_bggreen)
 
 mtext("Bird arrival (Julian day)", side = 2, outer = TRUE, line = 1.5)
 
-dev.off()
+#dev.off()
 
 #---- PPT results figure 5 *extra for ppt* ----
 
@@ -371,7 +370,7 @@ birdstats = data.frame(Species = rep(c("Indigo bunting", "Red-eyed vireo", "Comm
                              round(summary(inbu_lm_bggreen)$coefficients[2,4], 2), round(summary(revi_lm_bggreen)$coefficients[2,4], 2),
                              round(summary(coye_lm_bggreen)$coefficients[2,4], 2), round(summary(bggn_lm_bggreen)$coefficients[2,4], 2)))
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/pptresultsfigure5extra.pdf', width = 4, height = 4)
+#pdf(file = 'output/plots/thesis_plots_tracie/pptresultsfigure5extra.pdf', width = 4, height = 4)
 
 par(mar = c(4,4,2,2), mfrow = c(1,1), oma = c(1,1,1,1))
 
@@ -387,7 +386,7 @@ points(R2plot$GDDR2[7], R2plot$greenupR2[7], pch = 15, col = 'orange', cex = 2)
 points(R2plot$GDDR2[4], R2plot$greenupR2[4], pch = 9, col = 'gray67', cex = 2)
 points(R2plot$GDDR2[8], R2plot$greenupR2[8], pch = 9, col = 'gray67', cex = 2)
 
-dev.off()
+#dev.off()
 
 
 
@@ -396,7 +395,7 @@ dev.off()
 #---- PPT results figure 6 ----
 
 
-pdf(file = 'c:/git/caterpillars-count-analysis/plots/thesis_plots_tracie/pptresultsfigure6.pdf', width = 6.5, height = 5)
+#pdf(file = 'output/plots/thesis_plots_tracie/pptresultsfigure6.pdf', width = 6.5, height = 5)
 
 par(mfrow = c(2,2), mar = c(0,4,2,2), oma = c(5,5,3,3))
 
@@ -659,6 +658,6 @@ segments(y0 = inflection_bg$inflection_pt[inflection_bg$scientific_name == 'Poli
 mtext("Bird arrival (Julian day)", side = 2, outer = TRUE, line = 1.5)
 mtext("Arthropod peak (Julian day)", side = 1, outer = TRUE, line = 2)
 
-dev.off()
+#dev.off()
 
 

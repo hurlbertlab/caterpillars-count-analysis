@@ -4,7 +4,7 @@
 
 par(mfrow = c(1,1), mar = c(4,4,2,2), oma = c(1,1,1,1))
 
-source('c:/git/caterpillars-count-analysis/phenology_thesisplots.R')
+source('archived_scripts/Tracie_thesis/phenology_thesisplots.R')
 
 splinearth <- function(dataset, # enter dataset
                        degreesf) # enter degrees of freedom

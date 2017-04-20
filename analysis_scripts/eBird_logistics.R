@@ -5,12 +5,10 @@
 library(bbmle) ##has function 'mle2' which is a wrapper for the base function 'optim'
 require(agricolae)
 
-setwd('c:/git/caterpillars-count-analysis')
-
-sampling_pr <- read.csv('c:/git/caterpillars-count-analysis/data/ebird_sampling_pr.csv')
-sampling_bg <- read.csv('c:/git/caterpillars-count-analysis/data/ebird_sampling_bg.csv')
-obs_pr <- read.csv('c:/git/caterpillars-count-analysis/data/ebird_obs_pr.csv')
-obs_bg <- read.csv('c:/git/caterpillars-count-analysis/data/ebird_obs_bg.csv')
+sampling_pr <- read.csv('data/birds/ebird_sampling_pr.csv')
+sampling_bg <- read.csv('data/birds/ebird_sampling_bg.csv')
+obs_pr <- read.csv('data/birds/ebird_obs_pr.csv')
+obs_bg <- read.csv('data/birds/ebird_obs_bg.csv')
 
 
 #---- CREATE PRAIRIE RIDGE DATASET ----

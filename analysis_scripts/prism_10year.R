@@ -4,11 +4,11 @@
 library(prism)
 library(raster)
 
-setwd('c:/users/hayeste/my documents/495/prism') 
+#setwd('c:/users/hayeste/my documents/495/prism') 
 # Currently only have this data on my personal computer (not in git)
 # A csv is written and placed in the repo, but if any years are added will need to rerun skip section
 
-options(prism.path = "c:/users/hayeste/my documents/495/prism")
+#options(prism.path = "c:/users/hayeste/my documents/495/prism")
 
 ### SKIP SECTION BELOW IF ALREADY HAVE DATA DOWNLOADED ###
 
@@ -56,7 +56,7 @@ write.csv(temp.order, file = "c:/git/caterpillars-count-analysis/data/prism_temp
 
 ### END OF SKIP SECTION ###
 
-prismtemp <- read.csv(file = "c:/git/caterpillars-count-analysis/data/prism_temp.csv", header = TRUE, sep = ",",
+prismtemp <- read.csv(file = "c:/git/caterpillars-count-analysis/data/environmental/prism_temp.csv", header = TRUE, sep = ",",
             quote = "\"")
 prismtemp <- prismtemp[,2:7]
 
