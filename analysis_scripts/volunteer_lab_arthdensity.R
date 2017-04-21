@@ -1,5 +1,5 @@
 #Plots for CC paper: Absolute arth densities and relative arth densities 
-source("data_cleaning.R")
+source("cleaning_scripts/data_cleaning.R")
 
 #load libraries
 library(tidyr)
