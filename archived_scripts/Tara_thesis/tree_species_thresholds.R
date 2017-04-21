@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------test for how often you see an arthropod density at least this extreme-----------------------
-source("tree_species_model.R")
+source("archived_scripts/Tara_thesis/tree_species_model.R")
 
 #create columns with Y/N data for certain arth density thresholds
 count_merged3 = count_merged2

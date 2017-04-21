@@ -1,5 +1,5 @@
 #Tree species model
-source("data_cleaning.R")
+source("cleaning_scripts/data_cleaning.R")
 
 #load packages
 library(agricolae)
@@ -7,10 +7,10 @@ library(tidyr)
 library(dplyr)
 
 #read in data
-all_surveyTrees = read.csv("data/tbl_surveyTrees.csv", header=F)
-leaf_app = read.table("data/LeafAreaDatabase_20131126.txt", header=T, sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE)
-leaf_tri = read.table("data/LeafPhotoAreaDatabase_CC.txt", header=T, sep= '\t', quote="\"", fill = T)     #this is only a small subset of leaf area for the triangle for the most common trees
-plant_codes = read.csv("USA&AppalachianTrees_2016.csv", stringsAsFactors = F, header=T)
+all_surveyTrees = read.csv("data/arths_survey/tbl_surveyTrees.csv", header=F)
+leaf_app = read.table("data/arths_survey/LeafAreaDatabase_20131126.txt", header=T, sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE)
+leaf_tri = read.table("data/arths_survey/LeafPhotoAreaDatabase_CC.txt", header=T, sep= '\t', quote="\"", fill = T)     #this is only a small subset of leaf area for the triangle for the most common trees
+plant_codes = read.csv("data/arths_survey/USA&AppalachianTrees_2016.csv", stringsAsFactors = F, header=T)
 
 #organizes column headers
 names(all_surveyTrees) = c("siteID", "circle", "survey", "plantSpecies")
