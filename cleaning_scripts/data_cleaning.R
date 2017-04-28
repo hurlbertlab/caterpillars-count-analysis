@@ -25,8 +25,8 @@ labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191)
 
 
 # Read in data
-tempsurveys = read.csv('data/arths_survey/tbl_surveys.csv', header=F, stringsAsFactors = F)
-orders = read.csv('data/arths_survey/tbl_orders.csv', header=F, stringsAsFactors = F)
+tempsurveys = read.csv('data/arthropods/tbl_surveys.csv', header=F, stringsAsFactors = F)
+orders = read.csv('data/arthropods/tbl_orders.csv', header=F, stringsAsFactors = F)
 
 names(tempsurveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
                    'dateSubmit', 'tempMin', 'tempMax', 'notes', 'plantSp',
@@ -86,7 +86,7 @@ orders3["count"][is.na(orders3["count"])] <- 0
 # Remove all records where the Order is "Leaf Roll"
 orders4 = orders3[orders3$arthropod != "Leaf Roll",]
 
-arthcodes = read.csv('data/arths_survey/arth_codes.csv', header=T)
+arthcodes = read.csv('data/arthropods/arth_codes.csv', header=T)
 arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
 names(arthcodes1) = c('arthCode', 'arthropod')
 cleandata <- merge(orders4, arthcodes1, by = 'arthropod', all.x = TRUE, sort = FALSE)
@@ -149,7 +149,7 @@ cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 
 # y = a(x)^b
 # Read in arthropod regression data with slope = b and intercept = log(a)
-reg.data.temp <- read.csv('data/arths_survey/arth_regression.csv', header = T, sep = ',')
+reg.data.temp <- read.csv('data/arthropods/arth_regression.csv', header = T, sep = ',')
 # Calculate a (the coefficient)
 reg.data.temp$coefficient <- 10^(reg.data.temp$intercept)
 
@@ -237,6 +237,46 @@ cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "su
   
 #Removing exclosure trees (only 2016)    
 cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
+
+#----------------------------------------------------------------------------------------
+# Leaf area data
+
+leaf_app = read.table("data/trees/LeafAreaDatabase_20131126.txt", header=T, 
+                      sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE)
+leaf_tri = read.table("data/trees/LeafPhotoAreaDatabase_CC.txt", header=T, 
+                      sep= '\t', quote="\"", fill = T)     
+#this is only a small subset of leaf area for the triangle for the most common trees
+
+
+#get avg leaf area for each species
+leaf_app$LeafArea_pixels = as.numeric(leaf_app$LeafArea_pixels)
+leaf_app$RefArea_pixels = as.numeric(leaf_app$RefArea_pixels)
+leaf_app$RefArea_cm2 = as.numeric(leaf_app$RefArea_cm2)
+leaf_app$TreeSpecies = as.factor(leaf_app$TreeSpecies)
+leaf_app$leaf_area_cm2 = (leaf_app$LeafArea_pixels/leaf_app$RefArea_pixels)*(leaf_app$RefArea_cm2)
+leaf_app_clean = leaf_app[leaf_app$leaf_area_cm2 != is.na(leaf_app$leaf_area_cm2), ]
+
+#merge leaf areas from appalachians to subset of triangle
+leaf_app_clean1 = dplyr::select(leaf_app_clean, TreeSpecies, leaf_area_cm2)
+names(leaf_app_clean1) = c("TreeCodes", "leaf_area_cm2")
+leaf_tri1 = dplyr::select(leaf_tri, TreeCode, Leaf.Area..cm.2.)
+names(leaf_tri1) = c("TreeCodes", "leaf_area_cm2")
+all_leaves = rbind(leaf_app_clean1, leaf_tri1)
+
+leaves_grouped =  group_by(all_leaves, TreeCodes) 
+leaves_sp = dplyr::summarize(leaves_grouped, (mean(leaf_area_cm2)))
+
+#merge avg leaf area app/species with common names 
+leaves_sp1 = merge(leaves_sp, plant_codes, by.x = "TreeCodes", by.y = "TreeCode", all.x=T)
+leaves_sp1 = as.data.frame(leaves_sp1)
+leaves_sp1 = dplyr::select(leaves_sp1, -TreeCodes, -TreeSciName, -Notes)
+
+names(leaves_sp1) = c("avg_leaf_area_cm2", "ComName")
+
+
+
+
+
 
 # Taking out caterpillar colonies
 cleandata[cleandata$count > 10 & cleandata$arthCode == 'LEPL',]$count = 10
