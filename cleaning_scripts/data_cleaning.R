@@ -241,42 +241,40 @@ cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
 #----------------------------------------------------------------------------------------
 # Leaf area data
 
-leaf_app = read.table("data/trees/LeafAreaDatabase_20131126.txt", header=T, 
-                      sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE)
-leaf_tri = read.table("data/trees/LeafPhotoAreaDatabase_CC.txt", header=T, 
-                      sep= '\t', quote="\"", fill = T)     
-#this is only a small subset of leaf area for the triangle for the most common trees
+all_surveyTrees = read.csv("data/trees/tbl_surveyTrees.csv", header=F)
+plant_codes = read.csv("data/trees/USA&AppalachianTrees_2016.csv", stringsAsFactors = F, header=T)
 
+# Leaf area by species, site, date and station
+area = read.table("data/trees/LeafAreaDatabase.txt", header=T, 
+                      sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE) %>%
+  mutate(area_cm2 = (LeafArea_pixels/RefArea_pixels)*(RefArea_cm2)) %>%
+  filter(!is.na(area_cm2)) %>%
+  left_join(plant_codes[, c('TreeCode', 'ComName')], by = c('TreeSpecies' = 'TreeCode')) %>%
+  select(Site, Date, Station, ComName, area_cm2)
+  
+# Leaf area by species, site and date
+sitedate_area = area %>%
+  group_by(Site, Date, ComName) %>%
+  summarize(area_cm2 = mean(area_cm2))
 
-#get avg leaf area for each species
-leaf_app$LeafArea_pixels = as.numeric(leaf_app$LeafArea_pixels)
-leaf_app$RefArea_pixels = as.numeric(leaf_app$RefArea_pixels)
-leaf_app$RefArea_cm2 = as.numeric(leaf_app$RefArea_cm2)
-leaf_app$TreeSpecies = as.factor(leaf_app$TreeSpecies)
-leaf_app$leaf_area_cm2 = (leaf_app$LeafArea_pixels/leaf_app$RefArea_pixels)*(leaf_app$RefArea_cm2)
-leaf_app_clean = leaf_app[leaf_app$leaf_area_cm2 != is.na(leaf_app$leaf_area_cm2), ]
+# Leaf area by species and site
+site_area = area %>%
+  group_by(Site, ComName) %>%
+  summarize(area_cm2 = mean(area_cm2))
 
-#merge leaf areas from appalachians to subset of triangle
-leaf_app_clean1 = dplyr::select(leaf_app_clean, TreeSpecies, leaf_area_cm2)
-names(leaf_app_clean1) = c("TreeCodes", "leaf_area_cm2")
-leaf_tri1 = dplyr::select(leaf_tri, TreeCode, Leaf.Area..cm.2.)
-names(leaf_tri1) = c("TreeCodes", "leaf_area_cm2")
-all_leaves = rbind(leaf_app_clean1, leaf_tri1)
+# Leaf area by species and site
+species_area = area %>%
+  group_by(ComName) %>%
+  summarize(area_cm2 = mean(area_cm2))
 
-leaves_grouped =  group_by(all_leaves, TreeCodes) 
-leaves_sp = dplyr::summarize(leaves_grouped, (mean(leaf_area_cm2)))
-
-#merge avg leaf area app/species with common names 
-leaves_sp1 = merge(leaves_sp, plant_codes, by.x = "TreeCodes", by.y = "TreeCode", all.x=T)
-leaves_sp1 = as.data.frame(leaves_sp1)
-leaves_sp1 = dplyr::select(leaves_sp1, -TreeCodes, -TreeSciName, -Notes)
-
-names(leaves_sp1) = c("avg_leaf_area_cm2", "ComName")
-
+# Now need to merge in leaf area info by
+# --species, site, station, and date when possible
+# --or use mean leaf area
 
 
 
 
+#--------------------------------------------------------------------------
 
 # Taking out caterpillar colonies
 cleandata[cleandata$count > 10 & cleandata$arthCode == 'LEPL',]$count = 10
