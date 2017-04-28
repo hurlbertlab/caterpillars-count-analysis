@@ -49,13 +49,15 @@ trees_tri$plantSpecies = as.factor(trees_tri$plantSpecies)
 
 #merge tree sp with corrections with vis_tri
 vis_tri1 = merge(vis_tri, trees_tri, by.x= "loc_ID", by.y= "loc_ID", all.x=TRUE)
-vis_tri2 = dplyr::select(vis_tri1, -loc_ID, -clean_plantSp, -circle.y, -survey.y, -year.y, -siteID, -date)
+vis_tri2 = dplyr::select(vis_tri1, -loc_ID, -clean_plantSp, -time, -circle.y, -survey.y, -year.y, -siteID)
 names(vis_tri2) = c("surveyID", "userID", "site", "survey", "circle", "date", "julianday", "plantSp", "herbivory", 
                     "arthropod", "arthCode", "length", "count", "notes.y", "notes.x", "surveyType", "leafCount", "wetLeaves", "year", 
                     "biomass", "clean_plantSp")
 
 #merge triangle surveys and appalachian surveys
-vis_app = cleandata.app %>% dplyr::filter(surveyType =="Visual") %>% dplyr::select(-date) %>% dplyr::rename(date = date2)
+vis_app = cleandata.app %>% 
+          dplyr::filter(surveyType =="Visual") %>%
+          dplyr::select(-time)  
 vis = rbind(vis_tri2, vis_app)
 
 #add unique identifier column for surveys
@@ -71,12 +73,16 @@ vis_food = filter(vis, arthCode %in% birdfood)
 vis_caterpillar = filter(vis, arthCode == "LEPL")
 
 #group by unique surveys and summarize arthropod density
-vis_food_count = vis_food %>% group_by(site, circle, survey, date) %>% summarise(sum(count))
+vis_food_count = vis_food %>%
+                 group_by(site, circle, survey, date) %>%
+                 summarise(sum(count))
 vis_food_count$identifier = paste0(vis_food_count$site, vis_food_count$circle, vis_food_count$survey, vis_food_count$date)
 names(vis_food_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
 vis_food_count = data.frame(vis_food_count)
 
-vis_caterpillar_count = vis_caterpillar %>% group_by(site, circle, survey, date) %>% summarise(sum(count))
+vis_caterpillar_count = vis_caterpillar %>% 
+                        group_by(site, circle, survey, date) %>% 
+                        summarise(sum(count))
 vis_caterpillar_count$identifier = paste0(vis_caterpillar_count$site, vis_caterpillar_count$circle, vis_caterpillar_count$survey, vis_caterpillar_count$date)
 names(vis_caterpillar_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
 vis_caterpillar_count = data.frame(vis_caterpillar_count)
@@ -116,13 +122,18 @@ trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),]
 trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
 common_trees = trees_ordered1[1:10,]
 #just Appalachians
-trees_app = food_count_merged1 %>% filter(site %in% appalachians) %>% dplyr::select(plantSpecies) 
+trees_app = food_count_merged1 %>% 
+            filter(site %in% appalachians) %>% 
+            dplyr::select(plantSpecies) 
 trees_freq_app = data.frame(table(trees_app))
 trees_ordered_app = trees_freq_app[order(trees_freq_app$Freq, decreasing = T),] 
 trees_ordered1_app = filter(trees_ordered_app, trees_app !="UNID") # remove unidentified tree species
 common_trees_app = trees_ordered1_app[1:10,]
+
 #just triangle
-trees_tri = food_count_merged1 %>% filter(site %in% triangle) %>% dplyr::select(plantSpecies) 
+trees_tri = food_count_merged1 %>% 
+            filter(site %in% triangle) %>% 
+            dplyr::select(plantSpecies) 
 trees_freq_tri = data.frame(table(trees_tri))
 trees_ordered_tri = trees_freq_tri[order(trees_freq_tri$Freq, decreasing = T),] 
 trees_ordered1_tri = filter(trees_ordered_tri, trees_tri !="UNID") # remove unidentified tree species
