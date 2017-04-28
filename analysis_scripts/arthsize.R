@@ -197,28 +197,28 @@ abline(quant90)
 
 mtext('Julian day', side = 1, outer = TRUE, line = 1.5)
 
-# HEMI
+# HETE
 
-HEMI.pr <- amsurvey.prall[amsurvey.prall$arthCode == 'HEMI',]
-HEMIsize.pr <- aggregate(HEMI.pr$length, by = list(jd = HEMI.pr$julianday), FUN = mean)
-plot(HEMIsize.pr$jd, HEMIsize.pr$x, type = 'l', xlab = "", ylab = "Average Length (mm)")
-mtext("HEMI Visual Survey", line = 1.25, side = 3)
-HEMIlm.pr <- lm(HEMIsize.pr$x ~ HEMIsize.pr$jd)
-abline(HEMIlm.pr)
+HETE.pr <- amsurvey.prall[amsurvey.prall$arthCode == 'HETE',]
+HETEsize.pr <- aggregate(HETE.pr$length, by = list(jd = HETE.pr$julianday), FUN = mean)
+plot(HETEsize.pr$jd, HETEsize.pr$x, type = 'l', xlab = "", ylab = "Average Length (mm)")
+mtext("HETE Visual Survey", line = 1.25, side = 3)
+HETElm.pr <- lm(HETEsize.pr$x ~ HETEsize.pr$jd)
+abline(HETElm.pr)
 
-HEMIbs.pr <- beatsheet.prall[beatsheet.prall$arthCode == 'HEMI',]
-HEMIsizebs.pr <- aggregate(HEMIbs.pr$length, by = list(jd = HEMIbs.pr$julianday), FUN = mean)
-plot(HEMIsizebs.pr$jd, HEMIsizebs.pr$x, type = 'l', xlab = "", ylab = "")
-mtext("HEMI Beat Sheet", line = 1.25, side = 3)
-HEMIbslm.pr <- lm(HEMIsizebs.pr$x ~ HEMIsizebs.pr$jd)
-abline(HEMIbslm.pr)
+HETEbs.pr <- beatsheet.prall[beatsheet.prall$arthCode == 'HETE',]
+HETEsizebs.pr <- aggregate(HETEbs.pr$length, by = list(jd = HETEbs.pr$julianday), FUN = mean)
+plot(HETEsizebs.pr$jd, HETEsizebs.pr$x, type = 'l', xlab = "", ylab = "")
+mtext("HETE Beat Sheet", line = 1.25, side = 3)
+HETEbslm.pr <- lm(HETEsizebs.pr$x ~ HETEsizebs.pr$jd)
+abline(HETEbslm.pr)
 
-plot(HEMI.pr$julianday, HEMI.pr$length, xlab = "", ylab = "Length (mm)")
-quant90 = rq(HEMI.pr$length ~ HEMI.pr$julianday, 0.9)
+plot(HETE.pr$julianday, HETE.pr$length, xlab = "", ylab = "Length (mm)")
+quant90 = rq(HETE.pr$length ~ HETE.pr$julianday, 0.9)
 abline(quant90)
 
-plot(HEMIbs.pr$julianday, HEMIbs.pr$length, xlab = "", ylab = "")
-quant90 = rq(HEMIbs.pr$length ~ HEMIbs.pr$julianday, 0.9)
+plot(HETEbs.pr$julianday, HETEbs.pr$length, xlab = "", ylab = "")
+quant90 = rq(HETEbs.pr$length ~ HETEbs.pr$julianday, 0.9)
 abline(quant90)
 
 mtext('Julian day', side = 1, outer = TRUE, line = 1.5)
@@ -240,10 +240,10 @@ abline(DIPTlm.pr, col = 'orange', lwd = 2)
 abline(LEPLlm.pr, col = 'plum', lwd = 2)
 abline(OPILlm.pr, col = 'royalblue', lwd = 2)
 abline(ORTHlm.pr, col = 'magenta4', lwd = 2)
-abline(HEMIlm.pr, col = 'yellow', lwd = 2)
+abline(HETElm.pr, col = 'yellow', lwd = 2)
 
 par(xpd=TRUE)
-legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"), 
+legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HETE"), 
        col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), 
        lwd = 2)
 
@@ -264,10 +264,10 @@ abline(DIPTbslm.pr, col = 'orange', lwd = 2)
 abline(LEPLbslm.pr, col = 'plum', lwd = 2)
 abline(OPILbslm.pr, col = 'royalblue', lwd = 2)
 abline(ORTHbslm.pr, col = 'magenta4', lwd = 2)
-abline(HEMIbslm.pr, col = 'yellow', lwd = 2)
+abline(HETEbslm.pr, col = 'yellow', lwd = 2)
 
 par(xpd=TRUE)
-legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"), 
+legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HETE"), 
        col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), 
        lwd = 2)
 
@@ -462,28 +462,28 @@ abline(quant90)
 
 mtext('Julian day', side = 1, outer = TRUE, line = 1.5)
 
-# HEMI
+# HETE
 
-HEMI.bg <- amsurvey.bgall[amsurvey.bgall$arthCode == 'HEMI',]
-HEMIsize.bg <- aggregate(HEMI.bg$length, by = list(jd = HEMI.bg$julianday), FUN = mean)
-plot(HEMIsize.bg$jd, HEMIsize.bg$x, type = 'l', xlab = "", ylab = "Average Length (mm)")
-mtext("HEMI Visual Survey", line = 1.25, side = 3)
-HEMIlm.bg <- lm(HEMIsize.bg$x ~ HEMIsize.bg$jd)
-abline(HEMIlm.bg)
+HETE.bg <- amsurvey.bgall[amsurvey.bgall$arthCode == 'HETE',]
+HETEsize.bg <- aggregate(HETE.bg$length, by = list(jd = HETE.bg$julianday), FUN = mean)
+plot(HETEsize.bg$jd, HETEsize.bg$x, type = 'l', xlab = "", ylab = "Average Length (mm)")
+mtext("HETE Visual Survey", line = 1.25, side = 3)
+HETElm.bg <- lm(HETEsize.bg$x ~ HETEsize.bg$jd)
+abline(HETElm.bg)
 
-HEMIbs.bg <- beatsheet.bgall[beatsheet.bgall$arthCode == 'HEMI',]
-HEMIsizebs.bg <- aggregate(HEMIbs.bg$length, by = list(jd = HEMIbs.bg$julianday), FUN = mean)
-plot(HEMIsizebs.bg$jd, HEMIsizebs.bg$x, type = 'l', xlab = "", ylab = "")
-mtext("HEMI Beat Sheet", line = 1.25, side = 3)
-HEMIbslm.bg <- lm(HEMIsizebs.bg$x ~ HEMIsizebs.bg$jd)
-abline(HEMIbslm.bg)
+HETEbs.bg <- beatsheet.bgall[beatsheet.bgall$arthCode == 'HETE',]
+HETEsizebs.bg <- aggregate(HETEbs.bg$length, by = list(jd = HETEbs.bg$julianday), FUN = mean)
+plot(HETEsizebs.bg$jd, HETEsizebs.bg$x, type = 'l', xlab = "", ylab = "")
+mtext("HETE Beat Sheet", line = 1.25, side = 3)
+HETEbslm.bg <- lm(HETEsizebs.bg$x ~ HETEsizebs.bg$jd)
+abline(HETEbslm.bg)
 
-plot(HEMI.bg$julianday, HEMI.bg$length, xlab = "", ylab = "Length (mm)")
-quant90 = rq(HEMI.bg$length ~ HEMI.bg$julianday, 0.9)
+plot(HETE.bg$julianday, HETE.bg$length, xlab = "", ylab = "Length (mm)")
+quant90 = rq(HETE.bg$length ~ HETE.bg$julianday, 0.9)
 abline(quant90)
 
-plot(HEMIbs.bg$julianday, HEMIbs.bg$length, xlab = "", ylab = "")
-quant90 = rq(HEMIbs.bg$length ~ HEMIbs.bg$julianday, 0.9)
+plot(HETEbs.bg$julianday, HETEbs.bg$length, xlab = "", ylab = "")
+quant90 = rq(HETEbs.bg$length ~ HETEbs.bg$julianday, 0.9)
 abline(quant90)
 
 mtext('Julian day', side = 1, outer = TRUE, line = 1.5)
@@ -506,10 +506,10 @@ abline(DIPTlm.bg, col = 'orange', lwd = 2)
 abline(LEPLlm.bg, col = 'plum', lwd = 2)
 abline(OPILlm.bg, col = 'royalblue', lwd = 2)
 abline(ORTHlm.bg, col = 'magenta4', lwd = 2)
-abline(HEMIlm.bg, col = 'yellow', lwd = 2)
+abline(HETElm.bg, col = 'yellow', lwd = 2)
 
 par(xpd=TRUE)
-legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"), 
+legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HETE"), 
        col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), 
        lwd = 2)
 
@@ -529,70 +529,11 @@ abline(DIPTbslm.bg, col = 'orange', lwd = 2)
 abline(LEPLbslm.bg, col = 'plum', lwd = 2)
 abline(OPILbslm.bg, col = 'royalblue', lwd = 2)
 abline(ORTHbslm.bg, col = 'magenta4', lwd = 2)
-abline(HEMIbslm.bg, col = 'yellow', lwd = 2)
+abline(HETEbslm.bg, col = 'yellow', lwd = 2)
 
 par(xpd=TRUE)
-legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"), 
+legend(210,14,c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HETE"), 
        col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), 
        lwd = 2)
 
 par(xpd = FALSE)
-
-
-
-
-
-#----Stacked Bar----
-
-# For PR beat sheet
-prebar <- aggregate(beatsheet.pr$count, by = list(jd = beatsheet.pr$julianday, arth = beatsheet.pr$arthCode), 
-                  FUN = sum)
-bar <- prebar[prebar$arth == "ARAN" | prebar$arth == "AUCH" | prebar$arth == "COLE" | prebar$arth == "DIPT" |
-                prebar$arth == "LEPL" | prebar$arth == "OPIL" | prebar$arth == "ORTH" | prebar$arth == "HETE",]
-widebar <- reshape(bar,
-                v.names = "x",
-                timevar = "arth",
-                idvar = "jd",
-                direction = "wide")
-# need to figure out why HETE row is not showing up
-
-widebar <- widebar[order(widebar$jd),]
-
-
-# For PR visual survey
-prebar1 <- aggregate(amsurvey.pr$count, by = list(jd = amsurvey.pr$julianday, arth = amsurvey.pr$arthCode), 
-                    FUN = sum)
-bar1 <- prebar1[prebar1$arth == "ARAN" | prebar1$arth == "AUCH" | prebar1$arth == "COLE" | prebar1$arth == "DIPT" |
-                prebar1$arth == "LEPL" | prebar1$arth == "OPIL" | prebar1$arth == "ORTH" | prebar1$arth == "HETE",]
-widebar1 <- reshape(bar1,
-                   v.names = "x",
-                   timevar = "arth",
-                   idvar = "jd",
-                   direction = "wide")
-# need to figure out why HETE row is not showing up
-
-widebar1 <- widebar1[order(widebar1$jd),]
-
-
-library(RColorBrewer)
-#sequential <- brewer.pal(6, "BuGn")
-
-barplot(t(widebar1[,2:8]),
-        names.arg = widebar1$jd, # x-axis labels
-        cex.names = 0.7, # makes x-axis labels small enough to show all
-        col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'),
-        #col = sequential, # colors
-        xlab = "Julian day",
-        ylab = "Count",
-        ylim = c(0,90),
-        main = "Arthropod assemblages - PR Visual")
-        #xlim = c(135,215), # these two lines allow space for the legend
-        #width = 1) # these two lines allow space for the legend
-legend("bottomright", 
-       legend = c("ARAN", "AUCH", "COLE", "DIPT", "LEPL", "OPIL", "ORTH", "HEMI"),
-       #col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'), #in order from top to bottom
-       fill = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow')) # 6:1 reorders so legend order matches graph
-       
-
-barplot(counts, main = "Arthropod Assemblages Over the Season", xlab = 'Julian Day', 
-        col = c('cadetblue', 'chartreuse', 'red', 'orange', 'plum', 'royalblue', 'magenta4', 'yellow'))

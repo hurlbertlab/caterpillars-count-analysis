@@ -1,7 +1,7 @@
 ## Linear Models For effects of Average Summer Temperature and Net Annual Precipitation on Caterpillar Density Across Regions
 # WARNING- this is not an actual number of caterpillars observed, this is the number 
 # observed per 50 leaf survey X THE LEAF AREA OF THAT TREE SPECIES IN CM
-source("northern_comparisons.R")
+source("analysis_scripts/northern_comparisons.R")
 hubbard_no_trees = dat1 %>% dplyr::rename(ComName = tree.name, site=plot) 
 hubbard_no_trees1 = merge(hubbard_no_trees, leaves_sp1)
 hubbard_no_trees2 = hubbard_no_trees1 %>%
