@@ -1,9 +1,9 @@
 # Correlation coefficients between trained and citizen scientist estimates over the year
 # Weekly average values
 
-setwd('C:/git/caterpillars-count-analysis')
-source('summary_functions.r')
-source('data_cleaning.R')
+#setwd('C:/git/caterpillars-count-analysis')
+source('analysis_scripts/summary_functions.r')
+source('cleaning_scripts/data_cleaning.R')
 
 # 2015 Visual LEPL
 PR.LEPL15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
@@ -50,6 +50,7 @@ PR.ORTH16 = merge(PR.ORTH16.sci[,c(1,6)], PR.ORTH16.cs[,c(1,6)], by = 'week', al
 names(PR.ORTH16) = c('week', 'sci', 'cs')
 ORTH16r = cor(PR.ORTH16$sci, PR.ORTH16$cs)
 
+# Need to define multorders BEFORE RUNNING THIS SECTION
 # 2015 Visual BIRD
 PR.BIRD15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
                                   ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = F, 
