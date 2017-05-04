@@ -140,11 +140,11 @@ va = filter(all_coordinates, location %in% uniq_va)
 sa = filter(all_coordinates, location %in% uniq_sa)
 tri = filter(all_coordinates, location %in% c("Botanical Garden", "Prairie Ridge"))
 
-write.csv(hub, "data/hub_latlong.csv")
-write.csv(sing, "data/sing_latlong.csv")
-write.csv(va, "data/va_latlong.csv")
-write.csv(sa, "data/sa_latlong.csv")
-write.csv(tri, "data/tri_latlong.csv")
+write.csv(hub, "data/environmental/hub_latlong.csv")
+write.csv(sing, "data/environmental/sing_latlong.csv")
+write.csv(va, "data/environmental/va_latlong.csv")
+write.csv(sa, "data/environmental/sa_latlong.csv")
+write.csv(tri, "data/environmental/tri_latlong.csv")
 
 
 

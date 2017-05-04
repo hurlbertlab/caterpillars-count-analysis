@@ -51,6 +51,6 @@ names(precip2) = c("ppt_normals_1", "ppt_normals_2", "ppt_normals_3", "ppt_norma
 write.csv(precip2, file = "~/Desktop/caterpillars-count-analysis/data/prism_precip_northerncomp.csv")
 
 # Read in csvs if finished obtaining data
-temperature = read.csv("data/prism_temp_northerncomp.csv")
-precipitation = read.csv("data/prism_precip_northerncomp.csv")
+temperature = read.csv("data/environmental/prism_temp_northerncomp.csv")
+precipitation = read.csv("data/environmental/prism_precip_northerncomp.csv")
 
