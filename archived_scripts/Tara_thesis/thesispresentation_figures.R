@@ -1,6 +1,6 @@
 # Modified version of thesisfigures_tm for thesis presentation talk
 
-source("thesisfigures_tm.R")
+source("archived_scripts/Tara_thesis/thesisfigures_tm.R")
 #Figure 1 - Differences of Differences histogram comparing effects of exclosures on 
 #Bird Food Arthropods and caterpillars in the Southern Appalachians and in the triangle #still need to figure out how to do this in a panel/do I really want to show this?
 caterpillar_time4_t1 = dplyr::filter(caterpillar_time4_t, VFX_VF_dif != 26)

@@ -8,8 +8,7 @@ library(lattice)
 library(maps)
 
 # Read in data
-setwd("~/Desktop/insect-exclosure")
-topdown <- read.table("exclosure_experiment_2012_TM_corrected.txt", sep= '\t', quote="\"", header=TRUE)
+topdown <- read.table("data/exclosure_experiment_2012_TM_corrected.txt", sep= '\t', quote="\"", header=TRUE)
 
 # Remove Unnecessary Columns 
 topdown1<- dplyr::select(topdown, -LitterDepth, -TapeExposed_in, -Strip_length_in, -circle, -Year)
@@ -332,7 +331,7 @@ histogram(caterpillar_time4_12$VFX_VF_dif, breaks=10, ylab="Percent of Total",
 
 #Make Map of StateRouteStop locations
 ##Read in BBS Lat-Long Data
-lat_longs <- read.table("BBS_stop_latlongs.txt", sep= '\t', quote="\"", header=TRUE)
+lat_longs <- read.table("data/environmental/BBS_stop_latlongs.txt", sep= '\t', quote="\"", header=TRUE)
 ##Filter data to only include StateRouteStop locations where the exclosure experiment occurred
 exclosure_lat_longs<- dplyr::filter(lat_longs, Stateroutestop %in% c("2704132", "6302205", "6303117", 
                                                               "6390627", "6390644", "6390909", 

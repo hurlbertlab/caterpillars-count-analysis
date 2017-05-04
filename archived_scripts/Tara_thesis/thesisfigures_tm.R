@@ -6,10 +6,10 @@ library(RgoogleMaps)
 library(maps)
 
 #source documents where data files are contained
-source("Exclosure Analysis/ExclosureAnalysis_Summer2016.R") #Triangle exclosures (top-down)
-source("tree_species_model.R") #Tree species model (#Bottom up)
-source("northern_comparisons.R") # Regional comparisons
-source("data_analysis.R") # Southern Appalachian exclosures (top-down)
+source("archived_scripts/Tara_thesis/ExclosureAnalysis_Summer2016.R") #Triangle exclosures (top-down)
+source("archived_scripts/Tara_thesis/tree_species_model.R") #Tree species model (#Bottom up)
+source("archived_scripts/Tara_thesis/northern_comparisons.R") # Regional comparisons
+source("archived_scripts/Tara_thesis/data_analysis.R") # Southern Appalachian exclosures (top-down)
 
 #Figure 1 - Differences of Differences histogram comparing effects of exclosures on 
 #Bird Food Arthropods and caterpillars in the Southern Appalachians and in the triangle #still need to figure out how to do this in a panel/do I really want to show this?
@@ -122,7 +122,7 @@ text(x=seq(from=.9, to= 12, by = 1.29), y = 0, labels = plotting.log_tri_caterpi
 library(RgoogleMaps)
 
 ##Read in BBS Lat-Long Data
-BBS_coordinates <- read.table("data/BBS_stop_latlongs.txt", sep= '\t', quote="\"", header=TRUE)
+BBS_coordinates <- read.table("data/environmental/BBS_stop_latlongs.txt", sep= '\t', quote="\"", header=TRUE)
 names(BBS_coordinates) = c("location", "lat", "long")
 
 oth_coordinates = data.frame(location = c("Botanical Garden", "Prairie Ridge", "Hubbard Brook", "Moosilauke", "Russell", "Stinson", "C", "H", "M"), 
@@ -146,15 +146,5 @@ write.csv(va, "data/va_latlong.csv")
 write.csv(sa, "data/sa_latlong.csv")
 write.csv(tri, "data/tri_latlong.csv")
 
-map('state', xlim = c(-85, -70), ylim = c(33, 45))
-points(hub$lon, hub$lat, pch = 1, col ='pink', 
-       cex = 1, bg="black", main="Survey Site Locations")
-points(sing$lon, sing$lat, pch = 2, col ='purple', 
-       cex = 1, bg="black", main="Survey Site Locations")
-points(va$lon, va$lat, pch = 3, col ='lightblue', 
-       cex = 1, bg="black", main="Survey Site Locations")
-points(sa$lon, sa$lat, pch = 4, col ='blue', 
-       cex = 1, bg="black", main="Survey Site Locations")
-points(tri$lon, tri$lat, pch = 4, col ='green', 
-       cex = 1, bg="black", main="Survey Site Locations")
+
 

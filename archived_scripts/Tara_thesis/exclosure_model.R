@@ -1,7 +1,8 @@
 #Mixed Effects Model for Arth Density
 library(lme4)
 
-source("Exclosure Analysis/ExclosureAnalysis_Summer2016.R")
+source("archived_scripts/Tara_thesis/ExclosureAnalysis_Summer2016.R")
+source("archived_scripts/Tara_thesis/data_analysis.R")
 
 #data shaping food 2016 data
 food = food_time1
@@ -21,8 +22,6 @@ names(caterpillar)= c("identifier", "TrapType", "siteID", "survey", "circle", "c
 #mixed models for 2016 with tree species as a random effect)
 mix_mod_food = lmer(food_sum ~ TrapType + (1 | surveyTrees), food)
 mix_mod_caterpillar = lmer(caterpillar_sum ~ TrapType + (1 | surveyTrees), caterpillar)
-
-source("~/Desktop/insect-exclosure/data_analysis.R")
 
 #data shaping for 2012
 food_new = food_time_12
