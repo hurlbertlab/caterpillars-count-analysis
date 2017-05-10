@@ -2,8 +2,8 @@
 # number of surveys a month.
 
 # Run summary_functions.r and data_cleaning.R
-source('summary_functions.r') 
-source('data_cleaning.R')
+source('analysis_scripts/summary_functions.r') 
+source('cleaning_scripts/data_cleaning.R')
 
 
 # Function for creating a dataframe that has the max julian day 
@@ -78,12 +78,20 @@ for (circleSample in 4:(length(unique(alldata$circle)))) {
 return(samp.dataframe)
 } # end function
 
+
+
 # For running for loop inside function
+
 circleSample = 12
 alldata = amsurvey.pr
 freq = 1
 startval = 1
-arthropods = multorders
+
+# need to define what multorders includes (vector of the arth 4-letter codes):
+multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
+arthropods = multorders 
+
+
 site = 117
 minLength = 5
 inputSite = 117
@@ -105,7 +113,7 @@ year = 2015
 # Prairie Ridge morning visual surveys
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 PRam.max = maxjdStat(amsurvey.pr, multorders, 117, 2015)
-write.table(PRam.max, file = "PR_am_survey_max_jd")
+#write.table(PRam.max, file = "PR_am_survey_max_jd")
 
 colfunc <- colorRampPalette(c('blue', 'green'))
 
