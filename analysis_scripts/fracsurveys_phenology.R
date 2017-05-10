@@ -381,6 +381,8 @@ lines(130:207, p[3]*dnorm(130:207, p[1], p[2]), col = 'blue') # make sure it app
 
 
 #----FIGURE 4 PHENOLOGY PLOT----
+# Is this plot useful? Can't run now with missing script
+
 fracval = read.csv("c:/git/caterpillars-count-analysis/output/tabular/gaussian_fracsurveys.csv")
 
 par(mar = c(4,4,2,2))
@@ -388,7 +390,7 @@ source('C:/git/caterpillars-count-analysis/analysis_scripts/prism_10year.R')
 
 source('C:/git/caterpillars-count-analysis/analysis_scripts/modis_10year.R')
 
-source('C:/git/caterpillars-count-analysis/extensive_plotting.R')
+source('C:/git/caterpillars-count-analysis/extensive_plotting.R') # deleted this script earlier
 
 setwd('c:/git/caterpillars-count-analysis')
 
