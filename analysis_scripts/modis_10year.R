@@ -1,6 +1,5 @@
-# Calculating greenup date for the last 10 years using average EVI at Prairie Ridge and NCBG
-# 1/14/2016
-
+# Calculating greenup date for 2000-2016 using average EVI at Prairie Ridge and NCBG
+# MAKE SURE TO ADJUST "setwd" PATHS TO YOUR COMPUTER'S SETTINGS (ctrl f "setwd")
 
 source('analysis_scripts/summary_functions.r')
 
@@ -35,7 +34,7 @@ for (year in 1:length(multyears)) {
   modis$ID = c(1,2,3)
 
   # Set working directory to year file the data will be downloaded in
-  setwd(file.path('C:','git','caterpillars-count-analysis','modis-and-temp',multyears[[year]], sep = '/'))
+  setwd(file.path('C:','git','caterpillars-count-analysis','data','modis-and-temp',multyears[[year]], sep = '/'))
 
   # Download MODIS data
   MODISSubsets(LoadDat = modis, Products = 'MOD13Q1', 
@@ -59,7 +58,7 @@ par(mfrow = c(5, 2), mar = c(2, 2, 1, 1))
 for (year in 1:length(multyears)) {
   
   # Set working directory to year file you want to read from
-  setwd(file.path('C:','git','caterpillars-count-analysis','modis-and-temp',multyears[[year]]))
+  setwd(file.path('C:','git','caterpillars-count-analysis','data','modis-and-temp',multyears[[year]]))
 
   # Read in MODIS data
   bgmodis <- read.csv(list.files(pattern = ".asc")[1], header = FALSE, as.is = TRUE)
