@@ -25,8 +25,8 @@ labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191)
 
 
 # Read in data
-tempsurveys = read.csv('data/arths_survey/tbl_surveys.csv', header=F, stringsAsFactors = F)
-orders = read.csv('data/arths_survey/tbl_orders.csv', header=F, stringsAsFactors = F)
+tempsurveys = read.csv('data/arthropods/tbl_surveys.csv', header=F, stringsAsFactors = F)
+orders = read.csv('data/arthropods/tbl_orders.csv', header=F, stringsAsFactors = F)
 
 names(tempsurveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
                    'dateSubmit', 'tempMin', 'tempMax', 'notes', 'plantSp',
@@ -86,7 +86,7 @@ orders3["count"][is.na(orders3["count"])] <- 0
 # Remove all records where the Order is "Leaf Roll"
 orders4 = orders3[orders3$arthropod != "Leaf Roll",]
 
-arthcodes = read.csv('data/arths_survey/arth_codes.csv', header=T)
+arthcodes = read.csv('data/arthropods/arth_codes.csv', header=T)
 arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
 names(arthcodes1) = c('arthCode', 'arthropod')
 cleandata <- merge(orders4, arthcodes1, by = 'arthropod', all.x = TRUE, sort = FALSE)
@@ -149,7 +149,7 @@ cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 
 # y = a(x)^b
 # Read in arthropod regression data with slope = b and intercept = log(a)
-reg.data.temp <- read.csv('data/arths_survey/arth_regression.csv', header = T, sep = ',')
+reg.data.temp <- read.csv('data/arthropods/arth_regression.csv', header = T, sep = ',')
 # Calculate a (the coefficient)
 reg.data.temp$coefficient <- 10^(reg.data.temp$intercept)
 
@@ -237,6 +237,44 @@ cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "su
   
 #Removing exclosure trees (only 2016)    
 cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
+
+#----------------------------------------------------------------------------------------
+# Leaf area data
+
+all_surveyTrees = read.csv("data/trees/tbl_surveyTrees.csv", header=F)
+plant_codes = read.csv("data/trees/USA&AppalachianTrees_2016.csv", stringsAsFactors = F, header=T)
+
+# Leaf area by species, site, date and station
+area = read.table("data/trees/LeafAreaDatabase.txt", header=T, 
+                      sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE) %>%
+  mutate(area_cm2 = (LeafArea_pixels/RefArea_pixels)*(RefArea_cm2)) %>%
+  filter(!is.na(area_cm2)) %>%
+  left_join(plant_codes[, c('TreeCode', 'ComName')], by = c('TreeSpecies' = 'TreeCode')) %>%
+  select(Site, Date, Station, ComName, area_cm2)
+  
+# Leaf area by species, site and date
+sitedate_area = area %>%
+  group_by(Site, Date, ComName) %>%
+  summarize(area_cm2 = mean(area_cm2))
+
+# Leaf area by species and site
+site_area = area %>%
+  group_by(Site, ComName) %>%
+  summarize(area_cm2 = mean(area_cm2))
+
+# Leaf area by species and site
+species_area = area %>%
+  group_by(ComName) %>%
+  summarize(area_cm2 = mean(area_cm2))
+
+# Now need to merge in leaf area info by
+# --species, site, station, and date when possible
+# --or use mean leaf area
+
+
+
+
+#--------------------------------------------------------------------------
 
 # Taking out caterpillar colonies
 cleandata[cleandata$count > 10 & cleandata$arthCode == 'LEPL',]$count = 10

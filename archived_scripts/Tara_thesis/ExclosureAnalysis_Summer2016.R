@@ -1,6 +1,6 @@
 #Analysis of Exclosure Data Summer 2016
 #Open necessary packages
-source("summary_functions.r")
+source("analysis_scripts/summary_functions.r")
 library(tidyr)
 library(dplyr)
 library(stringr)
@@ -8,9 +8,9 @@ library(coin)
 library(lattice)
 
 # Read in data
-all_surveys <- read.csv('data/tbl_surveys.csv', header=F)
-all_orders <- read.csv('data/tbl_orders.csv', header=F)
-all_surveyTrees <- read.csv("data/tbl_surveyTrees.csv", header=T)
+all_surveys <- read.csv('data/arthropods/tbl_surveys.csv', header=F)
+all_orders <- read.csv('data/arthropods/tbl_orders.csv', header=F)
+all_surveyTrees <- read.csv("data/trees/tbl_surveyTrees.csv", header=T)
 
 # Rename columns and remove unecessary ones
 names(all_surveys) = c("surveyID", "siteID", "userID", 
@@ -231,6 +231,7 @@ wilcox_test(Visit3~ TrapType, data=caterpillar_time)
 wilcox_test(Visit3~ TrapType, data=notfood_time)
 
 ##Reshape dataframe for visualization
+food_time1 <- dplyr::select(food_time, -Visit1, -Visit2, -visit_dif)
 food_V3 <- food_time %>% dplyr::select(-Visit1, -Visit2, -visit_dif) %>% spread(TrapType, Visit3)
 names(food_V3) <- c("siteID", "circle", "survey", "Visit3VF", "Visit3VFX")
 food_V3$Visit3Dif <- (food_V3$Visit3VFX - food_V3$Visit3VF)

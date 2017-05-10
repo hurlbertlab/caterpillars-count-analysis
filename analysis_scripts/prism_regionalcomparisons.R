@@ -11,7 +11,7 @@ get_prism_normals(type = 'tmean', resolution = "800m", m = c(5,6,7), keepZip = F
 get_prism_normals(type = 'ppt', resolution = "800m", m = c(1:12), keepZip = FALSE)
 
 # Longitude and latitude of 5 locations
-BBS_coordinates <- read.table("data/BBS_stop_latlongs.txt", sep= '\t', quote="\"", header=TRUE)
+BBS_coordinates <- read.table("data/environmental/BBS_stop_latlongs.txt", sep= '\t', quote="\"", header=TRUE)
 names(BBS_coordinates) = c("location", "lat", "long")
 
 oth_coordinates = data.frame(location = c("Botanical Garden", "Prairie Ridge", "Hubbard Brook", "Moosilauke", "Russell", "Stinson", "C", "H", "M"), 
@@ -38,7 +38,7 @@ temp1 = data.frame(t(temp))
 names(temp1) = all_coordinates$location #up til here is definitely useful
 temp2 = data.frame(t(temp1))
 names(temp2) = c("temp_normals_may", "temp_normals_june", "temp_normals_july")
-write.csv(temp2, file = "~/Desktop/caterpillars-count-analysis/data/prism_temp_northerncomp.csv")
+write.csv(temp2, file = "data/environmental/prism_temp_northerncomp.csv")
 
 #30 year temp normals data for all 5 regions
 precip = extract(normals_precip, all_coordinates[,3:2]) 
@@ -48,9 +48,9 @@ precip2 = data.frame(t(precip1))
 names(precip2) = c("ppt_normals_1", "ppt_normals_2", "ppt_normals_3", "ppt_normals_4",
                    "ppt_normals_5", "ppt_normals_6", "ppt_normals_7", "ppt_normals_8",
                    "ppt_normals_9", "ppt_normals_10", "ppt_normals_11", "ppt_normals_12")
-write.csv(precip2, file = "~/Desktop/caterpillars-count-analysis/data/prism_precip_northerncomp.csv")
+write.csv(precip2, file = "data/environmental/prism_precip_northerncomp.csv")
 
 # Read in csvs if finished obtaining data
-temperature = read.csv("data/prism_temp_northerncomp.csv")
-precipitation = read.csv("data/prism_precip_northerncomp.csv")
+temperature = read.csv("data/environmental/prism_temp_northerncomp.csv")
+precipitation = read.csv("data/environmental/prism_precip_northerncomp.csv")
 

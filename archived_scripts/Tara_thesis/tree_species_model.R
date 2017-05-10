@@ -1,4 +1,5 @@
 #Tree species model
+#
 source("cleaning_scripts/data_cleaning.R")
 
 #load packages
@@ -7,10 +8,10 @@ library(tidyr)
 library(dplyr)
 
 #read in data
-all_surveyTrees = read.csv("data/arths_survey/tbl_surveyTrees.csv", header=F)
-leaf_app = read.table("data/arths_survey/LeafAreaDatabase_20131126.txt", header=T, sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE)
-leaf_tri = read.table("data/arths_survey/LeafPhotoAreaDatabase_CC.txt", header=T, sep= '\t', quote="\"", fill = T)     #this is only a small subset of leaf area for the triangle for the most common trees
-plant_codes = read.csv("data/arths_survey/USA&AppalachianTrees_2016.csv", stringsAsFactors = F, header=T)
+all_surveyTrees = read.csv("data/trees/tbl_surveyTrees.csv", header=F)
+leaf_app = read.table("data/trees/LeafAreaDatabase_20131126.txt", header=T, sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE)
+leaf_tri = read.table("data/trees/LeafPhotoAreaDatabase_CC.txt", header=T, sep= '\t', quote="\"", fill = T)     #this is only a small subset of leaf area for the triangle for the most common trees
+plant_codes = read.csv("data/trees/USA&AppalachianTrees_2016.csv", stringsAsFactors = F, header=T)
 
 #organizes column headers
 names(all_surveyTrees) = c("siteID", "circle", "survey", "plantSpecies")
@@ -49,13 +50,15 @@ trees_tri$plantSpecies = as.factor(trees_tri$plantSpecies)
 
 #merge tree sp with corrections with vis_tri
 vis_tri1 = merge(vis_tri, trees_tri, by.x= "loc_ID", by.y= "loc_ID", all.x=TRUE)
-vis_tri2 = dplyr::select(vis_tri1, -loc_ID, -clean_plantSp, -circle.y, -survey.y, -year.y, -siteID, -date)
+vis_tri2 = dplyr::select(vis_tri1, -loc_ID, -clean_plantSp, -time, -circle.y, -survey.y, -year.y, -siteID)
 names(vis_tri2) = c("surveyID", "userID", "site", "survey", "circle", "date", "julianday", "plantSp", "herbivory", 
                     "arthropod", "arthCode", "length", "count", "notes.y", "notes.x", "surveyType", "leafCount", "wetLeaves", "year", 
                     "biomass", "clean_plantSp")
 
 #merge triangle surveys and appalachian surveys
-vis_app = cleandata.app %>% dplyr::filter(surveyType =="Visual") %>% dplyr::select(-date) %>% dplyr::rename(date = date2)
+vis_app = cleandata.app %>% 
+  dplyr::filter(surveyType =="Visual") %>%
+  dplyr::select(-time)  
 vis = rbind(vis_tri2, vis_app)
 
 #add unique identifier column for surveys
@@ -71,12 +74,16 @@ vis_food = filter(vis, arthCode %in% birdfood)
 vis_caterpillar = filter(vis, arthCode == "LEPL")
 
 #group by unique surveys and summarize arthropod density
-vis_food_count = vis_food %>% group_by(site, circle, survey, date) %>% summarise(sum(count))
+vis_food_count = vis_food %>%
+  group_by(site, circle, survey, date) %>%
+  summarise(sum(count))
 vis_food_count$identifier = paste0(vis_food_count$site, vis_food_count$circle, vis_food_count$survey, vis_food_count$date)
 names(vis_food_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
 vis_food_count = data.frame(vis_food_count)
 
-vis_caterpillar_count = vis_caterpillar %>% group_by(site, circle, survey, date) %>% summarise(sum(count))
+vis_caterpillar_count = vis_caterpillar %>% 
+  group_by(site, circle, survey, date) %>% 
+  summarise(sum(count))
 vis_caterpillar_count$identifier = paste0(vis_caterpillar_count$site, vis_caterpillar_count$circle, vis_caterpillar_count$survey, vis_caterpillar_count$date)
 names(vis_caterpillar_count) = c("site", "circle", "survey", "date", "sum_count", "identifier")
 vis_caterpillar_count = data.frame(vis_caterpillar_count)
@@ -116,13 +123,18 @@ trees_ordered = trees_freq[order(trees_freq$Freq, decreasing = T),]
 trees_ordered1 = filter(trees_ordered, trees !="UNID") # remove unidentified tree species
 common_trees = trees_ordered1[1:10,]
 #just Appalachians
-trees_app = food_count_merged1 %>% filter(site %in% appalachians) %>% dplyr::select(plantSpecies) 
+trees_app = food_count_merged1 %>% 
+  filter(site %in% appalachians) %>% 
+  dplyr::select(plantSpecies) 
 trees_freq_app = data.frame(table(trees_app))
 trees_ordered_app = trees_freq_app[order(trees_freq_app$Freq, decreasing = T),] 
 trees_ordered1_app = filter(trees_ordered_app, trees_app !="UNID") # remove unidentified tree species
 common_trees_app = trees_ordered1_app[1:10,]
+
 #just triangle
-trees_tri = food_count_merged1 %>% filter(site %in% triangle) %>% dplyr::select(plantSpecies) 
+trees_tri = food_count_merged1 %>% 
+  filter(site %in% triangle) %>% 
+  dplyr::select(plantSpecies) 
 trees_freq_tri = data.frame(table(trees_tri))
 trees_ordered_tri = trees_freq_tri[order(trees_freq_tri$Freq, decreasing = T),] 
 trees_ordered1_tri = filter(trees_ordered_tri, trees_tri !="UNID") # remove unidentified tree species
@@ -145,7 +157,7 @@ names(leaf_app_clean1) = c("TreeCodes", "leaf_area_cm2")
 leaf_tri1 = dplyr::select(leaf_tri, TreeCode, Leaf.Area..cm.2.)
 names(leaf_tri1) = c("TreeCodes", "leaf_area_cm2")
 all_leaves = rbind(leaf_app_clean1, leaf_tri1)
-  
+
 leaves_grouped =  group_by(all_leaves, TreeCodes) 
 leaves_sp = dplyr::summarize(leaves_grouped, (mean(leaf_area_cm2)))
 
@@ -249,13 +261,13 @@ names(plotting.log_tri_caterpillar)=c("tree_sp", "means", "M", "std", "r", "Min"
 #Plot HSD results
 par(mfrow = c(2, 2), mar=c(7,4,3,3))
 barplot(plotting.log_app_food$means, names.arg=plotting.log_app_food$tree_sp, las=2, ylab="log mean arth density", 
-              ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
-              col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
+        ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_app_food$M)
 
 #caterpillar appalachians
 barplot(plotting.log_app_caterpillar$means, names.arg=plotting.log_app_caterpillar$tree_sp, las=2, ylab="log mean arth density", 
-         ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
         col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_app_caterpillar$M)
 
@@ -267,32 +279,32 @@ text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_tri_food$M)
 
 #caterpillar triangle
 barplot(plotting.log_tri_caterpillar$means, names.arg=plotting.log_tri_caterpillar$tree_sp, las=2, ylab="log mean arth density", 
-         ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
+        ylim = c(-.3,.4), cex.names=.65, cex.axis = .75, 
         col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_tri_caterpillar$M)
 
 #max and min average normalized values for each tree species
 app_food_range= count_common_app_food %>%
-               group_by(plantSpecies) %>%
-               dplyr::summarize(mean = mean(count_norm)) %>%
-               filter(plantSpecies != "Carolina silverbell") %>%
-               dplyr::summarize(min = min(mean), max = max(mean))
+  group_by(plantSpecies) %>%
+  dplyr::summarize(mean = mean(count_norm)) %>%
+  filter(plantSpecies != "Carolina silverbell") %>%
+  dplyr::summarize(min = min(mean), max = max(mean))
 
 app_caterpillar_range = count_common_app_caterpillar %>%
-                       group_by(plantSpecies) %>%
-                       dplyr::summarize(mean = mean(count_norm)) %>%
-                       filter(plantSpecies != "Carolina silverbell") %>%
-                       dplyr::summarize(min = min(mean), max = max(mean))
+  group_by(plantSpecies) %>%
+  dplyr::summarize(mean = mean(count_norm)) %>%
+  filter(plantSpecies != "Carolina silverbell") %>%
+  dplyr::summarize(min = min(mean), max = max(mean))
 tri_food_range = count_common_tri_food %>%
-                group_by(plantSpecies) %>%
-                dplyr::summarize(mean = mean(count_norm)) %>%
-                filter(plantSpecies != "Pin oak") %>%
-                dplyr::summarize(min = min(mean), max = max(mean))
+  group_by(plantSpecies) %>%
+  dplyr::summarize(mean = mean(count_norm)) %>%
+  filter(plantSpecies != "Pin oak") %>%
+  dplyr::summarize(min = min(mean), max = max(mean))
 tri_caterpillar_range = count_common_tri_caterpillar %>%
-                       group_by(plantSpecies) %>%
-                       dplyr::summarize(mean = mean(count_norm)) %>%
-                       filter(plantSpecies != "Pin oak") %>%
-                       dplyr::summarize(min = min(mean), max = max(mean))
+  group_by(plantSpecies) %>%
+  dplyr::summarize(mean = mean(count_norm)) %>%
+  filter(plantSpecies != "Pin oak") %>%
+  dplyr::summarize(min = min(mean), max = max(mean))
 
 
 
