@@ -38,12 +38,9 @@ names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
 # Only include valid entries in surveys
 surveys = tempsurveys[tempsurveys$isValid == 1,]
 
-# Convert 'survey' field to character from factor
-surveys$survey = as.character(surveys$survey)
-
 # Fix a few missing dates (based on checking old MS Access database)
-surveys$datetime = as.POSIXlt(surveys$dateStart, format = "%Y-%m-%d %H:%M:%S")
-surveys$date = as.POSIXlt(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d")
+surveys$datetime = as.POSIXct(surveys$dateStart, format = "%Y-%m-%d %H:%M:%S")
+surveys$date = as.POSIXct(word(surveys$dateStart, 1, sep = " "), format = "%Y-%m-%d")
 surveys$time = format(surveys$datetime, "%H:%M")
 surveys$date[surveys$surveyID %in% c(6497, 6499, 6501, 6502, 6503, 6504, 6507)] = "2011-06-05"
 surveys$date[surveys$surveyID == 9992] = "2011-06-01"
@@ -53,76 +50,69 @@ surveys$date[surveys$site == 8892351 & surveys$dateStart == "0000-00-00 00:00:00
 surveys$survey = toupper(surveys$survey)
 
 # Merge orders and surveys table
-orders2 = merge(surveys, orders, by = 'surveyID', sort = FALSE, all.x = TRUE)
-orders2$julianday = yday(orders2$date)
-orders2$date = as.character(orders2$date)
-
-orders3 = orders2[, c('surveyID', 'userID','site', 'survey', 'circle', 'date', 'time.x', 'julianday',
-                      'plantSp','herbivory','arthropod','length',
-                      'count','notes.y','notes.x', 'surveyType', 'leafCount')]
-names(orders3)[names(orders3) == 'time.x'] = 'time'
+orders2 = left_join(surveys, orders, by = 'surveyID') %>%
+  mutate(julianday = yday(date), date = as.character(date)) %>%
+  select(surveyID, userID, site, survey, circle, date, time.x, julianday,
+                      plantSp,herbivory, arthropod, length,
+                      count, notes.y , notes.x, surveyType, leafCount) %>%
+  rename(time = time.x) %>%
+  filter(arthropod != "Leaf Roll" | is.na(arthropod))
 
 # Clean arthropod names and then add column with arthopod order code
-orders3$arthropod[orders3$arthropod == "Bees and Wasps (Hymenoptera excluding ants)"] = 
+orders2$arthropod[orders2$arthropod == "Bees and Wasps (Hymenoptera excluding ants)"] = 
   "Bees and Wasps (Hymenoptera, excluding ants)"
-orders3$arthropod[orders3$arthropod == "Leaf Hoppers and Cicadas (Auchenorrhyncha)"] = 
+orders2$arthropod[orders2$arthropod == "Leaf Hoppers and Cicadas (Auchenorrhyncha)"] = 
   "Leaf hoppers and Cicadas (Auchenorrhyncha)"
-orders3$arthropod[orders3$arthropod == "Butterflies and Moths (Lepidoptera adult)"] = 
+orders2$arthropod[orders2$arthropod == "Butterflies and Moths (Lepidoptera adult)"] = 
   "Moths, Butterflies (Lepidoptera)"
-orders3$arthropod[orders3$arthropod == "OTHER (describe in Notes)"] = 
+orders2$arthropod[orders2$arthropod == "OTHER (describe in Notes)"] = 
   "Other (describe in Notes)"
-orders3$arthropod[orders3$arthropod == "Unidentified"] = 
+orders2$arthropod[orders2$arthropod == "Unidentified"] = 
   "UNIDENTIFIED (describe in Notes)"
 
 # Change records of termites to "Other"; users did not correctly identify
-orders3$arthropod[orders3$arthropod == "Termites (Isoptera)"] = 
+orders2$arthropod[orders2$arthropod == "Termites (Isoptera)"] = 
   "Other (describe in Notes)"
 
 #Change NAs in counts to 0s, and NAs in arthropods to none- mobile phone submissions don't recognize "nones"
-orders3["arthropod"][is.na(orders3["arthropod"])] <- "NONE"
-orders3["count"][is.na(orders3["count"])] <- 0
+orders2$arthropod[is.na(orders2$arthropod)] <- "NONE"
+orders2$count[is.na(orders2$count)] <- 0
 
 
-# Remove all records where the Order is "Leaf Roll"
-orders4 = orders3[orders3$arthropod != "Leaf Roll",]
+arthcodes = read.csv('data/arthropods/arth_codes.csv', header=T) %>%
+  select(ArthCode, DataName) %>%
+  rename(arthCode = ArthCode, arthropod = DataName)
 
-arthcodes = read.csv('data/arthropods/arth_codes.csv', header=T)
-arthcodes1 = arthcodes[, c('ArthCode', 'DataName')]
-names(arthcodes1) = c('arthCode', 'arthropod')
-cleandata <- merge(orders4, arthcodes1, by = 'arthropod', all.x = TRUE, sort = FALSE)
-cleandata <- cleandata[, c('surveyID', 'userID','site', 'survey', 'circle', 'date','time', 'julianday',
-                       'plantSp','herbivory','arthropod','arthCode','length',
-                       'count','notes.y','notes.x', 'surveyType', 'leafCount')]
-cleandata <- cleandata[order(cleandata$date),]
+joindata <- left_join(orders2, arthcodes, by = 'arthropod') %>%
+  select(surveyID, userID,site, survey, circle, date,time, julianday,
+                       plantSp,herbivory,arthropod,arthCode,length,
+                       count,notes.y,notes.x, surveyType, leafCount) %>%
+  arrange(date)
 
 # Add a column indicating if the leaves were wet
-tempwet <- sort(c(grep("wet leaves", cleandata$notes.x), grep("Wet leaves", cleandata$notes.x), 
-                  grep("very dewy", cleandata$notes.x), grep("Wet Leaves", cleandata$notes.x)))
-cleandata$wetLeaves = rep('no', nrow(cleandata))
-cleandata$wetLeaves[tempwet] = 'yes'
+tempwet <- sort(c(grep("wet leaves", joindata$notes.x), grep("Wet leaves", joindata$notes.x), 
+                  grep("very dewy", joindata$notes.x), grep("Wet Leaves", joindata$notes.x)))
+joindata$wetLeaves = rep('no', nrow(joindata))
+joindata$wetLeaves[tempwet] = 'yes'
 
 # Add a year column
-cleandata$year = substring(cleandata$date, 1, 4)
+joindata$year = substring(joindata$date, 1, 4)
 
 # Change arthCodes to class character
-cleandata$arthCode = as.character(cleandata$arthCode)
+joindata$arthCode = as.character(joindata$arthCode)
 
- #Take out large caterpillar colonies
-#cleandata <- cleandata[!(cleandata$arthCode == "LEPL" & cleandata$count > 10),]
- #or
-#cleandata$count[cleandata$arthCode == "LEPL" & cleandata$count > 5] = 5
 
 # Cleaning beat sheets (PR and BG) and isolating # leaves into a new column
 
 # Beat sheet designation was in notes field prior to 2016
-beatsheet_pre2016 <- cleandata[grep("BEAT SHEET", cleandata$notes.x), ] 
+beatsheet_pre2016 <- joindata[grep("BEAT SHEET", joindata$notes.x), ] 
 
 # In 2016, surveyType was not getting recorded when entered from website, so 
 # beat sheet is designated by either the surveyType field when entered by app or
 # by a leaf count that differed from the 50 expected of a visual survey.
 # (Participants were told to record 49 or 51 if the number of leaves in a beat
 # sheet survey truly was 50.)
-beatsheet_post2016 <- cleandata[((cleandata$leafCount != "50") & (cleandata$year>= "2016")) | (cleandata$surveyType=="Beat_Sheet"),] 
+beatsheet_post2016 <- joindata[((joindata$leafCount != "50") & (joindata$year>= "2016")) | (joindata$surveyType=="Beat_Sheet"),] 
 beatsheet_post2016 <- beatsheet_post2016[!is.na(beatsheet_post2016$surveyID),]
 
 # Pull out the leafCount from the notes
@@ -139,8 +129,8 @@ leavesNumTemp8 <- gsub("unknown", NA, leavesNumTemp7)
 beatsheet_pre2016$leafCount <- as.numeric(leavesNumTemp8)
 beatsheet<-rbind(beatsheet_pre2016, beatsheet_post2016)
 beatsheet$surveyType <- "Beat_Sheet"
-cleandata2 <- cleandata[!cleandata$surveyID %in% beatsheet$surveyID, ]
-cleandata <- rbind(cleandata2, beatsheet)
+visual <- joindata[!joindata$surveyID %in% beatsheet$surveyID, ]
+cleandata <- rbind(visual, beatsheet)
 cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 
 #--------------------------------------------------------------------------------
@@ -170,10 +160,10 @@ for (ord in arthlist) {
   cleandata$biomass[cleandata$arthCode == ord] <- biomass
 }
 
-# Orders with regression data:
-regorders <- as.vector(reg.data.temp$arthCode)
+#---------------------------------------------------------------------------------
 
-#Clean Tree sp names (pre-2015 no master table for tree sp names)
+## Clean Tree sp names (pre-2015 no master table for tree sp names)
+
 cleandata$plantSp = tolower(cleandata$plantSp)
 plantFreq=data.frame(table(dplyr::select(cleandata, plantSp)))
 
@@ -197,7 +187,7 @@ cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "su
     ifelse (cleandata$plantSp %in% c("carolina ash", "carolina ash "), "Carolina ash",
     ifelse (cleandata$plantSp %in% c("carolina silver", "carolina silver bell", "carolina silverbell", "silverbell"), "Carolina silverbell",
     ifelse (cleandata$plantSp %in% c("chalk maple"), "Chalk maple",
-    ifelse (cleandata$plantSp %in% c("chestnut oak"), "Chesnut oak",
+    ifelse (cleandata$plantSp %in% c("chestnut oak"), "Chestnut oak",
     ifelse (cleandata$plantSp %in% c("common persimmon", "persimmon", "perssimon"), "Common persimmon",  
     ifelse (cleandata$plantSp %in% c("dwarf paw paw", "dwarf pawpaw", "baby paw paw"), "Dwarf pawpaw",   
     ifelse (cleandata$plantSp %in% c("eastern red bud", "eastern red bud ", "eastern redbud", "redbud"), "Eastern redbud",
@@ -208,7 +198,7 @@ cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "su
     ifelse (cleandata$plantSp %in% c("hazelnut", "hazlenut"), "American hazelnut",
     ifelse (cleandata$plantSp %in% c("maple-leaved viburnum", "mapleleaf viburnum", "mapleleaf viburnum ", "mapleleaf-viburnum", "maple-leaf viburnum "), "Mapleleaf viburnum",
     ifelse (cleandata$plantSp %in% c("mountain laurel"), "Mountain laurel",
-    ifelse (cleandata$plantSp %in% c("mucslewood", "muscewood", "muscle wood ", "musclewood"), "Mucslewood",
+    ifelse (cleandata$plantSp %in% c("mucslewood", "muscewood", "muscle wood ", "musclewood"), "American hornbeam",
     ifelse (cleandata$plantSp %in% c("mulberry", "white mulberry"), "White mulberry", 
     ifelse (cleandata$plantSp %in% c("paw paw", "paw-paw", "pawpaw"), "Pawpaw", 
     ifelse (cleandata$plantSp %in% c("pin oak"), "Pin oak", 
@@ -236,6 +226,7 @@ cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "su
      
   
 #Removing exclosure trees (only 2016)    
+
 cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
 
 #----------------------------------------------------------------------------------------
@@ -265,7 +256,9 @@ site_area = area %>%
 # Leaf area by species and site
 species_area = area %>%
   group_by(ComName) %>%
-  summarize(area_cm2 = mean(area_cm2))
+  summarize(area_cm2 = mean(area_cm2)) %>% 
+  arrange(desc(area_cm2)) %>% 
+  data.frame()
 
 # Now need to merge in leaf area info by
 # --species, site, station, and date when possible
