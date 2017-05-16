@@ -1,8 +1,7 @@
 # Phenology plot for paper
-# Need volunteer beat sheet data from 2016
 
-setwd('c:/git/caterpillars-count-analysis')
-source("data_cleaning.r")
+#setwd('c:/git/caterpillars-count-analysis')
+source("cleaning_scripts/data_cleaning.r")
 
 par(mfrow = c(3,2), mar = c(3,4,3,2), oma = c(3,3,2,2))
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
