@@ -1,6 +1,8 @@
+# Calculating date of 1000 GDDs for 2000-2016 using daily average temps at Prairie Ridge and NCBG
+
 # Downloading temperature data from prism and calculating GDD
 
-# Install prism package
+# Install prism and raster package
 library(prism)
 library(raster)
 
@@ -16,7 +18,8 @@ library(raster)
 if (0) {
 
 # Set path and download data
-# This takes many hours
+# This takes many hours for multiple years
+# Can adjust min and max date
 get_prism_dailys(type = 'tmean', minDate = "2000-1-1", maxDate = "2006-12-31",
                  keepZip = FALSE)
 
@@ -24,6 +27,7 @@ get_prism_dailys(type = 'tmean', minDate = "2000-1-1", maxDate = "2006-12-31",
 
 
 # Longitude and latitude of 3 locations
+# Can adjust locations needed
 longlat = data.frame(location = c("Botanical Garden", "Prairie Ridge", "Hubbard Brook"), 
                      lat = c(35.898645, 35.809674, 43.942407), 
                      long = c(-79.031469, -78.716546, -71.710066))
@@ -35,7 +39,8 @@ if (0) {
 # Might need to change Hubbard Brook longlat
 
 list <- ls_prism_data()[,1]
-files<-paste('c:/users/hayeste/my documents/495/prism/',list,'/',list,'.bil',sep='')
+files<-paste('c:/users/hayeste/my documents/495/prism/',list,'/',list,'.bil',sep='') 
+  # will need to enter in your own data's location
 tmeans<-stack(files)
 ls_prism_data()[1:10,]
 
@@ -43,14 +48,15 @@ foo = extract(tmeans, longlat[,3:2])
 temp <- t(foo)
 temp <- data.frame(temp)
 names(temp) = c('BG', 'PR', "HB")
-filenames <- gsub('_provisional', "", ls_prism_data()[,1])
+filenames <- gsub('_provisional', "", ls_prism_data()[,1]) # "provisional" data is more recent
 filenames <- gsub('_stable', "", filenames)
 temp$date <- as.numeric(word(filenames, 4, 4, sep = fixed("_")))
 temp$date = as.Date(as.character(temp$date), format = '%Y%m%d')
 temp$jday = yday(temp$date)
 temp$year = as.numeric(substr(as.character(temp$date), 1, 4))
 temp.order <- temp[with(temp, order(year, jday)), ]
-write.csv(temp.order, file = "c:/git/caterpillars-count-analysis/data/prism_temp.csv")
+write.csv(temp.order, file = "c:/git/caterpillars-count-analysis/data/environmental/prism_temp.csv")
+  # set to own working directory
 
 } # end if (0)
 
@@ -65,7 +71,7 @@ prismtemp <- prismtemp[,2:7]
 
 gddcalc = function(data,      # dataset with a year, date, and julian day column (labeled jday, date, year)
                    site,      # either "PR", "BG", or "HB"
-                   year)      # enter year between 2007 and 2016
+                   year)      # enter year between 2000 and 2016
 {  
   
 subdata <- data[, c(site, "date", "jday", "year")]
@@ -89,7 +95,7 @@ return(refnum)
 } # end function
 
 
-### For loop for creating a dataset of all years and all sites' reference jday
+### For loop for creating a dataset of all years and all sites' reference jday (jday at 1000 GDDs for comparison)
 par(mfrow = c(3,10), mar = c(2,2,1,1), oma = c(1,1,1,1))
 gddyear <- c()
 
@@ -115,7 +121,3 @@ points(gddyear$year, gddyear$hb.gdd, col = 'green3', type = 'l', lwd = 2)
 #bg <- prism_slice(c(longlat[1,3],longlat[1,2]),ls_prism_data()[1:80,1])
 #pr <- prism_slice(c(longlat[2,2],longlat[2,3]),ls_prism_data()[,1])
 #hb <- prism_slice(c(longlat[3,2],longlat[3,3]),ls_prism_data()[,1])
-
-
-
-
