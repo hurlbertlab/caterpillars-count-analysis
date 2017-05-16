@@ -5,7 +5,8 @@
 # See http://onlinelibrary.wiley.com/doi/10.1002/ece3.1273/full for information about MODIS data
 # (Table 2 under Method)
 
-setwd('C:/git/caterpillars-count-analysis/modis-and-temp')
+# Set working directory to where you want data downloaded to:
+# Example: setwd('C:/git/caterpillars-count-analysis/data/modis-and-temp')
 
 # Load required libraries
 library(MODISTools)
@@ -18,6 +19,9 @@ library(maptools)
 library(rgeos)
 
 # Format MODIS data
+## CAN ADJUST FOR YEAR AND LOCATION
+## Currently set for 2015 and 2016 PR and BG data
+
 # 2015
 modis15 = data.frame(lat = c(35.898645, 35.809674), long = c(-79.031469, -78.716546))
 modis15$start.date = rep(2015, nrow(modis15)) #not sure if these dates are formatted correctly
@@ -30,6 +34,7 @@ modis16$end.date = rep(2016, nrow(modis16))
 modis16$ID = c(1,2)
 
 # Download MODIS data
+## CAN ADJUST WHAT TYPE OF DATA IS DOWNLOADED
 # 2015
 MODISSubsets(LoadDat = modis15, Products = 'MOD13Q1', 
              Bands = c('250m_16_days_EVI', '250m_16_days_pixel_reliability'), 
@@ -39,7 +44,6 @@ prmodis15 <- read.csv(list.files(pattern = ".asc")[2], header = FALSE, as.is = T
 bgmodis15$julianday <- as.numeric(substring(bgmodis15$V8, 6,8))
 prmodis15$julianday <- as.numeric(substring(prmodis15$V8, 6,8))
 # 2016
-#needs edits since files were not created
 MODISSubsets(LoadDat = modis16, Products = 'MOD13Q1', 
              Bands = c('250m_16_days_EVI', '250m_16_days_pixel_reliability'), 
              Size = c(1,1))
@@ -51,7 +55,7 @@ prmodis16$julianday <- as.numeric(substring(prmodis16$V8, 6,8))
 # Calculating average EVI across area (not taking into account pixel reliability)
 # Botanical Garden 2015:
 tempbgevi = bgmodis15[grep("EVI", bgmodis15$V6),]
-bgevi <- tempbgevi[11:91]
+bgevi <- tempbgevi[11:91] # will need to adjust if you change Size (in MODISSubsets func)
 bgmean1 <- apply(bgevi, 1, mean)
 bgmean2 <- bgmean1 / 10000
 bgmean15 <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
@@ -60,7 +64,7 @@ plot(bgmean15$julianday, bgmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI
      col = 'blue', type = 'l')
 # Prairie Ridge 2015:
 tempprevi = prmodis15[grep("EVI", prmodis15$V6),]
-previ <- tempprevi[11:91]
+previ <- tempprevi[11:91] # will need to adjust if you change Size (in MODISSubsets func)
 prmean1 <- apply(previ, 1, mean)
 prmean2 <- prmean1 / 10000
 prmean15 <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
@@ -69,7 +73,7 @@ plot(prmean15$julianday, prmean15$EVImean, xlab = "Julian Day", ylab = "Mean EVI
      col = 'red', type = 'l')
 # Botanical Garden 2016:
 tempbgevi = bgmodis16[grep("EVI", bgmodis16$V6),]
-bgevi <- tempbgevi[11:91]
+bgevi <- tempbgevi[11:91] # will need to adjust if you change Size (in MODISSubsets func)
 bgmean1 <- apply(bgevi, 1, mean)
 bgmean2 <- bgmean1 / 10000
 bgmean16 <- data.frame(julianday = tempbgevi$julianday, EVImean = bgmean2)
@@ -78,7 +82,7 @@ plot(bgmean16$julianday, bgmean16$EVImean, xlab = "Julian Day", ylab = "Mean EVI
      col = 'blue', type = 'l')
 # Prairie Ridge 2016:
 tempprevi = prmodis16[grep("EVI", prmodis16$V6),]
-previ <- tempprevi[11:91]
+previ <- tempprevi[11:91] # will need to adjust if you change Size (in MODISSubsets func)
 prmean1 <- apply(previ, 1, mean)
 prmean2 <- prmean1 / 10000
 prmean16 <- data.frame(julianday = tempprevi$julianday, EVImean = prmean2)
@@ -178,8 +182,12 @@ points(greenups$year, greenups$BG, type = 'l', col = 'blue')
 legend("topleft", c('PR', 'BG'), lwd = c(1,1), lty = c(1,1), 
        col = c('red', 'blue'))
 
-# Download and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
-prtemp1 = read.csv('pr_temp.csv') # Data retrieved from the past 180 days on Sept. 1, 2015, does not include Sept. 1 
+# TEMPERATURE
+# This temperature data was never used beyond 395, PRISM was used for thesis -Tracie
+# Keeping it here in case useful
+
+# Read in and clean temperature data Prairie Ridge (Reedy Creek Weather Station)
+prtemp1 = read.csv('data/modis-and-temp/pr_temp.csv') # Data retrieved from the past 180 days on Sept. 1, 2015, does not include Sept. 1 
 prtemp1$julianday = c(64:243) # Add Julian Day for date conversion, do days match up?
 prtemp1$date = as.Date(prtemp1$julianday, origin = '2014-12-31') # JD 1 is Jan. 1, 2015
 prtemp1$avgmaxmin = (prtemp$maxtemp + prtemp$mintemp)/2
@@ -187,7 +195,7 @@ prtemp = prtemp1[,c(10,9,3,6,2,11)]
 names(prtemp) = c('date', 'julianday', 'maxtemp', 'mintemp', 'avgtemp', 'avgmaxmin')
 
 # Download and clean temperature data NC Botanical Garden
-bgtemp1 = read.table('ncbg_temp.txt')
+bgtemp1 = read.table('data/modis-and-temp/ncbg_temp.txt')
 bgtemp2 = bgtemp1[,c(1, 4, 5)]
 names(bgtemp2) = c('date', 'hitemp', 'lowtemp') # Each date has 23 temp values, one each hour except midnight
 # For loops for determining highest of max values each day and lowest of min values each day:
@@ -247,7 +255,7 @@ mtext("Selected Arthropod Mean Density", side=4, las = 0, line = 3)
 legend("topleft", c('BG mean EVI', 'PR mean EVI', 'BG arth density', 'PR arth density'),
        lwd = c(3,3,1,1), lty = c(1,1,1,1), col = c('blue', 'red', 'blue', 'red'))
 
-# Merging for writing data
+# Merging
 bgtempmerge = bgtemp[c(1,2,5)]
 names(bgtempmerge) = c('date', 'julianday', 'bgavgtemp')
 bgtempmerge$bgavgtemp = round(bgtempmerge$bgavgtemp, digits = 2)
@@ -261,13 +269,6 @@ mergetemp = merge(bgtempmerge, prtempmerge, by = 'julianday', all = T)
 mergeEVI = merge(bgEVImerge, prEVImerge, by = 'julianday', all = T)
 premerge = merge(mergetemp, mergeEVI, by = 'julianday', all = T)
 temp_EVI_GDD = merge(premerge, GDD, by = 'julianday', all = T)
-setwd('c:/git/caterpillars-count-analysis/data')
-#write.csv(temp_EVI_GDD, file = "temp_EVI_GDD.csv")
-# Only for 2015
 
-# Change date to date class
-bands$bandingDate <- as.Date(bands$bandingDate, '%m/%d/%Y')
-
-CRS("+proj=laea +lat_0=40 +lon_0=-100") # lambert azimuthal equal area
 
 
