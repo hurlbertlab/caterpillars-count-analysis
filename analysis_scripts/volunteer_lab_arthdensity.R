@@ -135,10 +135,6 @@ names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #cha
 #---------plotting for figures------------------
 
 #plot relative and mean arth frequencies
-## Example code:
-# barplot(counts, main="Car Distribution by Gears and VS",
-# xlab="Number of Gears", col=c("darkblue","red"),
-# legend = rownames(counts), beside=TRUE) 
 
 pdf('plots/paper_plots/Figures1to6_arthropods.pdf', height = 6, width = 8)
 
@@ -193,7 +189,6 @@ laboratory = lm(lab_bs ~ lab_vis, data = arth_means2)
 abline(laboratory, col = "black", lwd = 2)
 abline(a = 0, b = 1, col = 'gray50', lwd = 1)
 
-#legend
 
 #figure D
 arth_selected_bs1 = as.matrix(arth_selected_bs)

@@ -14,6 +14,7 @@ plant_codes = read.csv("data/trees/USA&AppalachianTrees_2016.csv", stringsAsFact
 
 #organizes column headers
 names(all_surveyTrees) = c("siteID", "circle", "survey", "plantSpecies")
+all_surveyTrees$plantSpecies = tolower(all_surveyTrees$plantSpecies)
 
 #Create 1 dataset with all data from PR/NCBG 2015 & 2016
 lab.triangle = rbind(labdata.pr, labdata.bg)
@@ -41,10 +42,10 @@ trees_tri$loc_ID = paste0(trees_tri$site, trees_tri$circle, trees_tri$survey, tr
 
 #adjust for surveys that were moved to different trees in different years
 trees_tri$plantSpecies = as.character(trees_tri$plantSpecies)
-trees_tri$plantSpecies[trees_tri$loc_ID %in% c("1173A2015", "1173A2014")] = "Devil's walkingstick" 
-trees_tri$plantSpecies[trees_tri$loc_ID %in% c("1177D2015", "1177D2014")] = "Tuliptree" 
-trees_tri$plantSpecies[trees_tri$loc_ID %in% c("88923564B2015", "88923564B2014")] = "Mapleleaf viburnum" 
-trees_tri$plantSpecies[trees_tri$loc_ID %in% c("88923567E2015", "88923567E2014")] = "Sugar maple"  
+trees_tri$plantSpecies[trees_tri$loc_ID %in% c("1173A2015", "1173A2014")] = "devil's walkingstick" 
+trees_tri$plantSpecies[trees_tri$loc_ID %in% c("1177D2015", "1177D2014")] = "tuliptree" 
+trees_tri$plantSpecies[trees_tri$loc_ID %in% c("88923564B2015", "88923564B2014")] = "mapleleaf viburnum" 
+trees_tri$plantSpecies[trees_tri$loc_ID %in% c("88923567E2015", "88923567E2014")] = "sugar maple"  
 trees_tri$plantSpecies = as.factor(trees_tri$plantSpecies)
 
 #merge tree sp with corrections with vis_tri
@@ -161,6 +162,7 @@ leaves_grouped =  group_by(all_leaves, TreeCodes)
 leaves_sp = dplyr::summarize(leaves_grouped, (mean(leaf_area_cm2)))
 
 #merge avg leaf area app/species with common names 
+plant_codes$ComName = tolower(plant_codes$ComName)
 leaves_sp1 = merge(leaves_sp, plant_codes, by.x = "TreeCodes", by.y = "TreeCode", all.x=T)
 leaves_sp1 = as.data.frame(leaves_sp1)
 leaves_sp1 = dplyr::select(leaves_sp1, -TreeCodes, -TreeSciName, -Notes)
@@ -210,7 +212,7 @@ count_common_tri_caterpillar = dplyr::filter(caterpillar_count_merged2, plantSpe
 #Plot HSD results
 
 #bird food in the appalachians
-lm.log_app_food = lm(count_log10 ~ plantSpecies, data= count_common_app_food)
+lm.log_app_food = lm(count_log10 ~ plantSpecies, data= count_common_app_food) #this is where the errors start
 HSD_log_app_food<- HSD.test(lm.log_app_food, "plantSpecies")
 
 #Create dataframe with results of HSD test
@@ -282,7 +284,8 @@ barplot(plotting.log_tri_caterpillar$means, names.arg=plotting.log_tri_caterpill
         col = c("darkblue", "darkblue", "blue", "deepskyblue3", "deepskyblue2", "deepskyblue1", "deepskyblue1", "deepskyblue1", "deepskyblue1", "aliceblue"))
 text(x=seq(from=.7, to= 11.5 ,by=1.2), y=.35, plotting.log_tri_caterpillar$M)
 
-#max and min average normalized values for each tree species
+# max and min average normalized values for each tree species
+
 app_food_range= count_common_app_food %>%
                group_by(plantSpecies) %>%
                dplyr::summarize(mean = mean(count_norm)) %>%
