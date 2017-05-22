@@ -2,11 +2,11 @@
 # Script for general plotting of data from
 # Caterpillars Count! data exported from the
 # phpMyAdmin project site.
-# ****************Need to go through and add effortByDay argument**************
+
 
 # Run summary_functions.r and data_cleaning.R
-source('summary_functions.r')
-source('data_cleaning.R')
+source('analysis_scripts/summary_functions.r')
+source('cleaning_scripts/data_cleaning.R')
 
 
 # Plotting mean density
@@ -35,11 +35,11 @@ BGlepl16wk = meanDensityByWeek(amsurvey.bg, ordersToInclude = "LEPL", inputYear 
 
 # Average phenology of two sites
 amsurvey = rbind(amsurvey.pr, amsurvey.bg)
-pdf('plots/NC_caterpillars.pdf', height = 6, width = 8)
+#pdf('plots/NC_caterpillars.pdf', height = 6, width = 8)
 lepl15wk = meanDensityByWeek(amsurvey, ordersToInclude = "LEPL", inputYear = 2015, inputSite = c(117,8892356), plot = T, plotVar = 'meanDensity', new = T, color = 'salmon', minLength = 5, lwd = 3, ylab = 'Caterpillar density', xaxt = "n")
 lepl16wk = meanDensityByWeek(amsurvey, ordersToInclude = "LEPL", inputYear = 2016, inputSite = c(117,8892356), plot = T, plotVar = 'meanDensity', new = F, color = 'salmon', minLength = 5, lwd = 3, lty = 'dashed')
 legend("topleft", legend = c(2015, 2016), col = 'salmon', lty = c('solid', 'dashed'), lwd = 3)
 axis(1, at = jdwks, labels = F)
 mtext(c('May-15', 'Jun-1', 'Jun-15', 'Jul-1', 'Jul-15'), 1, at = jdwks, line = 1)
-dev.off()
+#dev.off()
 

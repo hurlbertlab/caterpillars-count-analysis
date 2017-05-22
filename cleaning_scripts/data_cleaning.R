@@ -168,67 +168,102 @@ for (ord in arthlist) {
 #---------------------------------------------------------------------------------
 
 ## Clean Tree sp names (pre-2015 no master table for tree sp names)
-
 cleandata$plantSp = tolower(cleandata$plantSp)
 plantFreq=data.frame(table(dplyr::select(cleandata, plantSp)))
+cleandata$clean_plantSp = cleandata$plantSp
 
-cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "sugar mapl", "sugar maple", "sugar maple "),"Sugar maple", 
-    ifelse (cleandata$plantSp %in% c("alder", "hazel alder"), "Hazel alder",
-    ifelse (cleandata$plantSp %in% c("american basswood", "basswood"), "American basswood",
-    ifelse (cleandata$plantSp %in% c("american beech", "american beech ", "beech"), "American beech",
-    ifelse (cleandata$plantSp %in% c("american bladdernut", "bladdernut"), "American bladdernut",
-    ifelse (cleandata$plantSp %in% c("american chestnut"),"American chestnut",
-    ifelse (cleandata$plantSp %in% c("american holly", "american holly "), "American holly",
-    ifelse (cleandata$plantSp %in% c("american hornbeam", "american hornbeam ", "carpinus caroliniana"), "American hornbeam", 
-    ifelse (cleandata$plantSp %in% c("american sycamore"), "American sycamore",
-    ifelse (cleandata$plantSp %in% c("arsp", "devil's walking stick", "devil's walkingstick","devil's-walking-sticl", "devils claw", "devils walking stick", "devils-walkingstick"), "Devil's walkingstick",
-    ifelse (cleandata$plantSp %in% c("bear huckleberry"), "Bear huckleberry",
-    ifelse (cleandata$plantSp %in% c("bitternut hickory", "butternut hickory"), "Bitternut hickory",
-    ifelse (cleandata$plantSp %in% c("black gum"), "Black gum",
-    ifelse (cleandata$plantSp %in% c("black oak"), "Black oak",
-    ifelse (cleandata$plantSp %in% c("black willow", "black willow ", "willow", "wilow"), "Black willow",
-    ifelse (cleandata$plantSp %in% c("box elder", "box elder "), "Box elder",
-    ifelse (cleandata$plantSp %in% c("buffalo nut"), "Buffalo nut",
-    ifelse (cleandata$plantSp %in% c("carolina ash", "carolina ash "), "Carolina ash",
-    ifelse (cleandata$plantSp %in% c("carolina silver", "carolina silver bell", "carolina silverbell", "silverbell"), "Carolina silverbell",
-    ifelse (cleandata$plantSp %in% c("chalk maple"), "Chalk maple",
-    ifelse (cleandata$plantSp %in% c("chestnut oak"), "Chestnut oak",
-    ifelse (cleandata$plantSp %in% c("common persimmon", "persimmon", "perssimon"), "Common persimmon",  
-    ifelse (cleandata$plantSp %in% c("dwarf paw paw", "dwarf pawpaw", "baby paw paw"), "Dwarf pawpaw",   
-    ifelse (cleandata$plantSp %in% c("eastern red bud", "eastern red bud ", "eastern redbud", "redbud"), "Eastern redbud",
-    ifelse (cleandata$plantSp %in% c("flowering dogwood", "flowering dogwood "), "Flowering dogwood",
-    ifelse (cleandata$plantSp %in% c("fraser magnolia"), "Fraser magnolia",
-    ifelse (cleandata$plantSp %in% c("fringe tree", "fringetree"), "Fringetree",
-    ifelse (cleandata$plantSp %in% c("great rhododendron"), "Great rhododendron",
-    ifelse (cleandata$plantSp %in% c("hazelnut", "hazlenut"), "American hazelnut",
-    ifelse (cleandata$plantSp %in% c("maple-leaved viburnum", "mapleleaf viburnum", "mapleleaf viburnum ", "mapleleaf-viburnum", "maple-leaf viburnum "), "Mapleleaf viburnum",
-    ifelse (cleandata$plantSp %in% c("mountain laurel"), "Mountain laurel",
-    ifelse (cleandata$plantSp %in% c("mucslewood", "muscewood", "muscle wood ", "musclewood"), "American hornbeam",
-    ifelse (cleandata$plantSp %in% c("mulberry", "white mulberry"), "White mulberry", 
-    ifelse (cleandata$plantSp %in% c("paw paw", "paw-paw", "pawpaw"), "Pawpaw", 
-    ifelse (cleandata$plantSp %in% c("pin oak"), "Pin oak", 
-    ifelse (cleandata$plantSp %in% c("red maple", "red maple "), "Red maple", 
-    ifelse (cleandata$plantSp %in% c("red oak", "red oak "), "Red oak", 
-    ifelse (cleandata$plantSp %in% c("sassafras"), "Sassafras", 
-    ifelse (cleandata$plantSp %in% c("serviceberry"), "Serviceberry", 
-    ifelse (cleandata$plantSp %in% c("sour wood", "sourwood", "sourwood "), "Sourwood", 
-    ifelse (cleandata$plantSp %in% c("spice bush", "spicebush", "spicebush "), "Spicebush",
-    ifelse (cleandata$plantSp %in% c("striped maple"), "Striped maple", 
-    ifelse (cleandata$plantSp %in% c("sweet birch"), "Sweet birch",
-    ifelse (cleandata$plantSp %in% c("sweet gum", "sweet gum ", "sweet gun", "sweetgum"), "Sweet gum",
-    ifelse (cleandata$plantSp %in% c("tulip poplar", "tulip poplar ", "tulip tree", "tuliptree", "tuliptree "), "Tuliptree", 
-    ifelse (cleandata$plantSp %in% c("winged elm"), "Winged elm",  
-    ifelse (cleandata$plantSp %in% c("witch hazel"), "Witch hazel", 
-    ifelse (cleandata$plantSp %in% c("yellow birch"), "Yellow birch", 
-    ifelse (cleandata$plantSp %in% c("yellow buckeye"), "Yellow buckeye", "UNID")))))))))))))))))))))))))))))))))))))))))))))))))
-   # ifelse (cleandata$plantSp %in% c("alternate-leafed dogwood", "american elm","black cherry", "black locust","cucumber magnolia", "elm","elum","beat sheet", "chalk willow", "chinkapin", "flame azalea", "frsp", "highbush blueberry", "hop hornbeam", "list", "maple", "mountain holly" 
-                                    #   "mountain maple", "musclewood (possible id: sweetgum)", "musclewood? maple is correct id", 
-                                    #   "musclewood?, sweetgum correct id, i think.","pignut hickory" "pin cherry", "quer","rhsp", "russian olive", "shagbark hickory", "station", "staton", "sweetgum? maple i think is correct id",
-                                     #  "sweetgum? maple is correct id i think.", "sweetgum? maple is correct id i think.", "sweetgum? musclewood correct id", 
-                                     #  "sweetgum? musclewood is correct id", "sweetgum? musclewood is correct id i believe", "sweet pepper bush", "sycamore", "syor", "unid willow", 
-                                     #  "unid. ash", "unid. cherry", "unid. elm", "unid. hickory", "unid. rhododendron", "unid. rubus", "unidentified", "unidentified ", 
-                                     #  "unidentified elm", "unidentified sp", "vasp", "white ash", white oak"), "other", "NA")
-     
+cleandata$clean_plantSp = gsub("acer saccharum", "sugar maple", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sugar mapl", "sugar maple", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sugar maple ", "sugar maple", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sugar maplee", "sugar maple", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sugar maplee ", "sugar maple", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sygar naoke", "sugar maple", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("american holly ", "american holly", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("carpinus caroliniana", "american hornbeam", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("american hornbeam ", "american hornbeam", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("boxelder", "box elder", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("arsp", "devil's walkingstick", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("devil's walking stick", "devil's walkingstick", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("devil's-walking-sticl", "devil's walkingstick", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("devils claw", "devil's walkingstick", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("devils walking stick", "devil's walkingstick", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("devils-walkingstick", "devil's walkingstick", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("butternut hickory", "bitternut hickory", cleandata$clean_plantSp) 
+cleandata$clean_plantSp = gsub("box elder ", "box elder", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("acarolina ash", "carolina ash", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("carolina ash ", "carolina ash", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("chalk mape", "chalk maple", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("dwarf paw paw", "dwarf pawpaw", cleandata$clean_plantSp) 
+cleandata$clean_plantSp = gsub("baby paw paw", "dwarf pawpaw", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("flowering dogwood ", "flowering dogwood", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("maple-leaved viburnum", "mapleleaf viburnum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("mapleleaf viburnum ", "mapleleaf viburnum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("mapleleaf-viburnum", "mapleleaf viburnum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("maple-leaf viburnum ", "mapleleaf viburnum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("mucslewood", "musclewood", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("muscewood", "musclewood", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("musclewood ", "musclewood", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("muscle wood ", "musclewood", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("musclewood?", "musclewood", cleandata$clean_plantSp) #musclewood? won't be removed
+cleandata$clean_plantSp = gsub("red maple ", "red maple", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("red oak ", "red oak", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sour wood", "sourwood", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sourwood ", "sourwood", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("spice bush", "spicebush", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("liquidambar", "sweetgum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sweetgum ", "sweetgum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sweet gun", "sweetgum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sweet gum", "sweetgum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sweet gum ", "sweetgum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("spicebush ", "spicebush", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("tulip poplar ", "tulip poplar", cleandata$clean_plantSp) 
+cleandata$clean_plantSp = gsub("tulip tree", "tulip poplar", cleandata$clean_plantSp) 
+cleandata$clean_plantSp = gsub("tuliptree", "tulip poplar", cleandata$clean_plantSp) 
+cleandata$clean_plantSp = gsub("alternate-leafed dogwood", "alternate-leaved dogwood", cleandata$clean_plantSp)  
+cleandata$clean_plantSp = gsub("elum", "elm", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("chinkapin", "white oak", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("white oak ", "white oak", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("unidentified elm", "unid. elm", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("unid willow", "unid. willow", cleandata$clean_plantSp)
+
+cleandata$clean_plantSp[cleandata$clean_plantSp == 'alder'] = "hazel alder"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("american basswood","basswood")] = "american basswood"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("american beech ","beech", "american beech c")] = "american beech"
+cleandata$clean_plantSp[cleandata$clean_plantSp == "bladdernut"] = "american bladdernut"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("black willow ", "willow", "wilow")] = "black willow"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("carolina silver", "carolina silver ",  "carolina silver bell", "silverbell", "sliverbell")] = "carolina silverbell"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("fringe tree", "fringe" )] = "fringetree"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("paw-paw", "pawpaw")] = "paw paw"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("persimmon", "perssimon", "permisson")] = "common persimmon"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("redbud", "eastern red bud ", "eastern red bud ", "eastern red bud")] = "eastern redbud"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("hazelnut", "hazlenut")] = "american hazelnut"
+cleandata$clean_plantSp[cleandata$clean_plantSp =="mulberry"] = "white mulberry"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("sycamore")] = "american sycamore"
+cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("","dead tree", "delete me", "frsp", "gfg", "list", "beat sheet", 
+                                                       "no data entry", "no entry", "not listed", "plant", 
+                                                       "musclewood (possible id: sweetgum)", "musclewood? maple is correct id",
+                                                       "musclewood?, sweetgumcorrect id, i think. ", "musclewood?", 
+                                                       "musclewood? maple is correct id i believe. ", 
+                                                       "musclewood? maple is correct id i believe. ", 
+                                                       "musclewood?, sweetgum correct id, i think.", "quer","rhsp", 
+                                                       "station", "staton", "statton", "sweet elm", 
+                                                       "sweetgum? maple i think is correct id", 
+                                                       "sweetgum? musclewoodis correct id i believe", 
+                                                       "musclewood(possible id: sweetgum)", 
+                                                       "sweetgum? maple is correct id i think.", 
+                                                       "sweetgum? maple is correct id i think.", 
+                                                       "sweetgum? musclewood correct id",  
+                                                       "sweetgum? musclewoodcorrect id ", 
+                                                       "sweetgum? musclewoodis correct id ",
+                                                       "sweetgum? musclewood is correct id", 
+                                                       "sweetgum? musclewood is correct id ", 
+                                                       "sweetgum? musclewood is correct id i believe", 
+                                                       "musclewood?, sweetgum correct id, i think. ", 
+                                                       "syor", "test", "unid. rubus", "unidentified", 
+                                                       "unidentified ", "unid. rubus, (often recorded as \"rusp\")", 
+                                                       "unidentified sp", "vasp")] = "unidentified"
+
+
 # Getting master list of tree species by survey (mainly from historical data where there are discrepancies)
 # This simply associates the tree species most frequently associated with each survey.
 # If there was a tie (i.e., a survey was labeled 'Red maple' twice and 'Red oak' twice)
@@ -255,7 +290,8 @@ cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "su
 #names(surveytrees)[4] = 'realPlantSp'
 #write.table(surveytrees, 'data/all_surveytrees.csv', row.names = F)
 surveytrees = read.csv('data/all_surveytrees.csv', header=T, stringsAsFactors = F)
-  
+
+
 cleandata2 = left_join(cleandata, surveytrees) %>%
   select(surveyID, userID, site, circle, survey, date, time, julianday, year,
          surveyType, leafCount, realPlantSp, herbivory, arthropod, arthCode, 
