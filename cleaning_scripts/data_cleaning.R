@@ -79,7 +79,8 @@ orders2$arthropod[is.na(orders2$arthropod)] <- "NONE"
 orders2$count[is.na(orders2$count)] <- 0
 
 
-arthcodes = read.csv('data/arthropods/arth_codes.csv', header=T) %>%
+arthcodes = read.csv('data/arthropods/arth_codes.csv', header=T,
+                     stringsAsFactors = FALSE) %>%
   select(ArthCode, DataName) %>%
   rename(arthCode = ArthCode, arthropod = DataName)
 
@@ -133,21 +134,25 @@ visual <- joindata[!joindata$surveyID %in% beatsheet$surveyID, ]
 cleandata <- rbind(visual, beatsheet)
 cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 
+#Removing exclosure trees (only 2016)    
+cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
+
 #--------------------------------------------------------------------------------
 
 ## Calculating biomass and adding this as a column to the cleandata
 
 # y = a(x)^b
 # Read in arthropod regression data with slope = b and intercept = log(a)
-reg.data.temp <- read.csv('data/arthropods/arth_regression.csv', header = T, sep = ',')
+reg.data.temp <- read.csv('data/arthropods/arth_regression.csv', header = T, 
+                          stringsAsFactors = F, sep = ',')
 # Calculate a (the coefficient)
 reg.data.temp$coefficient <- 10^(reg.data.temp$intercept)
 
 # Create list of arthropod orders (by code)
-arthlist <- arthcodes$ArthCode[arthcodes$ArthCode %in% reg.data.temp$arthCode] # arthcodes from data_cleaning.R
+arthlist <- arthcodes$arthCode[arthcodes$arthCode %in% reg.data.temp$arthCode] # arthcodes from data_cleaning.R
 
 # Merge reg.data.temp and arthlist so NAs will be calculated
-reg.data <- merge(reg.data.temp, arthcodes, by.x = 'arthCode', by.y = 'ArthCode', all = T)
+reg.data <- merge(reg.data.temp, arthcodes, by = 'arthCode', all = T)
 
 # Create empty biomass vector
 cleandata$biomass = NA
@@ -224,10 +229,37 @@ cleandata$clean_plantSp <- ifelse(cleandata$plantSp %in% c("acer saccharum", "su
                                      #  "unid. ash", "unid. cherry", "unid. elm", "unid. hickory", "unid. rhododendron", "unid. rubus", "unidentified", "unidentified ", 
                                      #  "unidentified elm", "unidentified sp", "vasp", "white ash", white oak"), "other", "NA")
      
-  
-#Removing exclosure trees (only 2016)    
+# Getting master list of tree species by survey (mainly from historical data where there are discrepancies)
+# This simply associates the tree species most frequently associated with each survey.
+# If there was a tie (i.e., a survey was labeled 'Red maple' twice and 'Red oak' twice)
+# then it is excluded from this table. 
+# Perhaps by examining additional evidence (e.g. userID of data entry, other notes)
+# we can assign tree species to these surveys in the future, but presumably
+# some fraction of them the tree species id will be lost to time.
 
-cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
+#recentsurveytrees = read.csv('data/trees/tbl_surveyTrees.csv', stringsAsFactors = F, header = F)
+#names(recentsurveytrees) = c('site', 'circle', 'survey', 'plantSp')
+
+#apptrees = cleandata %>% 
+#  select(site, circle, survey, date, clean_plantSp) %>% 
+#  unique() %>% 
+#  count(site, circle, survey, clean_plantSp) %>% 
+#  arrange(site, circle, survey, desc(n)) %>% 
+#  mutate(rank = rank(desc(n), ties.method = 'average')) %>% 
+#  filter(rank==1, !site %in% unique(recentsurveytrees$site)) %>% 
+#  select(-rank, -n) %>%
+#  rename(plantSp = clean_plantSp) %>%
+#  data.frame()
+
+#surveytrees = rbind(recentsurveytrees, apptrees)
+#names(surveytrees)[4] = 'realPlantSp'
+#write.table(surveytrees, 'data/all_surveytrees.csv', row.names = F)
+surveytrees = read.csv('data/all_surveytrees.csv', header=T, stringsAsFactors = F)
+  
+cleandata2 = left_join(cleandata, surveytrees) %>%
+  select(surveyID, userID, site, circle, survey, date, time, julianday, year,
+         surveyType, leafCount, realPlantSp, herbivory, arthropod, arthCode, 
+         length, count, biomass, wetLeaves, notes.x, notes.y)
 
 #----------------------------------------------------------------------------------------
 # Leaf area data
@@ -240,17 +272,17 @@ area = read.table("data/trees/LeafAreaDatabase.txt", header=T,
                       sep= '\t', quote="\"", fill = T, stringsAsFactors = FALSE) %>%
   mutate(area_cm2 = (LeafArea_pixels/RefArea_pixels)*(RefArea_cm2)) %>%
   filter(!is.na(area_cm2)) %>%
-  left_join(plant_codes[, c('TreeCode', 'ComName')], by = c('TreeSpecies' = 'TreeCode')) %>%
-  select(Site, Date, Station, ComName, area_cm2)
+  left_join(plant_codes[, c('TreeCode', 'ComName')], by = 'TreeCode') %>%
+  select(site, date, circle, survey, ComName, area_cm2)
   
 # Leaf area by species, site and date
 sitedate_area = area %>%
-  group_by(Site, Date, ComName) %>%
+  group_by(site, date, ComName) %>%
   summarize(area_cm2 = mean(area_cm2))
 
 # Leaf area by species and site
 site_area = area %>%
-  group_by(Site, ComName) %>%
+  group_by(site, ComName) %>%
   summarize(area_cm2 = mean(area_cm2))
 
 # Leaf area by species and site
@@ -260,11 +292,8 @@ species_area = area %>%
   arrange(desc(area_cm2)) %>% 
   data.frame()
 
-# Now need to merge in leaf area info by
-# --species, site, station, and date when possible
-# --or use mean leaf area
-
-
+# 1) Where possible merge by site, 
+bysurvey = left_join(cleandata, area[, c('site', 'date', 'circle', 'survey', 'area_cm2')])
 
 
 #--------------------------------------------------------------------------
