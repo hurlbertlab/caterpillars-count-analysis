@@ -20,13 +20,18 @@ library(stringr)
 source("analysis_scripts/summary_functions.r")
 
 # UserIDs of Hurlbert Lab data collectors
-labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191)
+labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191, 300, 301, 302)
 
 
 
 # Read in data
 tempsurveys = read.csv('data/arthropods/tbl_surveys.csv', header=F, stringsAsFactors = F)
+survclean = read.csv('data/arthropods/tbl_surveys_clean.csv', header=F, stringsAsFactors = F)
+
+
+# At the moment, there is no difference between tbl_orders and tbl_orders_clean
 orders = read.csv('data/arthropods/tbl_orders.csv', header=F, stringsAsFactors = F)
+#ordclean = read.csv('data/arthropods/tbl_orders_clean.csv', header=F, stringsAsFactors = F)
 
 names(tempsurveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
                    'dateSubmit', 'tempMin', 'tempMax', 'notes', 'plantSp',
@@ -35,8 +40,16 @@ names(tempsurveys) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateSt
 names(orders) = c('recordID', 'surveyID', 'arthropod', 'length', 'notes',
                   'count', 'photo', 'time', 'isValid')
 
+names(survclean) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStart',
+                     'tempMin', 'tempMax', 'plantSp', 'herbivory', 'modified', 
+                     'modNotes', 'surveyType', 'leafCount')
+#names(ordclean) = c('recordID', 'surveyID', 'arthropod', 'length', 'count',
+#                    'modified', 'modNotes', 'status')
+
 # Only include valid entries in surveys
-surveys = tempsurveys[tempsurveys$isValid == 1,]
+oksurveys = tempsurveys$surveyID[tempsurveys$isValid == 1 & tempsurveys$status != 'invalid']
+
+surveys = survclean[survclean$surveyID %in% oksurveys, ]
 
 # Fix a few missing dates (based on checking old MS Access database)
 surveys$datetime = as.POSIXct(surveys$dateStart, format = "%Y-%m-%d %H:%M:%S")
@@ -54,7 +67,7 @@ orders2 = left_join(surveys, orders, by = 'surveyID') %>%
   mutate(julianday = yday(date), date = as.character(date)) %>%
   select(surveyID, userID, site, survey, circle, date, time.x, julianday,
                       plantSp,herbivory, arthropod, length,
-                      count, notes.y , notes.x, surveyType, leafCount) %>%
+                      count, notes, surveyType, leafCount) %>%
   rename(time = time.x) %>%
   filter(arthropod != "Leaf Roll" | is.na(arthropod))
 
