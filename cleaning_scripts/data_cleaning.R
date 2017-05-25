@@ -49,7 +49,12 @@ names(survclean) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStar
 # Only include valid entries in surveys
 oksurveys = tempsurveys$surveyID[tempsurveys$isValid == 1 & tempsurveys$status != 'invalid']
 
-surveys = survclean[survclean$surveyID %in% oksurveys, ]
+# Filter and merge notes field back in
+surveys = survclean %>% 
+  filter(surveyID %in% oksurveys) %>%
+  left_join(tempsurveys[, c('surveyID', 'notes')], by = 'surveyID') %>%
+  rename(sitenotes = notes)
+
 
 # Fix a few missing dates (based on checking old MS Access database)
 surveys$datetime = as.POSIXct(surveys$dateStart, format = "%Y-%m-%d %H:%M:%S")
@@ -67,8 +72,8 @@ orders2 = left_join(surveys, orders, by = 'surveyID') %>%
   mutate(julianday = yday(date), date = as.character(date)) %>%
   select(surveyID, userID, site, survey, circle, date, time.x, julianday,
                       plantSp,herbivory, arthropod, length,
-                      count, notes, surveyType, leafCount) %>%
-  rename(time = time.x) %>%
+                      count, sitenotes, notes, surveyType, leafCount) %>%
+  rename(time = time.x, bugnotes = notes) %>%
   filter(arthropod != "Leaf Roll" | is.na(arthropod))
 
 # Clean arthropod names and then add column with arthopod order code
@@ -100,12 +105,12 @@ arthcodes = read.csv('data/arthropods/arth_codes.csv', header=T,
 joindata <- left_join(orders2, arthcodes, by = 'arthropod') %>%
   select(surveyID, userID,site, survey, circle, date,time, julianday,
                        plantSp,herbivory,arthropod,arthCode,length,
-                       count,notes.y,notes.x, surveyType, leafCount) %>%
+                       count, sitenotes, bugnotes, surveyType, leafCount) %>%
   arrange(date)
 
 # Add a column indicating if the leaves were wet
-tempwet <- sort(c(grep("wet leaves", joindata$notes.x), grep("Wet leaves", joindata$notes.x), 
-                  grep("very dewy", joindata$notes.x), grep("Wet Leaves", joindata$notes.x)))
+tempwet <- sort(c(grep("wet leaves", joindata$sitenotes), grep("Wet leaves", joindata$sitenotes), 
+                  grep("very dewy", joindata$sitenotes), grep("Wet Leaves", joindata$sitenotes)))
 joindata$wetLeaves = rep('no', nrow(joindata))
 joindata$wetLeaves[tempwet] = 'yes'
 
@@ -119,7 +124,7 @@ joindata$arthCode = as.character(joindata$arthCode)
 # Cleaning beat sheets (PR and BG) and isolating # leaves into a new column
 
 # Beat sheet designation was in notes field prior to 2016
-beatsheet_pre2016 <- joindata[grep("BEAT SHEET", joindata$notes.x), ] 
+beatsheet_pre2016 <- joindata[grep("BEAT SHEET", joindata$sitenotes), ] 
 
 # In 2016, surveyType was not getting recorded when entered from website, so 
 # beat sheet is designated by either the surveyType field when entered by app or
@@ -130,7 +135,7 @@ beatsheet_post2016 <- joindata[((joindata$leafCount != "50") & (joindata$year>= 
 beatsheet_post2016 <- beatsheet_post2016[!is.na(beatsheet_post2016$surveyID),]
 
 # Pull out the leafCount from the notes
-leavesNumTemp0 <- word(beatsheet_pre2016$notes.x, -1, sep = "BEAT SHEET; ")
+leavesNumTemp0 <- word(beatsheet_pre2016$sitenotes, -1, sep = "BEAT SHEET; ")
 leavesNumTemp <- word(leavesNumTemp0, -1, sep = "= ")
 leavesNumTemp1 <- word(leavesNumTemp, -1, sep = "Leaves  ")
 leavesNumTemp2 <- word(leavesNumTemp1, -1, sep = "Leaves=")
@@ -148,7 +153,7 @@ cleandata <- rbind(visual, beatsheet)
 cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
 
 #Removing exclosure trees (only 2016)    
-cleandata <-filter(cleandata, !(grepl("EXCLOSURE", notes.x)))
+cleandata <-filter(cleandata, !(grepl("EXCLOSURE", sitenotes)))
 
 #--------------------------------------------------------------------------------
 
@@ -224,10 +229,10 @@ cleandata$clean_plantSp = gsub("sour wood", "sourwood", cleandata$clean_plantSp)
 cleandata$clean_plantSp = gsub("sourwood ", "sourwood", cleandata$clean_plantSp)
 cleandata$clean_plantSp = gsub("spice bush", "spicebush", cleandata$clean_plantSp)
 cleandata$clean_plantSp = gsub("liquidambar", "sweetgum", cleandata$clean_plantSp)
-cleandata$clean_plantSp = gsub("sweetgum ", "sweetgum", cleandata$clean_plantSp)
-cleandata$clean_plantSp = gsub("sweet gun", "sweetgum", cleandata$clean_plantSp)
-cleandata$clean_plantSp = gsub("sweet gum", "sweetgum", cleandata$clean_plantSp)
-cleandata$clean_plantSp = gsub("sweet gum ", "sweetgum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sweetgum ", "sweet gum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sweet gun", "sweet gum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sweetgum", "sweet gum", cleandata$clean_plantSp)
+cleandata$clean_plantSp = gsub("sweet gum ", "sweet gum", cleandata$clean_plantSp)
 cleandata$clean_plantSp = gsub("spicebush ", "spicebush", cleandata$clean_plantSp)
 cleandata$clean_plantSp = gsub("tulip poplar ", "tulip poplar", cleandata$clean_plantSp) 
 cleandata$clean_plantSp = gsub("tulip tree", "tulip poplar", cleandata$clean_plantSp) 
@@ -301,14 +306,14 @@ cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("","dead tree", "delete m
 
 #surveytrees = rbind(recentsurveytrees, apptrees)
 #names(surveytrees)[4] = 'realPlantSp'
-#write.table(surveytrees, 'data/all_surveytrees.csv', row.names = F)
+#write.csv(surveytrees, 'data/all_surveytrees.csv', row.names = F)
 surveytrees = read.csv('data/all_surveytrees.csv', header=T, stringsAsFactors = F)
 
 
 cleandata2 = left_join(cleandata, surveytrees) %>%
   select(surveyID, userID, site, circle, survey, date, time, julianday, year,
          surveyType, leafCount, realPlantSp, herbivory, arthropod, arthCode, 
-         length, count, biomass, wetLeaves, notes.x, notes.y)
+         length, count, biomass, wetLeaves, sitenotes, bugnotes)
 
 #----------------------------------------------------------------------------------------
 # Leaf area data
