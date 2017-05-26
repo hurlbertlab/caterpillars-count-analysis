@@ -1,44 +1,46 @@
-#Plots for CC paper: Absolute arth densities and relative arth densities 
+# Plots for CC paper: Absolute arth densities and relative arth densities 
 source("cleaning_scripts/data_cleaning.R")
 
-#load libraries
+# load libraries
 library(tidyr)
 
 # subset lab data to the the circles regularly surveyed by volunteers
-# only arthropods >=5 mm included
-size_thresh = 5
-lab = filter(labdata.pr, circle %in% 1:8, length >= size_thresh)
+lab = filter(labdata.pr, circle %in% 1:8)
 
-#subset by year, cit/sci, and collection type 
-#2015 is the comparison year for visual surveys, 2016 is the comparison year for beat sheets
+# subset by year, cit/sci, and collection type 
+# 2015 is the comparison year for visual surveys, 2016 is the comparison year for beat sheets
 # (filtering is being done in two steps because the complete set of dates is being used later on)
-vol15 = filter(volunteer.pr, year == 2015 & surveyType == "Visual", length >= size_thresh) 
-vol16 = filter(volunteer.pr, year == 2016 & surveyType == "Beat_Sheet", length >= size_thresh) 
-lab15 = lab %>% filter(year == 2015, surveyType == "Visual")
+vol15 = filter(volunteer.pr, year == 2015 & surveyType == "Visual") 
+vol16 = filter(volunteer.pr, year == 2016 & surveyType == "Beat_Sheet") 
+lab15_vis = lab %>% filter(year == 2015, surveyType == "Visual")
 lab16_bs = lab %>% filter(year == 2016, surveyType == "Beat_Sheet") 
 lab16_vis = lab %>% filter(year == 2016, surveyType == "Visual")
+lab_vis = rbind(lab15_vis, lab16_vis)
     
 
-#subset volunteer and lab data for same range of dates for each year
-#2015 is visual surveys, 2016 is beat sheet surveys
+# subset volunteer and lab data for same range of dates for each year
+# 2015 is visual surveys, 2016 is beat sheet surveys
 vol15_sub = filter(vol15, julianday <= 193 & julianday >= 147)
 vol16_sub = filter(vol16, julianday <= 193 & julianday >= 147)
-lab15_sub = filter(lab15, julianday <= 193 & julianday >= 147)
+lab15_vis_sub = filter(lab15_vis, julianday <= 193 & julianday >= 147)
 lab16_bs_sub = filter(lab16_bs, julianday <= 193 & julianday >= 147)
 lab16_vis_sub = filter(lab16_vis, julianday <= 193 & julianday >= 147)
 
-#remove arthropods not in the "bird food" category for relative arthropod barplots
+# remove arthropods not in the "bird food" category for relative arthropod barplots
+# and greater than size threshold
 birdfood = c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA")
-vol15_sub_bird = vol15_sub %>% filter(arthCode %in% birdfood)
-vol16_sub_bird = vol16_sub %>% filter(arthCode %in% birdfood)
-lab15_sub_bird = lab15_sub %>% filter(arthCode %in% birdfood)
-lab16_bs_sub_bird = lab16_bs_sub %>% filter(arthCode %in% birdfood)
-lab16_vis_sub_bird = lab16_vis_sub %>% filter(arthCode %in% birdfood)
+size_thresh = 5
+
+vol15_sub_bird = vol15_sub %>% filter(arthCode %in% birdfood, length >= size_thresh)
+vol16_sub_bird = vol16_sub %>% filter(arthCode %in% birdfood, length >= size_thresh)
+lab15_vis_sub_bird = lab15_vis_sub %>% filter(arthCode %in% birdfood, length >= size_thresh)
+lab16_bs_sub_bird = lab16_bs_sub %>% filter(arthCode %in% birdfood, length >= size_thresh)
+lab16_vis_sub_bird = lab16_vis_sub %>% filter(arthCode %in% birdfood, length >= size_thresh)
 
 #calculate relative number of arthropods in each set of surveys
 vol15_rel= vol15_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(vol15_sub_bird$count)))
 vol16_rel= vol16_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(vol16_sub_bird$count)))
-lab15_rel= lab15_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab15_sub_bird$count)))
+lab15_rel= lab15_vis_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab15_vis_sub_bird$count)))
 lab16_bs_rel= lab16_bs_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab16_bs_sub_bird$count)))
 lab16_vis_rel = lab16_vis_sub_bird %>% group_by(arthCode) %>% dplyr::summarize(proportion = (sum(count)/sum(lab16_vis_sub_bird$count)))
 
@@ -84,40 +86,44 @@ uniq_vol15 = vol15_sub %>% count(julianday, circle, survey)
 surv_vol15 = nrow(uniq_vol15)
 uniq_vol16 = vol16_sub %>% count(julianday, circle, survey)
 surv_vol16 = nrow(uniq_vol16)
-uniq_lab15 = lab15_sub %>% count(julianday, circle, survey)
-surv_lab15 = nrow(uniq_lab15)
+uniq_lab15_vis = lab15_vis_sub %>% count(julianday, circle, survey)
+surv_lab15_vis = nrow(uniq_lab15_vis)
 uniq_lab16_bs = lab16_bs_sub %>% count(julianday, circle, survey)
 surv_lab16_bs = nrow(uniq_lab16_bs)
 uniq_lab16_vis = lab16_vis_sub %>% count(julianday, circle, survey)
 surv_lab16_vis = nrow(uniq_lab16_vis)
 
-#calculate mean number of each type of arthropods seen for each year/surveyor type
-vol15_means= vol15_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_vol15))
-vol16_means= vol16_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_vol16))
-lab15_means= lab15_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab15))
-lab16_bs_means= lab16_bs_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_bs))
-lab16_vis_means= lab16_vis_sub %>% group_by(arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_vis))
+# calculate mean number of each type of arthropods seen for each year/surveyor type
+# overall (irrespective of tree species)
+vol15_means= vol15_sub %>% group_by(arthCode) %>% summarize(mean_count = (sum(count)/surv_vol15))
+vol16_means= vol16_sub %>% group_by(arthCode) %>% summarize(mean_count = (sum(count)/surv_vol16))
+lab15_means= lab15_vis_sub %>% group_by(arthCode) %>% summarize(mean_count = (sum(count)/surv_lab15_vis))
+lab16_bs_means= lab16_bs_sub %>% group_by(arthCode) %>% summarize(mean_count = (sum(count)/surv_lab16_bs))
+lab16_vis_means= lab16_vis_sub %>% group_by(arthCode) %>% summarize(mean_count = (sum(count)/surv_lab16_vis))
 
-#calculate mean number of each type of arthropods seen for visual surveys in the lab in 2016 by tree type (for figure 2)
-
-############################
-# I THINK THIS IS WRONG DENOMINATOR--NEED TO USE PLANT SPECIES-SPECIFIC # OF TOTAL SURVEYS
-############################
-lab16_vis_trees = lab16_vis_sub_bird %>% group_by(clean_plantSp, arthCode) %>% dplyr::summarize(mean_count = (sum(count)/surv_lab16_vis))
+#calculate mean number of each type of arthropods seen by tree species for lab visual surveys in 2015 & 2016
+surv_tree_lab_vis = lab_vis %>% distinct(date, circle, survey, realPlantSp) %>% count(realPlantSp)
 
 #change less common arthropods into one "other" group for the tree species groups
-lab16_vis_trees$arthCode[!lab16_vis_trees$arthCode %in% birdfood_top6] = 'OTHR'
+lab_vis_oth = lab_vis
+lab_vis_oth$arthCode[!lab_vis_oth$arthCode %in% birdfood_top6] = 'OTHR'
 
-lab16_vis_trees = data.frame(lab16_vis_trees)
-
-#calculate mean number of each type of arthropods seen by tree sp 
-trees_oth = lab16_vis_trees %>% group_by(clean_plantSp, arthCode) %>% dplyr::summarize(vis = sum(mean_count))
+lab_vis_trees = lab_vis_oth %>% 
+  group_by(realPlantSp, arthCode) %>% 
+  summarize(tot_count = sum(count), presence = sum(count > 0)) %>%
+  left_join(surv_tree_lab_vis, by = 'realPlantSp') %>%
+  mutate(mean_count = tot_count/n, occurrence = presence/n)
 
 #only use 4 most common tree sp at PR (within 1-8) #sweet gum, common persimmon, box elder, chalk maple
-common_trees = trees_oth %>% 
-  filter(clean_plantSp %in% c("sweet gum", "common persimmon", "box elder", "chalk maple", "pin oak")) 
-common_trees1 = data.frame(spread(common_trees, clean_plantSp, vis))
-names(common_trees1) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Pin oak", "Sweet gum")
+common_trees = lab_vis_trees %>% 
+  filter(realPlantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak")) 
+common_trees_den = spread(common_trees[, c('realPlantSp', 'arthCode', 'mean_count')], realPlantSp, mean_count) %>%
+  data.frame()
+names(common_trees_den) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Pin oak", "Sweet gum")
+
+common_trees_occ = spread(common_trees[, c('realPlantSp', 'arthCode', 'occurrence')], realPlantSp, occurrence) %>%
+  data.frame()
+names(common_trees_occ) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Pin oak", "Sweet gum")
 
 #merge all means into one dataframe
 join = left_join(vol15_means, vol16_means, by = "arthCode")
@@ -148,12 +154,12 @@ arthcols$col2[arthcols$arthCode=='DIPT'] = 'gray50'
 arthcols$name = c('Aranae', 'Auchenorrhyncha', 'Coleoptera', 'Diptera', 'Caterpillars', 'Orthoptera', 'Other')
 
 #panel A
-common_trees2 = common_trees1[,-1]
-rownames(common_trees2) = common_trees1[,1]
+common_trees2 = common_trees_occ[,-1]
+rownames(common_trees2) = common_trees_occ[,1]
 common_trees2 = as.matrix(common_trees2)
 par(mgp = c(3.5, 1, 0))
 barplot(common_trees2, las = 1, cex.axis = 1.2, cex.lab = 1.5, xaxt="n", 
-        xlim = c(0, 6), ylab = "Density (#/survey)", col = arthcols$col, ylim = c(0, 0.25)) 
+        xlim = c(0, 6), ylab = "Density (#/survey)", col = arthcols$col) 
 text(seq(1, 5.5, length.out = 5), rep(-.01, 4), c('Box elder', 'Chalk maple', 'Persimmon', 'Pin oak', 'Sweet gum'),
      srt = 45, xpd = TRUE, adj = 1, cex = 1.2)
 
@@ -221,7 +227,7 @@ dev.off()
 vol15_dates = vol15 %>% group_by(julianday) %>% tally
 vol16_dates = vol16 %>% group_by(julianday) %>% tally
 
-lab15_dates = lab15 %>% group_by(julianday) %>% tally
+lab15_dates = lab15_vis %>% group_by(julianday) %>% tally
 lab16_bs_dates = lab16_bs %>% group_by(julianday) %>% tally
 
 #plots for sampling windows and sampling effort
@@ -234,7 +240,7 @@ plot(lab16_bs_dates$julianday, lab16_bs_dates$n, xlim = c(134, 204))
 #summarize the average density by order per tree #check to ensure there are no survey days with 2 surveys/day
 uniq_vol15= vol15 %>% group_by(julianday, circle, survey) %>% dplyr::summarize(sum_count = sum(count)) 
 uniq_vol16= vol16 %>% group_by(julianday, circle, survey) %>% dplyr::summarize(sum_count = sum(count))
-uniq_lab15= lab15 %>% group_by(julianday, circle, survey) %>% dplyr::summarize(sum_count = sum(count))
+uniq_lab15= lab15_vis %>% group_by(julianday, circle, survey) %>% dplyr::summarize(sum_count = sum(count))
 uniq_lab16_bs= lab16_bs %>% group_by(julianday, circle, survey) %>% dplyr::summarize(sum_count = sum(count))
 
 arth_rel_15 = select(arth_rel, arthCode, mean_vol15, mean_lab15)
