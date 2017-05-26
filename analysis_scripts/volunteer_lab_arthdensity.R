@@ -114,6 +114,15 @@ lab_vis_trees = lab_vis_oth %>%
   left_join(surv_tree_lab_vis, by = 'realPlantSp') %>%
   mutate(mean_count = tot_count/n, occurrence = presence/n)
 
+lab_vis_trees_no_outliers = lab_vis_oth %>% 
+  filter(count < 30) %>%
+  group_by(realPlantSp, arthCode) %>% 
+  summarize(tot_count = sum(count)) %>%
+  left_join(surv_tree_lab_vis, by = 'realPlantSp') %>%
+  mutate(mean_count = tot_count/n) %>%
+  filter(realPlantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak"))
+
+
 #only use 4 most common tree sp at PR (within 1-8) #sweet gum, common persimmon, box elder, chalk maple
 common_trees = lab_vis_trees %>% 
   filter(realPlantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak")) 
@@ -124,6 +133,8 @@ names(common_trees_den) = c("arthCode", "Box elder", "Chalk maple", "Common pers
 common_trees_occ = spread(common_trees[, c('realPlantSp', 'arthCode', 'occurrence')], realPlantSp, occurrence) %>%
   data.frame()
 names(common_trees_occ) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Pin oak", "Sweet gum")
+
+common_trees_den_no_outliers = spread(lab_vis_trees_no_outliers[, c('realPlantSp', 'arthCode', 'mean_count')], realPlantSp, mean_count) %>% data.frame()
 
 #merge all means into one dataframe
 join = left_join(vol15_means, vol16_means, by = "arthCode")
@@ -154,14 +165,22 @@ arthcols$col2[arthcols$arthCode=='DIPT'] = 'gray50'
 arthcols$name = c('Aranae', 'Auchenorrhyncha', 'Coleoptera', 'Diptera', 'Caterpillars', 'Orthoptera', 'Other')
 
 #panel A
-common_trees2 = common_trees_occ[,-1]
-rownames(common_trees2) = common_trees_occ[,1]
+common_trees2 = common_trees_den_no_outliers[,-1]
+rownames(common_trees2) = common_trees_den_no_outliers[,1]
 common_trees2 = as.matrix(common_trees2)
+common_trees2 = common_trees2[, c(5, 2, 1, 3, 4)]
+labs = c('Box elder', 'Chalk maple', 'Persimmon', 'Pin oak', 'Sweet gum')
+orderedlabs = labs[c(5, 2, 1, 3, 4)]
 par(mgp = c(3.5, 1, 0))
-barplot(common_trees2, las = 1, cex.axis = 1.2, cex.lab = 1.5, xaxt="n", 
+barplot(common_trees2, las = 1, cex.axis = 1.2, cex.lab = 1.5, xaxt="n", ylim = c(0, 2.7),
         xlim = c(0, 6), ylab = "Density (#/survey)", col = arthcols$col) 
-text(seq(1, 5.5, length.out = 5), rep(-.01, 4), c('Box elder', 'Chalk maple', 'Persimmon', 'Pin oak', 'Sweet gum'),
+text(seq(1, 5.5, length.out = 5), rep(-.02, 5), orderedlabs,
      srt = 45, xpd = TRUE, adj = 1, cex = 1.2)
+
+# * indicates tree species where large caterpillar colonies (e.g. 100s) were observed,
+# but these outlier records were removed in calculating means.
+text(5.5, 2.1, "*", cex = 3)
+text(.7, 2.6, "*", cex = 3)
 
 #panel B
 par(mgp = c(3, 1, 0))
