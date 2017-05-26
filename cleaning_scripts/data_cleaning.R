@@ -352,20 +352,17 @@ bysurvey = left_join(cleandata, area[, c('site', 'date', 'circle', 'survey', 'ar
 
 #--------------------------------------------------------------------------
 
-# Taking out caterpillar colonies
-cleandata[cleandata$count > 10 & cleandata$arthCode == 'LEPL',]$count = 10
-
 # Data collected by the Hurlbert Lab group in the Triangle
-labdata = filter(cleandata, userID %in% labgroupusers)
+labdata = filter(cleandata2, userID %in% labgroupusers)
 
 # Subsetting cleandata now that it has the biomass column included
 labdata.pr <- labdata[labdata$site == 117,]
 labdata.bg <- labdata[labdata$site == 8892356,]
 
-cleandata.app <-cleandata[cleandata$year %in% c(2010,2011,2012),]
+cleandata.app <-cleandata2[cleandata2$year %in% c(2010,2011,2012),]
 
-cleandata.pr <- cleandata[cleandata$site == 117,]
-cleandata.bg <- cleandata[cleandata$site == 8892356,]
+cleandata.pr <- cleandata2[cleandata2$site == 117,]
+cleandata.bg <- cleandata2[cleandata2$site == 8892356,]
 
 amsurvey.pr <- surveySubset(labdata.pr, subset = "visual am")
 pmsurvey.pr <- surveySubset(labdata.pr, subset = "visual pm")
