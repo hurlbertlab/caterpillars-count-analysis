@@ -1,8 +1,141 @@
 # Plots for CC paper: Absolute arth densities and relative arth densities 
 source("cleaning_scripts/data_cleaning.R")
 
+# Panels A-C are based on lab data from both 2015 and 2016
+# Panels D-F compare volunteers to lab members from the respective year
+#    (2015 comparison based on visual surveys, 2016 based on beat sheets)
+
 # load libraries
 library(tidyr)
+
+# ---------------------------------------------------------------------------
+# Specify "bird food" categories and minimum size threshold for analysis
+birdfood = c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA")
+minLength = 5       #only arthropods at least this long will be included
+outlierDensity = 30 #counts >= to this value will be excluded as outliers
+# ---------------------------------------------------------------------------
+
+
+#################################################################################
+# Analysis of lab data (no julianday restrictions), Panels A-C
+lab_vis = filter(amsurvey.pr, year %in% c(2015, 2016), length >= minLength)
+lab_bs = filter(beatsheet.pr, year %in% c(2015, 2016), length >= minLength)
+
+###
+# calculate mean number of each type of arthropods seen by tree species for lab visual surveys in 2015 & 2016
+surv_tree_lab_vis = lab_vis %>% distinct(date, circle, survey, realPlantSp) %>% count(realPlantSp)
+
+# Group less common "bird food" arthropods together for plotting; 
+# decided on these because AUCH, DIPT, and COLE were in the top 5 most dense for 
+# beat sheets and visual, and also in "bird food", LEPL obviously necessary; 
+# change less common arthropods into one "other" group 
+lab_vis_oth = lab_vis
+birdfood_top6 = c( "ARAN", "AUCH", "COLE", "LEPL", "ORTH", "DIPT")
+lab_vis_oth$arthCode[!lab_vis_oth$arthCode %in% birdfood_top6] = 'OTHR'
+
+lab_vis_trees = lab_vis_oth %>% 
+  group_by(realPlantSp, arthCode) %>% 
+  summarize(tot_count = sum(count), presence = sum(count > 0)) %>%
+  left_join(surv_tree_lab_vis, by = 'realPlantSp') %>%
+  mutate(mean_count = tot_count/n, occurrence = presence/n)
+
+# Removing large colonial insect observations (e.g. caterpillars) with counts >= 30
+lab_vis_trees_no_outliers = lab_vis_oth %>% 
+  filter(count < 30) %>%
+  group_by(realPlantSp, arthCode) %>% 
+  summarize(tot_count = sum(count)) %>%
+  left_join(surv_tree_lab_vis, by = 'realPlantSp') %>%
+  mutate(mean_count = tot_count/n) %>%
+  filter(realPlantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak"))
+
+
+# only use most common tree sp at PR: sweet gum, common persimmon, box elder, chalk maple, pin oak
+common_trees = lab_vis_trees %>% 
+  filter(realPlantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak")) 
+common_trees_den = spread(common_trees[, c('realPlantSp', 'arthCode', 'mean_count')], realPlantSp, mean_count) %>%
+  data.frame()
+names(common_trees_den) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Pin oak", "Sweet gum")
+
+common_trees_occ = spread(common_trees[, c('realPlantSp', 'arthCode', 'occurrence')], realPlantSp, occurrence) %>%
+  data.frame()
+names(common_trees_occ) = names(common_trees_den)
+
+common_trees_den_no_outliers = spread(lab_vis_trees_no_outliers[, c('realPlantSp', 'arthCode', 'mean_count')], 
+                                      realPlantSp, mean_count) %>% data.frame()
+names(common_trees_den_no_outliers) = names(common_trees_den)
+
+
+###
+# Calculate % of arthropod observations by visual survey vs beat sheet
+
+lab_bs_rel= lab_bs %>% filter(count < outlierDensity) %>%
+  group_by(arthCode) %>% summarize(proportion = (sum(count)/sum(lab_bs$count[lab_bs$count < outlierDensity])))
+lab_vis_rel = lab_vis %>% filter(count < outlierDensity) %>%
+  group_by(arthCode) %>% summarize(proportion = (sum(count)/sum(lab_vis$count[lab_vis$count < outlierDensity])))
+
+lab_bs_rel$arthCode[!lab_bs_rel$arthCode %in% birdfood_top6] = 'OTHR'
+lab_vis_rel$arthCode[!lab_vis_rel$arthCode %in% birdfood_top6] = 'OTHR'
+
+lab_bs_rel_oth = lab_bs_rel %>% group_by(arthCode) %>% summarize(proportion = sum(proportion))
+lab_vis_rel_oth = lab_vis_rel %>% group_by(arthCode) %>% summarize(proportion = sum(proportion))
+
+lab_selected_rel = left_join(lab_bs_rel_oth, lab_vis_rel_oth, by = 'arthCode') %>% data.frame()
+
+
+###
+# Calculate absolute density of arthropod orders by beat sheet vs visual survey
+
+num_bs_surveys = length(unique(lab_bs$surveyID[lab_bs$count < outlierDensity]))
+num_vis_surveys = length(unique(lab_vis$surveyID[lab_vis$count < outlierDensity]))
+
+lab_bs_den = lab_bs %>% filter(count < outlierDensity) %>%
+  group_by(arthCode) %>% summarize(totCount = sum(count)) %>%
+  mutate(density = totCount/num_bs_surveys)
+                                                 
+lab_vis_den = lab_vis %>% filter(count < outlierDensity) %>%
+  group_by(arthCode) %>% summarize(totCount = sum(count)) %>%
+  mutate(density = totCount/num_vis_surveys)
+
+lab_bs_vis_den = left_join(lab_bs_den[, c('arthCode', 'density')], 
+                           lab_vis_den[, c('arthCode', 'density')], by = 'arthCode') %>%
+  rename(bs_den = density.x, vis_den = density.y) %>% filter(arthCode != 'NONE') %>%
+  mutate(arthCode2 = arthCode)
+  
+lab_bs_vis_den$arthCode2[!lab_bs_vis_den$arthCode %in% birdfood_top6] = 'OTHR'
+
+arth_means2 = left_join(arth_means, arthcols)
+arth_means2$col[is.na(arth_means2$col)] = "#80B1D3"
+arth_means2 = arth_means2[arth_means2$arthCode != 'NONE', ]
+plot(arth_means2$lab_vis, arth_means2$lab_bs, las = 1, col = arth_means2$col, pch = 17, 
+     xlab = "Density (visual)", ylab = "Density (beat sheet)", cex = 3, cex.lab = 1.5, 
+     xlim = c(0, 0.65), ylim = c(0, 0.65), cex.axis = 1.2)
+laboratory = lm(lab_bs ~ lab_vis, data = arth_means2)
+abline(laboratory, col = "black", lwd = 2)
+abline(a = 0, b = 1, col = 'gray50', lwd = 1)
+
+
+
+
+
+
+#merge all means into one dataframe
+join = left_join(vol15_means, vol16_means, by = "arthCode")
+names(join) = c("arthCode", "mean_vol15", "mean_vol16")
+join1 = left_join(join, lab15_means, by = "arthCode")
+names(join1) =c("arthCode", "mean_vol15", "mean_vol16", "mean_lab15")
+arth_means = data.frame(left_join(join1, lab16_bs_means, by = "arthCode"))
+names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #change names to reflect visual and bs (2015 is vis, 2016 is bs)
+
+
+
+
+
+
+
+
+
+
+
 
 # subset lab data to the the circles regularly surveyed by volunteers
 lab = filter(labdata.pr, circle %in% 1:8)
@@ -26,10 +159,6 @@ lab15_vis_sub = filter(lab15_vis, julianday <= 193 & julianday >= 147)
 lab16_bs_sub = filter(lab16_bs, julianday <= 193 & julianday >= 147)
 lab16_vis_sub = filter(lab16_vis, julianday <= 193 & julianday >= 147)
 
-# remove arthropods not in the "bird food" category for relative arthropod barplots
-# and greater than size threshold
-birdfood = c("DIPT", "ARAN", "AUCH", "COLE", "LEPL", "HETE", "ORTH", "LEPA")
-size_thresh = 5
 
 vol15_sub_bird = vol15_sub %>% filter(arthCode %in% birdfood, length >= size_thresh)
 vol16_sub_bird = vol16_sub %>% filter(arthCode %in% birdfood, length >= size_thresh)
@@ -101,48 +230,20 @@ lab15_means= lab15_vis_sub %>% group_by(arthCode) %>% summarize(mean_count = (su
 lab16_bs_means= lab16_bs_sub %>% group_by(arthCode) %>% summarize(mean_count = (sum(count)/surv_lab16_bs))
 lab16_vis_means= lab16_vis_sub %>% group_by(arthCode) %>% summarize(mean_count = (sum(count)/surv_lab16_vis))
 
-#calculate mean number of each type of arthropods seen by tree species for lab visual surveys in 2015 & 2016
-surv_tree_lab_vis = lab_vis %>% distinct(date, circle, survey, realPlantSp) %>% count(realPlantSp)
 
-#change less common arthropods into one "other" group for the tree species groups
-lab_vis_oth = lab_vis
-lab_vis_oth$arthCode[!lab_vis_oth$arthCode %in% birdfood_top6] = 'OTHR'
+#create color palette:
+library(RColorBrewer)
+coul = brewer.pal(7, "Set3") 
 
-lab_vis_trees = lab_vis_oth %>% 
-  group_by(realPlantSp, arthCode) %>% 
-  summarize(tot_count = sum(count), presence = sum(count > 0)) %>%
-  left_join(surv_tree_lab_vis, by = 'realPlantSp') %>%
-  mutate(mean_count = tot_count/n, occurrence = presence/n)
-
-lab_vis_trees_no_outliers = lab_vis_oth %>% 
-  filter(count < 30) %>%
-  group_by(realPlantSp, arthCode) %>% 
-  summarize(tot_count = sum(count)) %>%
-  left_join(surv_tree_lab_vis, by = 'realPlantSp') %>%
-  mutate(mean_count = tot_count/n) %>%
-  filter(realPlantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak"))
+arthcols = data.frame(arthCode = c('ARAN', 'AUCH', 'COLE', 'DIPT', 'LEPL', 'ORTH', 'OTHR'),
+                      col = coul[c(3, 1, 4, 2, 7, 6, 5)])
+arthcols$arthCode = as.character(arthcols$arthCode)
+arthcols$col = as.character(arthcols$col)
+arthcols$col2 = arthcols$col
+arthcols$col2[arthcols$arthCode=='DIPT'] = 'gray50'
+arthcols$name = c('Aranae', 'Auchenorrhyncha', 'Coleoptera', 'Diptera', 'Caterpillars', 'Orthoptera', 'Other')
 
 
-#only use 4 most common tree sp at PR (within 1-8) #sweet gum, common persimmon, box elder, chalk maple
-common_trees = lab_vis_trees %>% 
-  filter(realPlantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak")) 
-common_trees_den = spread(common_trees[, c('realPlantSp', 'arthCode', 'mean_count')], realPlantSp, mean_count) %>%
-  data.frame()
-names(common_trees_den) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Pin oak", "Sweet gum")
-
-common_trees_occ = spread(common_trees[, c('realPlantSp', 'arthCode', 'occurrence')], realPlantSp, occurrence) %>%
-  data.frame()
-names(common_trees_occ) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Pin oak", "Sweet gum")
-
-common_trees_den_no_outliers = spread(lab_vis_trees_no_outliers[, c('realPlantSp', 'arthCode', 'mean_count')], realPlantSp, mean_count) %>% data.frame()
-
-#merge all means into one dataframe
-join = left_join(vol15_means, vol16_means, by = "arthCode")
-names(join) = c("arthCode", "mean_vol15", "mean_vol16")
-join1 = left_join(join, lab15_means, by = "arthCode")
-names(join1) =c("arthCode", "mean_vol15", "mean_vol16", "mean_lab15")
-arth_means = data.frame(left_join(join1, lab16_bs_means, by = "arthCode"))
-names(arth_means) = c("arthCode", "vol_vis", "vol_bs", "lab_vis", "lab_bs") #change names to reflect visual and bs (2015 is vis, 2016 is bs)
 
 #---------plotting for figures------------------
 
@@ -153,16 +254,6 @@ pdf('plots/paper_plots/Figures1to6_arthropods.pdf', height = 6, width = 8)
 par(xpd=FALSE)
 par(mfrow = c(2, 3), mar = c(5, 5, 2, 1))
 
-#create color palette:
-library(RColorBrewer)
-coul = brewer.pal(7, "Set3") 
-
-arthcols = data.frame(arthCode = lab_selected$arthCode,
-                      col = coul[c(3, 1, 4, 2, 7, 6, 5)])
-arthcols$col = as.character(arthcols$col)
-arthcols$col2 = arthcols$col
-arthcols$col2[arthcols$arthCode=='DIPT'] = 'gray50'
-arthcols$name = c('Aranae', 'Auchenorrhyncha', 'Coleoptera', 'Diptera', 'Caterpillars', 'Orthoptera', 'Other')
 
 #panel A
 common_trees2 = common_trees_den_no_outliers[,-1]
@@ -173,7 +264,7 @@ labs = c('Box elder', 'Chalk maple', 'Persimmon', 'Pin oak', 'Sweet gum')
 orderedlabs = labs[c(5, 2, 1, 3, 4)]
 par(mgp = c(3.5, 1, 0))
 barplot(common_trees2, las = 1, cex.axis = 1.2, cex.lab = 1.5, xaxt="n", ylim = c(0, 2.7),
-        xlim = c(0, 6), ylab = "Density (#/survey)", col = arthcols$col) 
+        xlim = c(0, 6), ylab = "Density (# / survey)", col = arthcols$col) 
 text(seq(1, 5.5, length.out = 5), rep(-.02, 5), orderedlabs,
      srt = 45, xpd = TRUE, adj = 1, cex = 1.2)
 
@@ -184,8 +275,8 @@ text(.7, 2.6, "*", cex = 3)
 
 #panel B
 par(mgp = c(3, 1, 0))
-lab_selected1 = lab_selected[,-1]
-rownames(lab_selected1) = lab_selected[,1]
+lab_selected1 = lab_selected_rel[,-1]
+rownames(lab_selected1) = lab_selected_rel[,1]
 lab_selected1 = as.matrix(lab_selected1) #create matrix w/o arth code?
 tops = cumsum(lab_selected1[,2])
 bottoms = c(0, tops[1:6])
@@ -193,19 +284,18 @@ centers = (tops + bottoms)/2
 
 barplot(lab_selected1, las = 1, xlim = c(0, 3.2), xaxt = "n",
         ylab = "Proportion", col = arthcols$col, cex.axis = 1.2, cex.lab = 1.5)
-mtext(c("Visual", "Beat sheet"), 1, at = c(.7, 2), line = 1)
+mtext(c("Visual\nsurvey", "Beat\nsheet"), 1, at = c(.7, 2), line = 2)
 mtext(arthcols$name, 4, at = centers, las = 1, line = -3.6, col = arthcols$col2, 
       cex = c(.75, .5, .75, .75, .75, .75, .75))
 
 
 #panel C
-arth_means2 = left_join(arth_means, arthcols)
+arth_means2 = left_join(lab_bs_vis_den, arthcols, by = c('arthCode2' = 'arthCode'))
 arth_means2$col[is.na(arth_means2$col)] = "#80B1D3"
-arth_means2 = arth_means2[arth_means2$arthCode != 'NONE', ]
-plot(arth_means2$lab_vis, arth_means2$lab_bs, las = 1, col = arth_means2$col, pch = 17, 
+plot(arth_means2$vis_den, arth_means2$bs_den, las = 1, col = arth_means2$col, pch = 17, 
      xlab = "Density (visual)", ylab = "Density (beat sheet)", cex = 3, cex.lab = 1.5, 
-     xlim = c(0, 0.65), ylim = c(0, 0.65), cex.axis = 1.2)
-laboratory = lm(lab_bs ~ lab_vis, data = arth_means2)
+     xlim = c(0, 0.5), ylim = c(0, 0.7), cex.axis = 1.2)
+laboratory = lm(bs_den ~ vis_den, data = arth_means2)
 abline(laboratory, col = "black", lwd = 2)
 abline(a = 0, b = 1, col = 'gray50', lwd = 1)
 

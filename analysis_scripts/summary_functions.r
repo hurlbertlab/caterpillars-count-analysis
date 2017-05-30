@@ -9,8 +9,6 @@ library(lubridate)
 library(stringr)
 library(gsheet)
 
-labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191, 300, 301, 302) #needs to be edited as new lab members conduct surveys
-
 #--------------------------------------------------------------------------------------------------
 # FUNCTIONS
 
