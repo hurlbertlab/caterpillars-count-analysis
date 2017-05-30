@@ -23,14 +23,14 @@ surveySubset = function(cleandata, subset = "visual am", minLength = 0)
   
   if (subset == "visual am"){
     visualsurvey = tempdata[tempdata$surveyType=="Visual",]
-    amsurvey = visualsurvey[!grepl("REPEAT SURVEY", visualsurvey$notes.x),]
+    amsurvey = visualsurvey[!grepl("REPEAT SURVEY", visualsurvey$sitenotes),]
     labsurvey = amsurvey[amsurvey$userID %in% labgroupusers, ] # make more general
     data.out = labsurvey
   } else if (subset == "beat sheet"){
     beatsheet = tempdata[tempdata$surveyType=="Beat_Sheet",]
     data.out = beatsheet
   } else if (subset == "visual pm"){
-    repsurvey = tempdata[grep("REPEAT SURVEY", tempdata$notes.x),]
+    repsurvey = tempdata[grep("REPEAT SURVEY", tempdata$sitenotes),]
     data.out = repsurvey
   } else if (subset == "volunteer"){
     volsurvey = tempdata[tempdata$userID == 129,] # make more general
