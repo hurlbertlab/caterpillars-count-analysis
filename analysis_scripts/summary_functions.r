@@ -31,7 +31,7 @@ surveySubset = function(cleandata, subset = "visual am", minLength = 0)
     repsurvey = tempdata[grep("REPEAT SURVEY", tempdata$sitenotes),]
     data.out = repsurvey
   } else if (subset == "volunteer"){
-    volsurvey = tempdata[tempdata$userID == 129,] # make more general
+    volsurvey = tempdata[!tempdata$userID %in% labgroupusers, ] # make more general
     data.out = volsurvey
   }
   return(data.out)

@@ -20,7 +20,7 @@ library(stringr)
 source("analysis_scripts/summary_functions.r")
 
 # UserIDs of Hurlbert Lab data collectors
-labgroupusers = c(69, 130, 131, 132, 136, 158, 159, 189, 191, 300, 301, 302)
+labgroupusers = c(69, 75, 130, 131, 132, 136, 158, 159, 189, 191, 300, 301, 302)
 
 
 
