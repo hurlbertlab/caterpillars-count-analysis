@@ -18,12 +18,21 @@ outlierDensity = 30 #counts >= to this value will be excluded as outliers
 
 #################################################################################
 # Analysis of lab data (no julianday restrictions), Panels A-C
-lab_vis = filter(amsurvey.pr, year %in% c(2015, 2016), length >= minLength)
-lab_bs = filter(beatsheet.pr, year %in% c(2015, 2016), length >= minLength)
+
+pre_lab_vis = filter(amsurvey.pr, year %in% c(2015, 2016))
+pre_lab_bs = filter(beatsheet.pr, year %in% c(2015, 2016))
+
+# Total number of surveys conducted must be derived from the 'pre' dataframes
+# before surveyIDs with NONE are excluded by the length criterion
+num_bs_surveys = length(unique(pre_lab_bs$surveyID[pre_lab_bs$count < outlierDensity]))
+num_vis_surveys = length(unique(pre_lab_vis$surveyID[pre_lab_vis$count < outlierDensity]))
+
+lab_vis = filter(pre_lab_vis, length >= minLength)
+lab_bs = filter(pre_lab_bs, length >= minLength)
 
 ###
 # calculate mean number of each type of arthropods seen by tree species for lab visual surveys in 2015 & 2016
-surv_tree_lab_vis = lab_vis %>% distinct(date, circle, survey, realPlantSp) %>% count(realPlantSp)
+surv_tree_lab_vis = pre_lab_vis %>% distinct(date, circle, survey, realPlantSp) %>% count(realPlantSp)
 
 # Group less common "bird food" arthropods together for plotting; 
 # decided on these because AUCH, DIPT, and COLE were in the top 5 most dense for 
@@ -85,9 +94,6 @@ lab_selected_rel = left_join(lab_bs_rel_oth, lab_vis_rel_oth, by = 'arthCode') %
 ###
 # Calculate absolute density of arthropod orders by beat sheet vs visual survey
 
-num_bs_surveys = length(unique(lab_bs$surveyID[lab_bs$count < outlierDensity]))
-num_vis_surveys = length(unique(lab_vis$surveyID[lab_vis$count < outlierDensity]))
-
 lab_bs_den = lab_bs %>% filter(count < outlierDensity) %>%
   group_by(arthCode) %>% summarize(totCount = sum(count)) %>%
   mutate(density = totCount/num_bs_surveys)
@@ -109,33 +115,44 @@ lab_bs_vis_den$arthCode2[!lab_bs_vis_den$arthCode %in% birdfood_top6] = 'OTHR'
 # Analysis of lab data vs volunteer data, Panels D-F
 # (comparison restricted to circles 1:8)
 
-lab15_vis = filter(amsurvey.pr, year == 2015, length >= minLength, 
-                   circle %in% 1:8, count < outlierDensity)
-vol15_vis = filter(volunteer.pr, year == 2015, length >= minLength, 
-                   circle %in% 1:8, count < outlierDensity)
-lab16_bs = filter(beatsheet.pr, year == 2016, length >= minLength, 
-                  circle %in% 1:8, count < outlierDensity)
-vol16_bs = filter(volunteer.pr, year == 2016, length >= minLength, 
-                  circle %in% 1:8, count < outlierDensity)
+pre_lab15_vis = filter(amsurvey.pr, year == 2015, count < outlierDensity, 
+                   circle %in% 1:8, julianday <= 193 & julianday >= 147)
+pre_vol15_vis = filter(volunteer.pr, year == 2015, count < outlierDensity, 
+                   circle %in% 1:8, julianday <= 193 & julianday >= 147)
+pre_lab16_bs = filter(beatsheet.pr, year == 2016, count < outlierDensity, 
+                  circle %in% 1:8, julianday <= 193 & julianday >= 147)
+pre_vol16_bs = filter(volunteer.pr, year == 2016, count < outlierDensity, 
+                  circle %in% 1:8, julianday <= 193 & julianday >= 147, surveyType == 'Beat_Sheet')
+
+num_lab15vis_surveys = length(unique(pre_lab15_vis$surveyID))
+num_vol15vis_surveys = length(unique(pre_vol15_vis$surveyID))
+num_lab16bs_surveys = length(unique(pre_lab16_bs$surveyID))
+num_vol16bs_surveys = length(unique(pre_vol16_bs$surveyID))
+
+
+lab15_vis = filter(pre_lab15_vis, length >= minLength)
+vol15_vis = filter(pre_vol15_vis, length >= minLength)
+lab16_bs = filter(pre_lab16_bs, length >= minLength)
+vol16_bs = filter(pre_vol16_bs, length >= minLength)
 
 # calculate relative number of arthropods in each set of surveys
 
 
 vol15_vis_rel = vol15_vis %>% group_by(arthCode) %>% summarize(totCount = sum(count)) %>%
   mutate(proportion = totCount/sum(vol15_vis$count), 
-         density = totCount/length(unique(vol15_vis$surveyID)),
+         density = totCount/num_vol15vis_surveys,
          arthCode2 = arthCode)
 lab15_vis_rel = lab15_vis %>% group_by(arthCode) %>% summarize(totCount = sum(count)) %>%
   mutate(proportion = totCount/sum(lab15_vis$count),
-         density = totCount/length(unique(lab15_vis$surveyID)),
+         density = totCount/num_lab15vis_surveys,
          arthCode2 = arthCode)
 vol16_bs_rel = vol16_bs %>% group_by(arthCode) %>% summarize(totCount = sum(count)) %>%
   mutate(proportion = totCount/sum(vol16_bs$count),
-         density = totCount/length(unique(vol16_bs$surveyID)),
+         density = totCount/num_vol16bs_surveys,
          arthCode2 = arthCode)
 lab16_bs_rel = lab16_bs %>% group_by(arthCode) %>% summarize(totCount = sum(count)) %>%
   mutate(proportion = totCount/sum(lab16_bs$count),
-         density = totCount/length(unique(lab16_bs$surveyID)),
+         density = totCount/num_lab16bs_surveys,
          arthCode2 = arthCode)
 
 vis_comp_all = left_join(vol15_vis_rel, lab15_vis_rel, by = c('arthCode', 'arthCode2')) %>%
@@ -188,7 +205,8 @@ arthcols$arthCode = as.character(arthcols$arthCode)
 arthcols$col = as.character(arthcols$col)
 arthcols$col2 = arthcols$col
 arthcols$col2[arthcols$arthCode=='DIPT'] = 'gray50'
-arthcols$name = c('Aranae', 'Auchenorrhyncha', 'Coleoptera', 'Diptera', 'Caterpillars', 'Orthoptera', 'Other')
+arthcols$name = c('Spiders', 'Leafhoppers', 'Beetles', 'Flies', 'Caterpillars', 'Crickets', 'Other')
+arthcols$name2 = c('Aranae', 'Auchenorrhyncha', 'Coleoptera', 'Diptera', 'Caterpillars', 'Orthoptera', 'Other')
 arthcols$pch = c(rep(17, 6), 16)
 arthcols$cex = c(rep(3, 6), 2)
 
@@ -201,26 +219,28 @@ pdf(paste('output/plots/paper_plots/Figure4_data_comparisons_minLength', minLeng
     height = 6, width = 8)
 
 par(xpd=FALSE)
-par(mfrow = c(2, 3), mar = c(5, 5, 2, 1))
+par(mfrow = c(2, 3), mar = c(5, 5, 3, 1))
 
 
 #panel A
 common_trees2 = common_trees_den_no_outliers[,-1]
 rownames(common_trees2) = common_trees_den_no_outliers[,1]
 common_trees2 = as.matrix(common_trees2)
-common_trees2 = common_trees2[, c(5, 2, 1, 3, 4)]
+order = order(colSums(common_trees2, na.rm = T), decreasing = T)
+common_trees2 = common_trees2[, order]
 labs = c('Box elder', 'Chalk maple', 'Persimmon', 'Pin oak', 'Sweet gum')
-orderedlabs = labs[c(5, 2, 1, 3, 4)]
+orderedlabs = labs[order]
 par(mgp = c(3.5, 1, 0))
-barplot(common_trees2, las = 1, cex.axis = 1.2, cex.lab = 1.5, xaxt="n", ylim = c(0, 2.7),
+barplot(common_trees2, las = 1, cex.axis = 1.2, cex.lab = 1.5, xaxt="n", ylim = c(0, 1.3),
         xlim = c(0, 6), ylab = "Density (# / survey)", col = arthcols$col) 
 text(seq(1, 5.5, length.out = 5), rep(-.02, 5), orderedlabs,
      srt = 45, xpd = TRUE, adj = 1, cex = 1.2)
 
 # * indicates tree species where large caterpillar colonies (e.g. 100s) were observed,
 # but these outlier records were removed in calculating means.
-text(5.5, 2.1, "*", cex = 3)
-text(.7, 2.6, "*", cex = 3)
+text(.7, 1.1, "*", cex = 3)
+text(1.9, 0.9, "*", cex = 3)
+mtext("A", 3, adj = -0.3, line = 0.5, cex = 2)
 
 #panel B
 par(mgp = c(3, 1, 0))
@@ -235,7 +255,8 @@ barplot(lab_selected1, las = 1, xlim = c(0, 3.2), xaxt = "n",
         ylab = "Proportion", col = arthcols$col, cex.axis = 1.2, cex.lab = 1.5)
 mtext(c("Visual\nsurvey", "Beat\nsheet"), 1, at = c(.7, 2), line = 2)
 mtext(arthcols$name, 4, at = centers, las = 1, line = -3.6, col = arthcols$col2, 
-      cex = c(.75, .5, .75, .75, .75, .75, .75))
+      cex = .7, font = 2)
+mtext("B", 3, adj = -0.3, line = 0.5, cex = 2)
 
 
 #panel C
@@ -243,12 +264,15 @@ arth_means2 = left_join(lab_bs_vis_den, arthcols, by = c('arthCode2' = 'arthCode
 arth_means2$col[is.na(arth_means2$col)] = "#80B1D3"
 plot(arth_means2$vis_den, arth_means2$bs_den, las = 1, col = arth_means2$col, pch = arth_means2$pch, 
      xlab = "Density (visual)", ylab = "Density (beat sheet)", cex = arth_means2$cex, cex.lab = 1.5, 
-     xlim = c(0, 0.5), ylim = c(0, 0.7), cex.axis = 1.2)
+     xlim = c(0, 0.2), ylim = c(0, 0.35), cex.axis = 1.2, yaxt = "n")
+axis(2, at = seq(0, 0.35, by = 0.05), tcl = -0.3, labels = F)
+mtext(c('0.0', '0.1', '0.2', '0.3'), 2, at = seq(0, 0.3, by = 0.1), line = 1, cex = 0.8, las = 1)
 points(arth_means2$vis_den[arth_means2$arthCode=='DIPT'],
        arth_means2$bs_den[arth_means2$arthCode=='DIPT'], cex = 3, pch = 2, col = 'gray80')
 laboratory = lm(bs_den ~ vis_den, data = arth_means2)
 abline(laboratory, col = "black", lwd = 2)
-abline(a = 0, b = 1, col = 'gray50', lwd = 1)
+abline(a = 0, b = 1, col = 'gray50', lwd = 4, lty = 'dotted')
+mtext("C", 3, adj = -0.3, line = 0.5, cex = 2)
 
 
 #figure D - visual surveys by pct
@@ -257,6 +281,7 @@ vis_cmp = left_join(vis_comp, arthcols, by = c('arthCode2' = 'arthCode'))
 barplot(as.matrix(vis_cmp[, c('vis_vol_pct', 'vis_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2), 
         ylab = "Proportion", col = vis_cmp$col, cex.lab = 1.5, cex.axis = 1.2)
 mtext(c("Volunteers", "Trained"), 1, at = c(.7, 2), line = 1)
+mtext("D", 3, adj = -0.3, line = 0.5, cex = 2)
 
 
 #figure E
@@ -265,22 +290,30 @@ bs_cmp = left_join(bs_comp, arthcols, by = c('arthCode2' = 'arthCode'))
 barplot(as.matrix(bs_cmp[, c('bs_vol_pct', 'bs_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2),
         ylab = "Proportion", col = arthcols$col, cex.lab = 1.5, cex.axis = 1.2)
 mtext(c("Volunteers", "Trained"), 1, at = c(.7, 2), line = 1)
+mtext("E", 3, adj = -0.3, line = 0.5, cex = 2)
 
 
 #figure F
 vis_cmp_all = left_join(vis_comp_all, arthcols, by = c('arthCode2' = 'arthCode'))
 bs_cmp_all = left_join(bs_comp_all, arthcols, by = c('arthCode2' = 'arthCode'))
 
-plot(vis_cmp_all$dens_lab, vis_cmp_all$dens_vol, las = 1, xlab = "Density (trained)",
+par(mgp = c(3.5, 0.75, 0))
+plot(vis_cmp_all$dens_lab, vis_cmp_all$dens_vol, las = 1, xlab = "",
      ylab = "Density (volunteers)", col = vis_cmp_all$col, pch = vis_cmp_all$pch, 
-     cex = vis_cmp_all$cex, cex.lab = 1.5, cex.axis = 1.2)
+     cex = vis_cmp_all$cex, cex.lab = 1.5, cex.axis = 1.2,
+     xlim = c(0, 0.26), ylim = c(0, 0.31), yaxt = "n")
+mtext("Density (trained)", 1, line = 3, cex.lab = 1.5)
+axis(2, at = seq(0, 0.3, by = 0.05), tcl = -0.3, labels = F)
+mtext(c('0.0', '0.1', '0.2', '0.3'), 2, at = seq(0, 0.3, by = 0.1), line = 1, cex = 0.8, las = 1)
 vol.lab.vis =lm(dens_vol ~ dens_lab, data = vis_cmp_all)
 abline(vol.lab.vis, lwd = 2)
 points(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol, las = 1, col = bs_cmp_all$col, pch = 1, cex =3)
 points(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol, las = 1, col = bs_cmp_all$col, pch = 16, cex =2)
 vol.lab.bs = lm(dens_vol ~ dens_lab, data = bs_cmp_all)
 abline(vol.lab.bs, lty = 'dashed', lwd = 2)
-abline(a = 0, b = 1, col = 'gray50', lwd = 1)
+abline(a = 0, b = 1, col = 'gray50', lwd = 4, lty = 'dotted')
+mtext("F", 3, adj = -0.3, line = 0.5, cex = 2)
+
 
 legend("bottomright", c('visual', 'beat sheet'), lwd = 2, lty = c('solid', 'dashed'))
 
