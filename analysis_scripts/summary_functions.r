@@ -53,6 +53,39 @@ surveyCount = function(events, site, year) {
 }
 
 
+# Function for calculating mean density over a window of time (julian days and/or years)
+# requires data_cleaning.R to have been run (specifically needs cleandata2 and labgroupusers)
+
+meanDensity = function(siteID, years, lab = TRUE, ordersToInclude = 'LEPL', survType = 'Visual', 
+                       minLength = 5, outlierDensity = 30, jdayRange = c(1, 365), circles = 1:12) {
+  
+  foo2 = cleandata2 %>% 
+    filter(site == siteID,
+           year %in% years,
+           !grepl("REPEAT SURVEY", sitenotes), # For excluding afternoon repeat surveys by us in 2015
+           surveyType == survType,
+           count < outlierDensity,
+           julianday >= min(jdayRange),
+           julianday <= max(jdayRange),
+           circle %in% circles)
+  
+  if(lab) {
+    foo = filter(foo2, userID %in% labgroupusers)
+  } else {
+    foo = filter(foo2, !userID %in% labgroupusers)
+  }
+  
+  num_surveys = length(unique(foo$surveyID))
+  
+  num_bugs = sum(foo$count[foo$arthCode %in% ordersToInclude & foo$length >= minLength])
+  
+  return(c(num_bugs, num_surveys, num_bugs / num_surveys))
+  
+}
+
+
+
+
 # Function for calculating mean density, mean biomass, or fraction of surveys 
 # with a certain Order per Julian day
 
