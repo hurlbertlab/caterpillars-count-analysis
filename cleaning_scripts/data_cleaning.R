@@ -95,6 +95,7 @@ orders2$arthropod[orders2$arthropod == "Termites (Isoptera)"] =
 #Change NAs in counts to 0s, and NAs in arthropods to none- mobile phone submissions don't recognize "nones"
 orders2$arthropod[is.na(orders2$arthropod)] <- "NONE"
 orders2$count[is.na(orders2$count)] <- 0
+orders2$length[is.na(orders2$length) & orders2$arthropod == 'NONE'] <- 0
 
 
 arthcodes = read.csv('data/arthropods/arth_codes.csv', header=T,
@@ -306,14 +307,27 @@ cleandata$clean_plantSp[cleandata$clean_plantSp %in% c("","dead tree", "delete m
 
 #surveytrees = rbind(recentsurveytrees, apptrees)
 #names(surveytrees)[4] = 'realPlantSp'
-#write.csv(surveytrees, 'data/all_surveytrees.csv', row.names = F)
-surveytrees = read.csv('data/all_surveytrees.csv', header=T, stringsAsFactors = F)
+#write.csv(surveytrees, 'data/trees/all_surveytrees.csv', row.names = F)
+surveytrees = read.csv('data/trees/all_surveytrees.csv', header=T, stringsAsFactors = F)
 
 
 cleandata2 = left_join(cleandata, surveytrees) %>%
   select(surveyID, userID, site, circle, survey, date, time, julianday, year,
          surveyType, leafCount, realPlantSp, herbivory, arthropod, arthCode, 
          length, count, biomass, wetLeaves, sitenotes, bugnotes)
+
+
+# Go through surveys which have had tree species changes, and change realPlantSp as needed
+oldtrees = read.csv('data/trees/tbl_old_surveyTrees.csv', stringsAsFactors = F)
+names(oldtrees) = c('oldTree_ID', 'siteID', 'circle', 'survey', 'dateBegin', 'dateEnd', 'plantspecies', 'Notes')
+
+for (i in 1:nrow(oldtrees)) {
+  cleandata2$realPlantSp[cleandata2$siteID == oldtrees$siteID[i] &
+                           cleandata2$circle == oldtrees$circle[i] &
+                           cleandata2$survey == oldtrees$survey[i] &
+                           as.Date(cleandata2$date) > as.Date(oldtrees$dateBegin[i]) &
+                           as.Date(cleandata2$date) < as.Date(oldtrees$dateEnd[i])] = oldtrees$plantspecies[i]
+}
 
 #----------------------------------------------------------------------------------------
 # Leaf area data
