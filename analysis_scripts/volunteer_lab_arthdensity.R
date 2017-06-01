@@ -19,8 +19,8 @@ outlierDensity = 30 #counts >= to this value will be excluded as outliers
 #################################################################################
 # Analysis of lab data (no julianday restrictions), Panels A-C
 
-pre_lab_vis = filter(amsurvey.pr, year %in% c(2015, 2016))
-pre_lab_bs = filter(beatsheet.pr, year %in% c(2015, 2016))
+pre_lab_vis = filter(rbind(amsurvey.pr, amsurvey.bg), year %in% c(2015, 2016))
+pre_lab_bs = filter(rbind(beatsheet.pr, beatsheet.bg), year %in% c(2015, 2016))
 
 # Total number of surveys conducted must be derived from the 'pre' dataframes
 # before surveyIDs with NONE are excluded by the length criterion
@@ -50,7 +50,7 @@ lab_vis_trees = lab_vis_oth %>%
 
 # Removing large colonial insect observations (e.g. caterpillars) with counts >= 30
 lab_vis_trees_no_outliers = lab_vis_oth %>% 
-  filter(count < 30) %>%
+  filter(count < outlierDensity) %>%
   group_by(realPlantSp, arthCode) %>% 
   summarize(tot_count = sum(count)) %>%
   left_join(surv_tree_lab_vis, by = 'realPlantSp') %>%
