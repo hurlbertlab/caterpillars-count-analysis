@@ -49,21 +49,39 @@ lab_vis_trees = lab_vis_oth %>%
   mutate(mean_count = tot_count/n, occurrence = presence/n)
 
 # Removing large colonial insect observations (e.g. caterpillars) with counts >= 30
+trees = c("American beech", "Box elder", "Common persimmon", 
+          "Spicebush", "Sugar maple", "Sweet gum")
+
 lab_vis_trees_no_outliers = lab_vis_oth %>% 
   filter(count < outlierDensity) %>%
   group_by(realPlantSp, arthCode) %>% 
   summarize(tot_count = sum(count)) %>%
   left_join(surv_tree_lab_vis, by = 'realPlantSp') %>%
   mutate(mean_count = tot_count/n) %>%
-  filter(realPlantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak"))
+  filter(realPlantSp %in% trees)
+
+# Getting mean & standard deviations of total arthropods by tree species
+
+tree_means = pre_lab_vis %>%
+  filter(count < outlierDensity) %>%
+  mutate(modcount = ifelse(length >= minLength, count, 0)) %>%
+  group_by(surveyID, realPlantSp) %>%
+  summarize(total = sum(modcount)) %>%
+  group_by(realPlantSp) %>%
+  summarize(mean = mean(total), sd = sd(total), n = n()) %>%
+  mutate(ll95 = mean - 1.96*sd/(n^.5), 
+         ul95 = mean + 1.96*sd/(n^.5)) %>%
+  filter(realPlantSp %in% trees) %>%
+  arrange(desc(mean))
+
 
 
 # only use most common tree sp at PR: sweet gum, common persimmon, box elder, chalk maple, pin oak
 common_trees = lab_vis_trees %>% 
-  filter(realPlantSp %in% c("Sweet gum", "Common persimmon", "Box elder", "Chalk maple", "Pin oak")) 
+  filter(realPlantSp %in% trees) 
 common_trees_den = spread(common_trees[, c('realPlantSp', 'arthCode', 'mean_count')], realPlantSp, mean_count) %>%
   data.frame()
-names(common_trees_den) = c("arthCode", "Box elder", "Chalk maple", "Common persimmon", "Pin oak", "Sweet gum")
+names(common_trees_den) = c("arthCode", trees)
 
 common_trees_occ = spread(common_trees[, c('realPlantSp', 'arthCode', 'occurrence')], realPlantSp, occurrence) %>%
   data.frame()
@@ -228,19 +246,21 @@ rownames(common_trees2) = common_trees_den_no_outliers[,1]
 common_trees2 = as.matrix(common_trees2)
 order = order(colSums(common_trees2, na.rm = T), decreasing = T)
 common_trees2 = common_trees2[, order]
-labs = c('Box elder', 'Chalk maple', 'Persimmon', 'Pin oak', 'Sweet gum')
+labs = c('Am. beech', 'Box elder', 'Persimmon', 'Spicebush', 'Sugar maple', 'Sweet gum')
 orderedlabs = labs[order]
 par(mgp = c(3.5, 1, 0))
-barplot(common_trees2, las = 1, cex.axis = 1.2, cex.lab = 1.5, xaxt="n", ylim = c(0, 1.3),
-        xlim = c(0, 6), ylab = "Density (# / survey)", col = arthcols$col) 
-text(seq(1, 5.5, length.out = 5), rep(-.02, 5), orderedlabs,
+bar = barplot(common_trees2, las = 1, cex.axis = 1.2, cex.lab = 1.5, xaxt="n", ylim = c(0, 1.3),
+        xlim = c(0, 7), ylab = "Density (# / survey)", col = arthcols$col) 
+segments(bar, tree_means$ll95, bar, tree_means$ul95, lwd = 2)
+
+text(seq(.8, 6.75, length.out = 6), rep(-.02, 6), orderedlabs,
      srt = 45, xpd = TRUE, adj = 1, cex = 1.2)
 
 # * indicates tree species where large caterpillar colonies (e.g. 100s) were observed,
 # but these outlier records were removed in calculating means.
 text(.7, 1.1, "*", cex = 3)
 text(1.9, 0.9, "*", cex = 3)
-mtext("A", 3, adj = -0.3, line = 0.5, cex = 2)
+mtext("A", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 #panel B
 par(mgp = c(3, 1, 0))
@@ -256,7 +276,7 @@ barplot(lab_selected1, las = 1, xlim = c(0, 3.2), xaxt = "n",
 mtext(c("Visual\nsurvey", "Beat\nsheet"), 1, at = c(.7, 2), line = 2)
 mtext(arthcols$name, 4, at = centers, las = 1, line = -3.6, col = arthcols$col2, 
       cex = .7, font = 2)
-mtext("B", 3, adj = -0.3, line = 0.5, cex = 2)
+mtext("B", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 
 #panel C
@@ -272,7 +292,7 @@ points(arth_means2$vis_den[arth_means2$arthCode=='DIPT'],
 laboratory = lm(bs_den ~ vis_den, data = arth_means2)
 abline(laboratory, col = "black", lwd = 2)
 abline(a = 0, b = 1, col = 'gray50', lwd = 4, lty = 'dotted')
-mtext("C", 3, adj = -0.3, line = 0.5, cex = 2)
+mtext("C", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 
 #figure D - visual surveys by pct
@@ -281,7 +301,7 @@ vis_cmp = left_join(vis_comp, arthcols, by = c('arthCode2' = 'arthCode'))
 barplot(as.matrix(vis_cmp[, c('vis_vol_pct', 'vis_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2), 
         ylab = "Proportion", col = vis_cmp$col, cex.lab = 1.5, cex.axis = 1.2)
 mtext(c("Volunteers", "Trained"), 1, at = c(.7, 2), line = 1)
-mtext("D", 3, adj = -0.3, line = 0.5, cex = 2)
+mtext("D", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 
 #figure E
@@ -290,7 +310,7 @@ bs_cmp = left_join(bs_comp, arthcols, by = c('arthCode2' = 'arthCode'))
 barplot(as.matrix(bs_cmp[, c('bs_vol_pct', 'bs_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2),
         ylab = "Proportion", col = arthcols$col, cex.lab = 1.5, cex.axis = 1.2)
 mtext(c("Volunteers", "Trained"), 1, at = c(.7, 2), line = 1)
-mtext("E", 3, adj = -0.3, line = 0.5, cex = 2)
+mtext("E", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 
 #figure F
@@ -312,7 +332,7 @@ points(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol, las = 1, col = bs_cmp_all$col, 
 vol.lab.bs = lm(dens_vol ~ dens_lab, data = bs_cmp_all)
 abline(vol.lab.bs, lty = 'dashed', lwd = 2)
 abline(a = 0, b = 1, col = 'gray50', lwd = 4, lty = 'dotted')
-mtext("F", 3, adj = -0.3, line = 0.5, cex = 2)
+mtext("F", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 
 legend("bottomright", c('visual', 'beat sheet'), lwd = 2, lty = c('solid', 'dashed'))
