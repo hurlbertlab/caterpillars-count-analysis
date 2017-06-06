@@ -198,6 +198,13 @@ lab16_bs_rel = lab16_bs %>% group_by(arthCode) %>% summarize(totCount = sum(coun
          density = totCount/num_lab16bs_surveys,
          arthCode2 = arthCode)
 
+# replace "others"
+vol15_vis_rel$arthCode2[!vol15_vis_rel$arthCode %in% birdfood_top6] = 'OTHR'
+lab15_vis_rel$arthCode2[!lab15_vis_rel$arthCode %in% birdfood_top6] = 'OTHR'
+vol16_bs_rel$arthCode2[!vol16_bs_rel$arthCode %in% birdfood_top6] = 'OTHR'
+lab16_bs_rel$arthCode2[!lab16_bs_rel$arthCode %in% birdfood_top6] = 'OTHR'
+
+
 vis_comp_all = left_join(vol15_vis_rel, lab15_vis_rel, by = c('arthCode', 'arthCode2')) %>%
   rename(dens_vol = density.x, dens_lab = density.y,
          pct_vol = proportion.x, pct_lab = proportion.y) %>% 
@@ -211,11 +218,6 @@ bs_comp_all = left_join(vol16_bs_rel, lab16_bs_rel, by = c('arthCode', 'arthCode
   filter(arthCode != 'NONE')
 
 
-# replace "others"
-vol15_vis_rel$arthCode2[!vol15_vis_rel$arthCode %in% birdfood_top6] = 'OTHR'
-lab15_vis_rel$arthCode2[!lab15_vis_rel$arthCode %in% birdfood_top6] = 'OTHR'
-vol16_bs_rel$arthCode2[!vol16_bs_rel$arthCode %in% birdfood_top6] = 'OTHR'
-lab16_bs_rel$arthCode2[!lab16_bs_rel$arthCode %in% birdfood_top6] = 'OTHR'
 
 vol15_vis_rel_oth = vol15_vis_rel %>% group_by(arthCode2) %>% 
   summarize(proportion = sum(proportion), density = sum(density))
@@ -265,7 +267,7 @@ arthcols$col2[arthcols$arthCode=='DIPT'] = 'gray50'
 arthcols$name = c('Spiders', 'Leafhoppers', 'Beetles', 'Flies', 'Caterpillars', 'Crickets', 'Other')
 arthcols$name2 = c('Aranae', 'Auchenorrhyncha', 'Coleoptera', 'Diptera', 'Caterpillars', 'Orthoptera', 'Other')
 arthcols$pch = c(rep(17, 6), 16)
-arthcols$cex = c(rep(3, 6), 2)
+arthcols$cex = c(rep(2.7, 6), 1.25)
 
 
 #---------plotting for figures------------------
@@ -297,8 +299,6 @@ text(seq(.8, 6.75, length.out = 6), rep(-.02, 6), orderedlabs,
 
 # * indicates tree species where large caterpillar colonies (e.g. 100s) were observed,
 # but these outlier records were removed in calculating means.
-text(.7, 1.1, "*", cex = 3)
-text(1.9, 0.9, "*", cex = 3)
 mtext("A", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 #panel B
@@ -321,16 +321,17 @@ mtext("B", 3, adj = -0.3, line = 0.5, cex = 1.75)
 #panel C
 arth_means2 = left_join(lab_bs_vis_den, arthcols, by = c('arthCode2' = 'arthCode'))
 arth_means2$col[is.na(arth_means2$col)] = "#80B1D3"
-plot(arth_means2$vis_den, arth_means2$bs_den, las = 1, col = arth_means2$col, pch = arth_means2$pch, 
+plot(arth_means2$vis_den, arth_means2$bs_den, las = 1, col = arth_means2$col, pch = 15, 
      xlab = "Density (visual)", ylab = "Density (beat sheet)", cex = arth_means2$cex, cex.lab = 1.5, 
-     xlim = c(0, 0.2), ylim = c(0, 0.35), cex.axis = 1.2, yaxt = "n")
-axis(2, at = seq(0, 0.35, by = 0.05), tcl = -0.3, labels = F)
-mtext(c('0.0', '0.1', '0.2', '0.3'), 2, at = seq(0, 0.3, by = 0.1), line = 1, cex = 0.8, las = 1)
+     xlim = c(0, 0.2), ylim = c(0, 0.26), cex.axis = 1.2, yaxt = "n")
+axis(2, at = seq(0, 0.25, by = 0.05), tcl = -0.3, labels = F)
+mtext(c('0.0', '0.1', '0.2'), 2, at = seq(0, 0.2, by = 0.1), line = 1, cex = 0.8, las = 1)
 points(arth_means2$vis_den[arth_means2$arthCode=='DIPT'],
-       arth_means2$bs_den[arth_means2$arthCode=='DIPT'], cex = 3, pch = 2, col = 'gray80')
-laboratory = lm(bs_den ~ vis_den, data = arth_means2)
-abline(laboratory, col = "black", lwd = 2)
-abline(a = 0, b = 1, col = 'gray50', lwd = 4, lty = 'dotted')
+       arth_means2$bs_den[arth_means2$arthCode=='DIPT'], cex = arthcols$cex[1], pch = 22, col = 'gray80')
+#laboratory = lm(bs_den ~ vis_den, data = arth_means2)
+#abline(laboratory, col = "black", lwd = 4)
+abline(a = 0, b = 1, col = 'black', lwd = 2, lty = 'solid')
+text(.17,.2, "1:1", srt = 30, cex = 1.5)
 mtext("C", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 
@@ -339,7 +340,8 @@ vis_cmp = left_join(vis_comp, arthcols, by = c('arthCode2' = 'arthCode'))
 
 barplot(as.matrix(vis_cmp[, c('vis_vol_pct', 'vis_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2), 
         ylab = "Proportion", col = vis_cmp$col, cex.lab = 1.5, cex.axis = 1.2)
-mtext(c("Volunteers", "Trained"), 1, at = c(.7, 2), line = 1)
+mtext("Visual", 3, adj = .35, line = .5)
+mtext(c("Volunteers", "Trained"), 1, at = c(.6, 1.9), line = 1, cex = .9)
 mtext("D", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 
@@ -348,7 +350,8 @@ bs_cmp = left_join(bs_comp, arthcols, by = c('arthCode2' = 'arthCode'))
 
 barplot(as.matrix(bs_cmp[, c('bs_vol_pct', 'bs_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2),
         ylab = "Proportion", col = arthcols$col, cex.lab = 1.5, cex.axis = 1.2)
-mtext(c("Volunteers", "Trained"), 1, at = c(.7, 2), line = 1)
+mtext("Beat sheet", 3, adj = .35, line = .5)
+mtext(c("Volunteers", "Trained"), 1, at = c(.6, 1.9), line = 1, cex = .9)
 mtext("E", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 
@@ -358,23 +361,28 @@ bs_cmp_all = left_join(bs_comp_all, arthcols, by = c('arthCode2' = 'arthCode'))
 
 par(mgp = c(3.5, 0.75, 0))
 plot(vis_cmp_all$dens_lab, vis_cmp_all$dens_vol, las = 1, xlab = "",
-     ylab = "Density (volunteers)", col = vis_cmp_all$col, pch = vis_cmp_all$pch, 
+     ylab = "Density (volunteers)", col = vis_cmp_all$col, pch = 17, 
      cex = vis_cmp_all$cex, cex.lab = 1.5, cex.axis = 1.2,
-     xlim = c(0, 0.26), ylim = c(0, 0.31), yaxt = "n")
+     xlim = c(0, 0.31), ylim = c(0, 0.31), yaxt = "n")
+points(vis_cmp_all$dens_lab[vis_cmp_all$arthCode=='DIPT'],
+       vis_cmp_all$dens_vol[vis_cmp_all$arthCode=='DIPT'], cex = 3, pch = 2, col = 'gray80')
 mtext("Density (trained)", 1, line = 3, cex.lab = 1.5)
 axis(2, at = seq(0, 0.3, by = 0.05), tcl = -0.3, labels = F)
 mtext(c('0.0', '0.1', '0.2', '0.3'), 2, at = seq(0, 0.3, by = 0.1), line = 1, cex = 0.8, las = 1)
 vol.lab.vis =lm(dens_vol ~ dens_lab, data = vis_cmp_all)
-abline(vol.lab.vis, lwd = 2)
-points(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol, las = 1, col = bs_cmp_all$col, pch = 1, cex =3)
-points(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol, las = 1, col = bs_cmp_all$col, pch = 16, cex =2)
+#abline(vol.lab.vis, lwd = 4)
+points(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol, las = 1, col = bs_cmp_all$col, pch = 16, cex = bs_cmp_all$cex)
+points(bs_cmp_all$dens_lab[bs_cmp_all$arthCode=='DIPT'], 
+       bs_cmp_all$dens_vol[bs_cmp_all$arthCode=='DIPT'], 
+       las = 1, col = 'gray80', pch = 1, cex = arthcols$cex[1])
 vol.lab.bs = lm(dens_vol ~ dens_lab, data = bs_cmp_all)
-abline(vol.lab.bs, lty = 'dashed', lwd = 2)
-abline(a = 0, b = 1, col = 'gray50', lwd = 4, lty = 'dotted')
+#abline(vol.lab.bs, lty = 'dashed', lwd = 4)
+abline(a = 0, b = 1, col = 'black', lwd = 2, lty = 'solid')
+text(.2,.23, "1:1", srt = 45, cex = 1.5)
 mtext("F", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
 
-legend("bottomright", c('visual', 'beat sheet'), lwd = 2, lty = c('solid', 'dashed'))
+legend("bottomright", c('visual', 'beat sheet'), pch = c(17, 16), pt.cex = 2, bty = 'n')
 
 dev.off()
 
