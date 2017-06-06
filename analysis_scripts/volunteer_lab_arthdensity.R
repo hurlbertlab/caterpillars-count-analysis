@@ -312,7 +312,7 @@ centers = (tops + bottoms)/2
 
 barplot(lab_selected1, las = 1, xlim = c(0, 3.2), xaxt = "n",
         ylab = "Proportion", col = arthcols$col, cex.axis = 1.2, cex.lab = 1.5)
-mtext(c("Visual\nsurvey", "Beat\nsheet"), 1, at = c(.7, 2), line = 2)
+mtext(c("Beat\nsheet", "Visual\nsurvey"), 1, at = c(.7, 1.9), line = 2)
 mtext(arthcols$name, 4, at = centers, las = 1, line = -3.6, col = arthcols$col2, 
       cex = .7, font = 2)
 mtext("B", 3, adj = -0.3, line = 0.5, cex = 1.75)
