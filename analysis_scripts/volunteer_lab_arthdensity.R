@@ -62,16 +62,28 @@ lab_vis_trees_no_outliers = lab_vis_oth %>%
 
 # Getting mean & standard deviations of total arthropods by tree species
 
-tree_means = pre_lab_vis %>%
+treedata = pre_lab_vis %>%
   filter(count < outlierDensity) %>%
   mutate(modcount = ifelse(length >= minLength, count, 0)) %>%
   group_by(surveyID, realPlantSp) %>%
   summarize(total = sum(modcount)) %>%
+  filter(realPlantSp %in% trees) 
+
+treemod1 = lm(total ~ realPlantSp, data = treedata)
+treemod2 = glm(total ~ realPlantSp, family = poisson, data = treedata)
+
+# note that estimates are pretty much identical for both models, 
+# differences slightly stronger for the glm
+
+# p-value = 1 - pchisq(deviance, degrees of freedom) in a glm
+# from https://stats.stackexchange.com/questions/108995/interpreting-residual-and-null-deviance-in-glm-r
+p = 1 - pchisq(treemod2$deviance, treemod2$df.residual)
+
+tree_means = treedata %>%
   group_by(realPlantSp) %>%
   summarize(mean = mean(total), sd = sd(total), n = n()) %>%
   mutate(ll95 = mean - 1.96*sd/(n^.5), 
          ul95 = mean + 1.96*sd/(n^.5)) %>%
-  filter(realPlantSp %in% trees) %>%
   arrange(desc(mean))
 
 
@@ -109,6 +121,7 @@ lab_vis_rel_oth = lab_vis_rel %>% group_by(arthCode) %>% summarize(proportion = 
 lab_selected_rel = left_join(lab_bs_rel_oth, lab_vis_rel_oth, by = 'arthCode') %>% data.frame()
 
 
+
 ###
 # Calculate absolute density of arthropod orders by beat sheet vs visual survey
 
@@ -127,7 +140,19 @@ lab_bs_vis_den = left_join(lab_bs_den[, c('arthCode', 'density')],
   
 lab_bs_vis_den$arthCode2[!lab_bs_vis_den$arthCode %in% birdfood_top6] = 'OTHR'
 
+# For chi-square test, lump all 'OTHR' together
 
+bs_vis_comp = lab_bs_vis_den %>%
+  group_by(arthCode2) %>%
+  summarize(bs_den = sum(bs_den), vis_den = sum(vis_den)) %>%
+  mutate(bs_tot = bs_den*num_bs_surveys, vis_tot = vis_den*num_vis_surveys)
+
+chisq.test(bs_vis_comp[,4:5])
+
+#Pearson's Chi-squared test
+
+#data:  bs_vis_comp[, 4:5]
+#X-squared = 284.73, df = 6, p-value < 2.2e-16
 
 #################################################################################
 # Analysis of lab data vs volunteer data, Panels D-F
@@ -204,14 +229,28 @@ lab16_bs_rel_oth = lab16_bs_rel %>% group_by(arthCode2) %>%
 vis_comp = left_join(vol15_vis_rel_oth, lab15_vis_rel_oth, by = 'arthCode2') %>%
   rename(vis_vol_pct = proportion.x, vis_lab_pct = proportion.y,
          vis_vol_den = density.x, vis_lab_den = density.y) %>%
-  filter(arthCode2 != 'NONE')
+  filter(arthCode2 != 'NONE') %>%
+  mutate(vis_vol_tot = vis_vol_den*num_vol15vis_surveys,
+         vis_lab_tot = vis_lab_den*num_lab15vis_surveys)
+
 
 bs_comp = left_join(vol16_bs_rel_oth, lab16_bs_rel_oth, by = 'arthCode2') %>%
   rename(bs_vol_pct = proportion.x, bs_lab_pct = proportion.y,
          bs_vol_den = density.x, bs_lab_den = density.y) %>%
-  filter(arthCode2 != 'NONE')
+  filter(arthCode2 != 'NONE') %>%
+  mutate(bs_vol_tot = bs_vol_den*num_vol16bs_surveys,
+       bs_lab_tot = bs_lab_den*num_lab16bs_surveys)
 
+# Chi-squared tests for panels D, E
+chisq.test(vis_comp[, c('vis_vol_tot', 'vis_lab_tot')])
 
+#data:  vis_comp[, c("vis_vol_tot", "vis_lab_tot")]
+#X-squared = 44.943, df = 6, p-value = 4.804e-08
+
+chisq.test(bs_comp[, c('bs_vol_tot', 'bs_lab_tot')])
+
+#data:  bs_comp[, c("bs_vol_tot", "bs_lab_tot")]
+#X-squared = 17.227, df = 6, p-value = 0.008484
 
 #create color palette:
 library(RColorBrewer)
