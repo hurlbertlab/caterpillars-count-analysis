@@ -10,13 +10,15 @@ source("cleaning_scripts/data_cleaning.r")
 par(mfrow = c(3,2), mar = c(2,3,2,2), oma = c(5,5,3,3))
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HEMI')
 
+jdmax = 193
+
 #----PHENOLOGY PLOT for paper, by week----
 
 # First panel
 PR.LEPL15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
                                  ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
-                                 xlim = c(135,210), ylim = c(0,.25), ylab = "Caterpillars", main = '2015 Visual', col = 'blueviolet')
+                                 xlim = c(135,jdmax), ylim = c(0,.15), ylab = "Caterpillars", main = '2015 Visual', col = 'blueviolet')
 PR.LEPL15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'darkgoldenrod3')
@@ -31,7 +33,7 @@ legend('topright', legend = c(paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL1
 PR.LEPL16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_Sheet' & beatsheet.pr$julianday %in% c(134:204),], 
                                  ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
-                                 xlim = c(135,210), ylim = c(0,.25), ylab = "", main = '2016 Beat Sheet', col = 'blueviolet')
+                                 xlim = c(135,jdmax), ylim = c(0,.15), ylab = "", main = '2016 Beat Sheet', col = 'blueviolet')
 PR.LEPL16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'darkgoldenrod3')
@@ -45,7 +47,7 @@ legend('topright', legend = c(paste("r =", round(cor(LEPL16$fracSurveys.x, LEPL1
 PR.ORTH15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
                                  ordersToInclude = "ORTH", inputYear = 2015, inputSite = 117, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
-                                 xlim = c(135,210), ylim = c(0,.4), ylab = "Orthopterans", main = '', col = 'blueviolet')
+                                 xlim = c(135,jdmax), ylim = c(0,.3), ylab = "Orthopterans", main = '', col = 'blueviolet')
 PR.ORTH15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "ORTH", inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'darkgoldenrod3')
@@ -58,7 +60,7 @@ legend('topright', legend = c(paste("r =", round(cor(ORTH15$fracSurveys.x, ORTH1
 PR.ORTH16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_Sheet' & beatsheet.pr$julianday %in% c(134:204),], 
                                  ordersToInclude = "ORTH", inputYear = 2016, inputSite = 117, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
-                                 xlim = c(135,210), ylim = c(0,.4), ylab = "", main = '', col = 'blueviolet')
+                                 xlim = c(135,jdmax), ylim = c(0,.3), ylab = "", main = '', col = 'blueviolet')
 PR.ORTH16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = "ORTH", inputYear = 2016, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'darkgoldenrod3')
@@ -71,7 +73,7 @@ legend('topright', legend = c(paste("r =", round(cor(ORTH16$fracSurveys.x, ORTH1
 PR.BIRD15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$surveyType == 'Visual' & amsurvey.pr$julianday %in% c(134:204),], 
                                  ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
-                                 xlim = c(135,210), ylim = c(0,.7), ylab = "Bird food", main = '', col = 'blueviolet')
+                                 xlim = c(135,jdmax), ylim = c(0,.5), ylab = "Bird food", main = '', col = 'blueviolet')
 PR.BIRD15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = multorders, inputYear = 2015, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'darkgoldenrod3')
@@ -84,7 +86,7 @@ legend('topright', legend = c(paste("r =", round(cor(BIRD15$fracSurveys.x, BIRD1
 PR.BIRD16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$surveyType == 'Beat_Sheet' & beatsheet.pr$julianday %in% c(134:204),], 
                                   ordersToInclude = multorders, inputYear = 2016, inputSite = 117, plot = T, 
                                   plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 2,
-                                  xlim = c(135,210), ylim = c(0,.7), ylab = "", main = '', col = 'blueviolet')
+                                  xlim = c(135,jdmax), ylim = c(0,.5), ylab = "", main = '', col = 'blueviolet')
 PR.BIRD16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$julianday %in% c(134:204),],  
                                 ordersToInclude = multorders, inputYear = 2016, inputSite = 117, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 2, lty = 1, col = 'darkgoldenrod3')
