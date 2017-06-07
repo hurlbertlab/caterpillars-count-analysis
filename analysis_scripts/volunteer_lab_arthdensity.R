@@ -388,7 +388,32 @@ dev.off()
 
 
 
+# Correlations between trained vs citizen science density estimates
+#cor.test(vis_cmp_all$dens_lab, vis_cmp_all$dens_vol)
 
+#Pearson's product-moment correlation
+
+#data:  vis_cmp_all$dens_lab and vis_cmp_all$dens_vol
+#t = 5.3678, df = 12, p-value = 0.0001687
+#alternative hypothesis: true correlation is not equal to 0
+#95 percent confidence interval:
+#0.5587268 0.9481240
+#sample estimates:
+#cor 
+#0.840223 
+
+#cor.test(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol)
+
+#Pearson's product-moment correlation
+
+#data:  bs_cmp_all$dens_lab and bs_cmp_all$dens_vol
+#t = 8.4427, df = 9, p-value = 1.436e-05
+#alternative hypothesis: true correlation is not equal to 0
+#95 percent confidence interval:
+#  0.7875905 0.9852450
+#sample estimates:
+#  cor 
+#0.9422799 
 
 
 
