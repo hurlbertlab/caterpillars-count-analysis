@@ -46,13 +46,55 @@ names(survclean) = c('surveyID', 'site', 'userID', 'circle', 'survey', 'dateStar
 #names(ordclean) = c('recordID', 'surveyID', 'arthropod', 'length', 'count',
 #                    'modified', 'modNotes', 'status')
 
+# Fix surveyType field based on known historical survey methods.
+# (data entry via web as of 2017 does not store surveyType info)
+# --all surveys prior to 2015 are visual surveys
+# --in 2015, "BEAT_SHEET" is in the siteNotes field (only done at 117 & 8892356)
+# --in 2016, all surveys at 882351 and all surveys by volunteers at 117 were Beat_Sheet
+# --in 2016, surveys at 117 and 8892356 by labgroupusers were Beat_Sheet if leafCount != 50
+# --in 2017, all surveys at 8892364, 8892366, 8892367 and 8892368 are Beat_Sheet (but entered via web)
+
+tempsurveys$surveyType[substr(tempsurveys$dateStart, 1, 4) < 2015] = 'Visual'
+
+tempsurveys$surveyType[substr(tempsurveys$dateStart, 1, 4) == 2015 &
+                         grepl("BEAT SHEET", tempsurveys$notes)] = 'Beat_Sheet'
+
+tempsurveys$surveyType[substr(tempsurveys$dateStart, 1, 4) == 2015 &
+                         !grepl("BEAT SHEET", tempsurveys$notes)] = 'Visual'
+
+tempsurveys$surveyType[substr(tempsurveys$dateStart, 1, 4) == 2016 &
+                         tempsurveys$site == 8892351] = 'Beat_Sheet'
+
+tempsurveys$surveyType[substr(tempsurveys$dateStart, 1, 4) == 2016 &
+                         tempsurveys$site == 117 &
+                         !tempsurveys$userID %in% labgroupusers] = 'Beat_Sheet'
+
+tempsurveys$surveyType[substr(tempsurveys$dateStart, 1, 4) == 2016 &
+                         tempsurveys$site %in% c(117, 8892356) &
+                         tempsurveys$userID %in% labgroupusers &
+                         tempsurveys$leafCount != 50] = 'Beat_Sheet'
+
+tempsurveys$surveyType[substr(tempsurveys$dateStart, 1, 4) == 2016 &
+                         tempsurveys$site %in% c(117, 8892356) &
+                         tempsurveys$userID %in% labgroupusers &
+                         tempsurveys$leafCount == 50] = 'Visual'
+
+tempsurveys$surveyType[tempsurveys$surveyID == 23258] = 'Beat_Sheet'
+
+tempsurveys$surveyType[substr(tempsurveys$dateStart, 1, 4) == 2017 &
+                         tempsurveys$site %in% c(8892364, 8892366, 8892367, 8892368)] = 'Beat_Sheet'
+
+
+
+
 # Only include valid entries in surveys
 oksurveys = tempsurveys$surveyID[tempsurveys$isValid == 1 & tempsurveys$status != 'invalid']
 
 # Filter and merge notes field back in
 surveys = survclean %>% 
   filter(surveyID %in% oksurveys) %>%
-  left_join(tempsurveys[, c('surveyID', 'notes')], by = 'surveyID') %>%
+  select(-surveyType) %>%
+  left_join(tempsurveys[, c('surveyID', 'notes', 'surveyType')], by = 'surveyID') %>%
   rename(sitenotes = notes)
 
 
