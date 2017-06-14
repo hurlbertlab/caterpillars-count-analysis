@@ -85,6 +85,21 @@ tempsurveys$surveyType[substr(tempsurveys$dateStart, 1, 4) == 2017 &
                          tempsurveys$site %in% c(8892364, 8892366, 8892367, 8892368)] = 'Beat_Sheet'
 
 
+# Pull out the leafCount from the notes for 2015 beat sheet surveys
+leafCount2015 = tempsurveys$notes[grep("BEAT SHEET", tempsurveys$notes)] %>%
+  word(-1, sep = "BEAT SHEET; ") %>%
+  word(-1, sep = "= ") %>%
+  word(-1, sep = "Leaves  ") %>%
+  word(-1, sep = "Leaves=") %>%
+  word(1, sep = ";") %>%
+  word(1, sep = ",") %>%
+  gsub(pattern = " ", replacement = "") %>%
+  gsub(pattern = "\n", replacement = "") %>%
+  gsub(pattern = "Unknown", replacement = NA) %>%
+  gsub(pattern = "unknown", replacement = NA) %>%
+  as.numeric()
+
+tempsurveys$leafCount[grep("BEAT SHEET", tempsurveys$notes)] = leafCount2015
 
 
 # Only include valid entries in surveys
@@ -93,8 +108,8 @@ oksurveys = tempsurveys$surveyID[tempsurveys$isValid == 1 & tempsurveys$status !
 # Filter and merge notes field back in
 surveys = survclean %>% 
   filter(surveyID %in% oksurveys) %>%
-  select(-surveyType) %>%
-  left_join(tempsurveys[, c('surveyID', 'notes', 'surveyType')], by = 'surveyID') %>%
+  select(-surveyType, -leafCount) %>%
+  left_join(tempsurveys[, c('surveyID', 'notes', 'surveyType', 'leafCount')], by = 'surveyID') %>%
   rename(sitenotes = notes)
 
 
@@ -113,7 +128,7 @@ surveys$survey = toupper(surveys$survey)
 orders2 = left_join(surveys, orders, by = 'surveyID') %>%
   mutate(julianday = yday(date), date = as.character(date)) %>%
   select(surveyID, userID, site, survey, circle, date, time.x, julianday,
-                      plantSp,herbivory, arthropod, length,
+                      plantSp, herbivory, arthropod, length,
                       count, sitenotes, notes, surveyType, leafCount) %>%
   rename(time = time.x, bugnotes = notes) %>%
   filter(arthropod != "Leaf Roll" | is.na(arthropod))
@@ -164,39 +179,8 @@ joindata$year = substring(joindata$date, 1, 4)
 joindata$arthCode = as.character(joindata$arthCode)
 
 
-# Cleaning beat sheets (PR and BG) and isolating # leaves into a new column
-
-# Beat sheet designation was in notes field prior to 2016
-beatsheet_pre2016 <- joindata[grep("BEAT SHEET", joindata$sitenotes), ] 
-
-# In 2016, surveyType was not getting recorded when entered from website, so 
-# beat sheet is designated by either the surveyType field when entered by app or
-# by a leaf count that differed from the 50 expected of a visual survey.
-# (Participants were told to record 49 or 51 if the number of leaves in a beat
-# sheet survey truly was 50.)
-beatsheet_post2016 <- joindata[((joindata$leafCount != "50") & (joindata$year>= "2016")) | (joindata$surveyType=="Beat_Sheet"),] 
-beatsheet_post2016 <- beatsheet_post2016[!is.na(beatsheet_post2016$surveyID),]
-
-# Pull out the leafCount from the notes
-leavesNumTemp0 <- word(beatsheet_pre2016$sitenotes, -1, sep = "BEAT SHEET; ")
-leavesNumTemp <- word(leavesNumTemp0, -1, sep = "= ")
-leavesNumTemp1 <- word(leavesNumTemp, -1, sep = "Leaves  ")
-leavesNumTemp2 <- word(leavesNumTemp1, -1, sep = "Leaves=")
-leavesNumTemp3 <- word(leavesNumTemp2, 1, sep = ";")
-leavesNumTemp4 <- word(leavesNumTemp3, 1, sep = ",")
-leavesNumTemp5 <- gsub(" ", "", leavesNumTemp4)
-leavesNumTemp6 <- gsub("\n", "", leavesNumTemp5)
-leavesNumTemp7 <- gsub("Unknown", NA, leavesNumTemp6)
-leavesNumTemp8 <- gsub("unknown", NA, leavesNumTemp7)
-beatsheet_pre2016$leafCount <- as.numeric(leavesNumTemp8)
-beatsheet<-rbind(beatsheet_pre2016, beatsheet_post2016)
-beatsheet$surveyType <- "Beat_Sheet"
-visual <- joindata[!joindata$surveyID %in% beatsheet$surveyID, ]
-cleandata <- rbind(visual, beatsheet)
-cleandata$surveyType[cleandata$surveyType != "Beat_Sheet"] <- "Visual"
-
 #Removing exclosure trees (only 2016)    
-cleandata <-filter(cleandata, !(grepl("EXCLOSURE", sitenotes)))
+cleandata <-filter(joindata, !(grepl("EXCLOSURE", sitenotes)))
 
 #--------------------------------------------------------------------------------
 
