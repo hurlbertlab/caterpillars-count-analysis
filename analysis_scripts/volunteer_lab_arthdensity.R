@@ -267,7 +267,7 @@ arthcols$col2[arthcols$arthCode=='DIPT'] = 'gray50'
 arthcols$name = c('Spiders', 'Leafhoppers', 'Beetles', 'Flies', 'Caterpillars', 'Crickets', 'Other')
 arthcols$name2 = c('Aranae', 'Auchenorrhyncha', 'Coleoptera', 'Diptera', 'Caterpillars', 'Orthoptera', 'Other')
 arthcols$pch = c(rep(17, 6), 16)
-arthcols$cex = c(rep(2.7, 6), 1.25)
+arthcols$cex = c(rep(2.7, 6), 1.5)
 
 
 #---------plotting for figures------------------
@@ -334,6 +334,7 @@ abline(a = 0, b = 1, col = 'black', lwd = 2, lty = 'solid')
 text(.17,.2, "1:1", srt = 30, cex = 1.5)
 mtext("C", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
+cor.test(arth_means2$vis_den, arth_means2$bs_den)
 
 #figure D - visual surveys by pct
 vis_cmp = left_join(vis_comp, arthcols, by = c('arthCode2' = 'arthCode'))
@@ -381,8 +382,10 @@ abline(a = 0, b = 1, col = 'black', lwd = 2, lty = 'solid')
 text(.2,.23, "1:1", srt = 45, cex = 1.5)
 mtext("F", 3, adj = -0.3, line = 0.5, cex = 1.75)
 
-
 legend("bottomright", c('visual', 'beat sheet'), pch = c(17, 16), pt.cex = 2, bty = 'n')
+
+cor.test(vis_cmp_all$dens_lab, vis_cmp_all$dens_vol)
+cor.test(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol)
 
 dev.off()
 
