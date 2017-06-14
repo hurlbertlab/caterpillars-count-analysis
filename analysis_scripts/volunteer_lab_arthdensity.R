@@ -348,8 +348,8 @@ vis_cmp = left_join(vis_comp, arthcols, by = c('arthCode2' = 'arthCode'))
 barplot(as.matrix(vis_cmp[, c('vis_vol_pct', 'vis_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2), 
         ylab = "Proportion", col = vis_cmp$col, cex.lab = 1.5, cex.axis = 1.2)
 mtext("Visual", 3, adj = .35, line = .5)
-mtext(c("Volunteers", "Trained"), 1, at = c(.6, 1.9), line = 1, cex = .9)
-mtext("D", 3, adj = -0.3, line = 0.5, cex = 1.75)
+mtext(c("Citizen\nscientists", "Trained\nscientists"), 1, at = c(.6, 1.9), line = 2, cex = .9)
+mtext("D", 3, adj = -0.3, line = .5, cex = 1.75)
 
 
 #figure E
@@ -358,8 +358,8 @@ bs_cmp = left_join(bs_comp, arthcols, by = c('arthCode2' = 'arthCode'))
 barplot(as.matrix(bs_cmp[, c('bs_vol_pct', 'bs_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2),
         ylab = "Proportion", col = arthcols$col, cex.lab = 1.5, cex.axis = 1.2)
 mtext("Beat sheet", 3, adj = .35, line = .5)
-mtext(c("Volunteers", "Trained"), 1, at = c(.6, 1.9), line = 1, cex = .9)
-mtext("E", 3, adj = -0.3, line = 0.5, cex = 1.75)
+mtext(c("Citizen\nscientists", "Trained\nscientists"), 1, at = c(.6, 1.9), line = 2, cex = .9)
+mtext("E", 3, adj = -0.3, line = .5, cex = 1.75)
 
 
 #figure F
@@ -368,7 +368,7 @@ bs_cmp_all = left_join(bs_comp_all, arthcols, by = c('arthCode2' = 'arthCode'))
 
 par(mgp = c(3.5, 0.75, 0))
 plot(vis_cmp_all$dens_lab, vis_cmp_all$dens_vol, las = 1, xlab = "",
-     ylab = "Density (volunteers)", col = vis_cmp_all$col, pch = 17, 
+     ylab = "Density (citizen)", col = vis_cmp_all$col, pch = 17, 
      cex = vis_cmp_all$cex, cex.lab = 1.5, cex.axis = 1.2,
      xlim = c(0, 0.31), ylim = c(0, 0.31), yaxt = "n")
 points(vis_cmp_all$dens_lab[vis_cmp_all$arthCode=='DIPT'],
