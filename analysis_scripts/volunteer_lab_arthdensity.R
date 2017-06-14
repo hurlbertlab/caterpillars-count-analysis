@@ -158,14 +158,20 @@ chisq.test(bs_vis_comp[,4:5])
 # Analysis of lab data vs volunteer data, Panels D-F
 # (comparison restricted to circles 1:8)
 
+# Restrict comparisons to the window of julian days when both groups were conducting surveys
+beg_jd15 = 138
+end_jd15 = 204
+beg_jd16 = 149
+end_jd16 = 203
+
 pre_lab15_vis = filter(amsurvey.pr, year == 2015, count < outlierDensity, 
-                   circle %in% 1:8, julianday <= 193 & julianday >= 147)
+                   circle %in% 1:8, julianday <= end_jd15 & julianday >= beg_jd15)
 pre_vol15_vis = filter(volunteer.pr, year == 2015, count < outlierDensity, 
-                   circle %in% 1:8, julianday <= 193 & julianday >= 147)
+                   circle %in% 1:8, julianday <= end_jd15 & julianday >= beg_jd15)
 pre_lab16_bs = filter(beatsheet.pr, year == 2016, count < outlierDensity, 
-                  circle %in% 1:8, julianday <= 193 & julianday >= 147)
+                  circle %in% 1:8, julianday <= end_jd16 & julianday >= beg_jd16)
 pre_vol16_bs = filter(volunteer.pr, year == 2016, count < outlierDensity, 
-                  circle %in% 1:8, julianday <= 193 & julianday >= 147, surveyType == 'Beat_Sheet')
+                  circle %in% 1:8, julianday <= end_jd16 & julianday >= beg_jd16, surveyType == 'Beat_Sheet')
 
 num_lab15vis_surveys = length(unique(pre_lab15_vis$surveyID))
 num_vol15vis_surveys = length(unique(pre_vol15_vis$surveyID))

@@ -102,13 +102,35 @@ leafCount2015bs = tempsurveys$notes[grep("BEAT SHEET", tempsurveys$notes)] %>%
 tempsurveys$leafCount[grep("BEAT SHEET", tempsurveys$notes)] = leafCount2015bs
 
 
+
+## Cleaning other known issues
+
+tempsurveys$isValid[tempsurveys$surveyID %in% 
+                      c(20962:21041, #double-entered records
+                        26189:26207, #individual re-did surveys in reverse order immediately after
+                        26142, #random empty survey in October
+                        20790,  #tent caterpillar cluster recorded by volunteers but avoided by us
+                        27319, 27322, 27359, 27369, 27506:27508, 27763, #C. Lim's app/pending surveys lost arth records
+                        21031, 26114
+                        )] = 0
+
+# Fixing date typo for 9 surveys
+tempsurveys$dateStart[tempsurveys$site == 117] = 
+  gsub("2016-07-08", "2016-07-09", tempsurveys$dateStart[tempsurveys$site == 117])
+
+survclean$dateStart[survclean$site == 117] = 
+  gsub("2016-07-08", "2016-07-09", survclean$dateStart[survclean$site == 117])
+
+
 # Only include valid entries in surveys without 'delete' in notes and not from Test sites
 oksurveys = tempsurveys$surveyID[tempsurveys$isValid == 1 & 
                                    tempsurveys$status != 'invalid' &
-                                   !grepl("delete", tempsurveys$notes) &
+                                   !grepl("delete", tolower(tempsurveys$notes)) &
+                                   !grepl("no leaves", tolower(tempsurveys$notes)) &
+                                   !grepl("dead tree", tolower(tempsurveys$notes)) &
                                    !tempsurveys$site %in% c(8892357, 8892363)]
 
-# Filter and merge notes field back in
+# Filter and merge notes, surveyType, and leafCount fields back in
 surveys = survclean %>% 
   filter(surveyID %in% oksurveys) %>%
   select(-surveyType, -leafCount) %>%
@@ -130,7 +152,7 @@ surveys$survey = toupper(surveys$survey)
 # Merge orders and surveys table
 orders2 = left_join(surveys, orders, by = 'surveyID') %>%
   mutate(julianday = yday(date), date = as.character(date)) %>%
-  select(surveyID, userID, site, survey, circle, date, time.x, julianday,
+  select(surveyID, userID, site, circle, survey, date, time.x, julianday,
                       plantSp, herbivory, arthropod, length,
                       count, sitenotes, notes, surveyType, leafCount) %>%
   rename(time = time.x, bugnotes = notes) %>%
@@ -164,7 +186,7 @@ arthcodes = read.csv('data/arthropods/arth_codes.csv', header=T,
   rename(arthCode = ArthCode, arthropod = DataName)
 
 joindata <- left_join(orders2, arthcodes, by = 'arthropod') %>%
-  select(surveyID, userID,site, survey, circle, date,time, julianday,
+  select(surveyID, userID, site, circle, survey, date,time, julianday,
                        plantSp,herbivory,arthropod,arthCode,length,
                        count, sitenotes, bugnotes, surveyType, leafCount) %>%
   arrange(date)
