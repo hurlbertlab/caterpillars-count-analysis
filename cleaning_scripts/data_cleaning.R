@@ -212,7 +212,7 @@ cleandata <-filter(joindata, !(grepl("EXCLOSURE", sitenotes)))
 ## Calculating biomass and adding this as a column to the cleandata
 
 # y = a(x)^b
-# Read in arthropod regression data with slope = b and intercept = log(a)
+# Read in arthropod regression data with slope = b and intercept = log10(a)
 reg.data.temp <- read.csv('data/arthropods/arth_regression.csv', header = T, 
                           stringsAsFactors = F, sep = ',')
 # Calculate a (the coefficient)

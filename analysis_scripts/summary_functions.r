@@ -12,6 +12,14 @@ library(gsheet)
 #--------------------------------------------------------------------------------------------------
 # FUNCTIONS
 
+# Modification of dplyr's mutate function that only acts on the rows meeting a condition
+mutate_cond <- function(.data, condition, ..., envir = parent.frame()) {
+  condition <- eval(substitute(condition), .data, envir)
+  .data[condition, ] <- .data[condition, ] %>% mutate(...)
+  .data
+}
+
+
 
 # Function for subsetting data based on survey type and time of survey
 
@@ -96,88 +104,54 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
                        minLength = 0,         # minimum arthropod size to include 
                        inputSite,
                        inputYear,
+                       jdRange = c(1,365),
+                       outlierCount = 10000,
                        plot = F,
                        plotVar = 'meanDensity', # 'meanDensity' or 'fracSurveys' or 'meanBiomass'
                        new = T,
                        color = 'black',
-                       ...)                  
+                                              ...)                  
+
 {
   
   if(length(ordersToInclude)==1 & ordersToInclude[1]=='All') {
     ordersToInclude = unique(surveyData$arthCode)
   }
   
-  temp = subset(surveyData,
-                length >= minLength & 
-                arthCode %in% ordersToInclude & 
-                site %in% inputSite &
-                year %in% inputYear)
+  firstFilter = surveyData %>%
+    filter(site %in% inputSite, year %in% inputYear, 
+           julianday >= jdRange[1], julianday <= jdRange[2])
   
-  # Create subset of data to use for calculating effort by day
-  pre_temp_foreffort = subset(surveyData,
-                              site %in% inputSite &
-                                year %in% inputYear)
-  temp_foreffort <- unique(pre_temp_foreffort[,c('survey', 'circle', 'date', 'site')])
+  effortByDay = firstFilter %>%
+    distinct(surveyID, julianday) %>%
+    count(julianday)
   
-  # Create effort by day within function
-  effortByDay = data.frame(table(temp_foreffort[, c('site', 'date')]))
-  names(effortByDay) = c('site', 'date', 'numSurveys')
-  effortByDay = effortByDay[effortByDay$numSurveys!=0, ]
-  effortByDay$date = as.POSIXlt(effortByDay$date, format = "%Y-%m-%d")
-  effortByDay$julianday = yday(effortByDay$date)
-  tempyear <- substring(effortByDay$date, 1, 4)
-  effortByDay$year = tempyear
+  arthCount = firstFilter %>%
+    filter(length >= minLength, 
+           count < outlierCount, 
+           arthCode %in% ordersToInclude) %>%
+    group_by(julianday) %>%
+    summarize(totalCount = sum(count, na.rm = T),
+              totalBiomass = sum(biomass, na.rm = T),
+              numSurveysGTzero = length(unique(surveyID[count > 0]))) %>% 
+    right_join(effortByDay, by = 'julianday') %>%
+    #next line replaces 3 fields with 0 if the totalCount is NA
+    mutate_cond(is.na(totalCount), totalCount = 0, totalBiomass = 0, numSurveysGTzero = 0) %>%
+    mutate(meanDensity = totalCount/n,
+           meanBiomass = totalBiomass/n,
+           fracSurveys = numSurveysGTzero/n) %>%
+    data.frame()
   
-  temp_effort = effortByDay
-  
-  # When no data is available for parameters set:
-  if(nrow(temp) == 0 & !byTreeSpecies) {
-    temp3 = temp_effort
-    temp3$totalCount = 0
-    temp3$numSurveysGTzero = 0
-    temp3$totalBiomass = 0
-
-  } else if (nrow(temp) > 0 & !byTreeSpecies) {
-    temp2 = temp %>%
-      group_by(site, julianday, year) %>%
-      summarize(totalCount = sum(count, na.rm = T), 
-                numSurveysGTzero = length(unique(surveyID[count > 0])), 
-                totalBiomass = sum(biomass, na.rm = T))
-    temp3 = merge(temp_effort[,c('site','numSurveys','julianday','year')], temp2, 
-                  by = c('julianday', 'site', 'year'), all.x = T) 
-
-  } else if (nrow(temp) > 0 & byTreeSpecies) {
-    temp2 = temp %>%
-      group_by(site, julianday, year, clean_plantSp) %>%
-      summarize(totalCount = sum(count), 
-                numSurveysGTzero = length(unique(surveyID[count > 0])), 
-                totalBiomass = sum(biomass))
-    temp3 = merge(temp_effort[,c('site','numSurveys','julianday','year')], temp2, 
-                  by = c('julianday', 'site', 'year'), all.x = T)
-  }  
-  
-  # Calculations shown in dataframe output:
-  temp3$totalCount[is.na(temp3$totalCount)] = 0
-  temp3$numSurveysGTzero[is.na(temp3$numSurveysGTzero)] = 0
-  temp3$totalBiomass[is.na(temp3$totalBiomass)] = 0
-  temp3$meanDensity = temp3$totalCount/temp3$numSurveys
-  temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
-  temp3$meanBiomass = temp3$totalBiomass/temp3$numSurveys
-  temp3$julianday = as.numeric(as.character(temp3$julianday))
-  
-  # Plotting the chosen variable:
   if (plot & new) {
-    plot(temp3$julianday, temp3[, plotVar], type = 'l', 
+    plot(arthCount$julianday, arthCount[, plotVar], type = 'l', 
          col = color, xlab = "Julian day", ...)
-    
-  # Adding to an existing plot:
   } else if (plot & new==F) {
-    points(temp3$julianday, temp3[, plotVar], type = 'l', col = color, ...)
+    points(arthCount$julianday, arthCount[, plotVar], type = 'l', col = color, ...)
   }
-  return(temp3)
+  return(arthCount)
 }
 
-
+  
 
 # ----------------------------------------------------------------------------------------
 
@@ -187,10 +161,11 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
 
 meanDensityByWeek = function(surveyData,            # merged dataframe of surveys and orders tables
                             ordersToInclude = 'All',       # which arthropod orders to calculate density for (codes)
-                            byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
-                            minLength = 0,         # minimum arthropod size to include
+                            minLength = 5,         # minimum arthropod size to include
                             inputYear,
                             inputSite, 
+                            jdRange = c(1,365),
+                            outlierCount = 10000,
                             plot = F,
                             plotVar = 'meanDensity', # 'meanDensity' or 'fracSurveys'
                             new = T,
@@ -198,67 +173,49 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
                             ...)                  
   
 {
-  # Create subset of data to use for calculating effort by day
-  pre_temp_foreffort = subset(surveyData,
-                              site %in% inputSite &
-                                year %in% inputYear)
-  pre_temp_foreffort$week = floor(pre_temp_foreffort$julianday/7) + 1
-  temp_foreffort <- unique(pre_temp_foreffort[,c('survey', 'circle', 'week', 'site', 'julianday')])
-  
-  # Create effort by week within function
-  effortByWeek = data.frame(table(temp_foreffort[, c('site', 'week')]))
-  names(effortByWeek) = c('site', 'week', 'numSurveys')
-  effortByWeek = effortByWeek[effortByWeek$numSurveys!=0, ]
-  effortByWeek = effortByWeek[, c('week', 'numSurveys')]
-  
-  temp_effort = effortByWeek
   
   if(length(ordersToInclude)==1 & ordersToInclude[1]=='All') {
     ordersToInclude = unique(surveyData$arthCode)
   }
   
-  temp = subset(surveyData,
-                length >= minLength & 
-                  arthCode %in% ordersToInclude & 
-                  site %in% inputSite &
-                  year %in% inputYear)
-  temp$week = floor(temp$julianday/7) + 1
+  firstFilter = surveyData %>%
+    filter(site %in% inputSite, year %in% inputYear, 
+           julianday >= jdRange[1], julianday <= jdRange[2]) %>%
+    mutate(week = floor(julianday/7) + 1)
   
-  if (byTreeSpecies) {
-    temp2 = temp %>% 
-      group_by(week, plantSp) %>%
-      summarize(totalCount = sum(count),
-                numSurveysGTzero = length(unique(surveyID[count > 0])))
-    
-      
-    
-  } else {
-    temp2 = temp %>% 
-      group_by(week) %>%
-      summarize(totalCount = sum(count),
-                numSurveysGTzero = length(unique(surveyID[count > 0])))
-                  #totalBiomass = sum(biomass))
-  }
+  effortByWeek = firstFilter %>%
+    distinct(surveyID, week) %>%
+    count(week)
   
-  temp3 = merge(effortByWeek, temp2[, c('week', 'totalCount', 'numSurveysGTzero')], 
-                by = 'week', all = T)
-  temp3$totalCount[is.na(temp3$totalCount)] = 0
-  temp3$numSurveysGTzero[is.na(temp3$numSurveysGTzero)] = 0
-  #temp3$totalBiomass[is.na(temp3$totalBiomass)] = 0
-  temp3$meanDensity = temp3$totalCount/temp3$numSurveys
-  temp3$fracSurveys = temp3$numSurveysGTzero / temp3$numSurveys
-  #temp3$meanBiomass = temp3$totalBiomass/temp3$numSurveys
-  temp3$week = as.numeric(as.character(temp3$week))
-  temp3$JDweek = (temp3$week - 1)*7 + 4
+  arthCount = firstFilter %>%
+    filter(length >= minLength, 
+           count < outlierCount, 
+           arthCode %in% ordersToInclude) %>%
+    group_by(week) %>%
+    summarize(totalCount = sum(count, na.rm = T),
+              totalBiomass = sum(biomass, na.rm = T),
+              numSurveysGTzero = length(unique(surveyID[count > 0]))) %>% 
+    right_join(effortByWeek, by = 'week') %>%
+    #next line replaces 3 fields with 0 if the totalCount is NA
+    mutate_cond(is.na(totalCount), totalCount = 0, totalBiomass = 0, numSurveysGTzero = 0) %>%
+    mutate(meanDensity = totalCount/n,
+           meanBiomass = totalBiomass/n,
+           fracSurveys = numSurveysGTzero/n,
+           JDweek = (week - 1)*7 + 4) %>%
+    data.frame()
+  
   if (plot & new) {
-    plot(temp3$JDweek, temp3[, plotVar], type = 'l', 
+    plot(arthCount$JDweek, arthCount[, plotVar], type = 'l', 
          col = color, xlab = "Week", ...)
   } else if (plot & new==F) {
-    points(temp3$JDweek, temp3[, plotVar], type = 'l', col = color, ...)
+    points(arthCount$JDweek, arthCount[, plotVar], type = 'l', col = color, ...)
   }
-  return(temp3)
+  return(arthCount)
 }
-
+  
+  
+  
+  
 
 # Function for reading in frass data from GoogleDoc
 # *if aim is to backup GoogleDoc and write to disk only, then open =F and write = T
