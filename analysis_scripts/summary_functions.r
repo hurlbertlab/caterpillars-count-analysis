@@ -139,7 +139,7 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
     mutate_cond(is.na(totalCount), totalCount = 0, totalBiomass = 0, numSurveysGTzero = 0) %>%
     mutate(meanDensity = totalCount/n,
            meanBiomass = totalBiomass/n,
-           fracSurveys = numSurveysGTzero/n) %>%
+           fracSurveys = 100*numSurveysGTzero/n) %>%
     data.frame()
   
   if (plot & new) {
@@ -200,7 +200,7 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
     mutate_cond(is.na(totalCount), totalCount = 0, totalBiomass = 0, numSurveysGTzero = 0) %>%
     mutate(meanDensity = totalCount/n,
            meanBiomass = totalBiomass/n,
-           fracSurveys = numSurveysGTzero/n,
+           fracSurveys = 100*numSurveysGTzero/n,
            JDweek = (week - 1)*7 + 4) %>%
     data.frame()
   
