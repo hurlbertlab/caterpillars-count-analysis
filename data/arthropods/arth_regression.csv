@@ -1,8 +1,15 @@
-arthCode,slope,intercept,r-squared
-ARAN,2.28,-1.17,0.97
-AUCH,3.13,-1.92,0.94
-COLE,1.66,-0.71,0.98
-DIPT,2.31,-1.63,0.96
-LEPL,2.09,-1.8,0.9
-OPIL,2.17,-0.79,0.94
-ORTH,2.27,-1.63,0.88
+arthCode,slope,intercept,r-squared,source
+ARAN,2.28,-1.17,0.97,Hurlbert Lab
+AUCH,3.13,-1.92,0.94,Hurlbert Lab
+COLE,1.66,-0.71,0.98,Hurlbert Lab
+DIPT,2.31,-1.63,0.96,Hurlbert Lab
+LEPL,2.09,-1.8,0.9,Hurlbert Lab
+OPIL,2.17,-0.79,0.94,Hurlbert Lab
+ORTH,2.27,-1.63,0.88,Hurlbert Lab
+FORM,2.666,-1.57,0.93,Sabo et al. 2002. Length–mass relationships for adult aquatic and terrestrial invertebrates in a California watershed
+HYME,1.56,-0.25,0.75,Sabo et al. 2002. Length–mass relationships for adult aquatic and terrestrial invertebrates in a California watershed
+HETE,2.785,-1.86,,Haas et al. 2007. Influence of fish on habitat choice of water birds: a whole system experiment
+LEPA,2.318,-1.75,0.96,Gruner 2003. Regression of length and width to predict arthropod biomass in the Hawaiian Islands
+STER,2.629,-1.76,0.819,Gruner 2003. Regression of length and width to predict arthropod biomass in the Hawaiian Islands
+UNID,2.355,-1.54,0.889,Gruner 2003. Regression of length and width to predict arthropod biomass in the Hawaiian Islands
+NONE,0,0,,
