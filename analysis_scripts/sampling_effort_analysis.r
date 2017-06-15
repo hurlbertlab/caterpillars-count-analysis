@@ -15,6 +15,8 @@ fitG = function(x, y, mu, sig, scale, ...){
 
 beg_jd15 = 138
 end_jd15 = 210
+beg_jd16 = 130
+end_jd16 = 205
 
 # --------------  Daily visual survey data, 2015 ------------------------------
 
@@ -36,14 +38,14 @@ for (i in 1:5) {
     gfit = fitG(series$julianday, series$fracSurveys, 
                 weighted.mean(series$julianday, series$fracSurveys),
                 14, 200, control = list(maxit = 10000), method="L-BFGS-B", lower=c(0,0,0,0,0,0))
-    output = rbind(output, c(i, j, gfit$par[1], gfit$par[2], gfit$par[3]))
+    output = rbind(output, c(i, nrow(series), j, gfit$par[1], gfit$par[2], gfit$par[3]))
     cols = c(cols, colors[i])
     
   }
 }
 
 output = data.frame(output)
-names(output) = c('freq', 'start', 'mu', 'sig', 'scal')
+names(output) = c('freq', 'n', 'start', 'mu', 'sig', 'scal')
 output$col = cols
 
 sapply(1:nrow(output), function(x) 
@@ -59,44 +61,56 @@ PR.LEPL15.day = meanDensityByDay(amsurvey.pr[amsurvey.pr$circle %in% 1:12,],
                                  main = '2015, Visual', col = 'blueviolet')
 
 
-prlepl15.day2 = prlepl15.day[c(1, 8, 15),]  
-  
 
-# Fit a normal curve using least squares
-gfit = fitG(prlepl15.day$julianday, prlepl15.day$fracSurveys, 
-            weighted.mean(prlepl15.day$julianday, prlepl15.day$fracSurveys),
-            14, 3.5, control = list(maxit = 10000), method="L-BFGS-B", lower=c(0,0,0,0,0,0))
+# --------------  Daily visual survey data, 2016 ------------------------------
 
-# Curve parameters
-p = gfit$par
-r2 = cor(prlepl15.day$julianday, p[3]*dnorm(prlepl15.day$julianday, p[1], p[2]))^2
-totalDensity = sum(prlepl15.day$fracSurveys)
-lines(138:205, p[3]*dnorm(138:205, p[1], p[2]), col = 'blue') # make sure it appears on the right plot
+PR.LEPL16.day = meanDensityByDay(amsurvey.pr[amsurvey.pr$circle %in% 1:12,], 
+                                 ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, 
+                                 jdRange = c(1,365), outlierCount = 10000, plot = T, 
+                                 plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 7, las = 1,
+                                 xlim = c(beg_jd16, end_jd16), ylim = c(0,30), ylab = "Caterpillars", 
+                                 main = '2016, Visual', col = 'blueviolet')
+prlepl16.day = PR.LEPL16.day[1:14,]
+colors = c('purple', 'blue', 'green', 'orange', 'red')
+
+output16 = c()
+cols = c()
+for (i in 1:5) {
+  for (j in 1:i) {
+    series = prlepl16.day[seq(j, 14, by = i),]
+    
+    gfit = fitG(series$julianday, series$fracSurveys, 
+                weighted.mean(series$julianday, series$fracSurveys),
+                14, 200, control = list(maxit = 10000), method="L-BFGS-B", lower=c(0,0,0,0,0,0))
+    output16 = rbind(output16, c(i, nrow(series), j, gfit$par[1], gfit$par[2], gfit$par[3]))
+    cols = c(cols, colors[i])
+    
+  }
+}
+
+output16 = data.frame(output16)
+names(output16) = c('freq', 'n', 'start', 'mu', 'sig', 'scal')
+output16$col = cols
+
+sapply(1:nrow(output16), function(x) 
+  lines(138:205, output16$scal[x]*dnorm(138:205, output16$mu[x], output16$sig[x]), 
+        col = output16$col[x], lwd = 2))
+
+PR.LEPL16.day = meanDensityByDay(amsurvey.pr[amsurvey.pr$circle %in% 1:12,], 
+                                 ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, 
+                                 jdRange = c(1,365), outlierCount = 10000, plot = T, 
+                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 7, las = 1,
+                                 xlim = c(beg_jd16, end_jd16), ylim = c(0,30), ylab = "Caterpillars", 
+                                 main = '2016, Visual', col = 'blueviolet')
 
 
 
 
-# --------------  Weekly visual survey data, 2015 ------------------------------
-
-PR.LEPL15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$circle %in% 1:12,], 
-                                  ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, 
-                                  jdRange = c(1,365), outlierCount = 10000, plot = T, 
-                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1,
-                                  xlim = c(beg_jd15, end_jd15), ylim = c(0,15), ylab = "Caterpillars", 
-                                  main = '2015, Visual', col = 'blueviolet')
-prlepl15.weekly = PR.LEPL15.sci[1:9,]
 
 
-# Fit a normal curve using least squares
-gfit = fitG(prlepl15.weekly$JDweek, prlepl15.weekly$fracSurveys, 
-            weighted.mean(prlepl15.weekly$JDweek, prlepl15.weekly$fracSurveys),
-            14, 3.5, control = list(maxit = 10000), method="L-BFGS-B", lower=c(0,0,0,0,0,0))
 
-# Curve parameters
-p = gfit$par
-r2 = cor(prlepl15.weekly$week, p[3]*dnorm(prlepl15.weekly$week, p[1], p[2]))^2
-totalDensity = sum(prlepl15.weekly$meanDensity)
-lines(138:205, p[3]*dnorm(138:205, p[1], p[2]), col = 'blue') # make sure it appears on the right plot
+
+
 
 
 
