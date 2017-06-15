@@ -10,13 +10,13 @@
 
 source("cleaning_scripts/data_cleaning.r")
 
+multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HETE', 'AUCH')
 
 #----PHENOLOGY PLOT by occurrence (%) by week----
 
 pdf('output/plots/paper_plots/phenology_trained_v_vols_pct.pdf', width = 6, height = 7)
 
 par(mfrow = c(3,2), mar = c(2,5,3,1), oma = c(4,4,1,1), cex.lab = 1.5, cex.axis = 1.25)
-multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HETE')
 
 # Restrict comparisons to the window of julian days when both groups were conducting surveys
 beg_jd15 = 138
@@ -104,7 +104,7 @@ PR.BIRD15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$circle %in% 1:8,],
                                  ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
                                  jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1,
-                                 xlim = c(beg_jd15, end_jd15), ylim = c(0,50), ylab = "Bird food", 
+                                 xlim = c(beg_jd15, end_jd15), ylim = c(10,70), ylab = "Foliage arthropods", 
                                  main = '', col = 'blueviolet')
 PR.BIRD15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                 ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
@@ -122,7 +122,7 @@ PR.BIRD16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$circle %in% 1:8,],
                                   ordersToInclude = multorders, inputYear = 2016, inputSite = 117, 
                                   jdRange = c(beg_jd16, end_jd16), outlierCount = 10000, plot = T, 
                                   plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1,
-                                  xlim = c(beg_jd16, end_jd16), ylim = c(0,60), ylab = "", 
+                                  xlim = c(beg_jd16, end_jd16), ylim = c(10,70), ylab = "", 
                                   main = '', col = 'blueviolet')
 PR.BIRD16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                 ordersToInclude = multorders, inputYear = 2016, inputSite = 117, 
@@ -150,7 +150,6 @@ dev.off()
 pdf('output/plots/paper_plots/phenology_trained_v_vols_den.pdf', width = 6, height = 7)
 
 par(mfrow = c(3,2), mar = c(2,5,3,1), oma = c(4,4,1,1), cex.lab = 1.5, cex.axis = 1.25, mgp = c(3.5, 1, 0))
-multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HETE')
 
 # Restrict comparisons to the window of julian days when both groups were conducting surveys
 beg_jd15 = 138
@@ -237,7 +236,7 @@ PR.BIRD15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$circle %in% 1:8,],
                                   ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
                                   jdRange = c(beg_jd15, end_jd15), outlierCount = 30, plot = T, 
                                   plotVar = 'meanDensity', new = T, minLength = 5, lwd = linewidth, las = 1,
-                                  xlim = c(beg_jd15, end_jd15), ylim = c(0,.9), ylab = "Bird food", 
+                                  xlim = c(beg_jd15, end_jd15), ylim = c(0,1.2), ylab = "Foliage arthropods", 
                                   main = '', col = 'blueviolet')
 PR.BIRD15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                  ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
@@ -255,7 +254,7 @@ PR.BIRD16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$circle %in% 1:8,],
                                   ordersToInclude = multorders, inputYear = 2016, inputSite = 117, 
                                   jdRange = c(beg_jd16, end_jd16), outlierCount = 30, plot = T, 
                                   plotVar = 'meanDensity', new = T, minLength = 5, lwd = linewidth, las = 1,
-                                  xlim = c(beg_jd16, end_jd16), ylim = c(0,1), ylab = "", 
+                                  xlim = c(beg_jd16, end_jd16), ylim = c(0,1.2), ylab = "", 
                                   main = '', col = 'blueviolet')
 PR.BIRD16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                  ordersToInclude = multorders, inputYear = 2016, inputSite = 117, 
