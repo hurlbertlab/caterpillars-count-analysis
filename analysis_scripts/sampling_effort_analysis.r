@@ -10,8 +10,177 @@ fitG = function(x, y, mu, sig, scale, ...){
     d = p[3] * dnorm(x, mean = p[1], sd = p[2])
     sum((d - y) ^ 2)
   }
-  optim(c(mu, sig, scale), f)
+  optim(c(mu, sig, scale), f, control = list(maxit = 10000), method="L-BFGS-B", lower=c(0,0,0,0,0,0))
 }
+
+
+
+# STEP 1: Visualize finest grain phenology pattern using meanDensityByDay
+
+PR.LEPL15.day = meanDensityByDay(amsurvey.pr[amsurvey.pr$circle %in% 1:12,], 
+                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, 
+                                 jdRange = c(1,365), outlierCount = 10000, plot = T, 
+                                 plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 7, las = 1,
+                                 xlim = c(beg_jd15, end_jd15), ylim = c(0,30), ylab = "Caterpillars", 
+                                 main = '2015, Visual', col = 'blueviolet')
+
+# upon inspection, the first 18 survey dates will be used for fitting the Gaussian
+# (past that is a second late summer peak)
+
+
+effortAnalysis = function(surveyData, ordersToInclude = "LEPL", inputYear, inputSite,
+                          jdRange = c(1,365), outlierCount = 10000, plotVar = 'fracSurveys',
+                          
+                          numSurveyDates,   # number of consecutive survey dates to include starting from 1st
+                          
+                          minFreq,          # minimum survey date frequency to subset, i.e., every
+                                            #                  "minFreq"-th survey date
+                          numCircles,       # a vector of survey effort levels based on number of circles
+                                            #                  to subset for phenology estimation
+                          plot = F,
+                          
+                          plotFilename = NULL)
+{
+  
+  colors = rainbow(minFreq)[minFreq:1]
+  p = 0
+  
+  if (plot) {
+    pdf(plotFilename, height = 10.5, width = 8)
+    par(mfrow = c(5, 3), mar = c(4, 4, 2, 1), oma = c(4, 4, 0, 0), cex.main = .85)
+  }
+  
+  output = data.frame(freq = NULL, n = NULL, start = NULL, circles = NULL, rep = NULL,
+                      mu = NULL, sig = NULL, scale = NULL, totalDensity = NULL, col = NULL)
+
+  for (i in 1:minFreq) {
+    
+    for (j in 1:i) {
+    
+      for (cir in numCircles) {
+          
+        for (rep in 1:ifelse(cir == max(numCircles), 1, 10)) {
+
+          circlesubset = sample(1:max(numCircles), cir)
+            
+          series = meanDensityByDay(filter(surveyData, circle %in% circlesubset), 
+                                    ordersToInclude = ordersToInclude, inputYear = inputYear, 
+                                    inputSite = inputSite, jdRange = jdRange, 
+                                    outlierCount = outlierCount, plot = F, plotVar = plotVar) %>%
+              
+            slice(1:numSurveyDates) %>%
+              
+            slice(seq(j, numSurveyDates, by = i)) %>%
+              
+            data.frame()
+            
+          # Fit Gaussian
+          gfit = tryCatch({
+            
+            fitG(series$julianday, series[, plotVar], 
+                        weighted.mean(series$julianday, series[, plotVar]),
+                        14, 200)
+          
+            }, error = function(err) {
+          
+            gfitFail = list(par = c(NA, NA, NA))
+          
+            return(gfitFail)
+          
+            }) # end tryCatch
+          
+          
+          if (is.na(gfit$par[1])) {
+            R2 = NA
+          } else {
+            series$predval = gfit$par[3]*dnorm(series$julianday, gfit$par[1], gfit$par[2])
+            lm1 = lm(series$predval ~ series[, plotVar])
+            R2 = round(summary(lm1)$r.squared, 3)
+          }
+          
+          
+          # Calculate total number of arthropods in the subset of surveys
+          totalDensity = surveyData %>% 
+            
+            filter(circle %in% circlesubset, year == inputYear,
+                  site == inputSite, arthCode %in% ordersToInclude,
+                  julianday >= min(jdRange), julianday <= max(jdRange),
+                  count <= 30) %>%
+            
+            summarize(total = sum(count))
+          
+          # Results  
+          temp = data.frame(freq = i,
+                            n = nrow(series),
+                            start = j,
+                            circles = cir,
+                            rep = rep,
+                            mu = gfit$par[1],
+                            sig = gfit$par[2],
+                            scale = gfit$par[3],
+                            R2 = R2,
+                            totalDensity = totalDensity,
+                            col = colors[i])
+            
+          output = rbind(output, temp)
+          
+          if(plot) {
+            plot(series$julianday, series[, plotVar], pch = 16, cex = 2, 
+                 xlim = jdRange, ylim = c(0, 1.3*max(series[, plotVar])), 
+                 col = 'red', xlab = "", ylab = "", main = 
+                   paste("freq=", i, ", start=", j, ", circles=", cir, ", rep=", rep, sep = ""))
+            legend("topleft", paste("R2 =", R2), bty = 'n')
+            
+            p = p + 1
+            
+            if (!is.na(temp$mu)) {
+              lines(jdRange[1]:jdRange[2], 
+                    temp$scale*dnorm(jdRange[1]:jdRange[2], temp$mu, temp$sig), 
+                    col = 'blue', lwd = 1)
+              abline(v = temp$mu, lty = 'dotted')
+            }
+            if (p %% 15 == 0) {
+              mtext("Julian day", 1, outer = T, line = 1, cex = 1.5)
+              mtext(plotVar, 2, outer = T, line = 1, cex = 1.5)
+            }
+          } #end if plot
+          
+          
+        } #end rep loop
+      } #end cir loop
+    } #end j loop
+  } #end i loop
+  
+  if(plot) { dev.off() }
+  
+  return(output)
+
+} #end function
+  
+  
+ 
+lep15vis = effortAnalysis(amsurvey.pr, inputYear = 2015, inputSite = 117, numSurveyDates = 18,
+                       minFreq = 5, numCircles = c(12, 10, 8, 6, 4, 2), jdRange = c(130, 205),
+                       plot = T, plotFilename = 'output/plots/lep15vis_effort.pdf')
+
+
+
+
+
+ sapply(1:nrow(output), function(x) 
+    lines(138:205, output$scal[x]*dnorm(138:205, output$mu[x], output$sig[x]), 
+          col = output$col[x], lwd = 2))
+  
+  
+  PR.LEPL15.day = meanDensityByDay(amsurvey.pr[amsurvey.pr$circle %in% 1:12,], 
+                                   ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, 
+                                   jdRange = c(1,365), outlierCount = 10000, plot = T, 
+                                   plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 7, las = 1,
+                                   xlim = c(beg_jd15, end_jd15), ylim = c(0,30), ylab = "Caterpillars", 
+                                   main = '2015, Visual', col = 'blueviolet')
+  
+}
+
 
 beg_jd15 = 138
 end_jd15 = 210
@@ -20,45 +189,6 @@ end_jd16 = 205
 
 # --------------  Daily visual survey data, 2015 ------------------------------
 
-PR.LEPL15.day = meanDensityByDay(amsurvey.pr[amsurvey.pr$circle %in% 1:12,], 
-                                  ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, 
-                                  jdRange = c(1,365), outlierCount = 10000, plot = T, 
-                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 7, las = 1,
-                                  xlim = c(beg_jd15, end_jd15), ylim = c(0,30), ylab = "Caterpillars", 
-                                  main = '2015, Visual', col = 'blueviolet')
-prlepl15.day = PR.LEPL15.day[1:18,]
-colors = c('purple', 'blue', 'green', 'orange', 'red')
-
-output = c()
-cols = c()
-for (i in 1:5) {
-  for (j in 1:i) {
-    series = prlepl15.day[seq(j, 18, by = i),]
-
-    gfit = fitG(series$julianday, series$fracSurveys, 
-                weighted.mean(series$julianday, series$fracSurveys),
-                14, 200, control = list(maxit = 10000), method="L-BFGS-B", lower=c(0,0,0,0,0,0))
-    output = rbind(output, c(i, nrow(series), j, gfit$par[1], gfit$par[2], gfit$par[3]))
-    cols = c(cols, colors[i])
-    
-  }
-}
-
-output = data.frame(output)
-names(output) = c('freq', 'n', 'start', 'mu', 'sig', 'scal')
-output$col = cols
-
-sapply(1:nrow(output), function(x) 
-  lines(138:205, output$scal[x]*dnorm(138:205, output$mu[x], output$sig[x]), 
-        col = output$col[x], lwd = 2))
-
-
-PR.LEPL15.day = meanDensityByDay(amsurvey.pr[amsurvey.pr$circle %in% 1:12,], 
-                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, 
-                                 jdRange = c(1,365), outlierCount = 10000, plot = T, 
-                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 7, las = 1,
-                                 xlim = c(beg_jd15, end_jd15), ylim = c(0,30), ylab = "Caterpillars", 
-                                 main = '2015, Visual', col = 'blueviolet')
 
 
 
@@ -70,6 +200,8 @@ PR.LEPL16.day = meanDensityByDay(amsurvey.pr[amsurvey.pr$circle %in% 1:12,],
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 7, las = 1,
                                  xlim = c(beg_jd16, end_jd16), ylim = c(0,30), ylab = "Caterpillars", 
                                  main = '2016, Visual', col = 'blueviolet')
+
+# 14 survey dates before late season peak
 prlepl16.day = PR.LEPL16.day[1:14,]
 colors = c('purple', 'blue', 'green', 'orange', 'red')
 
