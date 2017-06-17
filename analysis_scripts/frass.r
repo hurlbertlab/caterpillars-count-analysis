@@ -16,7 +16,7 @@ frassBackup = function(open = F) {
   data = gsheet2tbl(url)
 
   # Write a copy
-  write.csv(data, paste('z:/projects/caterpillarscount/frass/frass_', Sys.Date(), '.csv', sep = ''),
+  write.csv(data, paste('data/arthropods/frass_', Sys.Date(), '.csv', sep = ''),
           row.names = F)
   if (open) { return (data) }
 }
@@ -83,3 +83,28 @@ frassplot(meanfrass, "Prairie Ridge", 2015, 'green', new = F, var = 'density', l
 frassplot(meanfrass, "Botanical Garden", 2017, 'red', new =T, var = 'density', lwd = 3)
 frassplot(meanfrass, "Botanical Garden", 2017, 'red', new =T, var = 'mass', lwd = 3)
 
+
+prlep15.bsden = meanDensityByDay(beatsheet.pr, ordersToInclude = "LEPL", inputYear = 2015,
+                                   inputSite = 117, jdRange = c(138,197), outlierCount = 10000,
+                                   plot = F, plotVar = 'meanDensity')
+bsGfit = fitG(prlep15.bsden$julianday, prlep15.bsden$meanDensity, 
+              weighted.mean(prlep15.bsden$julianday, prlep15.bsden$meanDensity),
+              14, 200)  
+
+prlep15.frden = filter(meanfrass, Site == "Prairie Ridge", Year == 2015, jday >= 138, jday <=197)
+
+frGfit = fitG(prlep15.frden$jday, prlep15.frden$density, 
+              weighted.mean(prlep15.frden$jday, prlep15.frden$density),
+              14, 200)  
+
+
+
+
+par(new=T)
+frassplot(meanfrass, "Prairie Ridge", 2015, 'green', new = T, var = 'density', lwd = 3, xlim = c(139, 206))
+
+lepbs15 = 
+
+bsG = fitG(series$julianday, series[, plotVar], 
+           weighted.mean(series$julianday, series[, plotVar]),
+           14, 200)
