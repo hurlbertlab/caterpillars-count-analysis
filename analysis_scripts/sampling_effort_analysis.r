@@ -27,8 +27,12 @@ effortAnalysis = function(surveyData, ordersToInclude = "LEPL", inputYear, input
                           #                  to subset for phenology estimation
                           plot = F,
                           
-                          plotFilename = NULL)
+                          plotFilename = NULL, 
+                          
+                          seed = 1)
 {
+  
+  set.seed(seed)
   
   colors = rainbow(minFreq)[minFreq:1]
   p = 0
@@ -43,15 +47,34 @@ effortAnalysis = function(surveyData, ordersToInclude = "LEPL", inputYear, input
   
   for (i in 1:minFreq) {
     
+    # In order to represent the same number of phenology estimates per combination
+    # of survey frequency and circle number (e.g. 60), the number of sampling events
+    # per survey frequency/circle number/start date will need to decline with frequency.
+    
+    # freq 1 * 60 samples
+    # freq 2 * 30
+    # freq 3 * 20
+    # freq 4 * 15
+    # freq 5 * 12
+    
+    reps = 60/i
+
     for (j in 1:i) {
       
       for (cir in numCircles) {
         
-        for (rep in 1:ifelse(cir == max(numCircles), 1, 10)) {
+        # All combinations of cir circles out of 12
+        allcombos = combn(12, cir)
+        
+        if (ncol(allcombos) < reps) {
+          combos = allcombos 
+        } else {
+          combos = allcombos[, sample(1:ncol(allcombos), reps)]
+        }
+        
+        for (rep in 1:ncol(combos)) {
           
-          circlesubset = sample(1:max(numCircles), cir)
-          
-          
+          circlesubset = combos[, rep]
           
           densByDay = meanDensityByDay(filter(surveyData, circle %in% circlesubset), 
                                     ordersToInclude = ordersToInclude, inputYear = inputYear, 
@@ -200,7 +223,7 @@ PR.LEPL16.bsday = meanDensityByDay(beatsheet.pr,
 
 lep15vis = effortAnalysis(amsurvey.pr, inputYear = 2015, inputSite = 117,
                        minFreq = 5, numCircles = c(12, 10, 8, 6, 4, 2), jdRange = c(135, 194),
-                       plot = T, plotFilename = 'output/plots/lep15vis_effort.pdf')
+                       plot = T, plotFilename = 'output/plots/lep15vis_effort.pdf', seed = 1)
 
 lep16vis = effortAnalysis(amsurvey.pr, inputYear = 2016, inputSite = 117, 
                           minFreq = 5, numCircles = c(12, 10, 8, 6, 4, 2), jdRange = c(132, 189),
@@ -236,8 +259,48 @@ lep15bs.sum = lep15bs %>%
   rename(mu = mu.mean)
 
 
+lep15bs2 = lep15bs %>%
+  filter(mu > 100, mu < 200, R2 > 0.2)
 
 
+pdf('output/plots/paper_plots/effort_analysis_peakdate_hists.pdf', height = 6, width = 7)
+par(mfcol = c(5, 5), mar = c(2, 1, 1, 0.5), oma = c(3, 5, 5, 0), mgp = c(2, 0.7, 0))
+
+numCircles = c(2,4,6,8,10)
+
+for (f in 1:5) {
+  for (c in numCircles[5:1]) {
+    lepsub = filter(lep15bs2, freq == f, circles == c)
+    hist(lepsub$mu, breaks = seq(100, 220, by = 2), xlim = c(140, 210), 
+         main = '', xlab = '', ylab = '', yaxt = 'n', col = 'black', tck = -.1)
+    abline(v = full.mu, col = 'red', lwd = 2)
+  }
+}
+mtext("Julian day", 1, outer = T, line = 1, cex = 1.5)
+mtext("Sampling interval (days)", 3, outer = T, line = 3, cex = 1.5)
+mtext(round(3.5*(1:5), 0), 3, outer = T, at = seq(0.1, 0.9, length.out=5), cex = 1.5)
+mtext("Number of surveys", 2, outer = T, line = 3, cex = 1.5)
+mtext(5*numCircles, 2, outer = T, at = seq(0.13, .93, length.out = 5), cex = 1.5, las = 1)
+dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####
 
 PR.LEPL15.bsday = meanDensityByDay(beatsheet.pr, 
                                    ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, 
@@ -254,8 +317,6 @@ PR.LEPL15.bsday = meanDensityByDay(beatsheet.pr,
                                    main = '2015, Beat sheet', col = 'blueviolet')
 
 # Example: plotting fitted Gaussians where circles == 4 and freq == 4
-full = lep15bs %>%
-  filter(freq == 1, circles == 12)
 
 lines(130:210, full$scale*dnorm(130:210, full$mu, full$sig), lwd = 3, col = 'blueviolet', lty = 'dashed')
 
@@ -265,33 +326,9 @@ example = lep15bs %>%
   top_n(2)
 
 sapply(1:nrow(example), function(x)
-        lines(130:210, example$scale[x]*dnorm(130:210, example$mu[x], example$sig[x]),
-              col = 'gray60'))
-
-
-lep15bs2 = lep15bs %>%
-  filter(mu > 100, mu < 200, R2 > 0.2)
-
-pdf('output/plots/paper_plots/effort_analysis_peakdate_hists.pdf', height = 6, width = 7)
-par(mfcol = c(6, 5), mar = c(2, 2, 1, 1), oma = c(4, 5, 5, 0), mgp = c(2, 0.7, 0))
-
-for (f in 1:5) {
-  for (c in numCircles[6:1]) {
-    lepsub = filter(lep15bs2, freq == f, circles == c)
-    hist(lepsub$mu, breaks = seq(125, 212, by = 2), xlim = c(140, 210), 
-         main = '', xlab = '', ylab = '', yaxt = 'n', col = 'black', tck = -.1)
-    abline(v = full$mu, col = 'red', lwd = 2)
-  }
-}
-mtext("Julian day", 1, outer = T, line = 1, cex = 1.5)
-mtext("Sampling interval (days)", 3, outer = T, line = 3, cex = 1.5)
-mtext(round(3.5*(1:5), 0), 3, outer = T, at = seq(0.1, 0.9, length.out=5), cex = 1.5)
-mtext("Number of surveys", 2, outer = T, line = 3, cex = 1.5)
-mtext(5*numCircles, 2, outer = T, at = seq(0.1, .95, length.out = 6), cex = 1.5, las = 1)
-dev.off()
-
-
-
+  lines(130:210, example$scale[x]*dnorm(130:210, example$mu[x], example$sig[x]),
+        col = 'gray60'))
+###
 
 # Estimated peak
 mu.mat = matrix(lep15bs.sum$mu, nrow = length(unique(lep15bs.sum$circles)), 
