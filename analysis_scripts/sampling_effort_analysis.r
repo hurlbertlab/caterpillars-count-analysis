@@ -42,7 +42,7 @@ effortAnalysis = function(surveyData, ordersToInclude = "LEPL", inputYear, input
     par(mfrow = c(5, 3), mar = c(4, 4, 2, 1), oma = c(4, 4, 0, 0), cex.main = .85)
   }
   
-  output = data.frame(freq = NULL, n = NULL, start = NULL, circles = NULL, rep = NULL,
+  output = data.frame(freq = NULL, n = NULL, start = NULL, circles = NULL, rep = NULL, maxJD = NULL,
                       mu = NULL, sig = NULL, scale = NULL, totalDensity = NULL, col = NULL)
   
   for (i in 1:minFreq) {
@@ -130,6 +130,7 @@ effortAnalysis = function(surveyData, ordersToInclude = "LEPL", inputYear, input
                             start = j,
                             circles = cir,
                             rep = rep,
+                            maxJD = series$julianday[series[, plotVar] == max(series[, plotVar])],
                             mu = gfit$par[1],
                             sig = gfit$par[2],
                             scale = gfit$par[3],
@@ -241,6 +242,7 @@ lep16bs = effortAnalysis(beatsheet.pr, inputYear = 2016, inputSite = 117,
 # STEP 3: Summarize and visualize results
 
 full.mu = lep15bs$mu[lep15bs$circles == 12 & lep15bs$freq == 1]
+full.peak = lep15bs$maxJD[lep15bs$circles == 12 & lep15bs$freq == 1]
 lep15bs$dev = lep15bs$mu - full.mu
 
 lep15bs.sum = lep15bs %>%
@@ -263,7 +265,7 @@ lep15bs2 = lep15bs %>%
   filter(mu > 100, mu < 200, R2 > 0.2)
 
 
-pdf('output/plots/paper_plots/effort_analysis_peakdate_hists.pdf', height = 6, width = 7)
+pdf('output/plots/paper_plots/effort_analysis_Gausspeak_hists.pdf', height = 6, width = 7)
 par(mfcol = c(5, 5), mar = c(2, 1, 1, 0.5), oma = c(3, 5, 5, 0), mgp = c(2, 0.7, 0))
 
 numCircles = c(2,4,6,8,10)
@@ -283,6 +285,27 @@ mtext("Number of surveys", 2, outer = T, line = 3, cex = 1.5)
 mtext(5*numCircles, 2, outer = T, at = seq(0.13, .93, length.out = 5), cex = 1.5, las = 1)
 dev.off()
 
+
+
+pdf('output/plots/paper_plots/effort_analysis_peakdate_hists.pdf', height = 6, width = 7)
+par(mfcol = c(5, 5), mar = c(2, 1, 1, 0.5), oma = c(3, 5, 5, 0), mgp = c(2, 0.7, 0))
+
+numCircles = c(2,4,6,8,10)
+
+for (f in 1:5) {
+  for (c in numCircles[5:1]) {
+    lepsub = filter(lep15bs2, freq == f, circles == c)
+    hist(lepsub$maxJD, breaks = seq(100, 220, by = 2), xlim = c(140, 210), 
+         main = '', xlab = '', ylab = '', yaxt = 'n', col = 'black', tck = -.1)
+    abline(v = full.peak, col = 'red', lwd = 2)
+  }
+}
+mtext("Julian day", 1, outer = T, line = 1, cex = 1.5)
+mtext("Sampling interval (days)", 3, outer = T, line = 3, cex = 1.5)
+mtext(round(3.5*(1:5), 0), 3, outer = T, at = seq(0.1, 0.9, length.out=5), cex = 1.5)
+mtext("Number of surveys", 2, outer = T, line = 3, cex = 1.5)
+mtext(5*numCircles, 2, outer = T, at = seq(0.13, .93, length.out = 5), cex = 1.5, las = 1)
+dev.off()
 
 
 

@@ -85,11 +85,18 @@ frassplot(meanfrass, "Botanical Garden", 2017, 'red', new =T, var = 'mass', lwd 
 
 
 prlep15.bsden = meanDensityByDay(beatsheet.pr, ordersToInclude = "LEPL", inputYear = 2015,
-                                   inputSite = 117, jdRange = c(138,197), outlierCount = 10000,
-                                   plot = F, plotVar = 'meanDensity')
+                                   inputSite = 117, jdRange = c(138,197), outlierCount = 30,
+                                   plot = T, plotVar = 'meanDensity', xlim = c(138, 200),
+                                 lwd = 7, col = 'blueviolet', ylab = "Caterpillar density",
+                                 ylim = c(0, .3))
 bsGfit = fitG(prlep15.bsden$julianday, prlep15.bsden$meanDensity, 
               weighted.mean(prlep15.bsden$julianday, prlep15.bsden$meanDensity),
               14, 200)  
+
+#lines(138:200, bsGfit$par[3]*dnorm(138:200, bsGfit$par[1], bsGfit$par[2]), col = 'blueviolet', lwd = 2)
+
+par(new=T)
+frassplot(meanfrass, "Prairie Ridge", 2015, 'green', new = T, var = 'density', lwd = 7, xlim = c(138, 200), yaxt = "n")
 
 prlep15.frden = filter(meanfrass, Site == "Prairie Ridge", Year == 2015, jday >= 138, jday <=197)
 
@@ -97,14 +104,6 @@ frGfit = fitG(prlep15.frden$jday, prlep15.frden$density,
               weighted.mean(prlep15.frden$jday, prlep15.frden$density),
               14, 200)  
 
+lines(138:200, frGfit$par[3]*dnorm(138:200, frGfit$par[1], frGfit$par[2]), col = 'green', lwd = 2)
 
 
-
-par(new=T)
-frassplot(meanfrass, "Prairie Ridge", 2015, 'green', new = T, var = 'density', lwd = 3, xlim = c(139, 206))
-
-lepbs15 = 
-
-bsG = fitG(series$julianday, series[, plotVar], 
-           weighted.mean(series$julianday, series[, plotVar]),
-           14, 200)
