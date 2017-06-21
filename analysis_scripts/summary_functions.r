@@ -220,6 +220,7 @@ meanDensityByWeek = function(surveyData,            # merged dataframe of survey
 # Function for reading in frass data from GoogleDoc
 # *if aim is to backup GoogleDoc and write to disk only, then open =F and write = T
 # *if aim is to use data without writing to disk, then open = T and write = F
+
 frassData = function(open = F, write = F) {
   require(gsheet)
   url = "https://docs.google.com/spreadsheets/d/1RwXzwhHUbP0m5gKSOVhnKZbS1C_NrbdfHLglIVCzyFc/edit#gid=1479231778"
@@ -237,6 +238,7 @@ frassData = function(open = F, write = F) {
 # Function that takes a date field (formatted as %m/%d/%Y) and a time field
 # (hh:mm in 24h time), converts the date to julian day and adds the fractional
 # day represented by the hours and minutes
+
 julianDayTime = function(date, hour_min) {
   require(lubridate)
   jday = yday(date)
@@ -247,6 +249,39 @@ julianDayTime = function(date, hour_min) {
   output = jday + temp/24
   return(output)
 }
+
+
+# Function for plotting frass phenology
+
+frassplot = function(frassdata, site, year, color = 'black', new = T, var = 'mass',...) {
+  temp = filter(frassdata, Site == site, Year == year)
+  if (new & var == 'mass') {
+    plot(temp$jday, temp$mass, xlab = "Julian day", ylab = "Mean frass (mg / trap / day)",
+         type = 'l', col = color, ...)
+  } else if (!new & var == 'mass') {
+    points(temp$jday, temp$mass, type = 'l', col = color, ...)
+  } else if (new & var == 'density') {
+    plot(temp$jday, temp$density, xlab = "Julian day", ylab = "Mean frass (no. / trap / day)",
+         type = 'l', col = color, ...)
+  } else if (!new & var == 'density') {
+    points(temp$jday, temp$density, type = 'l', col = color, ...)
+  }
+}
+
+
+
+# Function for fitting a Gaussian curve
+#   mu:   mean
+#   sig:  SD
+#   scale: scale parameter
+fitG = function(x, y, mu, sig, scale, ...){
+  f = function(p){
+    d = p[3] * dnorm(x, mean = p[1], sd = p[2])
+    sum((d - y) ^ 2)
+  }
+  optim(c(mu, sig, scale), f, control = list(maxit = 10000), method="L-BFGS-B", lower=c(0,0,0,0,0,0))
+}
+
 
 
 #--------------------------------------------------------------------------------
