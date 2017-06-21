@@ -110,7 +110,7 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
                        plotVar = 'meanDensity', # 'meanDensity' or 'fracSurveys' or 'meanBiomass'
                        new = T,
                        color = 'black',
-                                              ...)                  
+                       ...)                  
 
 {
   
@@ -144,7 +144,7 @@ meanDensityByDay = function(surveyData, # merged dataframe of surveys and orders
   
   if (plot & new) {
     plot(arthCount$julianday, arthCount[, plotVar], type = 'l', 
-         col = color, xlab = "Julian day", ...)
+         col = color, ...)
   } else if (plot & new==F) {
     points(arthCount$julianday, arthCount[, plotVar], type = 'l', col = color, ...)
   }
@@ -259,18 +259,16 @@ julianDayTime = function(date, hour_min) {
 
 
 frassplot = function(frassdata, inputSite, year, color = 'black', new = T, 
-                     var = 'mass', minReliability = 0, ...) {
-  temp = filter(frassdata, site == inputSite, Year == year, reliability >= minReliability)
-  if (new & var == 'mass') {
-    plot(temp$jday, temp$mass, xlab = "Julian day", ylab = "Mean frass (mg / trap / day)",
+                     var = 'mass', minReliability = 0, xlab = 'Julian day', ylab = '', ...) {
+  
+  temp = filter(frassdata, site == inputSite, Year == year, reliability >= minReliability) %>%
+    data.frame()
+  
+  if (new) {
+    plot(temp$jday, temp[, var], xlab = xlab, ylab = ylab,
          type = 'l', col = color, ...)
-  } else if (!new & var == 'mass') {
-    points(temp$jday, temp$mass, type = 'l', col = color, ...)
-  } else if (new & var == 'density') {
-    plot(temp$jday, temp$density, xlab = "Julian day", ylab = "Mean frass (no. / trap / day)",
-         type = 'l', col = color, ...)
-  } else if (!new & var == 'density') {
-    points(temp$jday, temp$density, type = 'l', col = color, ...)
+  } else {
+    points(temp$jday, temp[, var], type = 'l', col = color, ...)
   }
 }
 
