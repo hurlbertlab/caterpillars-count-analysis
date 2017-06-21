@@ -252,9 +252,15 @@ julianDayTime = function(date, hour_min) {
 
 
 # Function for plotting frass phenology
+#   minReliability is the minimum reliability score for including in the analysis.
+#    3 - reliable, no obvious problems
+#    2 - frass traps wet, or potential minor issues
+#    1 - major problems, unreliable frass data
 
-frassplot = function(frassdata, site, year, color = 'black', new = T, var = 'mass',...) {
-  temp = filter(frassdata, Site == site, Year == year)
+
+frassplot = function(frassdata, inputSite, year, color = 'black', new = T, 
+                     var = 'mass', minReliability = 0, ...) {
+  temp = filter(frassdata, site == inputSite, Year == year, reliability >= minReliability)
   if (new & var == 'mass') {
     plot(temp$jday, temp$mass, xlab = "Julian day", ylab = "Mean frass (mg / trap / day)",
          type = 'l', col = color, ...)
@@ -285,6 +291,165 @@ fitG = function(x, y, mu, sig, scale, ...){
 
 
 #--------------------------------------------------------------------------------
+
+
+# Function for fitting a Gaussian curve to various subsets of the data, where one
+# can vary the frequency of sampling as well as the number of survey circles per date.
+
+effortAnalysis = function(surveyData, ordersToInclude = "LEPL", inputYear, inputSite,
+                          jdRange = c(1,365), outlierCount = 10000, plotVar = 'fracSurveys',
+                          
+                          minFreq,          # minimum survey date frequency to subset, i.e., every
+                          #                  "minFreq"-th survey date
+                          numCircles,       # a vector of survey effort levels based on number of circles
+                          #                  to subset for phenology estimation
+                          plot = F,
+                          
+                          plotFilename = NULL, 
+                          
+                          seed = 1)
+{
+  
+  set.seed(seed)
+  
+  colors = rainbow(minFreq)[minFreq:1]
+  p = 0
+  
+  if (plot) {
+    pdf(plotFilename, height = 10.5, width = 8)
+    par(mfrow = c(5, 3), mar = c(4, 4, 2, 1), oma = c(4, 4, 0, 0), cex.main = .85)
+  }
+  
+  output = data.frame(freq = NULL, n = NULL, start = NULL, circles = NULL, rep = NULL, maxJD = NULL,
+                      mu = NULL, sig = NULL, scale = NULL, totalDensity = NULL, col = NULL)
+  
+  for (i in 1:minFreq) {
+    
+    # In order to represent the same number of phenology estimates per combination
+    # of survey frequency and circle number (e.g. 60), the number of sampling events
+    # per survey frequency/circle number/start date will need to decline with frequency.
+    
+    # freq 1 * 60 samples
+    # freq 2 * 30
+    # freq 3 * 20
+    # freq 4 * 15
+    # freq 5 * 12
+    
+    reps = 60/i
+    
+    for (j in 1:i) {
+      
+      for (cir in numCircles) {
+        
+        # All combinations of cir circles out of 12
+        allcombos = combn(12, cir)
+        
+        if (ncol(allcombos) < reps) {
+          combos = allcombos 
+        } else {
+          combos = allcombos[, sample(1:ncol(allcombos), reps)]
+        }
+        
+        for (rep in 1:ncol(combos)) {
+          
+          circlesubset = combos[, rep]
+          
+          densByDay = meanDensityByDay(filter(surveyData, circle %in% circlesubset), 
+                                       ordersToInclude = ordersToInclude, inputYear = inputYear, 
+                                       inputSite = inputSite, jdRange = jdRange, 
+                                       outlierCount = outlierCount, plot = F, plotVar = plotVar)
+          
+          numSurveyDates = length(densByDay$julianday[densByDay$julianday >= min(jdRange) & 
+                                                        densByDay$julianday <= max(jdRange)])
+          series = densByDay %>%  
+            
+            slice(seq(j, numSurveyDates, by = i)) %>%
+            
+            data.frame()
+          
+          # Fit Gaussian
+          gfit = tryCatch({
+            
+            fitG(series$julianday, series[, plotVar], 
+                 weighted.mean(series$julianday, series[, plotVar]),
+                 14, 200)
+            
+          }, error = function(err) {
+            
+            gfitFail = list(par = c(NA, NA, NA))
+            
+            return(gfitFail)
+            
+          }) # end tryCatch
+          
+          
+          if (is.na(gfit$par[1])) {
+            R2 = NA
+          } else {
+            series$predval = gfit$par[3]*dnorm(series$julianday, gfit$par[1], gfit$par[2])
+            lm1 = lm(series$predval ~ series[, plotVar])
+            R2 = round(summary(lm1)$r.squared, 3)
+          }
+          
+          
+          # Calculate total number of arthropods in the subset of surveys
+          totalDensity = surveyData %>% 
+            
+            filter(circle %in% circlesubset, year == inputYear,
+                   site == inputSite, arthCode %in% ordersToInclude,
+                   julianday >= min(jdRange), julianday <= max(jdRange),
+                   count <= 30) %>%
+            
+            summarize(total = sum(count))
+          
+          # Results  
+          temp = data.frame(freq = i,
+                            n = nrow(series),
+                            start = j,
+                            circles = cir,
+                            rep = rep,
+                            maxJD = series$julianday[series[, plotVar] == max(series[, plotVar])],
+                            mu = gfit$par[1],
+                            sig = gfit$par[2],
+                            scale = gfit$par[3],
+                            R2 = R2,
+                            totalDensity = totalDensity,
+                            col = colors[i])
+          
+          output = rbind(output, temp)
+          
+          if(plot) {
+            plot(series$julianday, series[, plotVar], pch = 16, cex = 2, 
+                 xlim = jdRange, ylim = c(0, 1.3*max(series[, plotVar])), 
+                 col = 'red', xlab = "", ylab = "", main = 
+                   paste("freq=", i, ", start=", j, ", circles=", cir, ", rep=", rep, sep = ""))
+            legend("topleft", paste("R2 =", R2), bty = 'n')
+            
+            p = p + 1
+            
+            if (!is.na(temp$mu)) {
+              lines(jdRange[1]:jdRange[2], 
+                    temp$scale*dnorm(jdRange[1]:jdRange[2], temp$mu, temp$sig), 
+                    col = 'blue', lwd = 1)
+              abline(v = temp$mu, lty = 'dotted')
+            }
+            if (p %% 15 == 0) {
+              mtext("Julian day", 1, outer = T, line = 1, cex = 1.5)
+              mtext(plotVar, 2, outer = T, line = 1, cex = 1.5)
+            }
+          } #end if plot
+          
+          
+        } #end rep loop
+      } #end cir loop
+    } #end j loop
+  } #end i loop
+  
+  if(plot) { dev.off() }
+  
+  return(output)
+  
+} #end function
 
 
 
