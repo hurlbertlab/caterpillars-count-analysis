@@ -92,8 +92,15 @@ lep15bs.sum = lep15bs %>%
 lep15bs2 = lep15bs %>%
   filter(mu > 100, mu < 200, R2 > 0.2)
 
-CIs = lep15bs2 %>% group_by(freq, circles) %>% summarize(l95 = quantile(mu, .05), u95 = quantile(mu, .95), range = u95-l95)
+cool = rainbow(50, start=rgb2hsv(col2rgb('cyan'))[1], end=rgb2hsv(col2rgb('blue'))[1])
+warm = rainbow(50, start=rgb2hsv(col2rgb('red'))[1], end=rgb2hsv(col2rgb('yellow'))[1])
+cols = c(rev(cool), rev(warm))
+mypalette <- colorRampPalette(cols)(5)
+freqcols = data.frame(freq = 1:5, col = mypalette)
 
+CIs = lep15bs2 %>% group_by(freq, circles, col) %>% summarize(l95 = quantile(mu, .05), u95 = quantile(mu, .95), range = u95-l95) #%>% left_join(freqcols, by = 'freq')
+
+# Plot of histograms of estimated peak dates based on subsampling intensity/frequency
 pdf('output/plots/paper_plots/effort_analysis_Gausspeak_hists.pdf', height = 6, width = 7)
 par(mfcol = c(5, 5), mar = c(2, 1, 1, 0.5), oma = c(3, 5, 5, 0), mgp = c(2, 0.7, 0))
 
@@ -102,8 +109,11 @@ numCircles = c(2,4,6,8,10)
 for (f in 1:5) {
   for (c in numCircles[5:1]) {
     lepsub = filter(lep15bs2, freq == f, circles == c)
-    hist(lepsub$mu, breaks = seq(100, 220, by = 2), xlim = c(140, 210), 
+    CI = filter(CIs, freq == f, circles == c)
+    h = hist(lepsub$mu, breaks = seq(100, 220, by = 2), xlim = c(140, 210), 
          main = '', xlab = '', ylab = '', yaxt = 'n', col = 'black', tck = -.1)
+    mtext(paste("[", round(CI$l95, 0), ", ", round(CI$u95, 0), "]", sep = ""), 
+           3, adj = 1, line = -0.45, cex = .6)
     abline(v = full.mu, col = 'red', lwd = 2)
   }
 }
@@ -114,6 +124,17 @@ mtext("Number of surveys", 2, outer = T, line = 3, cex = 1.5)
 mtext(5*numCircles, 2, outer = T, at = seq(0.13, .93, length.out = 5), cex = 1.5, las = 1)
 dev.off()
 
+# Plot of 95% confidence interval width of peak date estimates as fcn of sampling intensity/frequency
+pdf('output/plots/paper_plots/effort_analysis_Gausspeak_CIs.pdf', height = 6, width = 7)
+par(mar = c(5, 5, 1, 1), oma = c(0, 0, 0, 0))
+plot(CIs$circles, CIs$range, pch = 16, cex = 3, col = CIs$col, las = 1, xaxt = "n", xlab = "", ylab = "")
+axis(1, at = c(numCircles, 12), labels = 5*c(numCircles, 12))
+mtext("Number of surveys", 1, cex = 1.5, line = 3)
+mtext("95% CI width (Julian days)", 2, cex = 1.5, line = 3)
+legend("topright", legend = c(4, 7, 10, 14, 18), pch = 16, col = unique(CIs$col), 
+       cex = 1.5, ncol = 3, title = 'Sampling frequency')
+abline(h = 14, lty = 'dotted', lwd = 2)
+dev.off()
 
 
 pdf('output/plots/paper_plots/effort_analysis_peakdate_hists.pdf', height = 6, width = 7)
