@@ -9,8 +9,8 @@
 library(dplyr)
 
 #read in data
-btbw = read.csv('data/birds/BTBW_data_Dryad.csv', header=T, stringsAsFactors = F)
-dat = read.csv('data/arthropods/caterpillars_hubbardbrook.csv', header=T, stringsAsFactors = F)
+#btbw = read.csv('data/birds/BTBW_data_Dryad.csv', header=T, stringsAsFactors = F)
+hubraw = read.csv('data/arthropods/caterpillars_hubbardbrook.csv', header=T, stringsAsFactors = F)
 singer = read.csv("data/arthropods/SingerData.csv", stringsAsFactors = F)
 temperature = read.csv("data/environmental/prism_temp_northerncomp.csv")
 precipitation = read.csv("data/environmental/prism_precip_northerncomp.csv")
@@ -20,17 +20,17 @@ source("archived_scripts/Tara_thesis/tree_species_model.R")
 source("archived_scripts/Tara_thesis/data_analysis.R")
 
 #improve format/put tree species names into common names
-dat$date = as.character(as.POSIXlt(dat$date, format = '%m/%d/%y'))
-dat$year = as.numeric(substr(dat$date, 1, 4))
-dat$week = floor(dat$yearday/7)+1
-dat$tree.name = ifelse(dat$tree.spec == 1, "american beech", # as outlined in hubbard brook metadata
-                       ifelse(dat$tree.spec == 2, "sugar maple",
-                              ifelse(dat$tree.spec == 3, "striped maple",
-                                     ifelse(dat$tree.spec == 4, "viburnum", NA))))
-dat$plot = gsub(1, "Hubbard Brook", dat$plot)
-dat$plot = gsub(2, "Moosilauke", dat$plot)
-dat$plot = gsub(3, "Russell", dat$plot)
-dat$plot = gsub(4, "Stinson", dat$plot)
+hubraw$date = as.character(as.POSIXlt(hubraw$date, format = '%m/%d/%y'))
+hubraw$year = as.numeric(substr(hubraw$date, 1, 4))
+hubraw$week = floor(hubraw$yearday/7)+1
+hubraw$tree.name = ifelse(hubraw$tree.spec == 1, "american beech", # as outlined in hubbard brook metadata
+                       ifelse(hubraw$tree.spec == 2, "sugar maple",
+                              ifelse(hubraw$tree.spec == 3, "striped maple",
+                                     ifelse(hubraw$tree.spec == 4, "viburnum", NA))))
+hubraw$plot = gsub(1, "Hubbard Brook", hubraw$plot)
+hubraw$plot = gsub(2, "Moosilauke", hubraw$plot)
+hubraw$plot = gsub(3, "Russell", hubraw$plot)
+hubraw$plot = gsub(4, "Stinson", hubraw$plot)
 singer$hostplantspecies = gsub("Hammamelis virginiana", "Hamamelis virginiana", singer$hostplantspecies) #incorrect spelling
 plant_codes1 = dplyr::rename(plant_codes, hostplantspecies = TreeSciName)
 singer1 = singer %>% 
@@ -40,10 +40,10 @@ singer1$ComName = gsub("Northern red oak", "Red oak", singer1$ComName)
 
 #remove data from 1994 (because it had far more caterpillars than any other year) & 1996 & 1997 b/c they only have 1 plot
 goodyears = c("1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1995")
-dat1 = dplyr::filter(dat, year %in% goodyears)
+hubraw1 = dplyr::filter(hubraw, year %in% goodyears)
 
 #number of sets of surveys conducted/year (says on website it should be 4-6 but this is not reflected in these counts) 
-hubbard_dates = dat %>% 
+hubbard_dates = hubraw %>% 
   dplyr::select(date, year, plot) %>% 
   dplyr::distinct() 
 plot1_dates = hubbard_dates %>% 
@@ -60,15 +60,15 @@ plot4_dates = hubbard_dates %>%
   dplyr::count(year) 
 
 #check out weird years/plots
-two_92 = dat %>% 
+two_92 = hubraw %>% 
   dplyr::filter(year == 1992 & plot == "Moosilauke")
-three_89 = dat %>% 
+three_89 = hubraw %>% 
   dplyr::filter(year == 1989 & plot == "Russell") #only 6 dates, one is left over
-four_89 = dat %>% 
+four_89 = hubraw %>% 
   dplyr::filter(year == 1989 & plot == "Stinson")
 
 # calculate total # of leaves surveyed for each tree species over the course of all years we are looking at
-unique_hub = dplyr::filter(data.frame(table(dat %>% dplyr:: select (year, plot, count))), Freq > 0)
+unique_hub = dplyr::filter(data.frame(table(hubraw %>% dplyr:: select (year, plot, count))), Freq > 0)
 numvisits = unique_hub %>% 
   dplyr::count(year, plot)
 numvisits$visits = numvisits$n*80 #number of visits in that plot in that year times the number of surveys/visit (4000 leaves surveyed/visit = 80 x 50 leaf surveys)
@@ -82,7 +82,7 @@ surveyspersite=total_surveys1/4
 #global means for normal years (beech and sugar maple) #are there the same number of beech and sugar maple trees? or is there metadata?
 #same number of beech and sugar maple
 #rename hubbard sites more intuitively
-hubbard_means = dat1 %>% 
+hubbard_means = hubraw1 %>% 
   dplyr::rename(ComName = tree.name) %>% 
   group_by(ComName) %>% 
   dplyr::summarize(mean_cat_dens = sum(number.lep)/total_surveys1, biomass = sum(lepbio.mass.mg.)/total_surveys1) 
@@ -92,13 +92,13 @@ hubbard_ranks_sel = hubbard_ranks %>%
 hubbard_ranks_sel = cbind(hubbard_ranks = rownames(hubbard_ranks_sel), hubbard_ranks_sel)
 
 #hubbard means by site
-hub_means_sites = data.frame(dat1 %>% dplyr::rename(ComName = tree.name, site=plot) %>% 
+hub_means_sites = data.frame(hubraw1 %>% dplyr::rename(ComName = tree.name, site=plot) %>% 
                                group_by(ComName, site) %>% 
                                dplyr::summarize(mean_cat_dens = sum(number.lep)/(surveyspersite))) 
 
 
 #subset dataset to only include 96/97 data to see if there is effect on beech and sugar maple amounts
-sumbysp_67 = dat1 %>% 
+sumbysp_67 = hubraw1 %>% 
   filter(year %in% c("1996", "1997") & plot =="1") %>% 
   group_by(tree.name) %>% 
   dplyr::summarize(total_count = sum(number.lep), biomass = sum(lepbio.mass.mg.)) 
