@@ -321,6 +321,8 @@ effortAnalysis = function(surveyData, ordersToInclude = "LEPL", inputYear, input
   output = data.frame(freq = NULL, n = NULL, start = NULL, circles = NULL, rep = NULL, maxJD = NULL,
                       mu = NULL, sig = NULL, scale = NULL, totalDensity = NULL, col = NULL)
   
+  maxcirclenum = max(surveyData$circle)
+  
   for (i in 1:minFreq) {
     
     # In order to represent the same number of phenology estimates per combination
@@ -333,14 +335,14 @@ effortAnalysis = function(surveyData, ordersToInclude = "LEPL", inputYear, input
     # freq 4 * 15
     # freq 5 * 12
     
-    reps = 60/i
+    reps = 5*maxcirclenum/i
     
     for (j in 1:i) {
       
       for (cir in numCircles) {
         
         # All combinations of cir circles out of 12
-        allcombos = combn(12, cir)
+        allcombos = combn(maxcirclenum, cir)
         
         if (ncol(allcombos) < reps) {
           combos = allcombos 

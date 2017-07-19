@@ -66,6 +66,11 @@ lep16bs = effortAnalysis(beatsheet.pr, inputYear = 2016, inputSite = 117,
                           minFreq = 5, numCircles = c(12, 10, 8, 6, 4, 2), jdRange = c(137, 180),
                           plot = T, plotFilename = 'output/plots/lep16bs_effort.pdf')
 
+lep15bs.bg = effortAnalysis(beatsheet.bg, inputYear = 2015, inputSite = 8892356, 
+                         minFreq = 5, numCircles = c(8, 6, 4, 2), jdRange = c(138, 196),
+                         plot = T, plotFilename = 'output/plots/lep15bs_BG_effort.pdf')
+
+
 ##########
 # STEP 3: Summarize and visualize results
 
