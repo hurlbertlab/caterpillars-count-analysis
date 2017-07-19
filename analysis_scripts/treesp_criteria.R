@@ -30,6 +30,7 @@ singerraw_uniq = singer1 %>%
 singerraw_uniq$ComName = tolower(singerraw_uniq$ComName)
 singerraw_uniq$region = "sing"
 
+
  
 
 #to get unique vis_tri & vis_app surveys #since most of these are 0s, it's weird that the # of surveys is reduced so much by summarize (usually there is only 1 survey record...) - no actually this is possible, b/c there might be multiple entries for other arth types
@@ -46,6 +47,7 @@ vis_app_uniq = vis_app %>%
   distinct() %>%
   dplyr::select(-circle, -survey) %>%
   dplyr::rename(ComName = realPlantSp)
+vis_app_uniq$ComName = gsub("tulip poplar", "tuliptree", vis_app_uniq$ComName)
 
 va_sites_uniq = vis_app_uniq %>% 
   filter(grepl("88", site))
@@ -74,7 +76,7 @@ totalspecies_sites = allraw_uniq %>%
  data.frame()
 
 totalspecies_sites = totalspecies_sites[order(totalspecies_sites$n, decreasing = T),]
-enough_sites = filter(totalspecies_sites, n >= 4) #tuliptree and tulip poplar are the same... figure out where the discripeancy is
+enough_sites = filter(totalspecies_sites, n >= 4) 
 
 totalspecies_surveys = allraw_uniq %>% #this is not doing total unique surveys, it's doing total dates/sites at which a survey was conducted 
   distinct(site, date, ComName) %>%
@@ -82,16 +84,14 @@ totalspecies_surveys = allraw_uniq %>% #this is not doing total unique surveys, 
   data.frame()
   
 totalspecies_surveys = totalspecies_surveys[order(totalspecies_surveys$n, decreasing = T),] 
-enough_surveys = filter(totalspecies_surveys, n >= 25) #tuliptree and tulip poplar are the same... figure out where the discripeancy is
-
+enough_surveys = filter(totalspecies_surveys, n >= 25) 
 totalspecies_regions = allraw_uniq %>%
   distinct(region, ComName) %>%
   count(ComName) %>%
   data.frame()
 
 totalspecies_regions = totalspecies_regions[order(totalspecies_regions$n, decreasing = T),] 
-enough_regions = filter(totalspecies_regions, n >= 3 | ComName %in% singerraw_uniq$ComName)
-
+enough_regions = filter(totalspecies_regions, n >= 3 | ((n == 2) & (ComName %in% singerraw_uniq$ComName))
 
 # create a list of trees that fulfill these expectations
 all_trees = unique(allraw_uniq$ComName)

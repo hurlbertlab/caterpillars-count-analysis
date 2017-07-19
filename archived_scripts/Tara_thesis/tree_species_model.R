@@ -12,7 +12,7 @@ plant_codes = read.csv("data/trees/USA&AppalachianTrees_2016.csv", stringsAsFact
 
 #organizes column headers
 names(all_surveyTrees) = c("siteID", "circle", "survey", "realPlantSp")
-all_surveyTrees$plantSpecies = tolower(all_surveyTrees$plantSpecies)
+all_surveyTrees$realPlantSp = tolower(all_surveyTrees$realPlantSp)
 
 #Create 1 dataset with all data from PR/NCBG 2015 & 2016
 lab.triangle = rbind(labdata.pr, labdata.bg)
