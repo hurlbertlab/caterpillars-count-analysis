@@ -74,6 +74,53 @@ lep15bs.bg = effortAnalysis(beatsheet.bg, inputYear = 2015, inputSite = 8892356,
 ##########
 # STEP 3: Summarize and visualize results
 
+plotGaussPeakHists = function(effortsummary, write = F, filename = NULL, minFreq = 5) {
+  
+  full.mu = effortsummary$mu[effortsummary$circles == max(effortsummary$circles) & 
+                               effortsummary$freq == 1]
+  
+  effortsummary2 = effortsummary %>%
+    filter(mu > 100, mu < 200, R2 > 0.2)
+  
+  CIs = effortsummary2 %>% 
+    group_by(freq, circles, col) %>% 
+    summarize(l95 = quantile(mu, .05), u95 = quantile(mu, .95), range = u95-l95) 
+  #%>% left_join(freqcols, by = 'freq')
+  
+  if (write) {
+    pdf(paste('output/plots/', filename, sep = ''), height = 6, width = 7)
+  }
+  
+  numCircles = unique(effortsummary$circles) %>% sort(decreasing = T)
+  
+  # Plot of histograms of estimated peak dates based on subsampling intensity/frequency
+  par(mfcol = c(length(numCircles), minFreq), mar = c(2, 1, 1, 0.5), oma = c(3, 5, 5, 0), mgp = c(2, 0.7, 0))
+  
+  
+  for (f in 1:minFreq) {
+    for (c in numCircles) {
+      lepsub = filter(effortsummary2, freq == f, circles == c)
+      CI = filter(CIs, freq == f, circles == c)
+      h = hist(lepsub$mu, breaks = seq(100, 220, by = 2), xlim = c(140, 210), 
+               main = '', xlab = '', ylab = '', yaxt = 'n', col = 'black', tck = -.1)
+      mtext(paste("[", round(CI$l95, 0), ", ", round(CI$u95, 0), "]", sep = ""), 
+            3, adj = 1, line = -0.45, cex = .6)
+      abline(v = full.mu, col = 'red', lwd = 2)
+    }
+  }
+  mtext("Julian day", 1, outer = T, line = 1, cex = 1.5)
+  mtext("Sampling interval (days)", 3, outer = T, line = 3, cex = 1.5)
+  mtext(round(3.5*(1:minFreq), 0), 3, outer = T, at = seq(0.1, 0.9, length.out=5), cex = 1.5)
+  mtext("Number of surveys", 2, outer = T, line = 3, cex = 1.5)
+  mtext(5*numCircles, 2, outer = T, at = seq(0.93, .13, length.out = length(numCircles)), cex = 1.5, las = 1)
+  
+  if (write) {
+    dev.off()
+  }
+}
+
+
+
 full.mu = lep15bs$mu[lep15bs$circles == 12 & lep15bs$freq == 1]
 full.peak = lep15bs$maxJD[lep15bs$circles == 12 & lep15bs$freq == 1]
 lep15bs$dev = lep15bs$mu - full.mu
