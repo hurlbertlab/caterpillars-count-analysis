@@ -74,13 +74,20 @@ lep15bs.bg = effortAnalysis(beatsheet.bg, inputYear = 2015, inputSite = 8892356,
 ##########
 # STEP 3: Summarize and visualize results
 
-plotGaussPeakHists = function(effortsummary, write = F, filename = NULL, minFreq = 5) {
+# minFreq = the minimum sampling frequency, e.g., every 'nth' sampling date
+# maxcircles = the maximum number of survey circles to subsample
+
+plotGaussPeakHists = function(effortsummary, write = F, filename = NULL, minFreq = 5, maxcircles = NULL) {
   
   full.mu = effortsummary$mu[effortsummary$circles == max(effortsummary$circles) & 
                                effortsummary$freq == 1]
   
+  if (is.null(maxcircles)) {
+    maxcircles = max(effortsummary$circles)
+  }
+  
   effortsummary2 = effortsummary %>%
-    filter(mu > 100, mu < 200, R2 > 0.2)
+    filter(mu > 100, mu < 200, R2 > 0.2, circles <= maxcircles)
   
   CIs = effortsummary2 %>% 
     group_by(freq, circles, col) %>% 
@@ -91,7 +98,7 @@ plotGaussPeakHists = function(effortsummary, write = F, filename = NULL, minFreq
     pdf(paste('output/plots/', filename, sep = ''), height = 6, width = 7)
   }
   
-  numCircles = unique(effortsummary$circles) %>% sort(decreasing = T)
+  numCircles = unique(effortsummary2$circles) %>% sort(decreasing = T)
   
   # Plot of histograms of estimated peak dates based on subsampling intensity/frequency
   par(mfcol = c(length(numCircles), minFreq), mar = c(2, 1, 1, 0.5), oma = c(3, 5, 5, 0), mgp = c(2, 0.7, 0))
@@ -103,14 +110,15 @@ plotGaussPeakHists = function(effortsummary, write = F, filename = NULL, minFreq
       CI = filter(CIs, freq == f, circles == c)
       h = hist(lepsub$mu, breaks = seq(100, 220, by = 2), xlim = c(140, 210), 
                main = '', xlab = '', ylab = '', yaxt = 'n', col = 'black', tck = -.1)
-      mtext(paste("[", round(CI$l95, 0), ", ", round(CI$u95, 0), "]", sep = ""), 
-            3, adj = 1, line = -0.45, cex = .6)
+      #mtext(paste("[", round(CI$l95, 0), ", ", round(CI$u95, 0), "]", sep = ""), 
+      #      3, adj = 1, line = -0.45, cex = .6)
+      legend("topright", legend = round(CI$u95 - CI$l95, 0), bty = 'n', cex = 1.5)
       abline(v = full.mu, col = 'red', lwd = 2)
     }
   }
   mtext("Julian day", 1, outer = T, line = 1, cex = 1.5)
   mtext("Sampling interval (days)", 3, outer = T, line = 3, cex = 1.5)
-  mtext(round(3.5*(1:minFreq), 0), 3, outer = T, at = seq(0.1, 0.9, length.out=5), cex = 1.5)
+  mtext(3.5*(1:minFreq), 3, outer = T, at = seq(0.1, 0.9, length.out=5), cex = 1.5)
   mtext("Number of surveys", 2, outer = T, line = 3, cex = 1.5)
   mtext(5*numCircles, 2, outer = T, at = seq(0.93, .13, length.out = length(numCircles)), cex = 1.5, las = 1)
   
@@ -177,3 +185,7 @@ plotGaussPeakCIs = function(effortsummary, write = F, filename = NULL, minFreq =
 
 plotGaussPeakCIs(lep15bs, write = T, filename = 'paper_plots/PR_effort_analysis_CI_polygons.pdf', 
                  arrow = T, arrowX = 6, arrowY = 166)
+
+
+plotGaussPeakHists(lep15bs, write = T, filename = 'paper_plots/PR_effort_analysis_hists_labels.pdf',
+                   maxcircles = 10)
