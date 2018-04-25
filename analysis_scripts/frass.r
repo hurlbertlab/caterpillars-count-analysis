@@ -1,106 +1,225 @@
-# Data currently in GoogleDoc here
-
-# Use the 'gsheet' package by maxconway for reading into R
-
-#library(devtools)
-#devtools::install_github("maxconway/gsheet")
-
+# Plotting frass density or mass over time
 library(gsheet)
-library(lubridate)
-library(dplyr)
 
-# URL copied from address bar
-frassBackup = function(open = F) {
-  require(gsheet)
-  url = "https://docs.google.com/spreadsheets/d/1RwXzwhHUbP0m5gKSOVhnKZbS1C_NrbdfHLglIVCzyFc/edit#gid=1479231778"
-  data = gsheet2tbl(url)
+# Get frass data and then get julian days and times
+data = frassData(open = T) %>%
+  filter(!is.na(Time.Set) & !is.na(Time.Collected)) %>%
+  mutate(Date.Set = as.Date(Date.Set, format = "%m/%d/%Y"),
+         Date.Collected = as.Date(Date.Collected, format = "%m/%d/%Y"),
+         Year = format(Date.Collected, "%Y"),
+         jday.Set = julianDayTime(Date.Set, Time.Set),
+         jday.Collected = julianDayTime(Date.Collected, Time.Collected),
+         frass.mg.d = Frass.mass..mg./(jday.Collected - jday.Set),
+         frass.no.d = Frass.number/(jday.Collected - jday.Set),
+         jday = (floor(jday.Collected) + floor(jday.Set))/2) 
 
-  # Write a copy
-  write.csv(data, paste('data/arthropods/frass_', Sys.Date(), '.csv', sep = ''),
-          row.names = F)
-  if (open) { return (data) }
-}
+# Sampling event data that specify reliability of data on any given date
+# (due to storms, etc that may affect frass recovery)
 
-
-# Function that takes a date field (formatted as %m/%d/%Y) and a time field
-# (hh:mm in 24h time), converts the date to julian day and adds the fractional
-# day represented by the hours and minutes
-julianDayTime = function(date, hour_min) {
-  require(lubridate)
-  jday = yday(date)
-  temp = sapply(strsplit(hour_min, ":"), function(x) {
-    x = as.numeric(x)
-    x[1] + x[2]/60
-  })
-  output = jday + temp/24
-  return(output)
-}
+url = "https://docs.google.com/spreadsheets/d/1RwXzwhHUbP0m5gKSOVhnKZbS1C_NrbdfHLglIVCzyFc/edit#gid=1611171427"
+events = gsheet2tbl(url)
+events$date = as.Date(events$date, format = "%m/%d/%Y")
 
 
-
-# Convert date class
-data$Date.Set = as.Date(data$Date.Set, format = "%m/%d/%Y")
-data$Date.Collected = as.Date(data$Date.Collected, format = "%m/%d/%Y")
-data$Year = format(data$Date.Collected, "%Y")
-data$jday.Set = julianDayTime(data$Date.Set, data$Time.Set)
-data$jday.Collected = julianDayTime(data$Date.Collected, data$Time.Collected)
-
-data$frass.mg.d = data$Frass.mass..mg./(data$jday.Collected - data$jday.Set)
-data$frass.no.d = data$Frass.number/(data$jday.Collected = data$jday.Set)
-
-data$jday = floor(data$jday.Collected)
 
 meanfrass = data %>%
-  group_by(Site, Year, jday) %>%
+  filter(!is.na(Frass.mass..mg.)) %>%
+  mutate(site = ifelse(Site=="Botanical Garden", 8892356, 117)) %>%
+  group_by(site, Date.Collected, Year, jday) %>%
   summarize(mass = mean(frass.mg.d, na.rm=T),
-            density = mean(frass.no.d, na.rm=T))
+            density = mean(frass.no.d, na.rm=T)) %>%
+  left_join(events[, c('date', 'site', 'reliability')], by = c('Date.Collected' = 'date', 
+                                                              'site' = 'site')) %>%
+  rename(date = Date.Collected)
 
 write.csv(meanfrass, "data/arthropods/frass_by_day_2015-2017.csv", row.names = F)
 
-frassplot = function(frassdata, site, year, color = 'black', new = T, var = 'mass',...) {
-  temp = filter(frassdata, Site == site, Year == year)
-  if (new & var == 'mass') {
-    plot(temp$jday, temp$mass, xlab = "Julian day", ylab = "Mean frass (mg / trap / day)",
-         type = 'l', col = color, ...)
-  } else if (!new & var == 'mass') {
-    points(temp$jday, temp$mass, type = 'l', col = color, ...)
-  } else if (new & var == 'density') {
-    plot(temp$jday, temp$density, xlab = "Julian day", ylab = "Mean frass (no. / trap / day)",
-         type = 'l', col = color, ...)
-  } else if (!new & var == 'density') {
-    points(temp$jday, temp$density, type = 'l', col = color, ...)
-  }
-}
-
-frassplot(meanfrass, "Botanical Garden", 2015, 'blue', new = T, var = 'mass', ylim = c(0, 6), lwd = 3)
-frassplot(meanfrass, "Botanical Garden", 2016, 'red', new = F, var = 'mass', lwd = 3)
-frassplot(meanfrass, "Prairie Ridge", 2015, 'green', new = F, var = 'mass', lwd = 3)
-
-frassplot(meanfrass, "Botanical Garden", 2015, 'blue', new = T, var = 'density', ylim = c(0, 0.35), lwd = 3)
-frassplot(meanfrass, "Botanical Garden", 2016, 'red', new = F, var = 'density', lwd = 3)
-frassplot(meanfrass, "Prairie Ridge", 2015, 'green', new = F, var = 'density', lwd = 3)
-
-frassplot(meanfrass, "Botanical Garden", 2017, 'red', new =T, var = 'density', lwd = 3)
-frassplot(meanfrass, "Botanical Garden", 2017, 'red', new =T, var = 'mass', lwd = 3)
 
 
-prlep15.bsden = meanDensityByDay(beatsheet.pr, ordersToInclude = "LEPL", inputYear = 2015,
-                                   inputSite = 117, jdRange = c(138,197), outlierCount = 30,
-                                   plot = T, plotVar = 'meanDensity', xlim = c(138, 200),
-                                 lwd = 7, col = 'blueviolet', ylab = "Caterpillar density",
-                                 ylim = c(0, .3))
-bsGfit = fitG(prlep15.bsden$julianday, prlep15.bsden$meanDensity, 
-              weighted.mean(prlep15.bsden$julianday, prlep15.bsden$meanDensity),
+beatvis.pr = rbind(beatsheet.pr, amsurvey.pr)
+beatvis.bg = rbind(beatsheet.bg, amsurvey.bg)
+
+
+# Frass plotting
+
+par(mfcol = c(4,2), mar = c(4,4,1,1), mgp = c(2.25, .75, 0))
+
+## Frass Mass
+# Bot Garden
+frassplot(meanfrass, inputSite = 8892356, 2015, 'red', new = T, var = 'mass', xlim = c(138,205),
+          ylim = c(0, 4), lwd = 2, minReliability = 1, lty = 'dotted', main = 'NCBG, 2015')
+frassplot(meanfrass, inputSite = 8892356, 2015, 'red', new = F, var = 'mass', 
+          lwd = 3, minReliability = 2, lty = 'dashed')
+frassplot(meanfrass, inputSite = 8892356, 2015, 'red', new = F, var = 'mass', 
+          lwd = 4, minReliability = 3, lty = 'solid')
+par(new = T)
+bglep15.mass = meanDensityByDay(beatvis.bg, ordersToInclude = "LEPL", inputYear = 2015,
+                                 inputSite = 8892356, jdRange = c(138,205), outlierCount = 30,
+                                 plot = T, new = T, plotVar = 'meanBiomass',  xlim = c(138,205),
+                                 lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '')
+legend("topleft", c('frass', 'LEPL mass'), lwd = 4, col = c('red', 'blueviolet'))
+
+
+frassplot(meanfrass, inputSite = 8892356, 2016, 'red', new = T, var = 'mass', xlim = c(138,205), 
+          ylim = c(0, 4), lwd = 2, minReliability = 1, lty = 'dotted', main = 'NCBG, 2016')
+frassplot(meanfrass, inputSite = 8892356, 2016, 'red', new = F, var = 'mass', 
+          lwd = 3, minReliability = 2, lty = 'dashed')
+frassplot(meanfrass, inputSite = 8892356, 2016, 'red', new = F, var = 'mass', 
+          lwd = 4, minReliability = 3, lty = 'solid')
+par(new = T)
+bglep16.mass = meanDensityByDay(beatvis.bg, ordersToInclude = "LEPL", inputYear = 2016,
+                                 inputSite = 8892356, jdRange = c(138,205), outlierCount = 30,
+                                 plot = T, new = T, plotVar = 'meanBiomass', xlim = c(138, 205),
+                                 lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '')
+
+
+frassplot(meanfrass, inputSite = 8892356, 2017, 'red', new = T, var = 'mass', xlim = c(138,205),
+          ylim = c(0, 12), lwd = 2, minReliability = 1, lty = 'dotted', main = 'NCBG, 2017')
+frassplot(meanfrass, inputSite = 8892356, 2017, 'red', new = F, var = 'mass', 
+          lwd = 3, minReliability = 2, lty = 'dashed')
+frassplot(meanfrass, inputSite = 8892356, 2017, 'red', new = F, var = 'mass', 
+          lwd = 4, minReliability = 3, lty = 'solid')
+par(new = T)
+bglep17.mass = meanDensityByDay(beatvis.bg, ordersToInclude = "LEPL", inputYear = 2017,
+                                 inputSite = 8892356, jdRange = c(138,205), outlierCount = 30,
+                                 plot = T, new = T, plotVar = 'meanBiomass', xlim = c(138, 205),
+                                 lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '')
+
+
+# Prairie Ridge
+frassplot(meanfrass, inputSite = 117, 2015, 'red', new = T, var = 'mass', xlim = c(138, 205),
+          ylim = c(0, 6), lwd = 2, minReliability = 1, lty = 'dotted', main = 'PR, 2015')
+frassplot(meanfrass, inputSite = 117, 2015, 'red', new = F, var = 'mass', 
+          lwd = 3, minReliability = 2, lty = 'dashed')
+frassplot(meanfrass, inputSite = 117, 2015, 'red', new = F, var = 'mass', 
+          lwd = 4, minReliability = 3, lty = 'solid')
+par(new=T)
+prlep15.mass = meanDensityByDay(beatvis.pr, ordersToInclude = "LEPL", inputYear = 2015,
+                                inputSite = 117, jdRange = c(138,205), outlierCount = 30,
+                                plot = T, plotVar = 'meanBiomass', xlim = c(138, 205),
+                                lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '')
+
+
+## Frass Density
+# Bot Garden
+frassplot(meanfrass, inputSite = 8892356, 2015, 'red', new = T, var = 'density', xlim = c(138, 205),
+          ylim = c(0, 8), lwd = 2, minReliability = 1, lty = 'dotted', main = 'NCBG, 2015')
+frassplot(meanfrass, inputSite = 8892356, 2015, 'red', new = F, var = 'density', 
+          lwd = 3, minReliability = 2, lty = 'dashed')
+frassplot(meanfrass, inputSite = 8892356, 2015, 'red', new = F, var = 'density', 
+          lwd = 4, minReliability = 3, lty = 'solid')
+par(new = T)
+bglep15.den = meanDensityByDay(beatvis.bg, ordersToInclude = "LEPL", inputYear = 2015,
+                                inputSite = 8892356, jdRange = c(138,205), outlierCount = 30,
+                                plot = T, new = T, plotVar = 'meanDensity', xlim = c(138, 205),
+                                lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '')
+legend("topleft", c('frass', 'LEPL density'), lwd = 4, col = c('red', 'blueviolet'))
+
+
+frassplot(meanfrass, inputSite = 8892356, 2016, 'red', new = T, var = 'density', xlim = c(138, 205), 
+          ylim = c(0, 8), lwd = 2, minReliability = 1, lty = 'dotted', main = 'NCBG, 2016')
+frassplot(meanfrass, inputSite = 8892356, 2016, 'red', new = F, var = 'density', 
+          lwd = 3, minReliability = 2, lty = 'dashed')
+frassplot(meanfrass, inputSite = 8892356, 2016, 'red', new = F, var = 'density', 
+          lwd = 4, minReliability = 3, lty = 'solid')
+par(new = T)
+bglep16.den = meanDensityByDay(beatvis.bg, ordersToInclude = "LEPL", inputYear = 2016,
+                               inputSite = 8892356, jdRange = c(138,205), outlierCount = 30,
+                               plot = T, new = T, plotVar = 'meanDensity', xlim = c(138, 205),
+                               lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '')
+
+frassplot(meanfrass, inputSite = 8892356, 2017, 'red', new = T, var = 'density', xlim = c(138, 205), 
+          ylim = c(0, 10), lwd = 2, minReliability = 1, lty = 'dotted', main = 'NCBG, 2017')
+frassplot(meanfrass, inputSite = 8892356, 2017, 'red', new = F, var = 'density', 
+          lwd = 3, minReliability = 2, lty = 'dashed')
+frassplot(meanfrass, inputSite = 8892356, 2017, 'red', new = F, var = 'density', 
+          lwd = 4, minReliability = 3, lty = 'solid')
+par(new = T)
+bglep17.den = meanDensityByDay(beatvis.bg, ordersToInclude = "LEPL", inputYear = 2017,
+                               inputSite = 8892356, jdRange = c(138,205), outlierCount = 30,
+                               plot = T, new = T, plotVar = 'meanBiomass', xlim = c(138, 205),
+                               lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '')
+
+# Prairie Ridge
+frassplot(meanfrass, inputSite = 117, 2015, 'red', new = T, var = 'mass',  xlim = c(138, 205),
+          ylim = c(0, 8), lwd = 2, minReliability = 1, lty = 'dotted', main = 'PR, 2015')
+frassplot(meanfrass, inputSite = 117, 2015, 'red', new = F, var = 'mass', 
+          lwd = 3, minReliability = 2, lty = 'dashed')
+frassplot(meanfrass, inputSite = 117, 2015, 'red', new = F, var = 'mass', 
+          lwd = 4, minReliability = 3, lty = 'solid')
+par(new = T)
+prlep15.den = meanDensityByDay(beatvis.pr, ordersToInclude = "LEPL", inputYear = 2015,
+                               inputSite = 117, jdRange = c(138,205), outlierCount = 30,
+                               plot = T, new = T, plotVar = 'meanDensity', xlim = c(138, 205),
+                               lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '')
+
+
+
+
+
+# Plot comparing frass to overall (BS + Vis) lep occurrence at Prairie Ridge, 2015
+pdf('output/plots/paper_plots/frass_v_caterpillars.pdf', height = 5, width = 10)
+par(mfrow = c(1,2), mar = c(4, 4, 2.5, 4), mgp = c(2.5, .75, 0))
+
+# Prairie Ridge
+frassplot(meanfrass, inputSite = 117, 2015, 'red', new = T, var = 'mass', lwd = 4, 
+          minReliability = 3, xlim = c(138, 205), ylim = c(1, 7), las = 1, 
+          cex.lab = 1.5, ylab = 'Frass (mg / trap / day')
+
+prlep15.fr = filter(meanfrass, site == 117, Year == 2015, jday >= 138, jday <=197)
+
+par(new = T)
+prlep15.occ = meanDensityByDay(beatvis.pr, ordersToInclude = "LEPL", inputYear = 2015,
+                               inputSite = 117, jdRange = c(138,205), outlierCount = 30,
+                               plot = T, new = T, plotVar = 'fracSurveys', xlim = c(138, 205), ylim = c(0, 18),
+                               lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '', xaxt = 'n', xlab = '')
+axis(4, at = seq(0, 16, by = 4), las = 1)
+axis(4, at = seq(2, 18, by = 4), tcl = -.25, labels = F)
+mtext("A", 3, adj = -.2, line = .75, cex = 2)
+
+legend("topleft", c('frass', 'caterpillars'), lwd = 4, col = c('red', 'blueviolet'))
+
+
+# Bot Garden
+frassplot(meanfrass, inputSite = 8892356, 2015, 'red', new = T, var = 'mass', lwd = 4, 
+          minReliability = 3, xlim = c(138, 205), ylim = c(0, 3), las = 1, cex.lab = 1.5, ylab = "")
+
+par(new = T)
+bglep15.occ = meanDensityByDay(beatvis.bg, ordersToInclude = "LEPL", inputYear = 2015,
+                               inputSite = 8892356, jdRange = c(138,205), outlierCount = 30,
+                               plot = T, new = T, plotVar = 'fracSurveys', xlim = c(138, 205), ylim = c(0, 24),
+                               lwd = 4, col = 'blueviolet', yaxt = 'n', ylab = '', xaxt = 'n', xlab = '')
+axis(4, at = seq(0, 24, by = 4), las = 1)
+mtext("Caterpillars (% of surveys)", 4, line = 2.5, cex = 1.5)
+
+mtext("B", 3, adj = -.2, line = .75, cex = 2)
+
+dev.off()
+
+
+# eliminate last 2 survey dates which are part of a late summer peak
+prlep15.occ2 = filter(prlep15.occ, julianday <= 197)
+
+occGfit = fitG(prlep15.occ2$julianday, prlep15.occ2$fracSurveys, 
+              weighted.mean(prlep15.occ2$julianday, prlep15.occ2$fracSurveys),
               14, 200)  
 
-#lines(138:200, bsGfit$par[3]*dnorm(138:200, bsGfit$par[1], bsGfit$par[2]), col = 'blueviolet', lwd = 2)
+#lines(138:200, occGfit$par[3]*dnorm(138:200, occGfit$par[1], occGfit$par[2]), col = 'blueviolet', lwd = 2, lty = 'dotted')
+
+
 
 par(new=T)
-frassplot(meanfrass, "Prairie Ridge", 2015, 'green', new = T, var = 'density', lwd = 7, xlim = c(138, 200), yaxt = "n")
+frassplot(meanfrass, "Prairie Ridge", 2015, 'green', new = T, var = 'density', lwd = 7, 
+          xlim = c(138, 200), yaxt = "n", minReliability = )
+
+par(new=T)
+frassplot(meanfrass, "Prairie Ridge", 2015, 'green', new = T, var = 'mass', lwd = 5, 
+          xlim = c(138, 200), yaxt = "n", lty = 'dashed')
+
 
 prlep15.frden = filter(meanfrass, Site == "Prairie Ridge", Year == 2015, jday >= 138, jday <=197)
 
-frGfit = fitG(prlep15.frden$jday, prlep15.frden$density, 
+frGfit.m = fitG(prlep15.frden$jday, prlep15.frden$density, 
               weighted.mean(prlep15.frden$jday, prlep15.frden$density),
               14, 200)  
 
