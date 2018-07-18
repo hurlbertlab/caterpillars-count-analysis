@@ -12,6 +12,9 @@ source("cleaning_scripts/data_cleaning.r")
 
 multorders <- c('LEPL', 'ORTH', 'ARAN','COLE', 'HETE', 'AUCH')
 
+meanfrass = read.csv("data/arthropods/frass_by_day_2015-2017.csv", header = T)
+
+
 #----PHENOLOGY PLOT by occurrence (%) by week----
 
 pdf('output/plots/paper_plots/phenology_trained_v_vols_pct.pdf', width = 6, height = 7)
@@ -27,20 +30,28 @@ end_jd16 = 194
 
 linewidth = 3
 
+col1 = 'black'
+col2 = 'gray50'
+col3 = 'blue'
+
 # First panel
 PR.LEPL15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$circle %in% 1:8,], 
                                  ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, 
                                  jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1,
                                  xlim = c(beg_jd15, end_jd15), ylim = c(0,15), ylab = "Caterpillars", 
-                                 main = '2015, Visual', col = 'blueviolet')
+                                 main = '2015, Visual', col = col1)
 PR.LEPL15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117, 
                                 jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = linewidth, las = 1, 
-                                lty = 1, col = 'darkgoldenrod3')
+                                lty = 1, col = col2)
 
-legend("topleft", c('trained', 'citizen'), lwd = linewidth, lty = 1, col = c('blueviolet', 'darkgoldenrod3'))
+par(new=T)
+frassplot(meanfrass, inputSite = 117, 2015, 'red', new = T, var = 'mass', xlim = c(beg_jd15, end_jd15),
+          lwd = 3, minReliability = 2, lty = 'dashed', ylim = c(1,8), yaxt = "n")
+
+legend("topleft", c('trained', 'citizen'), lwd = linewidth, lty = 1, col = c(col1, col2))
 LEPL15 = merge(PR.LEPL15.sci[,c('fracSurveys', 'week')], 
                PR.LEPL15.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', c(paste("r =", round(cor(LEPL15$fracSurveys.x, LEPL15$fracSurveys.y), 2))), bty="n", cex = 1.3)
@@ -53,12 +64,12 @@ PR.LEPL16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$circle %in% 1:8,],
                                  jdRange = c(beg_jd16, end_jd16), outlierCount = 10000, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1,
                                  xlim = c(beg_jd16, end_jd16), ylim = c(0,20), ylab = "", 
-                                 main = '2016, Beat Sheet', col = 'blueviolet')
+                                 main = '2016, Beat Sheet', col = col1)
 PR.LEPL16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                 ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, 
                                 jdRange = c(beg_jd16, end_jd16), outlierCount = 10000, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = linewidth, las = 1, 
-                                lty = 1, col = 'darkgoldenrod3')
+                                lty = 1, col = col2)
 
 LEPL16 = merge(PR.LEPL16.sci[,c('fracSurveys', 'week')], PR.LEPL16.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', c(paste("r =", round(cor(LEPL16$fracSurveys.x, LEPL16$fracSurveys.y), 2))), bty="n", cex = 1.3)
@@ -71,12 +82,12 @@ PR.ORTH15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$circle %in% 1:8,],
                                  jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1,
                                  xlim = c(beg_jd15, end_jd15), ylim = c(0,23), ylab = "Orthopterans", 
-                                 main = '', col = 'blueviolet')
+                                 main = '', col = col1)
 PR.ORTH15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                 ordersToInclude = "ORTH", inputYear = 2015, inputSite = 117, 
                                 jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = linewidth, las = 1, 
-                                lty = 1, col = 'darkgoldenrod3')
+                                lty = 1, col = col2)
 ORTH15 = merge(PR.ORTH15.sci[,c('fracSurveys', 'week')], PR.ORTH15.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', c(paste("r =", round(cor(ORTH15$fracSurveys.x, ORTH15$fracSurveys.y), 2))), bty="n", cex = 1.3)
 mtext("C", 3, adj=-.2, line=1.25, cex = 1.3)
@@ -88,12 +99,12 @@ PR.ORTH16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$circle %in% 1:8,],
                                  jdRange = c(beg_jd16, end_jd16), outlierCount = 10000, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1,
                                  xlim = c(beg_jd16, end_jd16), ylim = c(0,40), ylab = "", 
-                                 main = '', col = 'blueviolet')
+                                 main = '', col = col1)
 PR.ORTH16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                 ordersToInclude = "ORTH", inputYear = 2016, inputSite = 117, 
                                 jdRange = c(beg_jd16, end_jd16), outlierCount = 10000, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = linewidth, las = 1, 
-                                lty = 1, col = 'darkgoldenrod3')
+                                lty = 1, col = col2)
 ORTH16 = merge(PR.ORTH16.sci[,c('fracSurveys', 'week')], PR.ORTH16.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', c(paste("r =", round(cor(ORTH16$fracSurveys.x, ORTH16$fracSurveys.y), 2))), bty="n", cex = 1.3)
 mtext("D", 3, adj=-.2, line=1.25, cex = 1.3)
@@ -105,12 +116,12 @@ PR.BIRD15.sci = meanDensityByWeek(amsurvey.pr[amsurvey.pr$circle %in% 1:8,],
                                  jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1,
                                  xlim = c(beg_jd15, end_jd15), ylim = c(10,70), ylab = "Foliage arthropods", 
-                                 main = '', col = 'blueviolet')
+                                 main = '', col = col1)
 PR.BIRD15.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                 ordersToInclude = multorders, inputYear = 2015, inputSite = 117, 
                                 jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = linewidth, las = 1, 
-                                lty = 1, col = 'darkgoldenrod3')
+                                lty = 1, col = col2)
 
 BIRD15 = merge(PR.BIRD15.sci[,c('fracSurveys', 'week')], PR.BIRD15.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', c(paste("r =", round(cor(BIRD15$fracSurveys.x, BIRD15$fracSurveys.y), 2))), bty="n", cex = 1.3)
@@ -123,12 +134,12 @@ PR.BIRD16.sci = meanDensityByWeek(beatsheet.pr[beatsheet.pr$circle %in% 1:8,],
                                   jdRange = c(beg_jd16, end_jd16), outlierCount = 10000, plot = T, 
                                   plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1,
                                   xlim = c(beg_jd16, end_jd16), ylim = c(10,70), ylab = "", 
-                                  main = '', col = 'blueviolet')
+                                  main = '', col = col1)
 PR.BIRD16.cs = meanDensityByWeek(volunteer.pr[volunteer.pr$circle %in% 1:8,],  
                                 ordersToInclude = multorders, inputYear = 2016, inputSite = 117, 
                                 jdRange = c(beg_jd16, end_jd16), outlierCount = 10000, plot = T, 
                                 plotVar = 'fracSurveys', new = F, minLength = 5, lwd = linewidth, las = 1, 
-                                lty = 1, col = 'darkgoldenrod3')
+                                lty = 1, col = col2)
 
 BIRD16 = merge(PR.BIRD16.sci[,c('fracSurveys', 'week')], PR.BIRD16.cs[,c('fracSurveys', 'week')], by = 'week', all = F)
 legend('topright', c(paste("r =", round(cor(BIRD16$fracSurveys.x, BIRD16$fracSurveys.y), 2))), bty="n", cex = 1.3)
