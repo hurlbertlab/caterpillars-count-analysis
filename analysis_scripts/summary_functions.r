@@ -228,7 +228,7 @@ frassData = function(open = F, write = F) {
   
   if (write) {
     # Write a copy
-    write.csv(data, paste('data/frass_', Sys.Date(), '.csv', sep = ''),
+    write.csv(data, paste('data/arthropods/frass_', Sys.Date(), '.csv', sep = ''),
               row.names = F)
   }
   if (open) { return (data) }
