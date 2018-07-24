@@ -318,3 +318,43 @@ mtext("Julian day", side = 1, outer = TRUE, line = 2, cex = 1.25)
 
 dev.off()
 
+
+
+
+## Supplemental figure comparing morning vs afternoon
+pdf('output/plots/paper_plots/method_and_timeofday_pheno_comparison.pdf', width = 6, height = 5)
+par(mfrow = c(1,1), mar = c(3.25,5,1,1), oma = c(1,1,1,1), cex.lab = 1.5, cex.axis = 1.25, mgp = c(3.5, 1, 0))
+
+# Restrict comparisons to the window of julian days when both groups were conducting surveys
+beg_jd15 = 138
+end_jd15 = 200
+
+linewidth = 3
+
+PR.LEPL15.amvis = meanDensityByWeek(amsurvey.pr[amsurvey.pr$circle %in% 1:8,],
+                                 ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117,
+                                 jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T,
+                                 plotVar = 'fracSurveys', new = T, minLength = 5, lwd = linewidth, las = 1, lty = 'dashed',
+                                 xlim = c(beg_jd15, end_jd15), ylim = c(0,20), ylab = "Caterpillar occurrence (%)", xaxt = "n",
+                                 main = '', col = col1)
+PR.LEPL15.pmbs = meanDensityByWeek(pmsurvey.pr[pmsurvey.pr$circle %in% 1:8,],
+                                   ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117,
+                                   jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T,
+                                   plotVar = 'fracSurveys', new = F, minLength = 5, lwd = linewidth, las = 1, lty = 'solid',
+                                   xlim = c(beg_jd15, end_jd15), ylim = c(0,15), ylab = "Caterpillars", xaxt = "n",
+                                   main = '2015, Visual', col = 'gray70')
+PR.LEPL15.ambs = meanDensityByWeek(beatsheet.pr[beatsheet.pr$circle %in% 1:8,],
+                                   ordersToInclude = "LEPL", inputYear = 2015, inputSite = 117,
+                                   jdRange = c(beg_jd15, end_jd15), outlierCount = 10000, plot = T,
+                                   plotVar = 'fracSurveys', new = F, minLength = 5, lwd = linewidth, las = 1, lty = 'solid',
+                                   xlim = c(beg_jd15, end_jd15), ylim = c(0,15), ylab = "Caterpillars", xaxt = "n",
+                                   main = '2015, Visual', col = col1)
+
+axis(1, at = c(136, 153, 167, 183, 197), labels = F, tck = -.02)
+mtext(c("5/15", "6/1", "6/15", "7/1", "7/15"), at = c(136, 153, 167, 183, 197), side = 1, line = 1, cex = 1)
+
+legend("topleft", c('am visual', 'am beatsheet', 'pm beatsheet'), lwd = linewidth, lty = 
+         c('dashed', 'solid', 'solid'), col = c('black', 'black', 'gray70'))
+mtext("Date", side = 1, line = 2.5, cex = 1.25)
+dev.off()
+
