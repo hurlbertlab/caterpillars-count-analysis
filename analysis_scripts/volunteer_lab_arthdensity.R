@@ -278,6 +278,139 @@ arthcols$cex = c(rep(2.7, 6), 1.5)
 
 #---------plotting for figures------------------
 
+################ VERSION 2 figures #############################
+
+# Previous Figure 2 has been split into 2 figures:
+
+### New Figure 2: comparison of survey methods (using trained scientist data)
+
+pdf(paste('output/plots/paper_plots/Figure2_methodComparison_minLength', minLength, '.pdf', sep = ''), 
+    height = 6, width = 8)
+
+par(xpd=FALSE)
+par(mfrow = c(2, 3), mar = c(5, 5, 3, 1))
+
+
+#panel A
+par(mgp = c(3, 1, 0))
+lab_selected1 = lab_selected_rel[,-1]
+rownames(lab_selected1) = lab_selected_rel[,1]
+lab_selected1 = as.matrix(lab_selected1) #create matrix w/o arth code?
+tops = cumsum(lab_selected1[,2])
+bottoms = c(0, tops[1:6])
+centers = (tops + bottoms)/2
+
+barplot(lab_selected1, las = 1, xlim = c(0, 3.2), xaxt = "n",
+        ylab = "Proportion", col = arthcols$col, cex.axis = 1.2, cex.lab = 1.5)
+mtext(c("Beat\nsheet", "Visual\nsurvey"), 1, at = c(.7, 1.9), line = 2)
+mtext(arthcols$name, 4, at = centers, las = 1, line = -3.6, col = arthcols$col2, 
+      cex = .7, font = 2)
+mtext("A", 3, adj = -0.3, line = 0.5, cex = 1.75)
+
+
+#panel B
+arth_means2 = left_join(lab_bs_vis_den, arthcols, by = c('arthCode2' = 'arthCode'))
+arth_means2$col[is.na(arth_means2$col)] = "#80B1D3"
+plot(arth_means2$vis_den, arth_means2$bs_den, las = 1, col = arth_means2$col, pch = 15, 
+     xlab = "Density (visual)", ylab = "Density (beat sheet)", cex = arth_means2$cex, cex.lab = 1.5, 
+     xlim = c(0, 0.2), ylim = c(0, 0.26), cex.axis = 1.2, yaxt = "n")
+axis(2, at = seq(0, 0.25, by = 0.05), tcl = -0.3, labels = F)
+mtext(c('0.0', '0.1', '0.2'), 2, at = seq(0, 0.2, by = 0.1), line = 1, cex = 0.8, las = 1)
+points(arth_means2$vis_den[arth_means2$arthCode=='DIPT'],
+       arth_means2$bs_den[arth_means2$arthCode=='DIPT'], cex = arthcols$cex[1], pch = 22, col = 'gray80')
+#laboratory = lm(bs_den ~ vis_den, data = arth_means2)
+#abline(laboratory, col = "black", lwd = 4)
+abline(a = 0, b = 1, col = 'black', lwd = 2, lty = 'solid')
+text(.17,.2, "1:1", srt = 30, cex = 1.5)
+mtext("B", 3, adj = -0.3, line = 0.5, cex = 1.75)
+
+cor.test(arth_means2$vis_den, arth_means2$bs_den)
+
+dev.off()
+
+
+
+
+### New Figure 3: comparison of observer groups (trained vs citizens)
+pdf(paste('output/plots/paper_plots/Figure3_lab_vs_trained_comparisons_minLength', minLength, '.pdf', sep = ''), 
+    height = 6, width = 8)
+
+par(xpd=FALSE)
+par(mfrow = c(2, 3), mar = c(5, 5, 3, 1))
+
+
+#panel A - visual surveys by pct
+vis_cmp = left_join(vis_comp, arthcols, by = c('arthCode2' = 'arthCode'))
+
+barplot(as.matrix(vis_cmp[, c('vis_vol_pct', 'vis_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2), 
+        ylab = "Proportion", col = vis_cmp$col, cex.lab = 1.5, cex.axis = 1.2)
+mtext("Visual", 3, adj = .35, line = .5)
+mtext(c("Citizen\nscientists", "Trained\nscientists"), 1, at = c(.6, 1.9), line = 2, cex = .9)
+mtext("A", 3, adj = -0.3, line = .5, cex = 1.75)
+
+tops1 = cumsum(vis_cmp$vis_lab_pct)
+bottoms1 = c(0, tops1[1:6])
+centers1 = (tops1 + bottoms1)/2
+
+mtext(arthcols$name, 4, at = centers1, las = 1, line = -3.6, col = arthcols$col2, 
+      cex = .7, font = 2)
+
+
+#panel B
+bs_cmp = left_join(bs_comp, arthcols, by = c('arthCode2' = 'arthCode'))
+
+barplot(as.matrix(bs_cmp[, c('bs_vol_pct', 'bs_lab_pct')]), las = 1, xaxt = "n", xlim = c(0,3.2),
+        ylab = "Proportion", col = arthcols$col, cex.lab = 1.5, cex.axis = 1.2)
+mtext("Beat sheet", 3, adj = .35, line = .5)
+mtext(c("Citizen\nscientists", "Trained\nscientists"), 1, at = c(.6, 1.9), line = 2, cex = .9)
+mtext("B", 3, adj = -0.3, line = .5, cex = 1.75)
+
+
+#panel C
+vis_cmp_all = left_join(vis_comp_all, arthcols, by = c('arthCode2' = 'arthCode'))
+bs_cmp_all = left_join(bs_comp_all, arthcols, by = c('arthCode2' = 'arthCode'))
+
+par(mgp = c(3.5, 0.75, 0))
+plot(vis_cmp_all$dens_lab, vis_cmp_all$dens_vol, las = 1, xlab = "",
+     ylab = "Density (citizen)", col = vis_cmp_all$col, pch = 17, 
+     cex = vis_cmp_all$cex, cex.lab = 1.5, cex.axis = 1.2,
+     xlim = c(0, 0.31), ylim = c(0, 0.31), yaxt = "n")
+points(vis_cmp_all$dens_lab[vis_cmp_all$arthCode=='DIPT'],
+       vis_cmp_all$dens_vol[vis_cmp_all$arthCode=='DIPT'], cex = 3, pch = 2, col = 'gray80')
+mtext("Density (trained)", 1, line = 3, cex.lab = 1.5)
+axis(2, at = seq(0, 0.3, by = 0.05), tcl = -0.3, labels = F)
+mtext(c('0.0', '0.1', '0.2', '0.3'), 2, at = seq(0, 0.3, by = 0.1), line = 1, cex = 0.8, las = 1)
+vol.lab.vis =lm(dens_vol ~ dens_lab, data = vis_cmp_all)
+#abline(vol.lab.vis, lwd = 4)
+points(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol, las = 1, col = bs_cmp_all$col, pch = 16, cex = bs_cmp_all$cex)
+points(bs_cmp_all$dens_lab[bs_cmp_all$arthCode=='DIPT'], 
+       bs_cmp_all$dens_vol[bs_cmp_all$arthCode=='DIPT'], 
+       las = 1, col = 'gray80', pch = 1, cex = arthcols$cex[1])
+vol.lab.bs = lm(dens_vol ~ dens_lab, data = bs_cmp_all)
+#abline(vol.lab.bs, lty = 'dashed', lwd = 4)
+abline(a = 0, b = 1, col = 'black', lwd = 2, lty = 'solid')
+text(.2,.23, "1:1", srt = 45, cex = 1.5)
+mtext("C", 3, adj = -0.3, line = 0.5, cex = 1.75)
+
+legend("bottomright", c('visual', 'beat sheet'), pch = c(17, 16), pt.cex = 2, bty = 'n')
+
+cor.test(vis_cmp_all$dens_lab, vis_cmp_all$dens_vol)
+cor.test(bs_cmp_all$dens_lab, bs_cmp_all$dens_vol)
+
+dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+################ VERSION 1 figures #############################
 #plot relative and mean arth frequencies
 
 pdf(paste('output/plots/paper_plots/Figure4_data_comparisons_minLength', minLength, '.pdf', sep = ''), 
