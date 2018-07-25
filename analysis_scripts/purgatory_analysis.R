@@ -55,9 +55,9 @@ BG2018vislepdata = left_join(survey, plant, by = c('PlantFK' = 'ID')) %>%
 
 # PRAIRIE RIDGE
 col1 = 'blueviolet'
-col2 = 'seagreen1'
-col3 = 'limegreen'
-col4 = 'darkgreen'
+col2 = rgb(140/255, 176/255, 122/255)
+col3 = rgb(52/255, 212/255, 52/255)
+col4 = rgb(0, 100/255, 0)
 
 
 
@@ -72,11 +72,14 @@ col4 = 'darkgreen'
 pdf('output/plots/PR_caterpillars_2016-2018.pdf', height = 4, width = 5)
 par(tck = -.01, mar = c(4, 5, 2, 1), mgp = c(2.5, .5, 0), cex.lab = 1.5)
 
+beg_jd = 134
+end_jd = 205
+
 PR.LEPL16.day = meanDensityByDay(amsurvey.pr, 
                                  ordersToInclude = "LEPL", inputYear = 2016, inputSite = 117, 
                                  jdRange = c(1,365), outlierCount = 10000, plot = T, 
                                  plotVar = 'fracSurveys', new = T, minLength = 5, lwd = 3, las = 1, xaxt = 'n',
-                                 xlim = c(beg_jd16, end_jd16), ylim = c(0,25), ylab = "Caterpillar Frequency", xlab = 'Date',
+                                 xlim = c(beg_jd, end_jd), ylim = c(0,25), ylab = "Caterpillar Frequency", xlab = 'Date',
                                  main = 'Prairie Ridge Ecostation', col = col2)
 # upon inspection, use jdRange = c(132, 189)
 
@@ -84,12 +87,12 @@ PR.LEPL17.day = meanDensityByDay(amsurvey.pr,
                                  ordersToInclude = "LEPL", inputYear = 2017, inputSite = 117, 
                                  jdRange = c(1,365), outlierCount = 10000, plot = T, 
                                  plotVar = 'fracSurveys', new = F, minLength = 5, lwd = 3, las = 1,
-                                 xlim = c(beg_jd16, end_jd16), ylim = c(0,25), ylab = "Caterpillars", 
+                                 xlim = c(beg_jd, end_jd), ylim = c(0,25), ylab = "Caterpillars", 
                                  main = '', col = col3)
 
 points(PR2018vislepdata$julianday, PR2018vislepdata$fracSurveys, type = 'l', lwd = 4, col = col4)
 
-legend("topleft", legend = 2016:2018, col = c(col2, col3, col4), lwd = 3)
+legend("topleft", legend = 2016:2018, col = c(col2, col3, col4), text.col = c(col2, col3, col4), lwd = 3)
 axis(1, at = c(136, 153, 167, 183, 197), labels = F, tck = -.02)
 mtext(c("May 15", "Jun 1", "Jun 15", "Jul1", "Jul15"), at = c(136, 153, 167, 183, 197), side = 1, line = .5)
 dev.off()
