@@ -49,6 +49,17 @@ BG2018vislepdata = left_join(survey, plant, by = c('PlantFK' = 'ID')) %>%
   count(julianday) %>%
   mutate(fracSurveys = 100*n/40)
 
+UNC2018vislepdata = left_join(survey, plant, by = c('PlantFK' = 'ID')) %>%
+  left_join(site[, c('ID', 'Name')], by = c('SiteFK' = 'ID')) %>%
+  filter(Name == 'UNC Chapel Hill Campus', ObservationMethod == 'Visual') %>%
+  mutate(LocalDate = as.Date(as.character(LocalDate), format = "%Y-%m-%d"),
+         julianday = yday(LocalDate)) %>%
+  left_join(arth, by = c('ID' = 'SurveyFK')) %>%
+  select(LocalDate, julianday, Code, Group, Length, Quantity) %>%
+  filter(Group == 'caterpillar', Length >= 5) %>%
+  distinct(julianday, Code) %>%
+  count(julianday) %>%
+  mutate(fracSurveys = 100*n/60)
 
 
 # From sampling_effort_analysis.r ******************************************************
@@ -99,6 +110,10 @@ dev.off()
 
 
 # NCBG
+beg_jd15 = 136
+end_jd15 = 206
+beg_jd16 = 147
+end_jd16 = 194
 
 
 pdf('output/plots/BG_caterpillars_2015-2018.pdf', height = 4, width = 5)
@@ -134,3 +149,88 @@ axis(1, at = c(136, 153, 167, 183, 197), labels = F, tck = -.02)
 mtext(c("May 15", "Jun 1", "Jun 15", "Jul1", "Jul15"), at = c(136, 153, 167, 183, 197), side = 1, line = .5)
 
 dev.off()
+
+
+# UNC Campus
+
+pdf('output/plots/UNC_caterpillars_2018.pdf', height = 4, width = 5)
+par(tck = -.01, mar = c(4, 5, 2, 1), mgp = c(2.5, .5, 0), cex.lab = 1.5)
+
+plot(UNC2018vislepdata$julianday, UNC2018vislepdata$fracSurveys, type = 'l', lwd = 4, col = col4,
+     xaxt = 'n', ylab = 'Caterpillar Frequency', xlab = 'Date', main = 'UNC Campus', xlim = c(130, 200))
+
+axis(1, at = c(136, 153, 167, 183, 197), labels = F, tck = -.02)
+mtext(c("May 15", "Jun 1", "Jun 15", "Jul1", "Jul15"), at = c(136, 153, 167, 183, 197), side = 1, line = .5)
+dev.off()
+
+
+
+# Prairie Ridge by arthropod group
+# Make sure datasets placed into function do not have minLength already subsetted out (?) need to check on this
+meanDensityByDay2 = function(surveyData, # merged dataframe of surveys and orders tables
+                            ordersToInclude = 'All',       # which arthropod orders to calculate density for (codes)
+                            byTreeSpecies = FALSE, # do we want to calculate densities separately for each tree?
+                            minLength = 0,         # minimum arthropod size to include 
+                            inputSite,
+                            inputYear,
+                            jdRange = c(1,365),
+                            outlierCount = 10000,
+                            plot = F,
+                            plotVar = 'meanDensity', # 'meanDensity' or 'fracSurveys' or 'meanBiomass'
+                            new = T,
+                            color = 'black',
+                            ...)                  
+
+{
+  
+  if(length(ordersToInclude)==1 & ordersToInclude[1]=='All') {
+    ordersToInclude = unique(surveyData$Group)
+  }
+  
+  firstFilter = surveyData %>%
+    filter(Name %in% inputSite, year %in% inputYear, 
+           julianday >= jdRange[1], julianday <= jdRange[2])
+  
+  effortByDay = firstFilter %>%
+    distinct(surveyID, julianday) %>%
+    count(julianday)
+  
+  arthCount = firstFilter %>%
+    filter(length >= minLength, 
+           count < outlierCount, 
+           arthCode %in% ordersToInclude) %>%
+    group_by(julianday) %>%
+    summarize(totalCount = sum(count, na.rm = T),
+              totalBiomass = sum(biomass, na.rm = T),
+              numSurveysGTzero = length(unique(surveyID[count > 0]))) %>% 
+    right_join(effortByDay, by = 'julianday') %>%
+    #next line replaces 3 fields with 0 if the totalCount is NA
+    mutate_cond(is.na(totalCount), totalCount = 0, totalBiomass = 0, numSurveysGTzero = 0) %>%
+    mutate(meanDensity = totalCount/n,
+           meanBiomass = totalBiomass/n,
+           fracSurveys = 100*numSurveysGTzero/n) %>%
+    data.frame()
+  
+  if (plot & new) {
+    plot(arthCount$julianday, arthCount[, plotVar], type = 'l', 
+         col = color, ...)
+  } else if (plot & new==F) {
+    points(arthCount$julianday, arthCount[, plotVar], type = 'l', col = color, ...)
+  }
+  return(arthCount)
+}
+
+
+
+
+PR2018visspiderdata = left_join(survey, plant, by = c('PlantFK' = 'ID')) %>%
+  left_join(site[, c('ID', 'Name')], by = c('SiteFK' = 'ID')) %>%
+  filter(Name == 'Prairie Ridge Ecostation', ObservationMethod == 'Visual') %>%
+  mutate(LocalDate = as.Date(as.character(LocalDate), format = "%Y-%m-%d"),
+         julianday = yday(LocalDate)) %>%
+  left_join(arth, by = c('ID' = 'SurveyFK')) %>%
+  select(LocalDate, julianday, Code, Group, Length, Quantity) %>%
+  filter(Group == 'spider', Length >= 5) %>%
+  distinct(julianday, Code) %>%
+  count(julianday) %>%
+  mutate(fracSurveys = 100*n/60)
