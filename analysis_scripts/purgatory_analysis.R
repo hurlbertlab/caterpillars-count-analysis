@@ -221,7 +221,29 @@ meanDensityByDay2 = function(surveyData, # merged dataframe of surveys and order
 }
 
 
-
+occurrenceByDay = function(surveydata, 
+                           groups, 
+                           site, 
+                           year,
+                           minLength = 5,
+                           method = 'Visual',
+                           jdRange = c(1, 365), 
+                           plot = F, 
+                           new = T, 
+                           color = 'black', ...) {
+  dataByDay = surveydata %>%
+    filter(Name == site,
+           year == year,
+           Length >= minLength,
+           julianday >= min(jdRange) & julianday <= max(jdRange),
+           ObservationMethod == method,
+           Group %in% groups) %>%
+    distinct(julianday, Code) %>%
+    count(julianday) %>%
+    mutate(fracSurveys = 100*n/60)
+  
+    
+}
 
 PR2018visspiderdata = left_join(survey, plant, by = c('PlantFK' = 'ID')) %>%
   left_join(site[, c('ID', 'Name')], by = c('SiteFK' = 'ID')) %>%
